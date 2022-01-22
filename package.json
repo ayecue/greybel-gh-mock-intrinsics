@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
@@ -38,6 +38,6 @@
         "greyhack"
     ],
     "dependencies": {
-        "greybel-interpreter": "^0.4.9"
+        "greybel-interpreter": "^0.5.0"
     }
 }
