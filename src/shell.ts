@@ -1,6 +1,14 @@
 import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
-import { User, Service, computers, routers, Computer, Port } from './mock-environment';
+import {
+	User,
+	Service,
+	computers,
+	routers,
+	Computer,
+	Port,
+	getLocal
+} from './mock-environment';
 import { create as createComputer } from './computer';
 
 export function create(user: User, computer: Computer, port?: Port): BasicInterface {
@@ -122,11 +130,11 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 	);
 }
 
-export function loginLocal(user: any, password: any) {
-	const computer = computers[0] as Computer;
+export function loginLocal(user: any, password: any): BasicInterface | null {
+	const computer = getLocal().computer;
 
 	if (user instanceof CustomNil && password instanceof CustomNil) {
-		return create(computer.users[1], computer);
+		return create(getLocal().user, computer);
 	}
 
 	const usr = user.toString();

@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import {
 	User,
 	FileSystemEntity,
-	homePath,
+	getLocal,
 	File,
 	Folder
 } from './mock-environment';
@@ -131,5 +131,5 @@ export function removeFile (folder: Folder, fileName: string): boolean {
 
 
 export function getTraversalPath (path: string): string[] {
-	return path.startsWith('/') ? path.substr(1).split('/') : homePath.concat(path.split('/'));
+	return path.startsWith('/') ? path.substr(1).split('/') : getLocal().home.concat(path.split('/'));
 }

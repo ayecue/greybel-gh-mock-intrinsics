@@ -4,6 +4,8 @@ export interface User {
 	username: string;
 	password: string;
 	passwordHashed: string;
+	email: string;
+	userBankNumber: string;
 }
 
 export enum Service {
@@ -51,6 +53,11 @@ export interface Network {
 	name: string;
 }
 
+export interface RouterNamespace {
+	name: string;
+	router: Router;
+}
+
 export enum FileType {
 	Plain,
 	Bin,
@@ -80,12 +87,22 @@ export interface File extends FileSystemEntity {
 	type: FileType;
 }
 
+export const userList: User[] = [];
+
+export const bankIdRng = xmur3('test-bank-number');
+
 export function generateUser(username: string, password: string): User {
-	return {
+	const user: User = {
 		username,
 		password,
-		passwordHashed: md5(password)
+		passwordHashed: md5(password),
+		email: `${username}@test.org`,
+		userBankNumber: bankIdRng().toString(36).substring(2, 10)
 	};
+
+	userList.push(user);
+
+	return user;
 }
 
 function getEtcAptFiles(parent: FileSystemEntity): File[] {
@@ -180,19 +197,19 @@ function getLibFiles(parent: FileSystemEntity): File[] {
 		parent
 	}, {
 		name: 'aptclient.so',
-		permissions: '-rw-r-----',
+		permissions: '-rw-r--r--',
 		owner: 'root',
 		type: FileType.AptClient,
 		parent
 	}, {
 		name: 'crypto.so',
-		permissions: '-rw-r-----',
+		permissions: '-rw-r--r--',
 		owner: 'root',
 		type: FileType.Crypto,
 		parent
 	}, {
 		name: 'metaxploit.so',
-		permissions: '-rw-r-----',
+		permissions: '-rw-r--r--',
 		owner: 'root',
 		type: FileType.Metaxploit,
 		parent
@@ -518,7 +535,7 @@ export const computers: Computer[] = [
 			generateUser('Ali', 'shallnotpass')
 		], 'helloWorld'),
 		ports: [{
-			port: 22,
+			port: 288,
 			isClosed: false,
 			service: Service.SSH
 		}]
@@ -537,6 +554,24 @@ export const computers: Computer[] = [
 			port: 22,
 			isClosed: false,
 			service: Service.SSH
+		}, {
+			port: 80,
+			isClosed: false,
+			service: Service.HTTP
 		}]
 	}
 ];
+
+export const routerNamespaces: RouterNamespace[] =  [{
+	name: 'www.mytest.org',
+	router: routers[1]
+}];
+
+export function getLocal(): { computer: Computer, user: User, home: string[] } {
+	//default setup
+	return {
+		computer: computers[0],
+		user: computers[0].users[1],
+		home: homePath
+	};
+}
