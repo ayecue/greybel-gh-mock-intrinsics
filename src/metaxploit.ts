@@ -22,7 +22,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
 	itrface.set('load', (_: any, path: any): BasicInterface | null => {
 		const meta = {
-			path: path.toString()
+			path: path?.toString()
 		};
 		const traversalPath = getTraversalPath(meta.path);
 		const file = getFile(computer.fileSystem, traversalPath) as File;
@@ -37,7 +37,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
 	itrface.set('net_use', (_: any, ipAddress: any, port: any): BasicInterface | null => {
 		const meta = {
-			ipAddress: ipAddress.toString(),
+			ipAddress: ipAddress?.toString(),
 			port: Number(port?.valueOf())
 		};
 		let computerResult;
@@ -95,7 +95,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 		if (metaLib instanceof CustomMap) {
 			const meta = {
 				metaLib: metaLib as BasicInterface,
-				memAddress: memAddress.toString()
+				memAddress: memAddress?.toString()
 			};
 			const exploits: Vulnerability[] = meta.metaLib.value.get('exploits');
 	

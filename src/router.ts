@@ -16,7 +16,7 @@ export function create(user: User, router: Router): BasicInterface {
 
 	itrface.set('ping_port', (_: any, port: any): BasicInterface => {
 		const meta = {
-			port: Number(port.valueOf())
+			port: Number(port?.valueOf())
 		};
 
 		for (let item of computers) {

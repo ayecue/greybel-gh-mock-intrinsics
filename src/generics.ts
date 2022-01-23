@@ -56,7 +56,7 @@ export function getSwitch(ipAddress: any): BasicInterface {
 
 export function includeLib(libPath: any): BasicInterface | null {
 	const { user, computer } = getLocal();
-	const target = getTraversalPath(libPath.toString());
+	const target = getTraversalPath(libPath?.toString());
 	const entityResult = getFile(computer.fileSystem, target);
 
 	if (entityResult && !entityResult.isFolder) {
@@ -80,7 +80,7 @@ export function includeLib(libPath: any): BasicInterface | null {
 
 export function md5(customValue: any): string | null {
 	if (customValue instanceof CustomString) {
-		return actualMd5(customValue.toString());
+		return actualMd5(customValue?.toString());
 	}
 	return null;
 }
@@ -90,7 +90,7 @@ export function time(): number {
 }
 
 export function nslookup(hostname: any): string {
-	const target = hostname.toString();
+	const target = hostname?.toString();
 	const ns = routerNamespaces.find((item: RouterNamespace) => {
 		return item.name === target;
 	});
@@ -112,15 +112,15 @@ export function whois(ipAddress: any): string {
 }
 
 export function isValidIp(ipAddress: any): boolean {
-	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipAddress.toString());
+	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipAddress?.toString());
 }
 
 export function isLanIp(ipAddress: any): boolean {
-	return /^1(0|27|69\.254|72\.(1[6-9]|2[0-9]|3[0-1])|92\.168)\./.test(ipAddress.toString());
+	return /^1(0|27|69\.254|72\.(1[6-9]|2[0-9]|3[0-1])|92\.168)\./.test(ipAddress?.toString());
 }
 
 export function commandInfo(idCommand: any): string {
-	return idCommand.toString().toUpperCase();
+	return idCommand?.toString().toUpperCase();
 }
 
 export function currentDate(): string {
@@ -159,7 +159,7 @@ export function userBankNumber(): string {
 
 export function formatColumns(columns: any): string {
 	//todo add formating
-	return columns.toString();
+	return columns?.toString();
 }
 
 export function userInput(message: any, isPassword: any, anyKey: any): string {

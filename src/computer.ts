@@ -46,16 +46,16 @@ export function create(user: User, computer: Computer): BasicInterface {
 	});
 
 	itrface.set('create_folder', (_: any, path: any, folderName: any): boolean => {
-		const target = getTraversalPath(path.toString());
+		const target = getTraversalPath(path?.toString());
 		const entityResult = getFile(computer.fileSystem, target);
 
 		if (entityResult && entityResult.isFolder) {
 			const { w } = getPermissions(user, entityResult);
 			const folder = entityResult as Folder;
 
-			if (w && !hasFile(folder, folderName.toString())) {
+			if (w && !hasFile(folder, folderName?.toString())) {
 				folder.folders.push({
-					name: folderName.toString(),
+					name: folderName?.toString(),
 					owner: user.username,
 					permissions: entityResult.permissions,
 					isFolder: true,
@@ -76,8 +76,8 @@ export function create(user: User, computer: Computer): BasicInterface {
 	});
 
 	itrface.set('touch', (_: any, path: any, fileName: any): boolean => {
-		const containingFolder = getTraversalPath(path.toString());
-		const target = fileName.toString();
+		const containingFolder = getTraversalPath(path?.toString());
+		const target = fileName?.toString();
 		const entityResult = getFile(computer.fileSystem, containingFolder);
 
 		if (entityResult && entityResult.isFolder) {
@@ -117,8 +117,8 @@ export function create(user: User, computer: Computer): BasicInterface {
 	itrface.set('change_password', (_: any, username: any, password: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
-				username: username.toString(),
-				password: password.toString()
+				username: username?.toString(),
+				password: password?.toString()
 			};
 
 			return changePassword(computer, meta.username, meta.password);
@@ -130,8 +130,8 @@ export function create(user: User, computer: Computer): BasicInterface {
 	itrface.set('create_user', (_: any, username: any, password: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
-				username: username.toString(),
-				password: password.toString()
+				username: username?.toString(),
+				password: password?.toString()
 			};
 			const existingUser = computer.users.find((item: User) => {
 				return item.username === meta.username;
@@ -154,7 +154,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 	itrface.set('delete_user', (_: any, username: any, removeHome: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
-				username: username.toString(),
+				username: username?.toString(),
 				removeHome: removeHome && removeHome instanceof CustomBoolean ? removeHome.value : removeHome?.valueOf()
 			};
 

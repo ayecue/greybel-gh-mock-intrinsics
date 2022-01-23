@@ -23,9 +23,9 @@ export function create(user: User, computer: Computer): BasicInterface {
 
     itrface.set('aireplay', (_: any, bssid: any, essid: any, maxAcks: any): Promise<string | null> => {
         const meta = {
-			bssid: bssid.toString(),
-			essid: essid.toString(),
-            maxAcks: Number(maxAcks.valueOf())
+			bssid: bssid?.toString(),
+			essid: essid?.toString(),
+            maxAcks: Number(maxAcks?.valueOf())
 		};
 		const network = networks.find((item: Network) => {
             return (
@@ -59,7 +59,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
     itrface.set('aircrack', (_: any, path: any): string | null => {
         const meta = {
-			path: path.toString()
+			path: path?.toString()
 		};
         const traversalPath = getTraversalPath(meta.path);
         const file = getFile(computer.fileSystem, traversalPath) as File;
@@ -79,7 +79,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
     itrface.set('decipher', (_: any, encryptedPass: string): string | null => {
         const meta = {
-			encryptedPass: encryptedPass.toString()
+			encryptedPass: encryptedPass?.toString()
 		};
         const user = userList.find((item: User) => {
             return item.passwordHashed === meta.encryptedPass;

@@ -34,7 +34,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		}
 		
 		const meta = {
-			permissions: permissions.toString(),
+			permissions: permissions?.toString(),
 			isRecursive: !!isRecursive?.valueOf()
 		};
 
@@ -83,8 +83,8 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		}
 		
 		const meta = {
-			path: path.toString(),
-			newName: newName.toString()
+			path: path?.toString(),
+			newName: newName?.toString()
 		};
 		const traversalPath = getTraversalPath(meta.path);
 		const folder = getFile(entity, traversalPath) as Folder;
@@ -132,8 +132,8 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		}
 		
 		const meta = {
-			path: path.toString(),
-			newName: newName.toString()
+			path: path?.toString(),
+			newName: newName?.toString()
 		};
 		const traversalPath = getTraversalPath(meta.path);
 		const folder = getFile(entity, traversalPath) as Folder;
@@ -183,7 +183,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		}
 		
 		const meta = {
-			newName: newName.toString()
+			newName: newName?.toString()
 		};
 		
 		entity.name = meta.newName;
@@ -256,7 +256,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 
 		const file = entity as File;
 		const meta = {
-			content: content.toString()
+			content: content?.toString()
 		};
 
 		if (file.type !== FileType.Plain) {
@@ -354,8 +354,8 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		}
 
 		const meta = {
-			owner: owner.toString(),
-			isRecursive: !!isRecursive.valueOf()
+			owner: owner?.toString(),
+			isRecursive: !!isRecursive?.valueOf()
 		};
 
 		entity.owner = meta.owner;

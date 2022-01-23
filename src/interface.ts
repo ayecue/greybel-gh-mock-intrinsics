@@ -36,7 +36,7 @@ export default class BasicInterface extends CustomMap {
 
 		const traversalPath = [].concat(path);
 		const current = traversalPath.shift();
-		const currentValue = current.valueOf();
+		const currentValue = current?.valueOf();
 
 		if (currentValue != null) {
 			if (path.length === 1 && me.interface.has(currentValue)) {
@@ -55,7 +55,7 @@ export default class BasicInterface extends CustomMap {
 		const me = this;
 		const traversalPath = [].concat(path);
 		const current = traversalPath.shift();
-		const currentValue = current.valueOf();
+		const currentValue = current?.valueOf();
 
 		if (currentValue != null) {
 			if (path.length === 1 && me.interface.has(currentValue)) {
@@ -77,7 +77,7 @@ export default class BasicInterface extends CustomMap {
 		}
 
 		const me = this;
-		const key = method[0].valueOf();
+		const key = method?.[0]?.valueOf();
 
 		if (!me.interface.has(key)) {
 			throw new Error(`Cannot access ${key} in map`);

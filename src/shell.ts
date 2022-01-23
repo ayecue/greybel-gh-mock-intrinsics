@@ -28,11 +28,11 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			service: any
 		): BasicInterface | string => {
 			const meta = {
-				ip: ip.toString(),
-				port: port.toString(),
-				user: port.toString(),
-				password: port.toString(),
-				service: service.toString()
+				ip: ip?.toString(),
+				port: port?.toString(),
+				user: port?.toString(),
+				password: port?.toString(),
+				service: service?.toString()
 			};
 			let resultPort: Port | null;
 			let resultUser: User | null;
@@ -89,7 +89,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 		});
 
 		itrface.set('ping', (_: any, ipAddress: any): boolean | null => {
-			const ip = ipAddress.toString();
+			const ip = ipAddress?.toString();
 			const router = routers.find((item) => item.publicIp === ip);
 
 			if (router) {

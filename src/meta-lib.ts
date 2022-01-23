@@ -38,8 +38,8 @@ export function create(computer: Computer, targetComputer: Computer, library: Li
 
 	itrface.set('overflow', (_: any, memAddress: any, sector: any, optArgs: any): null | boolean | string | BasicInterface => {
 		const meta = {
-			memAddress: memAddress.toString(),
-			sector: sector.toString(),
+			memAddress: memAddress?.toString(),
+			sector: sector?.toString(),
 			optArgs: optArgs?.toString()
 		};
 		const vul = exploits.find((item: Vulnerability) => {
