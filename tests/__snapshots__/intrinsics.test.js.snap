@@ -108,59 +108,53 @@ CustomString {
 
 exports[`interpreter default scripts generics.src 9`] = `
 CustomString {
-  "value": "23-1-2022 8:51",
+  "value": "/home",
 }
 `;
 
 exports[`interpreter default scripts generics.src 10`] = `
 CustomString {
-  "value": "/home",
+  "value": "/home/test",
 }
 `;
 
 exports[`interpreter default scripts generics.src 11`] = `
 CustomString {
-  "value": "/home/test",
+  "value": "/home/test/myprogramm",
 }
 `;
 
 exports[`interpreter default scripts generics.src 12`] = `
 CustomString {
-  "value": "/home/test/myprogramm",
+  "value": "test",
 }
 `;
 
 exports[`interpreter default scripts generics.src 13`] = `
 CustomString {
-  "value": "test",
+  "value": "test@test.org",
 }
 `;
 
 exports[`interpreter default scripts generics.src 14`] = `
 CustomString {
-  "value": "test@test.org",
+  "value": "qdsaibwv",
 }
 `;
 
 exports[`interpreter default scripts generics.src 15`] = `
 CustomString {
-  "value": "qdsaibwv",
-}
-`;
-
-exports[`interpreter default scripts generics.src 16`] = `
-CustomString {
   "value": "test",
 }
 `;
 
-exports[`interpreter default scripts generics.src 17`] = `
+exports[`interpreter default scripts generics.src 16`] = `
 CustomNil {
   "value": null,
 }
 `;
 
-exports[`interpreter default scripts generics.src 18`] = `
+exports[`interpreter default scripts generics.src 17`] = `
 CustomString {
   "value": "/home/test/myprogramm",
 }
