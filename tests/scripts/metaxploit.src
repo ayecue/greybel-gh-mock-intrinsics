@@ -1,0 +1,33 @@
+meta = include_lib("/lib/metaxploit.so")
+
+print(typeof(meta))
+print(meta)
+
+metaLib = meta.load("/lib/crypto.so")
+
+print(typeof(metaLib))
+print(metaLib)
+
+netSession = meta.net_use("142.32.54.56", 22)
+
+print(typeof(netSession))
+print(netSession)
+
+netSessionMeta = netSession.dump_lib
+
+print(typeof(netSessionMeta))
+print(netSessionMeta)
+
+print(meta.scan(metaLib))
+print(meta.scan_address(metaLib, "0x33BC9555"))
+
+print(meta.sniffer)
+print(meta.rshell_client)
+print(meta.rshell_server)
+
+print(metaLib.lib_name)
+print(metaLib.version)
+print(metaLib.overflow("0x33BC9555", "fw5ynq2637"))
+print(metaLib.overflow("0x33BC9555", "fw5ynq2637", "change"))
+
+print(netSessionMeta.overflow("0x33BC9555", "d64lu1atp5"))

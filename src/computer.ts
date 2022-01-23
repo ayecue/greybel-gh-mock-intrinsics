@@ -19,32 +19,33 @@ import { create as createFile } from './file';
 import { create as createPort } from './port';
 import {
 	getPermissions,
-	md5,
 	getFile,
 	hasFile,
 	removeFile,
-	getTraversalPath
+	getTraversalPath,
+	changePassword
 } from './utils';
+
 
 export function create(user: User, computer: Computer): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
 
-	itrface.set('get_ports', (): BasicInterface[] => {
+	itrface.set('get_ports', (_: any): BasicInterface[] => {
 		return computer?.ports.map((item: Port) => createPort(computer, item)) || [];
 	});
 
-	itrface.set('File', (path: any): BasicInterface | null => {
-		const target = getTraversalPath(path.toString());
+	itrface.set('File', (_: any, path: any): BasicInterface | null => {
+		const target = getTraversalPath(path?.toString());
 		const entityResult = getFile(computer.fileSystem, target);
 
 		if (!entityResult) {
 			return null;
 		}
 		
-		return createFile(user, entityResult, target);
+		return createFile(user, entityResult);
 	});
 
-	itrface.set('create_folder', (path: any, folderName: any): boolean => {
+	itrface.set('create_folder', (_: any, path: any, folderName: any): boolean => {
 		const target = getTraversalPath(path.toString());
 		const entityResult = getFile(computer.fileSystem, target);
 
@@ -52,13 +53,15 @@ export function create(user: User, computer: Computer): BasicInterface {
 			const { w } = getPermissions(user, entityResult);
 			const folder = entityResult as Folder;
 
-			if (w && !hasFile(folder, folderName)) {
+			if (w && !hasFile(folder, folderName.toString())) {
 				folder.folders.push({
-					name: folderName,
+					name: folderName.toString(),
 					owner: user.username,
 					permissions: entityResult.permissions,
 					isFolder: true,
-					parent: folder
+					parent: folder,
+					folders: [],
+					files: []
 				});
 
 				return true;
@@ -68,11 +71,11 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return false;
 	});
 
-	itrface.set('is_network_active', (): boolean => {
+	itrface.set('is_network_active', (_: any): boolean => {
 		return true;
 	});
 
-	itrface.set('touch', (path: any, fileName: any): boolean => {
+	itrface.set('touch', (_: any, path: any, fileName: any): boolean => {
 		const containingFolder = getTraversalPath(path.toString());
 		const target = fileName.toString();
 		const entityResult = getFile(computer.fileSystem, containingFolder);
@@ -97,7 +100,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return false;
 	});
 
-	itrface.set('show_procs', (): string => {
+	itrface.set('show_procs', (_: any): string => {
 		return [
 			'USER PID CPU MEM COMMAND',
 			'root 2134 0.0% 13.37% kernel_task',
@@ -105,36 +108,26 @@ export function create(user: User, computer: Computer): BasicInterface {
 		].join('\n');
 	});
 
-	itrface.set('network_devices', (): string => {
+	itrface.set('network_devices', (_: any): string => {
 		return computer.networkDevices.map((item: NetworkDevice) => {
 			return `${item.type} ${item.id} ${item.active}`;
 		}).join('\n');
 	});
 
-	itrface.set('change_password', (username: any, password: any): boolean => {
+	itrface.set('change_password', (_: any, username: any, password: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
 				username: username.toString(),
 				password: password.toString()
 			};
-			const user = computer.users.find((item: User) => {
-				return (
-					item.username === meta.username &&
-					item.password === meta.password
-				);
-			});
 
-			if (user) {
-				user.password = meta.password;
-				user.passwordHashed = md5(meta.password);
-				return true;
-			}
+			return changePassword(computer, meta.username, meta.password);
 		}
 
 		return false;
 	});
 
-	itrface.set('create_user', (username: any, password: any): boolean => {
+	itrface.set('create_user', (_: any, username: any, password: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
 				username: username.toString(),
@@ -158,7 +151,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return false;
 	});
 
-	itrface.set('delete_user', (username: any, removeHome: any): boolean => {
+	itrface.set('delete_user', (_: any, username: any, removeHome: any): boolean => {
 		if (user.username === 'root') {
 			const meta = {
 				username: username.toString(),
@@ -191,42 +184,46 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return false;
 	});
 
-	itrface.set('create_group', (): boolean => {
+	itrface.set('create_group', (_: any): boolean => {
 		// g is ignored for now
 		// todo: add group logic
 		return false;
 	});
 
-	itrface.set('delete_group', (): boolean => {
+	itrface.set('delete_group', (_: any): boolean => {
 		// g is ignored for now
 		// todo: add group logic
 		return false;
 	});
 
-	itrface.set('groups', (): string => {
+	itrface.set('groups', (_: any): string => {
 		// g is ignored for now
 		// todo: add group logic
 		return '';
 	});
 
-	itrface.set('close_program', (): boolean => {
+	itrface.set('close_program', (_: any): boolean => {
 		//programs are not supported for now
+		if (user.username !== 'root') {
+			return false;
+		}
+
 		return Math.random() < 0.5;
 	});
 
-	itrface.set('wifi_networks', (): string[] => {
+	itrface.set('wifi_networks', (_: any): string[] => {
 		//programs are not supported for now
 		return networks.map((item: Network) => {
 			return `${item.mac} ${item.percentage}% ${item.name}`;
 		});
 	});
 
-	itrface.set('connect_wifi', (): boolean => {
+	itrface.set('connect_wifi', (_: any): boolean => {
 		//connect_wifi will always default to the standart one for now
 		return true;
 	});
 
-	itrface.set('connect_ethernet', (): boolean => {
+	itrface.set('connect_ethernet', (_: any): boolean => {
 		//connect_ethernet not yet supported
 		return false;
 	});

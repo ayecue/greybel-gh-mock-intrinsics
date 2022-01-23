@@ -20,6 +20,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 
 	if (currentService === Service.SSH) {
 		itrface.set('connect_service', (
+			_: any,
 			ip: any,
 			port: any,
 			user: any,
@@ -75,19 +76,19 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			return 'Invalid connection.';
 		});
 
-		itrface.set('scp', (pathOrig: any, pathDest: any, remoteShell: any): string => {
+		itrface.set('scp', (_: any, pathOrig: any, pathDest: any, remoteShell: any): string => {
 			return 'Not yet supported.';
 		});
 
-		itrface.set('build', (pathSource: any, pathBinary: any, allowImport: any): string => {
+		itrface.set('build', (_: any, pathSource: any, pathBinary: any, allowImport: any): string => {
 			return 'Not yet supported.';
 		});
 
-		itrface.set('launch', (path: any, args: any): string => {
+		itrface.set('launch', (_: any, path: any, args: any): string => {
 			return 'Not yet supported.';
 		});
 
-		itrface.set('ping', (ipAddress: any): boolean | null => {
+		itrface.set('ping', (_: any, ipAddress: any): boolean | null => {
 			const ip = ipAddress.toString();
 			const router = routers.find((item) => item.publicIp === ip);
 
@@ -98,28 +99,28 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			return null;
 		});
 
-		itrface.set('masterkey', (): null => {
+		itrface.set('masterkey', (_: any): null => {
 			return null;
 		});
 
-		itrface.set('masterkey_direct', (): null => {
+		itrface.set('masterkey_direct', (_: any): null => {
 			return null;
 		});
 
-		itrface.set('restore_network', (): null => {
+		itrface.set('restore_network', (_: any): null => {
 			return null;
 		});
 	} else if (currentService === Service.FTP) {
-		itrface.set('put', (): string => {
+		itrface.set('put', (_: any): string => {
 			return 'Not yet supported.';
 		});
 	}
 
-	itrface.set('start_terminal', (): null => {
+	itrface.set('start_terminal', (_: any): null => {
 		return null;
 	});
 
-	itrface.set('host_computer', (): BasicInterface => {
+	itrface.set('host_computer', (_: any): BasicInterface => {
 		return createComputer(user, computer);
 	});
 
@@ -133,12 +134,12 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 export function loginLocal(user: any, password: any): BasicInterface | null {
 	const computer = getLocal().computer;
 
-	if (user instanceof CustomNil && password instanceof CustomNil) {
+	const usr = user?.toString();
+	const pwd = password?.toString();
+
+	if (!usr && !pwd) {
 		return create(getLocal().user, computer);
 	}
-
-	const usr = user.toString();
-	const pwd = password.toString();
 
 	for (user of computer.users) {
 		if (

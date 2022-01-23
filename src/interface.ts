@@ -7,8 +7,8 @@ import crypto from 'crypto';
 export default class BasicInterface extends CustomMap {
 	interface: Map<string, Function>;
 
-	constructor(type: string, itrface: Map<string, Function>) {
-		super();
+	constructor(type: string, itrface: Map<string, Function>, values?: Map<string, any>) {
+		super(values);
 		const me = this;
 
 		me.value.set('classID', type);

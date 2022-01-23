@@ -1,4 +1,5 @@
-import { md5, xmur3 } from './utils';
+import { md5 } from './helper';
+import randomSeed from 'random-seed';
 
 export interface User {
 	username: string;
@@ -65,7 +66,11 @@ export enum FileType {
 	Crypto,
 	Metaxploit,
 	System,
-	AptClient
+	AptClient,
+	Ack,
+	Net,
+	Init,
+	KernelModule
 }
 
 export interface FileSystemEntity {
@@ -75,11 +80,12 @@ export interface FileSystemEntity {
 	owner: string;
 	isFolder?: boolean;
 	isProtected?: boolean;
+	deleted?: boolean;
 }
 
 export interface Folder extends FileSystemEntity {
-	files?: File[];
-	folders?: Folder[];
+	files: File[];
+	folders: Folder[];
 }
 
 export interface File extends FileSystemEntity {
@@ -87,9 +93,174 @@ export interface File extends FileSystemEntity {
 	type: FileType;
 }
 
+export enum Library {
+	SSH = 'ssh',
+	FTP = 'ftp',
+	HTTP = 'http',
+	SQL = 'sql',
+	SMTP = 'smtp',
+	CHAT = 'chat',
+	CAM = 'cam',
+	RSHELL = 'rshell',
+	KERNEL_ROUTER = 'kernel_router',
+	APT = 'apt',
+	METAXPLOIT = 'metaxploit',
+	CRYPTO = 'crypto',
+	KERNEL_MODULE = 'kernel_module',
+	INIT = 'init',
+	NET = 'net'
+}
+
+export enum VulnerabilityRequirements {
+	LIBRARY,
+	REGISTER_AMOUNT,
+	ANY_ACTIVE,
+	ROOT_ACTIVE,
+	LOCAL,
+	FORWARD,
+	GATEWAY
+}
+
+export const VulnerabilityRequirementList = [
+	VulnerabilityRequirements.LIBRARY,
+	VulnerabilityRequirements.REGISTER_AMOUNT,
+	VulnerabilityRequirements.ANY_ACTIVE,
+	VulnerabilityRequirements.ROOT_ACTIVE,
+	VulnerabilityRequirements.LOCAL,
+	VulnerabilityRequirements.FORWARD,
+	VulnerabilityRequirements.GATEWAY
+];
+
+export enum VulnerabilityAction {
+	SHELL,
+	FOLDER,
+	PASSWORD,
+	COMPUTER,
+	FIREWALL
+}
+
+export const VulnerabilityActionList = [
+	VulnerabilityAction.SHELL,
+	VulnerabilityAction.FOLDER,
+	VulnerabilityAction.PASSWORD,
+	VulnerabilityAction.COMPUTER,
+	VulnerabilityAction.FIREWALL
+];
+
+export enum VulnerabilityActionUser {
+	GUEST,
+	NORMAL,
+	ROOT
+}
+
+export interface Vulnerability {
+	required: VulnerabilityRequirements[];
+	sector: string;
+	details: string;
+	remote?: boolean;
+	library: Library;
+	action: VulnerabilityAction;
+	user: VulnerabilityActionUser;
+	folder: string[];
+	memAddress: string;
+}
+
+export const vulnerabilityRng = randomSeed.create('test-vul-number');
+
+export function generateVulnerability(library: Library, memAddress: string, remote: boolean): Vulnerability {
+	const requirementAmount = vulnerabilityRng.intBetween(0, 3);
+	const required: VulnerabilityRequirements[] = [];
+	const action = VulnerabilityActionList[vulnerabilityRng.intBetween(0, 4)] as VulnerabilityAction;
+	let user;
+
+	while (required.length < requirementAmount) {
+		const index = vulnerabilityRng.intBetween(0, 6);
+		const req = VulnerabilityRequirementList[index] as VulnerabilityRequirements;
+
+		if (!required.includes(req)) {
+			required.push(req);
+		}
+	}
+
+	const userType = vulnerabilityRng.intBetween(0, 5);
+
+	switch (userType) {
+		case 0:
+			user = VulnerabilityActionUser.ROOT;
+			break;
+		case 1:
+		case 2:
+			user = VulnerabilityActionUser.NORMAL;
+			break;
+		default:
+			user = VulnerabilityActionUser.GUEST;
+			break;
+	}
+
+	return {
+		required,
+		memAddress,
+		sector: vulnerabilityRng.random().toString(36).substring(2, 12),
+		details: 'loop in array',
+		remote,
+		library,
+		action,
+		user,
+		folder: ['home', 'guest']
+	};
+}
+
+export function generateSectorVulnerabilities(library: Library, sector: string, remote: boolean): Vulnerability[]  {
+	const vulAmount = vulnerabilityRng.intBetween(1, 4);
+	const result = [];
+
+	for (let index = vulAmount; index >= 0; index--) {
+		result.push(generateVulnerability(library, sector, remote));
+	}
+
+	return result;
+}
+
+export const vulnerabilities = [
+	...generateSectorVulnerabilities(Library.CRYPTO, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.CRYPTO, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.FTP, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.FTP, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.FTP, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.FTP, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.HTTP, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.HTTP, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.HTTP, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.HTTP, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.INIT, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.INIT, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.KERNEL_MODULE, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.KERNEL_MODULE, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.KERNEL_ROUTER, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.KERNEL_ROUTER, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.METAXPLOIT, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.METAXPLOIT, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.NET, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.NET, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.RSHELL, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.RSHELL, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.RSHELL, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.RSHELL, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.SMTP, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.SMTP, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.SQL, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.SQL, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.SQL, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.SQL, '0x48096032', false),
+	...generateSectorVulnerabilities(Library.SSH, '0x33BC9555', true),
+	...generateSectorVulnerabilities(Library.SSH, '0x48096032', true),
+	...generateSectorVulnerabilities(Library.SSH, '0x33BC9555', false),
+	...generateSectorVulnerabilities(Library.SSH, '0x48096032', false)
+];
+
 export const userList: User[] = [];
 
-export const bankIdRng = xmur3('test-bank-number');
+export const bankIdRng = randomSeed.create('test-bank-number');
 
 export function generateUser(username: string, password: string): User {
 	const user: User = {
@@ -97,7 +268,7 @@ export function generateUser(username: string, password: string): User {
 		password,
 		passwordHashed: md5(password),
 		email: `${username}@test.org`,
-		userBankNumber: bankIdRng().toString(36).substring(2, 10)
+		userBankNumber: bankIdRng.random().toString(36).substring(2, 10)
 	};
 
 	userList.push(user);
@@ -125,6 +296,8 @@ function getEtcAptFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxr-x---',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -164,6 +337,8 @@ function getEtcFolder(parent: FileSystemEntity, users: User[]): Folder {
 		permissions: 'drwxr-x---',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -181,19 +356,19 @@ function getLibFiles(parent: FileSystemEntity): File[] {
 		name: 'init.so',
 		permissions: '-rw-r-----',
 		owner: 'root',
-		type: FileType.System,
+		type: FileType.Init,
 		parent
 	}, {
 		name: 'kernel_module.so',
 		permissions: '-rw-r-----',
 		owner: 'root',
-		type: FileType.System,
+		type: FileType.KernelModule,
 		parent
 	}, {
 		name: 'net.so',
 		permissions: '-rw-r-----',
 		owner: 'root',
-		type: FileType.System,
+		type: FileType.Net,
 		parent
 	}, {
 		name: 'aptclient.so',
@@ -222,6 +397,8 @@ function getLibFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxrwx---',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -258,6 +435,8 @@ function getSysFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxr-xr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -272,24 +451,32 @@ function getDefaultHomeFolders(parent: FileSystemEntity, owner: string, permissi
 		permissions,
 		owner,
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	}, {
 		name: 'Downloads',
 		permissions,
 		owner,
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	}, {
 		name: 'Config',
 		permissions,
 		owner,
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	}, {
 		name: '.Trash',
 		permissions,
 		owner,
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	}];
 }
@@ -300,6 +487,8 @@ function getRootFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxr-----',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -310,10 +499,12 @@ function getRootFolder(parent: FileSystemEntity): Folder {
 
 export function getUserFolder(parent: FileSystemEntity, user: string): Folder {
 	const userFolder: Folder = {
-		name: 'root',
+		name: user,
 		permissions: 'drwxr-----',
-		owner: 'root',
+		owner: user,
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -324,10 +515,12 @@ export function getUserFolder(parent: FileSystemEntity, user: string): Folder {
 
 function getGuestFolder(parent: FileSystemEntity): Folder {
 	const guestFolder: Folder = {
-		name: 'root',
+		name: 'guest',
 		permissions: 'drwxrwxrwx',
-		owner: 'root',
+		owner: 'guest',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -342,6 +535,8 @@ function getHomeFolder(parent: FileSystemEntity, users: User[]): Folder {
 		permissions: 'drwxr-xr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -359,6 +554,8 @@ function getVarFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxr-xr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 }
@@ -369,6 +566,8 @@ function getBinFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxrwxr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 }
@@ -379,6 +578,8 @@ function getUsrBinFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxrwxr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 }
@@ -389,6 +590,8 @@ function getUsrFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxrwxr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -427,6 +630,8 @@ function getBootFolder(parent: FileSystemEntity): Folder {
 		permissions: 'drwxr-xr-x',
 		owner: 'root',
 		isFolder: true,
+		folders: [],
+		files: [],
 		parent
 	};
 
@@ -442,7 +647,8 @@ export function getDefaultFileSystem(users: User[]): Folder {
 		owner: 'root',
 		isFolder: true,
 		isProtected: true,
-		files: []
+		files: [],
+		folders: []
 	};
 
 	defaultSystem.folders = [
@@ -467,12 +673,12 @@ export function generateComputer(users: User[], rootPassword: string = 'test'): 
 	};
 }
 
-export const networkIdRng = xmur3('test-network-devices');
+export const networkIdRng = randomSeed.create('test-network-devices');
 
 export function generateNetworkDevice(type: string = 'wlan0'): NetworkDevice {
 	return {
 		type,
-		id: networkIdRng().toString(36).substring(2, 10),
+		id: networkIdRng.random().toString(36).substring(2, 10),
 		active: true
 	};
 }

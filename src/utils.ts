@@ -1,15 +1,16 @@
-import crypto from 'crypto';
 import {
 	User,
 	FileSystemEntity,
 	getLocal,
 	File,
-	Folder
+	Folder,
+	Library,
+	FileType,
+	Computer,
+	VulnerabilityActionUser,
+	Service
 } from './mock-environment';
-
-export function md5(value: string): string {
-	return crypto.createHash('md5').update(value).digest('hex');
-}
+import { md5 } from './helper';
 
 export interface PermissionSegment {
 	[permissionType: string]: boolean;
@@ -69,20 +70,12 @@ export function getPermissions(user: User, file: FileSystemEntity): PermissionSe
 	return parsedPermissions.o;
 }
 
-//https://stackoverflow.com/a/47593316
-export function xmur3(str: string): () => number {
-    for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++) {
-        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-        h = h << 13 | h >>> 19;
-    } return function() {
-        h = Math.imul(h ^ (h >>> 16), 2246822507);
-        h = Math.imul(h ^ (h >>> 13), 3266489909);
-        return (h ^= h >>> 16) >>> 0;
-    }
-}
-
 export function getFile (entity: FileSystemEntity, path: string[]): FileSystemEntity | null {
 	if (!entity.isFolder) {
+		return null;
+	}
+
+	if (path.length === 0) {
 		return null;
 	}
 
@@ -96,7 +89,9 @@ export function getFile (entity: FileSystemEntity, path: string[]): FileSystemEn
 
 	if (!nextEntity) {
 		return null;
-	} else if (nextPath.length === 0) {
+	}
+
+	if (nextPath.length === 0) {
 		return nextEntity;
 	}
 
@@ -104,32 +99,188 @@ export function getFile (entity: FileSystemEntity, path: string[]): FileSystemEn
 }
 
 export function hasFile (folder: Folder, fileName: string): boolean {
-	return !!(
-		folder.files.find((item: File) => item.name === fileName) ||
-		folder.folders.find((item: Folder) => item.name === fileName)
-	);
+	return !!getFileIndex(folder, fileName);
 }
 
-
-export function removeFile (folder: Folder, fileName: string): boolean {
+export function getFileIndex (folder: Folder, fileName: string): { isFolder: boolean, index: number } {
 	const fileIndex = folder.files.findIndex((item: File) => item.name === fileName);
 
-	if (fileIndex !== -1) {
-		folder.files.splice(fileIndex, 1);
-		return true;
+	if (fileIndex !== -1 && fileIndex !== undefined) {
+		return {
+			isFolder: false,
+			index: fileIndex
+		};
 	}
 
 	const folderIndex = folder.folders.findIndex((item: Folder) => item.name === fileName);
 
-	if (folderIndex !== -1) {
-		folder.folders.splice(folderIndex, 1);
+	if (folderIndex !== -1 && folderIndex !== undefined) {
+		return {
+			isFolder: true,
+			index: folderIndex
+		};
+	}
+
+	return null;
+}
+
+export function putFile (folder: Folder, file: File): void {
+	removeFile(folder, file.name);
+	file.parent = folder;
+	folder.files.push(file);
+}
+
+export function removeFile (folder: Folder, fileName: string): boolean {
+	const result = getFileIndex(folder, fileName);
+
+	if (!result) {
+		return false;
+	}
+
+	const { isFolder, index } = result;
+	let entity;
+
+	if (isFolder) {
+		entity = folder.folders[index];
+		entity.deleted = true;
+		folder.folders.splice(index, 1);
+	} else {
+		entity = folder.files[index];
+		entity.deleted = true;
+		folder.files.splice(index, 1);
+	}
+
+	traverseChildren(entity, (item: FileSystemEntity) => {
+		item.deleted = true;
+	});
+
+	return true;
+}
+
+export function traverseChildren (entity: FileSystemEntity, callback: (v: FileSystemEntity) => void, skip?: boolean): void {
+	if (!entity.isFolder) {
+		return;
+	}
+
+	const folder = entity as Folder;
+
+	if (!skip) {
+		callback(entity);
+	}
+
+	folder.files.forEach((item: File) => callback(item));
+	folder.folders.forEach((item: Folder) => traverseChildren(item, callback));
+}
+
+export function copyFile (entity: FileSystemEntity, parent: FileSystemEntity): FileSystemEntity {
+	const newEntity: FileSystemEntity = {
+		name: entity.name,
+		permissions: entity.permissions,
+		owner: entity.owner,
+		isFolder: entity.isFolder,
+		parent
+	};
+
+	if (entity.isFolder) {
+		const folder = entity as Folder;
+		const newFolder = newEntity as Folder;
+
+		newFolder.files = folder.files.map((item: File) => copyFile(item, newFolder) as File);
+		newFolder.folders = folder.folders.map((item: Folder) => copyFile(item, newFolder) as Folder);
+
+		return newFolder;
+	}
+
+	const file = entity as File;
+	const newFile = newEntity as File;
+
+	newFile.content = file.content;
+	newFile.type = file.type;
+
+	return newFile;
+}
+
+export function getTraversalPath (path: string | null): string[] {
+	if (!path) {
+		return [];
+	}
+
+	return path.startsWith('/')
+		? path.substr(1).split('/')
+		: getLocal().home.concat(path.split('/'));
+}
+
+export function getFileLibrary (file: File): Library | null {
+	switch (file.type) {
+		case FileType.AptClient:
+			return Library.APT;
+		case FileType.Crypto:
+			return Library.CRYPTO;
+		case FileType.Init:
+			return Library.INIT;
+		case FileType.KernelModule:
+			return Library.KERNEL_MODULE;
+		case FileType.Metaxploit:
+			return Library.METAXPLOIT;
+		case FileType.Net:
+			return Library.NET;
+		default:
+	}
+
+	return null;
+}
+
+export function getServiceLibrary (service: Service): Library | null {
+	switch (service) {
+		case Service.FTP:
+			return Library.FTP;
+		case Service.HTTP:
+			return Library.HTTP;
+		case Service.RSHELL:
+			return Library.RSHELL;
+		case Service.SMTP:
+			return Library.SMTP;
+		case Service.SQL:
+			return Library.SQL;
+		case Service.SSH:
+			return Library.SSH;
+		default:
+	}
+
+	return null;
+}
+
+export function getUserByVulnerability (vulActionUser: VulnerabilityActionUser, computer: Computer): User {
+	switch (vulActionUser) {
+		case VulnerabilityActionUser.NORMAL:
+			return computer.users[1];
+		case VulnerabilityActionUser.ROOT:
+			return computer.users[0];
+		default:
+	}
+
+	return {
+		username: 'guest',
+		password: '',
+		passwordHashed: '',
+		email: '',
+		userBankNumber: ''
+	};
+}
+
+export function changePassword (computer: Computer, username: string, password: string): boolean {
+	const user = computer.users.find((item: User) => {
+		return (
+			item.username === username &&
+			item.password === password
+		);
+	});
+
+	if (user) {
+		user.password = password;
+		user.passwordHashed = md5(password);
 		return true;
 	}
 
 	return false;
-}
-
-
-export function getTraversalPath (path: string): string[] {
-	return path.startsWith('/') ? path.substr(1).split('/') : getLocal().home.concat(path.split('/'));
 }

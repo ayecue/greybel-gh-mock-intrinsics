@@ -1,0 +1,13 @@
+router = get_router
+switch = get_switch
+
+print(typeof(router))
+print(router)
+
+print(typeof(switch))
+print(switch)
+
+print(router.public_ip)
+print(router.local_ip)
+print(router.ping_port(22))
+print(router.port_info(router.ping_port(22)))
