@@ -618,6 +618,7 @@ BasicInterface {
     "public_ip" => [Function],
     "local_ip" => [Function],
     "ping_port" => [Function],
+    "used_ports" => [Function],
     "port_info" => [Function],
   },
   "isInstance": false,
@@ -639,6 +640,7 @@ BasicInterface {
     "public_ip" => [Function],
     "local_ip" => [Function],
     "ping_port" => [Function],
+    "used_ports" => [Function],
     "port_info" => [Function],
   },
   "isInstance": false,
@@ -680,6 +682,42 @@ BasicInterface {
 exports[`interpreter default scripts router.src 8`] = `
 CustomString {
   "value": "22 false ssh",
+}
+`;
+
+exports[`interpreter default scripts router.src 9`] = `
+CustomList {
+  "slice": [Function],
+  "value": Array [
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 22,
+        "isClosed" => false,
+        "service" => "ssh",
+        "classID" => "port",
+      },
+    },
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 80,
+        "isClosed" => false,
+        "service" => "http",
+        "classID" => "port",
+      },
+    },
+  ],
 }
 `;
 

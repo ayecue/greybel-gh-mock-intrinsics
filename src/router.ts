@@ -34,6 +34,22 @@ export function create(user: User, router: Router): BasicInterface {
 		return null;
 	});
 
+	itrface.set('used_ports', (_: any): BasicInterface[] => {
+		const result = [];
+
+		for (let item of computers) {
+			if (item.router.publicIp === router.publicIp) {
+				continue;
+			}
+
+			result.push(...item.ports.map((itemPort: Port) => {
+				return createPort(router, itemPort);
+			}));
+		}
+
+		return result;
+	});
+
 	itrface.set('port_info', (_: any, portObject: any): string | null => {
 		if (portObject instanceof CustomMap) {
 			const port = portObject as BasicInterface;
