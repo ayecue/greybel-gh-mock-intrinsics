@@ -10,5 +10,5 @@ export function create(computer: Computer, targetComputer: Computer, library: Li
 		return createMetaLib(computer, targetComputer, library);
 	});
 
-	return new BasicInterface('NetSession', itrface);
+	return new BasicInterface('netSession', itrface);
 }

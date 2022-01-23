@@ -248,5 +248,5 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return computer.router.publicIp;
 	});
 
-	return new BasicInterface('Computer', itrface);
+	return new BasicInterface('computer', itrface);
 }

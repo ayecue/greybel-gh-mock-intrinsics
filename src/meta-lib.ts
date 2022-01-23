@@ -74,7 +74,7 @@ export function create(computer: Computer, targetComputer: Computer, library: Li
 		return null;
 	});
 
-	return new BasicInterface('MetaLib', itrface, new Map([
+	return new BasicInterface('metaLib', itrface, new Map([
 		['exploits', exploits]
 	]));
 }

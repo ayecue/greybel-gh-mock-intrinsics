@@ -389,5 +389,5 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		return null;
 	});
 
-	return new BasicInterface('File', itrface);
+	return new BasicInterface('file', itrface);
 }

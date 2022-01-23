@@ -148,5 +148,5 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return [];
 	});
 
-	return new BasicInterface('Metaxploit', itrface);
+	return new BasicInterface('metaxploit', itrface);
 }

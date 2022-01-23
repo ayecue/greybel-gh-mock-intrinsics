@@ -96,5 +96,5 @@ export function create(user: User, computer: Computer): BasicInterface {
         return [];
     });
 
-	return new BasicInterface('Crypto', itrface);
+	return new BasicInterface('crypto', itrface);
 }

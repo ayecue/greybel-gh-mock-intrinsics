@@ -126,7 +126,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 
 
 	return new BasicInterface(
-		Service.SSH === currentService ? 'Shell' : 'FtpShell',
+		Service.SSH === currentService ? 'shell' : 'ftpShell',
 		itrface
 	);
 }

@@ -43,5 +43,5 @@ export function create(user: User, router: Router): BasicInterface {
 		return null;
 	});
 
-	return new BasicInterface('Router', itrface);
+	return new BasicInterface('router', itrface);
 }

@@ -33,5 +33,5 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return 'Not yet supported';
 	});
 
-	return new BasicInterface('AptClient', itrface);
+	return new BasicInterface('aptClient', itrface);
 }

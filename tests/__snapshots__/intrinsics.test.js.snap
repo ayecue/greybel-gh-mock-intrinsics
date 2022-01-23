@@ -2,7 +2,7 @@
 
 exports[`interpreter default scripts crypto.src 1`] = `
 CustomString {
-  "value": "Crypto",
+  "value": "crypto",
 }
 `;
 
@@ -17,7 +17,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Crypto",
+    "classID" => "crypto",
   },
 }
 `;
@@ -56,7 +56,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "MetaMail",
+    "classID" => "metaMail",
   },
 }
 `;
@@ -168,7 +168,7 @@ CustomString {
 
 exports[`interpreter default scripts metaxploit.src 1`] = `
 CustomString {
-  "value": "Metaxploit",
+  "value": "metaxploit",
 }
 `;
 
@@ -185,14 +185,14 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Metaxploit",
+    "classID" => "metaxploit",
   },
 }
 `;
 
 exports[`interpreter default scripts metaxploit.src 3`] = `
 CustomString {
-  "value": "MetaLib",
+  "value": "metaLib",
 }
 `;
 
@@ -333,14 +333,14 @@ BasicInterface {
         "user": 1,
       },
     ],
-    "classID" => "MetaLib",
+    "classID" => "metaLib",
   },
 }
 `;
 
 exports[`interpreter default scripts metaxploit.src 5`] = `
 CustomString {
-  "value": "NetSession",
+  "value": "netSession",
 }
 `;
 
@@ -351,14 +351,14 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "NetSession",
+    "classID" => "netSession",
   },
 }
 `;
 
 exports[`interpreter default scripts metaxploit.src 7`] = `
 CustomString {
-  "value": "MetaLib",
+  "value": "metaLib",
 }
 `;
 
@@ -493,7 +493,7 @@ BasicInterface {
         "user": 0,
       },
     ],
-    "classID" => "MetaLib",
+    "classID" => "metaLib",
   },
 }
 `;
@@ -589,7 +589,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Shell",
+    "classID" => "shell",
   },
 }
 `;
@@ -608,7 +608,7 @@ CustomString {
 
 exports[`interpreter default scripts router.src 1`] = `
 CustomString {
-  "value": "Router",
+  "value": "router",
 }
 `;
 
@@ -622,14 +622,14 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Router",
+    "classID" => "router",
   },
 }
 `;
 
 exports[`interpreter default scripts router.src 3`] = `
 CustomString {
-  "value": "Router",
+  "value": "router",
 }
 `;
 
@@ -643,7 +643,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Router",
+    "classID" => "router",
   },
 }
 `;
@@ -672,7 +672,7 @@ BasicInterface {
     "port" => 22,
     "isClosed" => false,
     "service" => "ssh",
-    "classID" => "Port",
+    "classID" => "port",
   },
 }
 `;
@@ -685,7 +685,7 @@ CustomString {
 
 exports[`interpreter default scripts shell.src 1`] = `
 CustomString {
-  "value": "Shell",
+  "value": "shell",
 }
 `;
 
@@ -705,14 +705,14 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Shell",
+    "classID" => "shell",
   },
 }
 `;
 
 exports[`interpreter default scripts shell.src 3`] = `
 CustomString {
-  "value": "Computer",
+  "value": "computer",
 }
 `;
 
@@ -743,7 +743,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "Computer",
+    "classID" => "computer",
   },
 }
 `;
@@ -763,7 +763,7 @@ CustomList {
         "port" => 22,
         "isClosed" => false,
         "service" => "ssh",
-        "classID" => "Port",
+        "classID" => "port",
       },
     },
   ],
@@ -810,7 +810,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "File",
+    "classID" => "file",
   },
 }
 `;
@@ -944,7 +944,7 @@ CustomString {
 
 exports[`interpreter default scripts shell.src 29`] = `
 CustomString {
-  "value": "File",
+  "value": "file",
 }
 `;
 
@@ -976,7 +976,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "File",
+    "classID" => "file",
   },
 }
 `;
@@ -1039,7 +1039,7 @@ BasicInterface {
   },
   "isInstance": false,
   "value": Map {
-    "classID" => "File",
+    "classID" => "file",
   },
 }
 `;
@@ -1117,7 +1117,7 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "classID" => "File",
+        "classID" => "file",
       },
     },
     BasicInterface {
@@ -1147,7 +1147,7 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "classID" => "File",
+        "classID" => "file",
       },
     },
     BasicInterface {
@@ -1177,7 +1177,7 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "classID" => "File",
+        "classID" => "file",
       },
     },
     BasicInterface {
@@ -1207,7 +1207,7 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "classID" => "File",
+        "classID" => "file",
       },
     },
   ],

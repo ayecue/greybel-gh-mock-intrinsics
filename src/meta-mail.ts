@@ -21,5 +21,5 @@ export function create(user: User, computer: Computer): BasicInterface {
 		return 'Not yet supported';
 	});
 
-	return new BasicInterface('MetaMail', itrface);
+	return new BasicInterface('metaMail', itrface);
 }

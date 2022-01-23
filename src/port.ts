@@ -16,7 +16,7 @@ export function create(computer: Computer, port: Port): BasicInterface {
 		return port.port;
 	});
 
-	return new BasicInterface('Port', itrface, new Map<string, any>([
+	return new BasicInterface('port', itrface, new Map<string, any>([
 		['port', port.port],
 		['isClosed', port.isClosed],
 		['service', port.service]
