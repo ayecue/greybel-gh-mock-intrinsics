@@ -1596,3 +1596,15 @@ BasicInterface {
   },
 }
 `;
+
+exports[`interpreter default scripts shell.src 53`] = `
+CustomBoolean {
+  "value": false,
+}
+`;
+
+exports[`interpreter default scripts shell.src 54`] = `
+CustomBoolean {
+  "value": true,
+}
+`;

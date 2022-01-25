@@ -58,3 +58,6 @@ print(file.meta_info)
 
 
 print(globals.get_shell.host_computer)
+
+print(get_shell("test", "test").host_computer.File("/root").has_permission("w"))
+print(get_shell("root", "test").host_computer.File("/root").has_permission("w"))

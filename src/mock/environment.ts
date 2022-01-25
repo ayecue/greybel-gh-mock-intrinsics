@@ -61,7 +61,7 @@ export class MockEnvironment {
 		this.emails = [];
 		this.localComputer = this.generateComputer(null, [
 			this.generateUser(localUser.username, localUser.password)
-		]);
+		], 'test');
 	}
 
 	generateUser(username: string, password: string): User {
@@ -136,11 +136,11 @@ export class MockEnvironment {
 		return router;
 	}
 
-	generateComputer(router: Router | null, users: User[]): Computer {
+	generateComputer(router: Router | null, users: User[], rootPassword?: string): Computer {
 		const me = this;
 		const networkDevice = me.generateNetworkDevice();
 		const computerUsers = [
-			me.generateUser('root', me.generatePassword()),
+			me.generateUser('root', rootPassword || me.generatePassword()),
 			...users
 		];
 		const computer = {
