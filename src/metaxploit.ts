@@ -4,10 +4,9 @@ import {
 	User,
 	Computer,
 	File,
-	computers,
-	Vulnerability,
-	VulnerabilityRequirements
-} from './mock-environment';
+	VulnerabilityRequirements,
+	Vulnerability
+} from './types';
 import {
 	getFile,
 	getFileLibrary,
@@ -16,6 +15,7 @@ import {
 } from './utils';
 import { create as createMetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
+import mockEnvironment from './mock/environment';
 
 export function create(user: User, computer: Computer): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
@@ -40,6 +40,12 @@ export function create(user: User, computer: Computer): BasicInterface {
 			ipAddress: ipAddress?.toString(),
 			port: Number(port?.valueOf())
 		};
+		const computers = mockEnvironment.getComputersOfRouter(meta.ipAddress);
+
+		if (computers.length === 0) {
+			return null;
+		}
+
 		let computerResult;
 		let portResult;
 		

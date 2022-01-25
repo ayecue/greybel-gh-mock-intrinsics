@@ -1,0 +1,20 @@
+mail = mail_login("test@test.org", "test")
+
+print(typeof(mail))
+print(mail)
+
+print(mail.fetch())
+print(mail.read("nothing"))
+
+print(mail.send("test@test.org", "hello", "dude"))
+print(mail.fetch())
+
+messages = mail.fetch()
+segments = messages[0].split(" ")
+mailId = segments[0]
+
+print(mailId)
+print(mail.read(mailId))
+
+print(mail.delete(mailId))
+print(mail.fetch())

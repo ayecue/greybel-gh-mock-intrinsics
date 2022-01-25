@@ -1,7 +1,6 @@
 import {
 	User,
 	FileSystemEntity,
-	getLocal,
 	File,
 	Folder,
 	Library,
@@ -9,8 +8,9 @@ import {
 	Computer,
 	VulnerabilityActionUser,
 	Service
-} from './mock-environment';
+} from './types';
 import md5 from 'blueimp-md5';
+import mockEnvironment from './mock/environment';
 
 export interface PermissionSegment {
 	[permissionType: string]: boolean;
@@ -207,7 +207,7 @@ export function getTraversalPath (path: string | null): string[] {
 
 	return path.startsWith('/')
 		? path.substr(1).split('/')
-		: getLocal().home.concat(path.split('/'));
+		: mockEnvironment.getLocal().home.concat(path.split('/'));
 }
 
 export function getFileLibrary (file: File): Library | null {

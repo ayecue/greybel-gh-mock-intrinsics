@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
@@ -42,7 +42,9 @@
     ],
     "dependencies": {
         "blueimp-md5": "^2.19.0",
+        "generate-password": "^1.7.0",
         "greybel-interpreter": "^0.5.8",
-        "random-seed": "^0.3.0"
+        "random-seed": "^0.3.0",
+        "random-username-generator": "^1.0.4"
     }
 }

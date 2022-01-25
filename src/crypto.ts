@@ -7,27 +7,25 @@ import {
     getPermissions
 } from './utils';
 import {
-    User,
-    Computer,
-    networks,
-    Network,
-    getLocal,
-    FileType,
-    File,
-    userList,
-    Folder
-} from './mock-environment';
+	User,
+	Computer,
+	Network,
+	FileType,
+	Folder,
+	File
+} from './types';
+import mockEnvironment from './mock/environment';
 
 export function create(user: User, computer: Computer): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
 
-    itrface.set('aireplay', (_: any, bssid: any, essid: any, maxAcks: any): Promise<string | null> => {
+    itrface.set('aireplay', (_: any, bssid: any, essid: any, maxAcks: any): string | null => {
         const meta = {
 			bssid: bssid?.toString(),
 			essid: essid?.toString(),
             maxAcks: Number(maxAcks?.valueOf())
 		};
-		const network = networks.find((item: Network) => {
+		const network = mockEnvironment.networks.find((item: Network) => {
             return (
                 item.bssid === item.bssid &&
                 item.essid === item.essid
@@ -35,22 +33,20 @@ export function create(user: User, computer: Computer): BasicInterface {
         });
 
         if (!network) {
-            return Promise.reject('No network found');
+            return 'No network found';
         }
 
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const folder = getFile(computer.fileSystem, getLocal().home) as Folder;
-                putFile(folder, {
-                    name: 'file.cap',
-                    content: network.password,
-                    owner: user.username,
-                    permissions: 'drwxr--r--',
-                    type: FileType.Ack
-                });
-                resolve(null);
-            }, meta.maxAcks * 10);
+        const folder = getFile(computer.fileSystem, mockEnvironment.getLocal().home) as Folder;
+        
+        putFile(folder, {
+            name: 'file.cap',
+            content: network.password,
+            owner: user.username,
+            permissions: 'drwxr--r--',
+            type: FileType.Ack
         });
+
+        return null;
 	});
 
     itrface.set('airmon', (_: any): string => {
@@ -81,7 +77,7 @@ export function create(user: User, computer: Computer): BasicInterface {
         const meta = {
 			encryptedPass: encryptedPass?.toString()
 		};
-        const user = userList.find((item: User) => {
+        const user = mockEnvironment.users.find((item: User) => {
             return item.passwordHashed === meta.encryptedPass;
         });
 

@@ -1,15 +1,10 @@
-import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
 import {
-	User,
 	Computer,
-	File,
-	FileType,
-	vulnerabilities,
-	Vulnerability,
+	Library,
 	VulnerabilityAction,
-	Library
-} from './mock-environment';
+	Vulnerability
+} from './types';
 import {
 	getFile,
 	getFileLibrary,
@@ -19,12 +14,13 @@ import {
 import { create as createShell } from './shell';
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
+import mockEnvironment from './mock/environment';
 
 export function create(computer: Computer, targetComputer: Computer, library: Library): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
 	const isLan = computer.router.publicIp === targetComputer.router.publicIp;
 	const isLocal = isLan && computer.localIp === targetComputer.localIp;
-	const exploits = vulnerabilities.filter((item: Vulnerability) => {
+	const exploits = mockEnvironment.vulnerabilities.filter((item: Vulnerability) => {
 		return item.library === library && item.remote !== isLocal;
 	});
 

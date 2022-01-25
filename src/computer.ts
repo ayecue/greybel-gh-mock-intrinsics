@@ -1,20 +1,14 @@
 import { CustomNil, CustomBoolean } from 'greybel-interpreter';
 import BasicInterface from './interface';
 import {
-	Computer,
 	User,
-	Port,
-	homePath,
-	FileSystemEntity,
-	Folder,
-	File,
-	FileType,
+	Computer,
 	NetworkDevice,
-	generateUser,
-	getUserFolder,
-	networks,
-	Network
-} from './mock-environment';
+	Network,
+	Port,
+	FileType,
+	Folder
+} from './types';
 import { create as createFile } from './file';
 import { create as createPort } from './port';
 import {
@@ -25,6 +19,8 @@ import {
 	getTraversalPath,
 	changePassword
 } from './utils';
+import mockEnvironment from './mock/environment';
+import { getUserFolder } from './mock/default-file-system';
 
 
 export function create(user: User, computer: Computer): BasicInterface {
@@ -141,7 +137,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 				const homeFolder = getFile(computer.fileSystem, ['home']) as Folder;
 
 				if (!hasFile(homeFolder, meta.username)) {
-					computer.users.push(generateUser(meta.username, meta.password));
+					computer.users.push(mockEnvironment.generateUser(meta.username, meta.password));
 					homeFolder.folders.push(getUserFolder(homeFolder, meta.username));
 					return true;
 				}
@@ -213,7 +209,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
 	itrface.set('wifi_networks', (_: any): string[] => {
 		//programs are not supported for now
-		return networks.map((item: Network) => {
+		return mockEnvironment.networks.map((item: Network) => {
 			return `${item.mac} ${item.percentage}% ${item.name}`;
 		});
 	});

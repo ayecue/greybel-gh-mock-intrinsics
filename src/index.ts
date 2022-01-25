@@ -1,5 +1,8 @@
 import * as generics from './generics';
 
+export * from './types';
+export { default as mockEnvironment } from './mock/environment';
+
 export function getAPI(): Map<string, Function> {
 	const apiInterface = new Map();
 

@@ -1,7 +1,8 @@
 import { CustomBoolean, CustomMap } from 'greybel-interpreter';
 import BasicInterface from './interface';
-import { Router, User, computers, Port } from './mock-environment';
+import { Router, User, Port } from './types';
 import { create as createPort } from './port';
+import mockEnvironment from './mock/environment';
 
 export function create(user: User, router: Router): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
@@ -18,6 +19,7 @@ export function create(user: User, router: Router): BasicInterface {
 		const meta = {
 			port: Number(port?.valueOf())
 		};
+		const computers = mockEnvironment.getComputersOfRouter(router.publicIp);
 
 		for (let item of computers) {
 			if (item.router.publicIp === router.publicIp) {
@@ -36,6 +38,7 @@ export function create(user: User, router: Router): BasicInterface {
 
 	itrface.set('used_ports', (_: any): BasicInterface[] => {
 		const result = [];
+		const computers = mockEnvironment.getComputersOfRouter(router.publicIp);
 
 		for (let item of computers) {
 			if (item.router.publicIp === router.publicIp) {

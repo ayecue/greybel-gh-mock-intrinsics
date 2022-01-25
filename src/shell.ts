@@ -1,15 +1,12 @@
-import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
 import {
 	User,
 	Service,
-	computers,
-	routers,
 	Computer,
-	Port,
-	getLocal
-} from './mock-environment';
+	Port
+} from './types';
 import { create as createComputer } from './computer';
+import mockEnvironment from './mock/environment';
 
 export function create(user: User, computer: Computer, port?: Port): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
@@ -36,6 +33,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			};
 			let resultPort: Port | null;
 			let resultUser: User | null;
+			const computers = mockEnvironment.getComputersOfRouter(meta.ip);
 			const resultComputer = computers.find((item) => {
 				if (item.router.publicIp !== meta.ip) {
 					return false;
@@ -90,7 +88,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 
 		itrface.set('ping', (_: any, ipAddress: any): boolean | null => {
 			const ip = ipAddress?.toString();
-			const router = routers.find((item) => item.publicIp === ip);
+			const router = mockEnvironment.getRouter(ip);
 
 			if (router) {
 				return true;
@@ -132,13 +130,13 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 }
 
 export function loginLocal(user: any, password: any): BasicInterface | null {
-	const computer = getLocal().computer;
+	const computer = mockEnvironment.getLocal().computer;
 
 	const usr = user?.toString();
 	const pwd = password?.toString();
 
 	if (!usr && !pwd) {
-		return create(getLocal().user, computer);
+		return create(mockEnvironment.getLocal().user, computer);
 	}
 
 	for (user of computer.users) {

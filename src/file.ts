@@ -1,6 +1,12 @@
 import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
-import { File, FileSystemEntity, Folder, User, FileType } from './mock-environment';
+import {
+	User,
+	FileType,
+	FileSystemEntity,
+	Folder,
+	File
+} from './types';
 import {
 	parsePermissions,
 	getPermissions,

@@ -1,6 +1,8 @@
-import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
-import { Library, Computer } from './mock-environment';
+import {
+	Computer,
+	Library
+} from './types';
 import { create as createMetaLib } from './meta-lib';
 
 export function create(computer: Computer, targetComputer: Computer, library: Library): BasicInterface {

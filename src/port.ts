@@ -1,5 +1,5 @@
 import BasicInterface from './interface';
-import { Port, Computer } from './mock-environment';
+import { Computer, Port } from './types';
 
 export function create(computer: Computer, port: Port): BasicInterface {
 	const itrface: Map<string, Function> = new Map();

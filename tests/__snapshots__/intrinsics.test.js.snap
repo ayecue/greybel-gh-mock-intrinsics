@@ -36,7 +36,7 @@ CustomString {
 
 exports[`interpreter default scripts crypto.src 5`] = `
 CustomString {
-  "value": "somefoo",
+  "value": "test",
 }
 `;
 
@@ -47,17 +47,8 @@ CustomString {
 `;
 
 exports[`interpreter default scripts generics.src 1`] = `
-BasicInterface {
-  "interface": Map {
-    "fetch" => [Function],
-    "read" => [Function],
-    "send" => [Function],
-    "delete" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "metaMail",
-  },
+CustomNil {
+  "value": null,
 }
 `;
 
@@ -81,10 +72,10 @@ CustomString {
 
 exports[`interpreter default scripts generics.src 5`] = `
 CustomString {
-  "value": "Domain name: mytest.org
-Administrative contact: Rodd Mantil
-Email address: Mantil@goldm.info
-Phone: 782517348",
+  "value": "Domain name: Splendid-bart-48.org
+Administrative contact: placid-lambert-82
+Email address: placid-lambert-82@Splendid-bart-48.org
+Phone: 123456891",
 }
 `;
 
@@ -132,13 +123,13 @@ CustomString {
 
 exports[`interpreter default scripts generics.src 13`] = `
 CustomString {
-  "value": "test@test.org",
+  "value": "test@Unbelievable-player-76.tv",
 }
 `;
 
 exports[`interpreter default scripts generics.src 14`] = `
 CustomString {
-  "value": "qdsaibwv",
+  "value": "s1jbeulm",
 }
 `;
 
@@ -163,6 +154,84 @@ CustomString {
 exports[`interpreter default scripts ls.src 1`] = `
 CustomString {
   "value": "Desktop\\\\nDownloads\\\\nConfig\\\\nfile.cap",
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 1`] = `
+CustomString {
+  "value": "metaMail",
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 2`] = `
+BasicInterface {
+  "interface": Map {
+    "fetch" => [Function],
+    "read" => [Function],
+    "send" => [Function],
+    "delete" => [Function],
+  },
+  "isInstance": false,
+  "value": Map {
+    "classID" => "metaMail",
+  },
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 3`] = `
+CustomList {
+  "slice": [Function],
+  "value": Array [],
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 4`] = `
+CustomNil {
+  "value": null,
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 5`] = `
+CustomBoolean {
+  "value": true,
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 6`] = `
+CustomList {
+  "slice": [Function],
+  "value": Array [
+    CustomString {
+      "value": "87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+dude",
+    },
+  ],
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 7`] = `
+CustomString {
+  "value": "87ffc4dc-8555-4f07-a077-af1919e43718",
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 8`] = `
+CustomString {
+  "value": "87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+dude",
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 9`] = `
+CustomBoolean {
+  "value": true,
+}
+`;
+
+exports[`interpreter default scripts meta-mail.src 10`] = `
+CustomList {
+  "slice": [Function],
+  "value": Array [],
 }
 `;
 
@@ -207,6 +276,22 @@ BasicInterface {
   "value": Map {
     "exploits" => Array [
       Object {
+        "action": 4,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [
+          2,
+        ],
+        "sector": "borg8kwtzu",
+        "user": 0,
+      },
+      Object {
         "action": 3,
         "details": "loop in array",
         "folder": Array [
@@ -214,14 +299,14 @@ BasicInterface {
           "guest",
         ],
         "library": "crypto",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0xC8CE05AB",
         "remote": false,
         "required": Array [
-          6,
+          2,
           0,
         ],
-        "sector": "mslubssnoe",
-        "user": 1,
+        "sector": "6iogj1qr7h",
+        "user": 0,
       },
       Object {
         "action": 2,
@@ -231,13 +316,30 @@ BasicInterface {
           "guest",
         ],
         "library": "crypto",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [
+          5,
+        ],
+        "sector": "4w2so9dmgw",
+        "user": 1,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
         "remote": false,
         "required": Array [
           0,
-          2,
+          4,
+          1,
         ],
-        "sector": "b01jydhrcf",
+        "sector": "ueqg4x1o0v",
         "user": 0,
       },
       Object {
@@ -248,29 +350,15 @@ BasicInterface {
           "guest",
         ],
         "library": "crypto",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0xC8CE05AB",
         "remote": false,
         "required": Array [
-          3,
-          5,
+          1,
           2,
+          5,
         ],
-        "sector": "sjw2b8l8js",
-        "user": 2,
-      },
-      Object {
-        "action": 2,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0x33BC9555",
-        "remote": false,
-        "required": Array [],
-        "sector": "fw5ynq2637",
-        "user": 1,
+        "sector": "y0arblna9a",
+        "user": 0,
       },
       Object {
         "action": 4,
@@ -280,13 +368,58 @@ BasicInterface {
           "guest",
         ],
         "library": "crypto",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0xC8CE05AB",
         "remote": false,
         "required": Array [
-          3,
+          2,
+          6,
         ],
-        "sector": "u19jo65mfl",
-        "user": 2,
+        "sector": "i5cxta6sop",
+        "user": 0,
+      },
+      Object {
+        "action": 4,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [],
+        "sector": "q37eqpjlzy",
+        "user": 0,
+      },
+      Object {
+        "action": 4,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [
+          5,
+        ],
+        "sector": "1f7paxxf7e",
+        "user": 1,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [],
+        "sector": "7knf7ejdni",
+        "user": 1,
       },
       Object {
         "action": 3,
@@ -296,40 +429,47 @@ BasicInterface {
           "guest",
         ],
         "library": "crypto",
-        "memAddress": "0x48096032",
-        "remote": false,
-        "required": Array [],
-        "sector": "mie6bkughj",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0x48096032",
-        "remote": false,
-        "required": Array [],
-        "sector": "suef4z9u65",
-        "user": 0,
-      },
-      Object {
-        "action": 0,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0x48096032",
+        "memAddress": "0xC8CE05AB",
         "remote": false,
         "required": Array [
+          5,
+          1,
+          3,
+        ],
+        "sector": "at0h9o477l",
+        "user": 0,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [
+          3,
+        ],
+        "sector": "mwha9je4hh",
+        "user": 0,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "crypto",
+        "memAddress": "0xC8CE05AB",
+        "remote": false,
+        "required": Array [
+          6,
           2,
         ],
-        "sector": "6ddnjaivtn",
+        "sector": "2mxjo6mo50",
         "user": 1,
       },
     ],
@@ -373,6 +513,23 @@ BasicInterface {
   "value": Map {
     "exploits" => Array [
       Object {
+        "action": 2,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x49F15300",
+        "remote": false,
+        "required": Array [
+          6,
+          1,
+        ],
+        "sector": "nmrp8uli0w",
+        "user": 1,
+      },
+      Object {
         "action": 1,
         "details": "loop in array",
         "folder": Array [
@@ -380,67 +537,102 @@ BasicInterface {
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0x49F15300",
         "remote": false,
         "required": Array [
+          1,
           6,
-          2,
+          4,
         ],
-        "sector": "h6yi3i6ym4",
+        "sector": "ozyfeds5qk",
+        "user": 0,
+      },
+      Object {
+        "action": 3,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x49F15300",
+        "remote": false,
+        "required": Array [
+          1,
+          5,
+        ],
+        "sector": "ck2gxafm2d",
+        "user": 0,
+      },
+      Object {
+        "action": 4,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x49F15300",
+        "remote": false,
+        "required": Array [
+          0,
+          5,
+          1,
+        ],
+        "sector": "g958o11uty",
         "user": 1,
       },
       Object {
-        "action": 3,
+        "action": 4,
         "details": "loop in array",
         "folder": Array [
           "home",
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0x49F15300",
         "remote": false,
         "required": Array [
-          4,
+          5,
         ],
-        "sector": "iahh3g6ohi",
+        "sector": "wu7hy0ojpz",
         "user": 0,
       },
       Object {
-        "action": 0,
+        "action": 4,
         "details": "loop in array",
         "folder": Array [
           "home",
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x33BC9555",
+        "memAddress": "0x49F15300",
         "remote": false,
         "required": Array [
-          2,
-          3,
-          4,
-        ],
-        "sector": "t5l9ml3dvg",
-        "user": 0,
-      },
-      Object {
-        "action": 0,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x33BC9555",
-        "remote": false,
-        "required": Array [
-          2,
           1,
         ],
-        "sector": "d64lu1atp5",
+        "sector": "r12hsw73b3",
         "user": 2,
       },
       Object {
+        "action": 0,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x2FB30899",
+        "remote": false,
+        "required": Array [
+          6,
+          1,
+          5,
+        ],
+        "sector": "q7b63b1y6e",
+        "user": 0,
+      },
+      Object {
         "action": 3,
         "details": "loop in array",
         "folder": Array [
@@ -448,48 +640,145 @@ BasicInterface {
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x48096032",
+        "memAddress": "0x2FB30899",
+        "remote": false,
+        "required": Array [
+          0,
+        ],
+        "sector": "rb1e197v19",
+        "user": 1,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x2FB30899",
+        "remote": false,
+        "required": Array [
+          3,
+          0,
+        ],
+        "sector": "v1caw4cv6l",
+        "user": 0,
+      },
+      Object {
+        "action": 3,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x2FB30899",
+        "remote": false,
+        "required": Array [],
+        "sector": "lfqy61z10a",
+        "user": 1,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x60744A64",
+        "remote": false,
+        "required": Array [],
+        "sector": "laj5q5fy0b",
+        "user": 1,
+      },
+      Object {
+        "action": 1,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x60744A64",
+        "remote": false,
+        "required": Array [
+          0,
+          4,
+          2,
+        ],
+        "sector": "otlt6u2mi1",
+        "user": 0,
+      },
+      Object {
+        "action": 2,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x60744A64",
+        "remote": false,
+        "required": Array [
+          6,
+          1,
+          3,
+        ],
+        "sector": "iv4otk4242",
+        "user": 0,
+      },
+      Object {
+        "action": 3,
+        "details": "loop in array",
+        "folder": Array [
+          "home",
+          "guest",
+        ],
+        "library": "ssh",
+        "memAddress": "0x60744A64",
         "remote": false,
         "required": Array [
           5,
           3,
         ],
-        "sector": "l2nr1zvbf9",
+        "sector": "52vj1ouyuh",
         "user": 0,
       },
       Object {
-        "action": 0,
+        "action": 1,
         "details": "loop in array",
         "folder": Array [
           "home",
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x48096032",
+        "memAddress": "0x42CBFBA3",
         "remote": false,
         "required": Array [
-          2,
           3,
+          6,
         ],
-        "sector": "eta8rgjtuq",
-        "user": 0,
+        "sector": "58ndo1b2vg",
+        "user": 1,
       },
       Object {
-        "action": 3,
+        "action": 4,
         "details": "loop in array",
         "folder": Array [
           "home",
           "guest",
         ],
         "library": "ssh",
-        "memAddress": "0x48096032",
+        "memAddress": "0x42CBFBA3",
         "remote": false,
         "required": Array [
           0,
           6,
-          3,
+          4,
         ],
-        "sector": "f12a7l3rrk",
+        "sector": "wsijit43t8",
         "user": 0,
       },
     ],
@@ -503,10 +792,7 @@ CustomList {
   "slice": [Function],
   "value": Array [
     CustomString {
-      "value": "0x33BC9555",
-    },
-    CustomString {
-      "value": "0x48096032",
+      "value": "0xC8CE05AB",
     },
   ],
 }
@@ -514,19 +800,7 @@ CustomList {
 
 exports[`interpreter default scripts metaxploit.src 10`] = `
 CustomString {
-  "value": "loop in array <b>mslubssnoe</b>. Buffer overflow.
-* 1337 computers using this router as gateway.
-* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-loop in array <b>b01jydhrcf</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-* Checking an active user.
-loop in array <b>sjw2b8l8js</b>. Buffer overflow.
-* Checking root active user.
-* 1337 port forwarding configured from router to the target computer.
-* Checking an active user.
-loop in array <b>fw5ynq2637</b>. Buffer overflow.
-loop in array <b>u19jo65mfl</b>. Buffer overflow.
-* Checking root active user.",
+  "value": "",
 }
 `;
 
@@ -562,35 +836,20 @@ CustomString {
 `;
 
 exports[`interpreter default scripts metaxploit.src 16`] = `
-CustomString {
-  "value": "Invalid args",
+CustomNil {
+  "value": null,
 }
 `;
 
 exports[`interpreter default scripts metaxploit.src 17`] = `
-CustomBoolean {
-  "value": false,
+CustomNil {
+  "value": null,
 }
 `;
 
 exports[`interpreter default scripts metaxploit.src 18`] = `
-BasicInterface {
-  "interface": Map {
-    "connect_service" => [Function],
-    "scp" => [Function],
-    "build" => [Function],
-    "launch" => [Function],
-    "ping" => [Function],
-    "masterkey" => [Function],
-    "masterkey_direct" => [Function],
-    "restore_network" => [Function],
-    "start_terminal" => [Function],
-    "host_computer" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "shell",
-  },
+CustomNil {
+  "value": null,
 }
 `;
 
@@ -658,66 +917,26 @@ CustomString {
 
 exports[`interpreter default scripts router.src 6`] = `
 CustomString {
-  "value": "192.168.1.1",
+  "value": "192.168.19.82",
 }
 `;
 
 exports[`interpreter default scripts router.src 7`] = `
-BasicInterface {
-  "interface": Map {
-    "get_lan_ip" => [Function],
-    "is_closed" => [Function],
-    "port_number" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "port" => 22,
-    "isClosed" => false,
-    "service" => "ssh",
-    "classID" => "port",
-  },
+CustomNil {
+  "value": null,
 }
 `;
 
 exports[`interpreter default scripts router.src 8`] = `
-CustomString {
-  "value": "22 false ssh",
+CustomNil {
+  "value": null,
 }
 `;
 
 exports[`interpreter default scripts router.src 9`] = `
 CustomList {
   "slice": [Function],
-  "value": Array [
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 22,
-        "isClosed" => false,
-        "service" => "ssh",
-        "classID" => "port",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 80,
-        "isClosed" => false,
-        "service" => "http",
-        "classID" => "port",
-      },
-    },
-  ],
+  "value": Array [],
 }
 `;
 
@@ -790,6 +1009,48 @@ exports[`interpreter default scripts shell.src 5`] = `
 CustomList {
   "slice": [Function],
   "value": Array [
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 386,
+        "isClosed" => true,
+        "service" => "sql",
+        "classID" => "port",
+      },
+    },
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 623,
+        "isClosed" => false,
+        "service" => "http",
+        "classID" => "port",
+      },
+    },
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 977,
+        "isClosed" => true,
+        "service" => "rshell",
+        "classID" => "port",
+      },
+    },
     BasicInterface {
       "interface": Map {
         "get_lan_ip" => [Function],
@@ -887,7 +1148,7 @@ root 1864 0.0% 4.20% Xorg",
 
 exports[`interpreter default scripts shell.src 14`] = `
 CustomString {
-  "value": "wlan0 38dr2pis true",
+  "value": "eth0 38dr2pis true",
 }
 `;
 
@@ -938,7 +1199,16 @@ CustomList {
   "slice": [Function],
   "value": Array [
     CustomString {
-      "value": "C6:35:EA:25:3A:4C 70% test-network",
+      "value": "0B:E4:A7:98:32:AA 57% straightforward-realtor-81",
+    },
+    CustomString {
+      "value": "44:8E:73:9E:F2:63 45% Smart-author-26",
+    },
+    CustomString {
+      "value": "D4:3B:19:E1:AE:8A 53% willing-lambert-31",
+    },
+    CustomString {
+      "value": "D6:70:65:60:43:66 22% reserved-sharp-59",
     },
   ],
 }
@@ -958,7 +1228,7 @@ CustomBoolean {
 
 exports[`interpreter default scripts shell.src 25`] = `
 CustomString {
-  "value": "192.168.0.2",
+  "value": "192.168.166.167",
 }
 `;
 
@@ -970,7 +1240,7 @@ CustomString {
 
 exports[`interpreter default scripts shell.src 27`] = `
 CustomString {
-  "value": "192.168.0.2",
+  "value": "192.168.166.167",
 }
 `;
 

@@ -12,15 +12,10 @@ import { create as createMetaxploit } from './metaxploit';
 import { create as createRouter } from './router';
 import { create as createMetaMail } from './meta-mail';
 import {
-	getLocal,
 	FileType,
-	File,
-	computers,
-	routerNamespaces,
-	RouterNamespace,
-	routers,
-	Router
-} from './mock-environment';
+	File
+} from './types';
+import mockEnvironment from './mock/environment';
 
 import BasicInterface from './interface';
 
@@ -29,33 +24,33 @@ export function getShell(user: any, password: any): BasicInterface {
 }
 
 export function mailLogin(username: any, password: any): BasicInterface {
-	const { user, computer } = getLocal();
+	const email = mockEnvironment.getEmailViaLogin(username?.toString(), password?.toString());
 	
-	return createMetaMail(user, computer);
+	if (!email) {
+		return null;
+	}
+
+	return createMetaMail(email);
 }
 
 export function getRouter(ipAddress: any): BasicInterface {
-	const { user, computer } = getLocal();
+	const { user, computer } = mockEnvironment.getLocal();
 	const target = ipAddress?.toString();
-	const router = routers.find((item: Router) => {
-		return item.publicIp === target;
-	});
+	const router = mockEnvironment.getRouter(target || computer.router?.publicIp);
 	
 	return createRouter(user, router || computer.router);
 }
 
 export function getSwitch(ipAddress: any): BasicInterface {
-	const { user, computer } = getLocal();
+	const { user, computer } = mockEnvironment.getLocal();
 	const target = ipAddress?.toString();
-	const router = routers.find((item: Router) => {
-		return item.publicIp === target;
-	});
+	const router = mockEnvironment.getRouter(target || computer.router?.publicIp);
 	
 	return createRouter(user, router || computer.router);
 }
 
 export function includeLib(libPath: any): BasicInterface | null {
-	const { user, computer } = getLocal();
+	const { user, computer } = mockEnvironment.getLocal();
 	const target = getTraversalPath(libPath?.toString());
 	const entityResult = getFile(computer.fileSystem, target);
 
@@ -91,32 +86,26 @@ export function time(): number {
 
 export function nslookup(hostname: any): string {
 	const target = hostname?.toString();
-	const ns = routerNamespaces.find((item: RouterNamespace) => {
-		return item.name === target;
-	});
-	
-	return ns.router.publicIp;
+	const router = mockEnvironment.findRouterViaNS(target);
+	return router?.publicIp;
 }
 
 export function whois(ipAddress: any): string {
-	if (isValidIp(ipAddress)) {
-		return [
-			'Domain name: mytest.org',
-			'Administrative contact: Rodd Mantil',
-			'Email address: Mantil@goldm.info',
-			'Phone: 782517348'
-		].join('\n');
+	const target = ipAddress?.toString();
+	if (isValidIp(target)) {
+		return mockEnvironment.getRouter(target).whoisDescription;
 	}
-
 	return 'Invalid IP address: ${ipAddress}';
 }
 
 export function isValidIp(ipAddress: any): boolean {
-	return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipAddress?.toString());
+	const target = ipAddress?.toString();
+	return mockEnvironment.isValidIp(target);
 }
 
 export function isLanIp(ipAddress: any): boolean {
-	return /^1(0|27|69\.254|72\.(1[6-9]|2[0-9]|3[0-1])|92\.168)\./.test(ipAddress?.toString());
+	const target = ipAddress?.toString();
+	return mockEnvironment.isLanIp(target);
 }
 
 export function commandInfo(idCommand: any): string {
@@ -129,32 +118,32 @@ export function currentDate(): string {
 }
 
 export function currentPath(): string {
-	return '/' + getLocal().home.join('/');
+	return '/' + mockEnvironment.getLocal().home.join('/');
 }
 
 export function parentPath(): string {
-	const { home } = getLocal();
+	const { home } = mockEnvironment.getLocal();
 	return '/' + home.slice(0, home.length - 1).join('/');
 }
 
 export function homeDir(): string {
-	return '/' + getLocal().home.join('/');
+	return '/' + mockEnvironment.getLocal().home.join('/');
 }
 
 export function programPath(): string {
-	return '/' + getLocal().home.join('/') + '/myprogramm';
+	return '/' + mockEnvironment.getLocal().home.join('/') + '/myprogramm';
 }
 
 export function activeUser(): string {
-	return getLocal().user.username;
+	return mockEnvironment.getLocal().user.username;
 }
 
 export function userMailAddress(): string {
-	return getLocal().user.email;
+	return mockEnvironment.getLocal().user.email;
 }
 
 export function userBankNumber(): string {
-	return getLocal().user.userBankNumber;
+	return mockEnvironment.getLocal().user.userBankNumber;
 }
 
 export function formatColumns(columns: any): string {
@@ -171,7 +160,7 @@ export function clearScreen(): null {
 }
 
 export function launchPath(): string {
-	return '/' + getLocal().home.join('/') + '/myprogramm';
+	return '/' + mockEnvironment.getLocal().home.join('/') + '/myprogramm';
 }
 
 export function typeOf(value: any): string {
