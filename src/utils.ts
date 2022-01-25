@@ -71,12 +71,12 @@ export function getPermissions(user: User, file: FileSystemEntity): PermissionSe
 }
 
 export function getFile (entity: FileSystemEntity, path: string[]): FileSystemEntity | null {
-	if (!entity.isFolder) {
+	if (!path || !entity.isFolder) {
 		return null;
 	}
 
 	if (path.length === 0) {
-		return null;
+		return entity;
 	}
 
 	const nextPath = [].concat(path);
@@ -200,8 +200,10 @@ export function copyFile (entity: FileSystemEntity, parent: FileSystemEntity): F
 	return newFile;
 }
 
-export function getTraversalPath (path: string | null): string[] {
+export function getTraversalPath (path: string | null): null | string[] {
 	if (!path) {
+		return null;
+	} else if (path === '/') {
 		return [];
 	}
 

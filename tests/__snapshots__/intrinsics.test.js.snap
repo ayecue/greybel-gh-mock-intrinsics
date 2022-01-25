@@ -1608,3 +1608,36 @@ CustomBoolean {
   "value": true,
 }
 `;
+
+exports[`interpreter default scripts shell.src 55`] = `
+BasicInterface {
+  "interface": Map {
+    "chmod" => [Function],
+    "copy" => [Function],
+    "move" => [Function],
+    "rename" => [Function],
+    "path" => [Function],
+    "parent" => [Function],
+    "name" => [Function],
+    "get_content" => [Function],
+    "set_content" => [Function],
+    "is_binary" => [Function],
+    "is_folder" => [Function],
+    "has_permission" => [Function],
+    "delete" => [Function],
+    "get_folders" => [Function],
+    "get_files" => [Function],
+    "permissions" => [Function],
+    "owner" => [Function],
+    "set_owner" => [Function],
+    "group" => [Function],
+    "set_group" => [Function],
+    "size" => [Function],
+    "meta_info" => [Function],
+  },
+  "isInstance": false,
+  "value": Map {
+    "classID" => "file",
+  },
+}
+`;
