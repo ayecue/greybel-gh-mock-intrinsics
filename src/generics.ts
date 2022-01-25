@@ -4,7 +4,7 @@ import {
 	getPermissions,
 	getTraversalPath
 } from './utils';
-import { md5 as actualMd5 } from './helper';
+import { default as actualMd5 } from 'blueimp-md5';
 import { loginLocal } from './shell';
 import { create as createAptClient } from './apt-client';
 import { create as createCrypto } from './crypto';

@@ -10,7 +10,7 @@ import {
 	VulnerabilityActionUser,
 	Service
 } from './mock-environment';
-import { md5 } from './helper';
+import md5 from 'blueimp-md5';
 
 export interface PermissionSegment {
 	[permissionType: string]: boolean;

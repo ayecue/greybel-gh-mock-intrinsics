@@ -55,3 +55,6 @@ print(file.group)
 print(file.set_group)
 print(file.size)
 print(file.meta_info)
+
+
+print(globals.get_shell.host_computer)

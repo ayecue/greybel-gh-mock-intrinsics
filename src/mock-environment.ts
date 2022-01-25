@@ -1,4 +1,4 @@
-import { md5 } from './helper';
+import md5 from 'blueimp-md5';
 import randomSeed from 'random-seed';
 
 export interface User {

@@ -162,7 +162,7 @@ CustomString {
 
 exports[`interpreter default scripts ls.src 1`] = `
 CustomString {
-  "value": "Desktop\\\\nDownloads\\\\nConfig\\\\nack_file",
+  "value": "Desktop\\\\nDownloads\\\\nConfig\\\\nfile.cap",
 }
 `;
 
@@ -1292,5 +1292,37 @@ CustomNumber {
 exports[`interpreter default scripts shell.src 51`] = `
 CustomNil {
   "value": null,
+}
+`;
+
+exports[`interpreter default scripts shell.src 52`] = `
+BasicInterface {
+  "interface": Map {
+    "get_ports" => [Function],
+    "File" => [Function],
+    "create_folder" => [Function],
+    "is_network_active" => [Function],
+    "touch" => [Function],
+    "show_procs" => [Function],
+    "network_devices" => [Function],
+    "change_password" => [Function],
+    "create_user" => [Function],
+    "delete_user" => [Function],
+    "create_group" => [Function],
+    "delete_group" => [Function],
+    "groups" => [Function],
+    "close_program" => [Function],
+    "wifi_networks" => [Function],
+    "connect_wifi" => [Function],
+    "connect_ethernet" => [Function],
+    "network_gateway" => [Function],
+    "active_net_card" => [Function],
+    "local_ip" => [Function],
+    "public_ip" => [Function],
+  },
+  "isInstance": false,
+  "value": Map {
+    "classID" => "computer",
+  },
 }
 `;

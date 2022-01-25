@@ -42,7 +42,7 @@ export function create(user: User, computer: Computer): BasicInterface {
             setTimeout(() => {
                 const folder = getFile(computer.fileSystem, getLocal().home) as Folder;
                 putFile(folder, {
-                    name: 'ack_file',
+                    name: 'file.cap',
                     content: network.password,
                     owner: user.username,
                     permissions: 'drwxr--r--',

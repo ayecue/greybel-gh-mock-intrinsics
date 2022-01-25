@@ -5,5 +5,5 @@ print(crypto)
 
 print(crypto.aireplay("bssid-test-uuid", "essid-test-uuid", 10))
 print(crypto.airmon)
-print(crypto.aircrack("/home/test/ack_file"))
+print(crypto.aircrack("/home/test/file.cap"))
 print(crypto.decipher("44a4676e955f415dff63ddbfdf18ff13"))
