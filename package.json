@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
@@ -33,7 +33,8 @@
         "jest": "^27.4.5",
         "nodemon": "^2.0.15",
         "ts-node": "^10.4.0",
-        "typescript": "^4.5.4"
+        "typescript": "^4.5.4",
+        "@types/random-seed": "^0.3.3"
     },
     "keywords": [
         "greyscript",
@@ -41,10 +42,9 @@
     ],
     "dependencies": {
         "blueimp-md5": "^2.19.0",
-        "generate-password": "^1.7.0",
+        "generate-password-browser": "^1.1.0",
         "greybel-interpreter": "^0.5.8",
         "random-seed": "^0.3.0",
-        "random-username-generator": "^1.0.4",
-        "@types/random-seed": "^0.3.3"
+        "random-username-generator": "^1.0.4"
     }
 }

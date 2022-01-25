@@ -1,6 +1,6 @@
 import md5 from 'blueimp-md5';
 const randomUsernameGenerator = require('random-username-generator');
-import generatePassword from 'generate-password';
+import generatePassword from 'generate-password-browser';
 import randomSeed, { RandomSeed } from 'random-seed';
 import {
 	User,
