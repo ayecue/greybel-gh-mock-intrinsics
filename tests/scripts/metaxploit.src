@@ -31,3 +31,12 @@ print(metaLib.overflow("0x33BC9555", "fw5ynq2637"))
 print(metaLib.overflow("0x33BC9555", "fw5ynq2637", "change"))
 
 print(netSessionMeta.overflow("0x33BC9555", "d64lu1atp5"))
+
+netSession = meta.net_use("142.32.54.56")
+
+routerNetSessionMeta = netSession.dump_lib
+scanResult = meta.scan(metaLib)
+scanAddressResult = meta.scan_address(metaLib, scanResult[0])
+
+print(scanResult)
+print(scanAddressResult)

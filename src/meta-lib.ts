@@ -3,11 +3,11 @@ import {
 	Computer,
 	Library,
 	VulnerabilityAction,
-	Vulnerability
+	Vulnerability,
+	Router
 } from './types';
 import {
 	getFile,
-	getFileLibrary,
 	getUserByVulnerability,
 	changePassword
 } from './utils';
@@ -18,7 +18,10 @@ import mockEnvironment from './mock/environment';
 
 export function create(computer: Computer, targetComputer: Computer, library: Library): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
-	const isLan = computer.router.publicIp === targetComputer.router.publicIp;
+	const isRouter = (targetComputer as Router).publicIp && targetComputer.router == null;
+	const isLan = isRouter
+		? computer.router.publicIp === (targetComputer as Router).publicIp
+		: computer.router.publicIp === targetComputer.router.publicIp;
 	const isLocal = isLan && computer.localIp === targetComputer.localIp;
 	const exploits = mockEnvironment.vulnerabilities.filter((item: Vulnerability) => {
 		return item.library === library && item.remote !== isLocal;

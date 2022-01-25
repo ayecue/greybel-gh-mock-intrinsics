@@ -5,7 +5,8 @@ import {
 	Computer,
 	File,
 	VulnerabilityRequirements,
-	Vulnerability
+	Vulnerability,
+	Library
 } from './types';
 import {
 	getFile,
@@ -40,6 +41,12 @@ export function create(user: User, computer: Computer): BasicInterface {
 			ipAddress: ipAddress?.toString(),
 			port: Number(port?.valueOf())
 		};
+
+		if (meta.port === 0 || Number.isNaN(meta.port)) {
+			const targetComputer = mockEnvironment.getRouter(meta.ipAddress);
+			return createNetSession(computer, targetComputer, Library.KERNEL_ROUTER);
+		}
+
 		const computers = mockEnvironment.getComputersOfRouter(meta.ipAddress);
 
 		if (computers.length === 0) {
@@ -75,7 +82,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 			return null;
 		}
 
-		return createNetSession(computer, computer, library);
+		return createNetSession(computer, computerResult, library);
 	});
 
 	itrface.set('scan', (_: any, metaLib: CustomMap): string[] => {
