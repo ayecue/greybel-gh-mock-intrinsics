@@ -37,7 +37,7 @@ export function create(user: User, computer: Computer): BasicInterface {
         }
 
         const folder = getFile(computer.fileSystem, getHomePath(user, computer)) as Folder;
-        
+
         putFile(folder, {
             name: 'file.cap',
             content: network.password,
@@ -59,6 +59,10 @@ export function create(user: User, computer: Computer): BasicInterface {
 		};
         const traversalPath = getTraversalPath(meta.path, getHomePath(user, computer));
         const file = getFile(computer.fileSystem, traversalPath) as File;
+
+        if (!file) {
+            return null;
+        }
 
         const { r } = getPermissions(user, file);
 
