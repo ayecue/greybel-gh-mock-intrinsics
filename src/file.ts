@@ -379,8 +379,8 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 		return 'Not yet supported';
 	});
 
-	itrface.set('size', (_: any): number => {
-		return 1337;
+	itrface.set('size', (_: any): string => {
+		return "1337";
 	});
 
 	itrface.set('meta_info', (_: any): null => {
