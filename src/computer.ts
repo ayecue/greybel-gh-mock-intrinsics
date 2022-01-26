@@ -7,7 +7,8 @@ import {
 	Network,
 	Port,
 	FileType,
-	Folder
+	Folder,
+	Router
 } from './types';
 import { create as createFile } from './file';
 import { create as createPort } from './port';
@@ -23,7 +24,7 @@ import mockEnvironment from './mock/environment';
 import { getUserFolder } from './mock/default-file-system';
 
 
-export function create(user: User, computer: Computer): BasicInterface {
+export function create(user: User, computer: Computer, options: { location?: string[] } = {}): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
 
 	itrface.set('get_ports', (_: any): BasicInterface[] => {
@@ -31,7 +32,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 	});
 
 	itrface.set('File', (_: any, path: any): BasicInterface | null => {
-		const target = getTraversalPath(path?.toString());
+		const target = getTraversalPath(path?.toString(), null);
 		const entityResult = getFile(computer.fileSystem, target);
 
 		if (!entityResult) {
@@ -42,7 +43,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 	});
 
 	itrface.set('create_folder', (_: any, path: any, folderName: any): boolean => {
-		const target = getTraversalPath(path?.toString());
+		const target = getTraversalPath(path?.toString(), options.location);
 		const entityResult = getFile(computer.fileSystem, target);
 
 		if (entityResult && entityResult.isFolder) {
@@ -72,7 +73,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 	});
 
 	itrface.set('touch', (_: any, path: any, fileName: any): boolean => {
-		const containingFolder = getTraversalPath(path?.toString());
+		const containingFolder = getTraversalPath(path?.toString(), options.location);
 		const target = fileName?.toString();
 		const entityResult = getFile(computer.fileSystem, containingFolder);
 
@@ -241,7 +242,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 
 	itrface.set('public_ip', (): string => {
 		//connect_ethernet not yet supported
-		return computer.router.publicIp;
+		return computer.router?.publicIp || (computer as Router).publicIp;
 	});
 
 	return new BasicInterface('computer', itrface);

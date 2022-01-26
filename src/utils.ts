@@ -200,16 +200,55 @@ export function copyFile (entity: FileSystemEntity, parent: FileSystemEntity): F
 	return newFile;
 }
 
-export function getTraversalPath (path: string | null): null | string[] {
+export function getHomePath (user: User, computer: Computer): string[] | null {
+	let path;
+	
+	switch (user.username) {
+		case 'root':
+			path = '/root';
+			break;
+		case 'guest':
+			path = '/home/guest';
+			break;
+		default:
+			path = '/home/' + user.username;
+	}
+	
+	const traversalPath = getTraversalPath(path, []);
+	const folder = getFile(computer.fileSystem, traversalPath)
+	return folder ? traversalPath : null;
+}
+
+export function getFilePath (entity: FileSystemEntity): string[] | null {
+	const path = [entity.name];
+	let current = entity.parent;
+
+	while (current && current.name !== '') {
+		path.unshift(current.name);
+		current = current.parent;
+	}
+
+	return path;
+}
+
+export function getTraversalPath (path: string | null, currentLocation: string[] | null): null | string[] {
 	if (!path) {
 		return null;
 	} else if (path === '/') {
 		return [];
 	}
 
-	return path.startsWith('/')
-		? path.substr(1).split('/')
-		: mockEnvironment.getLocal().home.concat(path.split('/'));
+	path = path.replace(/\/+$/i, '');
+
+	if (path.startsWith('/')) {
+		return path.substr(1).split('/');
+	}
+
+	if (currentLocation) {
+		return currentLocation.concat(path.split('/'));
+	}
+
+	return path.split('/');
 }
 
 export function getFileLibrary (file: File): Library | null {

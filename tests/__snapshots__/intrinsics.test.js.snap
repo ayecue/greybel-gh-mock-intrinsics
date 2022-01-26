@@ -72,9 +72,9 @@ CustomString {
 
 exports[`interpreter default scripts generics.src 5`] = `
 CustomString {
-  "value": "Domain name: Splendid-bart-48.org
-Administrative contact: placid-lambert-82
-Email address: placid-lambert-82@Splendid-bart-48.org
+  "value": "Domain name: agreeable-merchant-86.de
+Administrative contact: philosophical-actuary-51
+Email address: philosophical-actuary-51@agreeable-merchant-86.de
 Phone: 123456891",
 }
 `;
@@ -98,8 +98,8 @@ CustomString {
 `;
 
 exports[`interpreter default scripts generics.src 9`] = `
-CustomString {
-  "value": "/home",
+CustomNil {
+  "value": null,
 }
 `;
 
@@ -147,7 +147,7 @@ CustomNil {
 
 exports[`interpreter default scripts generics.src 17`] = `
 CustomString {
-  "value": "/home/test/myprogramm",
+  "value": "/home/test",
 }
 `;
 
@@ -906,12 +906,6 @@ CustomBoolean {
 }
 `;
 
-exports[`interpreter default scripts mkdir.src 2`] = `
-CustomString {
-  "value": "mkdir: permission denied",
-}
-`;
-
 exports[`interpreter default scripts router.src 1`] = `
 CustomString {
   "value": "router",
@@ -923,8 +917,12 @@ BasicInterface {
   "interface": Map {
     "public_ip" => [Function],
     "local_ip" => [Function],
-    "ping_port" => [Function],
+    "bssid_name" => [Function],
+    "essid_name" => [Function],
+    "computers_lan_ip" => [Function],
     "used_ports" => [Function],
+    "device_ports" => [Function],
+    "ping_port" => [Function],
     "port_info" => [Function],
   },
   "isInstance": false,
@@ -945,8 +943,12 @@ BasicInterface {
   "interface": Map {
     "public_ip" => [Function],
     "local_ip" => [Function],
-    "ping_port" => [Function],
+    "bssid_name" => [Function],
+    "essid_name" => [Function],
+    "computers_lan_ip" => [Function],
     "used_ports" => [Function],
+    "device_ports" => [Function],
+    "ping_port" => [Function],
     "port_info" => [Function],
   },
   "isInstance": false,
@@ -983,7 +985,38 @@ CustomNil {
 exports[`interpreter default scripts router.src 9`] = `
 CustomList {
   "slice": [Function],
-  "value": Array [],
+  "value": Array [
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 22,
+        "isClosed" => false,
+        "service" => "ssh",
+        "forwarded" => true,
+        "classID" => "port",
+      },
+    },
+    BasicInterface {
+      "interface": Map {
+        "get_lan_ip" => [Function],
+        "is_closed" => [Function],
+        "port_number" => [Function],
+      },
+      "isInstance": false,
+      "value": Map {
+        "port" => 559,
+        "isClosed" => false,
+        "service" => "rshell",
+        "forwarded" => true,
+        "classID" => "port",
+      },
+    },
+  ],
 }
 `;
 
@@ -994,33 +1027,12 @@ CustomString {
 `;
 
 exports[`interpreter default scripts shell.src 2`] = `
-BasicInterface {
-  "interface": Map {
-    "connect_service" => [Function],
-    "scp" => [Function],
-    "build" => [Function],
-    "launch" => [Function],
-    "ping" => [Function],
-    "masterkey" => [Function],
-    "masterkey_direct" => [Function],
-    "restore_network" => [Function],
-    "start_terminal" => [Function],
-    "host_computer" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "shell",
-  },
-}
-`;
-
-exports[`interpreter default scripts shell.src 3`] = `
 CustomString {
   "value": "computer",
 }
 `;
 
-exports[`interpreter default scripts shell.src 4`] = `
+exports[`interpreter default scripts shell.src 3`] = `
 BasicInterface {
   "interface": Map {
     "get_ports" => [Function],
@@ -1052,7 +1064,7 @@ BasicInterface {
 }
 `;
 
-exports[`interpreter default scripts shell.src 5`] = `
+exports[`interpreter default scripts shell.src 4`] = `
 CustomList {
   "slice": [Function],
   "value": Array [
@@ -1064,9 +1076,10 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "port" => 386,
+        "port" => 922,
         "isClosed" => true,
         "service" => "sql",
+        "forwarded" => false,
         "classID" => "port",
       },
     },
@@ -1078,23 +1091,10 @@ CustomList {
       },
       "isInstance": false,
       "value": Map {
-        "port" => 623,
-        "isClosed" => false,
-        "service" => "http",
-        "classID" => "port",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 977,
+        "port" => 401,
         "isClosed" => true,
-        "service" => "rshell",
+        "service" => "http",
+        "forwarded" => false,
         "classID" => "port",
       },
     },
@@ -1109,6 +1109,7 @@ CustomList {
         "port" => 22,
         "isClosed" => false,
         "service" => "ssh",
+        "forwarded" => true,
         "classID" => "port",
       },
     },
@@ -1116,19 +1117,19 @@ CustomList {
 }
 `;
 
-exports[`interpreter default scripts shell.src 6`] = `
+exports[`interpreter default scripts shell.src 5`] = `
 CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 7`] = `
+exports[`interpreter default scripts shell.src 6`] = `
 CustomBoolean {
   "value": true,
 }
 `;
 
-exports[`interpreter default scripts shell.src 8`] = `
+exports[`interpreter default scripts shell.src 7`] = `
 BasicInterface {
   "interface": Map {
     "chmod" => [Function],
@@ -1161,31 +1162,31 @@ BasicInterface {
 }
 `;
 
-exports[`interpreter default scripts shell.src 9`] = `
+exports[`interpreter default scripts shell.src 8`] = `
 CustomBoolean {
   "value": true,
+}
+`;
+
+exports[`interpreter default scripts shell.src 9`] = `
+CustomBoolean {
+  "value": false,
 }
 `;
 
 exports[`interpreter default scripts shell.src 10`] = `
 CustomBoolean {
-  "value": false,
+  "value": true,
 }
 `;
 
 exports[`interpreter default scripts shell.src 11`] = `
 CustomBoolean {
-  "value": true,
-}
-`;
-
-exports[`interpreter default scripts shell.src 12`] = `
-CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 13`] = `
+exports[`interpreter default scripts shell.src 12`] = `
 CustomString {
   "value": "USER PID CPU MEM COMMAND
 root 2134 0.0% 13.37% kernel_task
@@ -1193,9 +1194,15 @@ root 1864 0.0% 4.20% Xorg",
 }
 `;
 
-exports[`interpreter default scripts shell.src 14`] = `
+exports[`interpreter default scripts shell.src 13`] = `
 CustomString {
   "value": "eth0 38dr2pis true",
+}
+`;
+
+exports[`interpreter default scripts shell.src 14`] = `
+CustomBoolean {
+  "value": false,
 }
 `;
 
@@ -1224,86 +1231,80 @@ CustomBoolean {
 `;
 
 exports[`interpreter default scripts shell.src 19`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
-
-exports[`interpreter default scripts shell.src 20`] = `
 CustomString {
   "value": "",
 }
 `;
 
-exports[`interpreter default scripts shell.src 21`] = `
+exports[`interpreter default scripts shell.src 20`] = `
 CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 22`] = `
+exports[`interpreter default scripts shell.src 21`] = `
 CustomList {
   "slice": [Function],
   "value": Array [
     CustomString {
-      "value": "0B:E4:A7:98:32:AA 57% straightforward-realtor-81",
+      "value": "0B:E4:A7:98:32:AA 26% reserved-sharp-59",
     },
     CustomString {
-      "value": "44:8E:73:9E:F2:63 45% Smart-author-26",
+      "value": "44:8E:73:9E:F2:63 38% romantic-tungay-41",
     },
     CustomString {
-      "value": "D4:3B:19:E1:AE:8A 53% willing-lambert-31",
+      "value": "D4:3B:19:E1:AE:8A 27% independent-weevle-4",
     },
     CustomString {
-      "value": "D6:70:65:60:43:66 22% reserved-sharp-59",
+      "value": "D6:70:65:60:43:66 67% creative-robber-90",
     },
   ],
 }
 `;
 
-exports[`interpreter default scripts shell.src 23`] = `
+exports[`interpreter default scripts shell.src 22`] = `
 CustomBoolean {
   "value": true,
 }
 `;
 
-exports[`interpreter default scripts shell.src 24`] = `
+exports[`interpreter default scripts shell.src 23`] = `
 CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 25`] = `
+exports[`interpreter default scripts shell.src 24`] = `
 CustomString {
   "value": "192.168.166.167",
 }
 `;
 
-exports[`interpreter default scripts shell.src 26`] = `
+exports[`interpreter default scripts shell.src 25`] = `
 CustomString {
   "value": "WIFI",
 }
 `;
 
-exports[`interpreter default scripts shell.src 27`] = `
+exports[`interpreter default scripts shell.src 26`] = `
 CustomString {
   "value": "192.168.166.167",
 }
 `;
 
-exports[`interpreter default scripts shell.src 28`] = `
+exports[`interpreter default scripts shell.src 27`] = `
 CustomString {
   "value": "142.32.54.56",
 }
 `;
 
-exports[`interpreter default scripts shell.src 29`] = `
+exports[`interpreter default scripts shell.src 28`] = `
 CustomString {
   "value": "file",
 }
 `;
 
-exports[`interpreter default scripts shell.src 30`] = `
+exports[`interpreter default scripts shell.src 29`] = `
 BasicInterface {
   "interface": Map {
     "chmod" => [Function],
@@ -1336,9 +1337,15 @@ BasicInterface {
 }
 `;
 
-exports[`interpreter default scripts shell.src 31`] = `
+exports[`interpreter default scripts shell.src 30`] = `
 CustomString {
   "value": "No write permissions",
+}
+`;
+
+exports[`interpreter default scripts shell.src 31`] = `
+CustomString {
+  "value": "No read permissions",
 }
 `;
 
@@ -1350,23 +1357,17 @@ CustomString {
 
 exports[`interpreter default scripts shell.src 33`] = `
 CustomString {
-  "value": "No read permissions",
+  "value": "No write permissions",
 }
 `;
 
 exports[`interpreter default scripts shell.src 34`] = `
 CustomString {
-  "value": "No write permissions",
-}
-`;
-
-exports[`interpreter default scripts shell.src 35`] = `
-CustomString {
   "value": "/root",
 }
 `;
 
-exports[`interpreter default scripts shell.src 36`] = `
+exports[`interpreter default scripts shell.src 35`] = `
 BasicInterface {
   "interface": Map {
     "chmod" => [Function],
@@ -1399,49 +1400,49 @@ BasicInterface {
 }
 `;
 
-exports[`interpreter default scripts shell.src 37`] = `
+exports[`interpreter default scripts shell.src 36`] = `
 CustomString {
   "value": "root",
 }
 `;
 
-exports[`interpreter default scripts shell.src 38`] = `
+exports[`interpreter default scripts shell.src 37`] = `
 CustomNil {
   "value": null,
 }
 `;
 
-exports[`interpreter default scripts shell.src 39`] = `
+exports[`interpreter default scripts shell.src 38`] = `
 CustomString {
   "value": "No write permissions",
+}
+`;
+
+exports[`interpreter default scripts shell.src 39`] = `
+CustomBoolean {
+  "value": false,
 }
 `;
 
 exports[`interpreter default scripts shell.src 40`] = `
 CustomBoolean {
-  "value": false,
+  "value": true,
 }
 `;
 
 exports[`interpreter default scripts shell.src 41`] = `
 CustomBoolean {
-  "value": true,
-}
-`;
-
-exports[`interpreter default scripts shell.src 42`] = `
-CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 43`] = `
+exports[`interpreter default scripts shell.src 42`] = `
 CustomString {
   "value": "No write permissions",
 }
 `;
 
-exports[`interpreter default scripts shell.src 44`] = `
+exports[`interpreter default scripts shell.src 43`] = `
 CustomList {
   "slice": [Function],
   "value": Array [
@@ -1569,50 +1570,50 @@ CustomList {
 }
 `;
 
-exports[`interpreter default scripts shell.src 45`] = `
+exports[`interpreter default scripts shell.src 44`] = `
 CustomList {
   "slice": [Function],
   "value": Array [],
 }
 `;
 
-exports[`interpreter default scripts shell.src 46`] = `
+exports[`interpreter default scripts shell.src 45`] = `
 CustomString {
   "value": "root",
 }
 `;
 
-exports[`interpreter default scripts shell.src 47`] = `
+exports[`interpreter default scripts shell.src 46`] = `
 CustomString {
   "value": "No write permissions",
 }
 `;
 
-exports[`interpreter default scripts shell.src 48`] = `
+exports[`interpreter default scripts shell.src 47`] = `
 CustomString {
   "value": "test-group",
 }
 `;
 
-exports[`interpreter default scripts shell.src 49`] = `
+exports[`interpreter default scripts shell.src 48`] = `
 CustomString {
   "value": "Not yet supported",
 }
 `;
 
-exports[`interpreter default scripts shell.src 50`] = `
+exports[`interpreter default scripts shell.src 49`] = `
 CustomNumber {
   "value": 1337,
 }
 `;
 
-exports[`interpreter default scripts shell.src 51`] = `
+exports[`interpreter default scripts shell.src 50`] = `
 CustomNil {
   "value": null,
 }
 `;
 
-exports[`interpreter default scripts shell.src 52`] = `
+exports[`interpreter default scripts shell.src 51`] = `
 BasicInterface {
   "interface": Map {
     "get_ports" => [Function],
@@ -1644,19 +1645,19 @@ BasicInterface {
 }
 `;
 
-exports[`interpreter default scripts shell.src 53`] = `
+exports[`interpreter default scripts shell.src 52`] = `
 CustomBoolean {
   "value": false,
 }
 `;
 
-exports[`interpreter default scripts shell.src 54`] = `
+exports[`interpreter default scripts shell.src 53`] = `
 CustomBoolean {
   "value": true,
 }
 `;
 
-exports[`interpreter default scripts shell.src 55`] = `
+exports[`interpreter default scripts shell.src 54`] = `
 BasicInterface {
   "interface": Map {
     "chmod" => [Function],

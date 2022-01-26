@@ -1,19 +1,30 @@
+import { CustomMap } from 'greybel-interpreter';
 import BasicInterface from './interface';
 import {
 	User,
 	Service,
 	Computer,
-	Port
+	Port,
+	Folder,
+	File
 } from './types';
 import { create as createComputer } from './computer';
 import mockEnvironment from './mock/environment';
+import {
+	getFile,
+	getTraversalPath,
+	getHomePath,
+	getPermissions,
+	putFile
+} from './utils';
 
-export function create(user: User, computer: Computer, port?: Port): BasicInterface {
+export function create(user: User, computer: Computer, options: { port?: Port, location?: string[] } = {}): BasicInterface {
 	const itrface: Map<string, Function> = new Map();
-	const activePort = port
-		? computer.ports.find((item) => item.port === port.port)
+	const activePort = options.port
+		? computer.ports.find((item) => item.port === options.port.port)
 		: null;
 	const currentService = activePort?.service === Service.FTP ? Service.FTP : Service.SSH;
+	const currentLocation = options.location || getHomePath(user, computer);
 
 	if (currentService === Service.SSH) {
 		itrface.set('connect_service', (
@@ -33,7 +44,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			};
 			let resultPort: Port | null;
 			let resultUser: User | null;
-			const computers = mockEnvironment.getComputersOfRouter(meta.ip);
+			const computers = mockEnvironment.getComputersOfRouterByIp(meta.ip);
 			const resultComputer = computers.find((item) => {
 				if (item.router.publicIp !== meta.ip) {
 					return false;
@@ -68,14 +79,47 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 			});
 
 			if (resultPort && resultUser) {
-				return create(resultUser, resultComputer, resultPort);
+				return create(resultUser, resultComputer, {
+					port: resultPort
+				});
 			}
 
 			return 'Invalid connection.';
 		});
 
-		itrface.set('scp', (_: any, pathOrig: any, pathDest: any, remoteShell: any): string => {
-			return 'Not yet supported.';
+		itrface.set('scp', (_: any, pathOrig: any, pathDest: any, remoteShell: any): string | boolean => {
+			if (remoteShell instanceof CustomMap && remoteShell?.getType() === 'shell') {
+				const rshell = remoteShell as BasicInterface;
+				const traversalPath = getTraversalPath(pathOrig?.toString(), currentLocation);
+				const localFile = getFile(computer.fileSystem, traversalPath);
+				const remoteTraversalPath = getTraversalPath(pathDest?.toString(), rshell.value.get('currentLocation'));
+				const remoteFile = getFile(rshell.value.get('computer').fileSystem, remoteTraversalPath);
+
+				if (!localFile) {
+					return 'pathOrig does not exist.';
+				}
+
+				if (!remoteFile) {
+					return 'pathDest does not exist.';
+				}
+
+				const { r } = getPermissions(user, localFile);
+
+				if (!r) {
+					return 'No read permissions for pathOrig.';
+				}
+
+				const { w } = getPermissions(rshell.value.get('user'), remoteFile);
+
+				if (!w) {
+					return 'No write permissions for pathDest.';
+				}
+
+				putFile(remoteFile as Folder, localFile as File);
+				return true;
+			}
+
+			return 'Invalid remote shell object.'
 		});
 
 		itrface.set('build', (_: any, pathSource: any, pathBinary: any, allowImport: any): string => {
@@ -88,7 +132,7 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 
 		itrface.set('ping', (_: any, ipAddress: any): boolean | null => {
 			const ip = ipAddress?.toString();
-			const router = mockEnvironment.getRouter(ip);
+			const router = mockEnvironment.getRouterByIp(ip);
 
 			if (router) {
 				return true;
@@ -119,13 +163,18 @@ export function create(user: User, computer: Computer, port?: Port): BasicInterf
 	});
 
 	itrface.set('host_computer', (_: any): BasicInterface => {
-		return createComputer(user, computer);
+		return createComputer(user, computer, { location: currentLocation });
 	});
 
 
 	return new BasicInterface(
 		Service.SSH === currentService ? 'shell' : 'ftpShell',
-		itrface
+		itrface,
+		new Map<string, any>([
+			['user', user],
+			['computer', computer],
+			['currentLocation', currentLocation]
+		])
 	);
 }
 

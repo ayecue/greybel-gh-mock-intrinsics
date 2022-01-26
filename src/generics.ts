@@ -2,7 +2,8 @@ import { CustomString } from 'greybel-interpreter';
 import {
 	getFile,
 	getPermissions,
-	getTraversalPath
+	getTraversalPath,
+	getHomePath
 } from './utils';
 import { default as actualMd5 } from 'blueimp-md5';
 import { loginLocal } from './shell';
@@ -16,7 +17,6 @@ import {
 	File
 } from './types';
 import mockEnvironment from './mock/environment';
-
 import BasicInterface from './interface';
 
 export function getShell(user: any, password: any): BasicInterface {
@@ -36,7 +36,7 @@ export function mailLogin(username: any, password: any): BasicInterface {
 export function getRouter(ipAddress: any): BasicInterface {
 	const { user, computer } = mockEnvironment.getLocal();
 	const target = ipAddress?.toString();
-	const router = mockEnvironment.getRouter(target || computer.router?.publicIp);
+	const router = mockEnvironment.getRouterByIp(target || computer.router?.publicIp);
 	
 	return createRouter(user, router || computer.router);
 }
@@ -44,14 +44,14 @@ export function getRouter(ipAddress: any): BasicInterface {
 export function getSwitch(ipAddress: any): BasicInterface {
 	const { user, computer } = mockEnvironment.getLocal();
 	const target = ipAddress?.toString();
-	const router = mockEnvironment.getRouter(target || computer.router?.publicIp);
+	const router = mockEnvironment.getRouterByIp(target || computer.router?.publicIp);
 	
 	return createRouter(user, router || computer.router);
 }
 
 export function includeLib(libPath: any): BasicInterface | null {
 	const { user, computer } = mockEnvironment.getLocal();
-	const target = getTraversalPath(libPath?.toString());
+	const target = getTraversalPath(libPath?.toString(), null);
 	const entityResult = getFile(computer.fileSystem, target);
 
 	if (entityResult && !entityResult.isFolder) {
@@ -93,7 +93,7 @@ export function nslookup(hostname: any): string {
 export function whois(ipAddress: any): string {
 	const target = ipAddress?.toString();
 	if (isValidIp(target)) {
-		return mockEnvironment.getRouter(target).whoisDescription;
+		return mockEnvironment.getRouterByIp(target).whoisDescription;
 	}
 	return 'Invalid IP address: ${ipAddress}';
 }
@@ -118,20 +118,34 @@ export function currentDate(): string {
 }
 
 export function currentPath(): string {
-	return '/' + mockEnvironment.getLocal().home.join('/');
+	const path = getHomePath(
+		mockEnvironment.getLocal().user,
+		mockEnvironment.getLocal().computer
+	);
+
+	return path ? '/' + path.join('/') : '/';
 }
 
-export function parentPath(): string {
-	const { home } = mockEnvironment.getLocal();
-	return '/' + home.slice(0, home.length - 1).join('/');
+export function parentPath(path: any): string {
+	return path?.toString().replace(/\/[^\/]+\/?$/i, '');
 }
 
 export function homeDir(): string {
-	return '/' + mockEnvironment.getLocal().home.join('/');
+	const path = getHomePath(
+		mockEnvironment.getLocal().user,
+		mockEnvironment.getLocal().computer
+	);
+
+	return path ? '/' + path.join('/') : '/';
 }
 
 export function programPath(): string {
-	return '/' + mockEnvironment.getLocal().home.join('/') + '/myprogramm';
+	const path = getHomePath(
+		mockEnvironment.getLocal().user,
+		mockEnvironment.getLocal().computer
+	);
+
+	return path ? '/' + path.join('/') + '/myprogramm' : '/myprogramm';
 }
 
 export function activeUser(): string {
@@ -160,7 +174,12 @@ export function clearScreen(): null {
 }
 
 export function launchPath(): string {
-	return '/' + mockEnvironment.getLocal().home.join('/') + '/myprogramm';
+	const path = getHomePath(
+		mockEnvironment.getLocal().user,
+		mockEnvironment.getLocal().computer
+	);
+
+	return path ? '/' + path.join('/') : '/';
 }
 
 export function typeOf(value: any): string {

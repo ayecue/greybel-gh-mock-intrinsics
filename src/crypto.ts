@@ -1,10 +1,10 @@
-import { CustomNil } from 'greybel-interpreter';
 import BasicInterface from './interface';
 import {
     getFile,
     getTraversalPath,
     putFile,
-    getPermissions
+    getPermissions,
+    getHomePath
 } from './utils';
 import {
 	User,
@@ -36,7 +36,7 @@ export function create(user: User, computer: Computer): BasicInterface {
             return 'No network found';
         }
 
-        const folder = getFile(computer.fileSystem, mockEnvironment.getLocal().home) as Folder;
+        const folder = getFile(computer.fileSystem, getHomePath(user, computer)) as Folder;
         
         putFile(folder, {
             name: 'file.cap',
@@ -57,7 +57,7 @@ export function create(user: User, computer: Computer): BasicInterface {
         const meta = {
 			path: path?.toString()
 		};
-        const traversalPath = getTraversalPath(meta.path);
+        const traversalPath = getTraversalPath(meta.path, getHomePath(user, computer));
         const file = getFile(computer.fileSystem, traversalPath) as File;
 
         const { r } = getPermissions(user, file);

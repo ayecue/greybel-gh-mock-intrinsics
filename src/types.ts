@@ -28,6 +28,7 @@ export interface Port {
 	port: number;
 	isClosed: boolean;
 	service: Service;
+	forwarded: boolean;
 }
 
 export interface EMail {

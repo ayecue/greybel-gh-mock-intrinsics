@@ -12,7 +12,7 @@ import {
 	getPermissions,
 	transformFlagsToPermissions,
 	getFile,
-	hasFile,
+	getFilePath,
 	removeFile,
 	getTraversalPath,
 	getFileIndex,
@@ -92,7 +92,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 			path: path?.toString(),
 			newName: newName?.toString()
 		};
-		const traversalPath = getTraversalPath(meta.path);
+		const traversalPath = getTraversalPath(meta.path, getFilePath(entity));
 		const folder = getFile(entity, traversalPath) as Folder;
 
 		if (folder && folder.isFolder) {
@@ -141,7 +141,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 			path: path?.toString(),
 			newName: newName?.toString()
 		};
-		const traversalPath = getTraversalPath(meta.path);
+		const traversalPath = getTraversalPath(meta.path, getFilePath(entity));
 		const folder = getFile(entity, traversalPath) as Folder;
 
 		if (folder && folder.isFolder) {
@@ -202,15 +202,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 			return null;
 		}
 
-		const path = [entity.name];
-		let current = entity.parent;
-
-		while (current) {
-			path.unshift(current.name);
-			current = current.parent;
-		}
-
-		return path.join('/');
+		return '/' + getFilePath(entity).join('/');
 	});
 
 	itrface.set('parent', (_: any): BasicInterface | null => {

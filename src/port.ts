@@ -19,6 +19,7 @@ export function create(computer: Computer, port: Port): BasicInterface {
 	return new BasicInterface('port', itrface, new Map<string, any>([
 		['port', port.port],
 		['isClosed', port.isClosed],
-		['service', port.service]
+		['service', port.service],
+		['forwarded', port.forwarded]
 	]));
 }

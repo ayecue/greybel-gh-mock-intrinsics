@@ -3,7 +3,6 @@ computer = shell.host_computer
 file = computer.File("/root")
 
 print(typeof(shell))
-print(shell)
 
 print(typeof(computer))
 print(computer)

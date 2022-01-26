@@ -152,23 +152,102 @@ export class MockEnvironment {
 			],
 			users: computerUsers,
 			fileSystem: getDefaultFileSystem(computerUsers),
-			ports: me.generatePorts()
+			ports: <Port[]>[]
 		};
 
+		computer.ports =  me.generatePorts(computer);
 		me.computers.push(computer);
 		
 		return computer;
 	}
 
-	generatePorts(): Port[] {
+	generatePorts(computer: Computer): Port[] {
 		const me = this;
+		const portNumber = me.portRng.intBetween(1, 1000);
+		const router = computer.router;
+		let forwarded = false;
+
+		if (router) {
+			const forwardedPort = me.getForwardedPortOfRouter(router, portNumber);
+
+			if (!forwardedPort) {
+				forwarded = me.networkRng.intBetween(0, 2) === 1;
+			}
+		}
+
 		return [...Array(me.portRng.intBetween(1, 3)).keys()].map(() => {
 			return {
 				port: me.portRng.intBetween(1, 1000),
 				isClosed: !!me.portRng.intBetween(0, 1),
-				service: ServiceList[me.portRng.intBetween(0, 5)]
+				service: ServiceList[me.portRng.intBetween(0, 5)],
+				forwarded
 			};
 		});
+	}
+
+	getComputerInLan(ipAddress: string, router: Router): Computer | null {
+		const me = this;
+
+		return me.getComputersOfRouter(router).find((v) => {
+			return v.localIp === ipAddress;
+		});
+	}
+
+	getComputersOfRouter(router: Router): Computer[] {
+		const me = this;
+		
+		return me.computers.filter((v) => {
+			return v.router?.publicIp === router.publicIp;
+		});
+	}
+
+	getPortsOfRouter(router: Router): Port[] {
+		const me = this;
+		const computers = me.getComputersOfRouter(router);
+		
+		return [].concat(...computers.map((v: Computer) => {
+			return v.ports;
+		}));
+	}
+
+	getForwardedPortsOfRouter(router: Router): Port[] {
+		const me = this;
+
+		return me.getPortsOfRouter(router).filter((v) => v.forwarded);
+	}
+
+	getForwardedPortOfRouter(router: Router, port: number): { computer: Computer, port: Port } | null {
+		const me = this;
+		const computers = me.computers.filter((v) => {
+			return v.router?.publicIp === router.publicIp;
+		});
+		let computerResult;
+		let portResult;
+
+		for (let item of computers) {
+			if (item.ports) {
+				for (let itemPort of item.ports) {
+					if (itemPort.port === port && itemPort.forwarded) {
+						computerResult = item;
+						portResult = itemPort;
+						break;
+					}
+				}
+			}
+
+			if (computerResult || portResult) {
+				break;
+			}
+		}
+
+		if (!computerResult || !portResult) {
+			return null;
+		}
+
+		return {
+			computer: computerResult,
+			port: portResult
+		};
 	}
 
 	generateNetworkDevice(): NetworkDevice {
@@ -338,14 +417,13 @@ export class MockEnvironment {
 		me.generateVulnerabilitiesForLibrary(Library.SSH, { local: true, remote: true });
 	}
 
-	getLocal(): { computer: Computer, user: User, home: string[] } {
+	getLocal(): { computer: Computer, user: User } {
 		const computer = this.localComputer;
 		const user = computer.users[1];
 
 		return {
 			computer,
-			user,
-			home: ['home', user.username]
+			user
 		};
 	}
 
@@ -353,7 +431,7 @@ export class MockEnvironment {
 		this.localComputer.router = router;
 	}
 
-	getRouter(ipAddress: string): Router | null {
+	getRouterByIp(ipAddress: string): Router | null {
 		const me = this;
 
 		if (!me.isValidIp(ipAddress)) {
@@ -367,9 +445,9 @@ export class MockEnvironment {
 		});
 	}
 
-	getComputersOfRouter(ipAddress: string): Computer[] {
+	getComputersOfRouterByIp(ipAddress: string): Computer[] {
 		const me = this;
-		const router = me.getRouter(ipAddress);
+		const router = me.getRouterByIp(ipAddress);
 
 		if (!router) {
 			return [];
@@ -439,7 +517,8 @@ mockEnvironment.generateRouter({
 mockEnvironment.getLocal().computer.ports.push({
 	port: 22,
 	service: Service.SSH,
-	isClosed: false
+	isClosed: false,
+	forwarded: true
 });
 mockEnvironment.generateEmail({
 	name: 'test',

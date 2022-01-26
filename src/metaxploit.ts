@@ -12,7 +12,8 @@ import {
 	getFile,
 	getFileLibrary,
 	getTraversalPath,
-	getServiceLibrary
+	getServiceLibrary,
+	getHomePath
 } from './utils';
 import { create as createMetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
@@ -25,7 +26,7 @@ export function create(user: User, computer: Computer): BasicInterface {
 		const meta = {
 			path: path?.toString()
 		};
-		const traversalPath = getTraversalPath(meta.path);
+		const traversalPath = getTraversalPath(meta.path, getHomePath(user, computer));
 		const file = getFile(computer.fileSystem, traversalPath) as File;
 		const library = getFileLibrary(file);
 
@@ -41,48 +42,29 @@ export function create(user: User, computer: Computer): BasicInterface {
 			ipAddress: ipAddress?.toString(),
 			port: Number(port?.valueOf())
 		};
+		const router = mockEnvironment.getRouterByIp(meta.ipAddress);
+
+		if (!router) {
+			return null;
+		}
 
 		if (meta.port === 0 || Number.isNaN(meta.port)) {
-			const targetComputer = mockEnvironment.getRouter(meta.ipAddress);
-			return createNetSession(computer, targetComputer, Library.KERNEL_ROUTER);
+			return createNetSession(computer, router, Library.KERNEL_ROUTER);
 		}
 
-		const computers = mockEnvironment.getComputersOfRouter(meta.ipAddress);
+		const result = mockEnvironment.getForwardedPortOfRouter(router, meta.port);
 
-		if (computers.length === 0) {
+		if (!result) {
 			return null;
 		}
 
-		let computerResult;
-		let portResult;
-		
-		for (let item of computers) {
-			if (item.ports) {
-				for (let itemPort of item.ports) {
-					if (itemPort.port === meta.port) {
-						computerResult = item;
-						portResult = itemPort;
-						break;
-					}
-				}
-			}
-
-			if (computerResult || portResult) {
-				break;
-			}
-		}
-
-		if (!computerResult || !portResult) {
-			return null;
-		}
-
-		const library = getServiceLibrary(portResult.service);
+		const library = getServiceLibrary(result.port.service);
 
 		if (!library) {
 			return null;
 		}
 
-		return createNetSession(computer, computerResult, library);
+		return createNetSession(computer, result.computer, library);
 	});
 
 	itrface.set('scan', (_: any, metaLib: CustomMap): string[] => {
