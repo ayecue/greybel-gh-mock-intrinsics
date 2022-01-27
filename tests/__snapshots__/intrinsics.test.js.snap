@@ -1602,8 +1602,8 @@ CustomString {
 `;
 
 exports[`interpreter default scripts shell.src 49`] = `
-CustomNumber {
-  "value": 1337,
+CustomString {
+  "value": "1337",
 }
 `;
 
