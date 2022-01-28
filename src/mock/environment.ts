@@ -1,7 +1,6 @@
 import md5 from 'blueimp-md5';
-const randomUsernameGenerator = require('random-username-generator');
-import generatePassword from 'generate-password-browser';
 import randomSeed, { RandomSeed } from 'random-seed';
+const randomUsernameGenerator = require('random-username-generator');
 import {
 	User,
 	Computer,
@@ -297,13 +296,7 @@ export class MockEnvironment {
 
 	generatePassword(): string {
 		const me = this;
-		const nativeMath = Math.random;
-		Math.random = () => me.passwordRng.random();
-		const password = generatePassword.generate({
-			length: me.passwordRng.intBetween(4, 8)
-		});
-		Math.random = nativeMath;
-		return password;
+		return me.passwordRng.string(me.passwordRng.intBetween(4, 8));
 	}
 
 	generateNetwork(router: Router, options: Partial<Network> = {}): Network {
