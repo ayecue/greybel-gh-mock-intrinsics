@@ -1,9 +1,11 @@
+import { CustomFunction } from 'greybel-interpreter';
+
 import * as generics from './generics';
 
 export { default as mockEnvironment } from './mock/environment';
 export * from './types';
 
-export function getAPI(): Map<string, Function> {
+export function getAPI(): Map<string, CustomFunction> {
   const apiInterface = new Map();
 
   apiInterface.set('typeof', generics.typeOf);
@@ -35,9 +37,9 @@ export function getAPI(): Map<string, Function> {
   return apiInterface;
 }
 
-export function init(customAPI: Map<string, Function> = new Map()) {
+export function init(customAPI: Map<string, CustomFunction> = new Map()) {
   const apiInterface = getAPI();
-  const api: Map<string, Function> = new Map([
+  const api: Map<string, CustomFunction> = new Map([
     ...Array.from(apiInterface.entries()),
     ...Array.from(customAPI.entries())
   ]);
