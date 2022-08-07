@@ -1,391 +1,598 @@
-import { CustomNil } from 'greybel-interpreter';
+import {
+  CustomBoolean,
+  CustomFunction,
+  CustomList,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import BasicInterface from './interface';
+import { File, FileSystemEntity, FileType, Folder, User } from './types';
 import {
-	User,
-	FileType,
-	FileSystemEntity,
-	Folder,
-	File
-} from './types';
-import {
-	parsePermissions,
-	getPermissions,
-	transformFlagsToPermissions,
-	getFile,
-	getFilePath,
-	removeFile,
-	getTraversalPath,
-	getFileIndex,
-	traverseChildren,
-	copyFile
+  copyFile,
+  getFile,
+  getFileIndex,
+  getFilePath,
+  getPermissions,
+  getTraversalPath,
+  parsePermissions,
+  removeFile,
+  transformFlagsToPermissions,
+  traverseChildren
 } from './utils';
 
 export function create(user: User, entity: FileSystemEntity): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
-	const permissionTansformOffset: { [type: string]: number } = {
-		'u': 1,
-		'g': 4,
-		'o': 7
-	};
-
-	itrface.set('chmod', (_: any, permissions: any, isRecursive: any): string => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { w } = getPermissions(user, entity);
-
-		if (!w) {
-			return 'No write permissions';
-		}
-		
-		const meta = {
-			permissions: permissions?.toString(),
-			isRecursive: !!isRecursive?.valueOf()
-		};
-
-		if (!/^[ugo](\-|\+)[wrx]{1,3}$/i.test(meta.permissions)) {
-			return 'Invalid pattern for permissions';
-		}
-
-		const userType: string = meta.permissions[0];
-		const operator = meta.permissions[1];
-		const getNewPermissions = (itemFile: FileSystemEntity) => {
-			const flags = parsePermissions(itemFile);
-			
-			meta.permissions.substr(2).split('').forEach((item: string) => {
-				if (flags?.[userType]?.[item]) {
-					flags[userType][item] = operator === '+';
-				}
-			});
-
-			return flags;
-		}
-
-		entity.permissions = transformFlagsToPermissions(getNewPermissions(entity));
-
-		if (meta.isRecursive) {
-			traverseChildren(entity, (item: FileSystemEntity) => {
-				const { w } = getPermissions(user, item);
-
-				if (w) {
-					item.permissions = transformFlagsToPermissions(getNewPermissions(item));
-				}
-			}, true);
-		}
-		
-		return '';
-	});
-
-	itrface.set('copy', (_: any, path: any, newName: any): string | boolean | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { r } = getPermissions(user, entity);
-
-		if (!r) {
-			return 'No read permissions';
-		}
-		
-		const meta = {
-			path: path?.toString(),
-			newName: newName?.toString()
-		};
-		const traversalPath = getTraversalPath(meta.path, getFilePath(entity));
-		const folder = getFile(entity, traversalPath) as Folder;
-
-		if (folder && folder.isFolder) {
-			const { w } = getPermissions(user, folder);
-
-			if (!w) {
-				return 'No write permissions';
-			}
-
-			const result = getFileIndex(folder, meta.newName);
-
-			if (result) {
-				removeFile(folder, meta.newName);
-			}
-
-			if (entity.isFolder) {
-				const newFolder = copyFile(entity, folder) as Folder;
-				newFolder.name = meta.newName;
-				folder.folders.push(newFolder);
-			} else {
-				const newFile = copyFile(entity, folder) as File;
-				newFile.name = meta.newName;
-				folder.files.push(newFile);
-			}
-
-			return true;
-		} else {
-			return 'Invalid path';
-		}
-		
-		return null;
-	});
-
-	itrface.set('move', (_: any, path: any, newName: any): string | boolean | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { r } = getPermissions(user, entity);
-
-		if (!r) {
-			return 'No read permissions';
-		}
-		
-		const meta = {
-			path: path?.toString(),
-			newName: newName?.toString()
-		};
-		const traversalPath = getTraversalPath(meta.path, getFilePath(entity));
-		const folder = getFile(entity, traversalPath) as Folder;
-
-		if (folder && folder.isFolder) {
-			const { w } = getPermissions(user, folder);
-
-			if (!w) {
-				return 'No write permissions';
-			}
-
-			const result = getFileIndex(folder, meta.newName);
-
-			if (result) {
-				removeFile(folder, meta.newName);
-			}
-
-			if (entity.isFolder) {
-				const newFolder = copyFile(entity, folder) as Folder;
-				newFolder.name = meta.newName;
-				folder.folders.push(newFolder);
-			} else {
-				const newFile = copyFile(entity, folder) as File;
-				newFile.name = meta.newName;
-				folder.files.push(newFile);
-			}
-
-			removeFile(entity.parent as Folder, entity.name);
-
-			return true;
-		} else {
-			return 'Invalid path';
-		}
-		
-		return null;
-	});
-
-	itrface.set('rename', (_: any, newName: any): string | boolean | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { w } = getPermissions(user, entity);
-
-		if (!w) {
-			return 'No write permissions';
-		}
-		
-		const meta = {
-			newName: newName?.toString()
-		};
-		
-		entity.name = meta.newName;
-		
-		return '';
-	});
-
-	itrface.set('path', (_: any): string | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		return '/' + getFilePath(entity).join('/');
-	});
-
-	itrface.set('parent', (_: any): BasicInterface | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		if (entity.name === '') {
-			return null;
-		}
-
-		return create(user, entity.parent);
-	});
-
-	itrface.set('name', (_: any): string => {
-		return entity.name;
-	});
-
-	itrface.set('get_content', (_: any): string | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { r } = getPermissions(user, entity);
-
-		if (!r) {
-			return null;
-		}
-
-		const file = entity as File;
-
-		if (file.type !== FileType.Plain) {
-			return null;
-		}
-
-		return file.content;
-	});
-
-	itrface.set('set_content', (_: any, content: any): string | boolean => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { w } = getPermissions(user, entity);
-
-		if (!w) {
-			return 'No write permissions';
-		}
-
-		const file = entity as File;
-		const meta = {
-			content: content?.toString()
-		};
-
-		if (file.type !== FileType.Plain) {
-			return 'Invalid file type';
-		}
-
-		file.content = meta.content;
-
-		return true;
-	});
-
-	itrface.set('is_binary', (_: any): boolean => {
-		if (entity.isFolder) {
-			return false;
-		}
-
-		const file = entity as File;
-		return file.type !== FileType.Plain;
-	});
-
-	itrface.set('is_folder', (_: any): boolean => {
-		return !!entity.isFolder;
-	});
-
-	itrface.set('has_permission', (_: any, permission: any): boolean => {
-		const meta = {
-			permission: permission?.toString().substr(0, 1)
-		};
-		const permissions = getPermissions(user, entity);
-
-		return permissions[meta.permission];
-	});
-
-	itrface.set('delete', (_: any): string | null => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { w } = getPermissions(user, entity);
-
-		if (!w) {
-			return 'No write permissions';
-		}
-
-		removeFile(entity.parent as Folder, entity.name);
-
-		return '';
-	});
-
-	itrface.set('get_folders', (_: any): BasicInterface[] => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		if (!entity.isFolder) {
-			return null;
-		}
-
-		return (entity as Folder).folders.map((folder: Folder) => {
-			return create(user, folder);
-		});
-	});
-
-	itrface.set('get_files', (_: any): BasicInterface[] => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		if (!entity.isFolder) {
-			return null;
-		}
-
-		return (entity as Folder).files.map((file: File) => {
-			return create(user, file);
-		});
-	});
-
-	itrface.set('permissions', (_: any): string => {
-		return entity.permissions;
-	});
-
-	itrface.set('owner', (_: any): string => {
-		return entity.owner;
-	});
-
-	itrface.set('set_owner', (_: any, owner: any, isRecursive: any): string => {
-		if (entity.deleted) {
-			return null;
-		}
-
-		const { w } = getPermissions(user, entity);
-
-		if (!w) {
-			return 'No write permissions';
-		}
-
-		const meta = {
-			owner: owner?.toString(),
-			isRecursive: !!isRecursive?.valueOf()
-		};
-
-		entity.owner = meta.owner;
-
-		if (meta.isRecursive) {
-			traverseChildren(entity, (item: FileSystemEntity) => {
-				const { w } = getPermissions(user, item);
-
-				if (w) {
-					item.owner =  meta.owner;
-				}
-			}, true);
-		}
-
-		return '';
-	});
-
-	itrface.set('group', (_: any): string => {
-		return 'test-group';
-	});
-
-	itrface.set('set_group', (_: any, group: any, isRecursive: any): string => {
-		return 'Not yet supported';
-	});
-
-	itrface.set('size', (_: any): string => {
-		return "1337";
-	});
-
-	itrface.set('meta_info', (_: any): null => {
-		return null;
-	});
-
-	return new BasicInterface('file', itrface);
+  const itrface = new BasicInterface('file');
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'chmod',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { w } = getPermissions(user, entity);
+
+        if (!w) {
+          return Promise.resolve(new CustomString('No write permissions'));
+        }
+
+        const permissions = args.get('permissions').toString();
+        const isRecursive = args.get('isRecursive').toTruthy();
+
+        if (!/^[ugo](-|\+)[wrx]{1,3}$/i.test(permissions)) {
+          return Promise.resolve(
+            new CustomString('Invalid pattern for permissions')
+          );
+        }
+
+        const userType: string = permissions[0];
+        const operator = permissions[1];
+        const getNewPermissions = (itemFile: FileSystemEntity) => {
+          const flags = parsePermissions(itemFile);
+
+          permissions
+            .substr(2)
+            .split('')
+            .forEach((item: string) => {
+              if (flags?.[userType]?.[item]) {
+                flags[userType][item] = operator === '+';
+              }
+            });
+
+          return flags;
+        };
+
+        entity.permissions = transformFlagsToPermissions(
+          getNewPermissions(entity)
+        );
+
+        if (isRecursive) {
+          traverseChildren(
+            entity,
+            (item: FileSystemEntity) => {
+              const { w } = getPermissions(user, item);
+
+              if (w) {
+                item.permissions = transformFlagsToPermissions(
+                  getNewPermissions(item)
+                );
+              }
+            },
+            true
+          );
+        }
+
+        return Promise.resolve(new CustomString(''));
+      }
+    )
+      .addArgument('permissions')
+      .addArgument('isRecursive', new CustomBoolean(false))
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'copy',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { r } = getPermissions(user, entity);
+
+        if (!r) {
+          return Promise.resolve(new CustomString('No read permissions'));
+        }
+
+        const path = args.get('path').toString();
+        const newName = args.get('newName').toString();
+        const traversalPath = getTraversalPath(path, getFilePath(entity));
+        const folder = getFile(entity, traversalPath) as Folder;
+
+        if (folder && folder.isFolder) {
+          const { w } = getPermissions(user, folder);
+
+          if (!w) {
+            return Promise.resolve(new CustomString('No write permissions'));
+          }
+
+          const result = getFileIndex(folder, newName);
+
+          if (result) {
+            removeFile(folder, newName);
+          }
+
+          if (entity.isFolder) {
+            const newFolder = copyFile(entity, folder) as Folder;
+            newFolder.name = newName;
+            folder.folders.push(newFolder);
+          } else {
+            const newFile = copyFile(entity, folder) as File;
+            newFile.name = newName;
+            folder.files.push(newFile);
+          }
+
+          return Promise.resolve(Defaults.True);
+        }
+
+        return Promise.resolve(new CustomString('Invalid path'));
+      }
+    )
+      .addArgument('path')
+      .addArgument('newName')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'move',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { r } = getPermissions(user, entity);
+
+        if (!r) {
+          return Promise.resolve(new CustomString('No read permissions'));
+        }
+
+        const path = args.get('path').toString();
+        const newName = args.get('newName').toString();
+        const traversalPath = getTraversalPath(path, getFilePath(entity));
+        const folder = getFile(entity, traversalPath) as Folder;
+
+        if (folder && folder.isFolder) {
+          const { w } = getPermissions(user, folder);
+
+          if (!w) {
+            return Promise.resolve(new CustomString('No write permissions'));
+          }
+
+          const result = getFileIndex(folder, newName);
+
+          if (result) {
+            removeFile(folder, newName);
+          }
+
+          if (entity.isFolder) {
+            const newFolder = copyFile(entity, folder) as Folder;
+            newFolder.name = newName;
+            folder.folders.push(newFolder);
+          } else {
+            const newFile = copyFile(entity, folder) as File;
+            newFile.name = newName;
+            folder.files.push(newFile);
+          }
+
+          removeFile(entity.parent as Folder, entity.name);
+
+          return Promise.resolve(Defaults.True);
+        }
+
+        return Promise.resolve(new CustomString('Invalid path'));
+      }
+    )
+      .addArgument('path')
+      .addArgument('newName')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'rename',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { w } = getPermissions(user, entity);
+
+        if (!w) {
+          return Promise.resolve(new CustomString('No write permissions'));
+        }
+
+        const newName = args.get('newName').toString();
+
+        entity.name = newName;
+
+        return Promise.resolve(new CustomString(''));
+      }
+    ).addArgument('newName')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'path',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(
+          new CustomString('/' + getFilePath(entity).join('/'))
+        );
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'parent',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        if (entity.name === '') {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(create(user, entity.parent));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'name',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(entity.name));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'get_content',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { r } = getPermissions(user, entity);
+
+        if (!r) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const file = entity as File;
+
+        if (file.type !== FileType.Plain) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(new CustomString(file.content));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'set_content',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { w } = getPermissions(user, entity);
+
+        if (!w) {
+          return Promise.resolve(new CustomString('No write permissions'));
+        }
+
+        const file = entity as File;
+        const content = args.get('content').toString();
+
+        if (file.type !== FileType.Plain) {
+          return Promise.resolve(new CustomString('Invalid file type'));
+        }
+
+        file.content = content;
+
+        return Promise.resolve(Defaults.True);
+      }
+    ).addArgument('content')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'is_binary',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.isFolder) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const file = entity as File;
+        return Promise.resolve(new CustomBoolean(file.type !== FileType.Plain));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'is_folder',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomBoolean(!!entity.isFolder));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'has_permission',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const permission = args.get('permission').toString().substr(0, 1);
+        const permissionMap = getPermissions(user, entity);
+
+        return Promise.resolve(new CustomBoolean(permissionMap[permission]));
+      }
+    ).addArgument('permission')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'delete',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { w } = getPermissions(user, entity);
+
+        if (!w) {
+          return Promise.resolve(new CustomString('No write permissions'));
+        }
+
+        removeFile(entity.parent as Folder, entity.name);
+
+        return Promise.resolve(new CustomString(''));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'get_folders',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        if (!entity.isFolder) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const result = (entity as Folder).folders.map((folder: Folder) => {
+          return create(user, folder);
+        });
+
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'get_files',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        if (!entity.isFolder) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const result = (entity as Folder).files.map((file: File) => {
+          return create(user, file);
+        });
+
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'permissions',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(entity.permissions));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'owner',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(entity.owner));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'set_owner',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { w } = getPermissions(user, entity);
+
+        if (!w) {
+          return Promise.resolve(new CustomString('No write permissions'));
+        }
+
+        const owner = args.get('owner').toString();
+        const isRecursive = args.get('isRecursive').toTruthy();
+
+        if (isRecursive) {
+          traverseChildren(
+            entity,
+            (item: FileSystemEntity) => {
+              const { w } = getPermissions(user, item);
+
+              if (w) {
+                item.owner = owner;
+              }
+            },
+            true
+          );
+        }
+
+        return Promise.resolve(new CustomString(''));
+      }
+    )
+      .addArgument('owner')
+      .addArgument('isRecursive', new CustomBoolean(false))
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'group',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('test-group'));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'set_group',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'size',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('1337'));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'meta_info',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(Defaults.Void);
+      }
+    )
+  );
+
+  return itrface;
 }

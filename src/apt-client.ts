@@ -1,40 +1,106 @@
-import { CustomNil } from 'greybel-interpreter';
-import BasicInterface from './interface';
 import {
-	User,
-	Computer
-} from './types';
+  CustomFunction,
+  CustomString,
+  CustomValue,
+  OperationContext
+} from 'greybel-interpreter';
 
-export function create(user: User, computer: Computer): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+import BasicInterface from './interface';
+import { Computer, User } from './types';
 
-    itrface.set('show', (_: any): string => {
-		return 'Not yet supported';
-	});
+export function create(_user: User, _computer: Computer): BasicInterface {
+  const itrface = new BasicInterface('aptClient');
 
-    itrface.set('search', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'show',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-    itrface.set('update', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'search',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-    itrface.set('add_repo', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'update',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-    itrface.set('del_repo', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'add_repo',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-    itrface.set('install', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'del_repo',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-    itrface.set('check_upgrade', (_: any): string => {
-		return 'Not yet supported';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'install',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
 
-	return new BasicInterface('aptClient', itrface);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'check_upgrade',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('Not yet supported'));
+      }
+    )
+  );
+
+  return itrface;
 }

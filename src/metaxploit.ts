@@ -1,147 +1,226 @@
-import { CustomMap } from 'greybel-interpreter';
-import BasicInterface from './interface';
 import {
-	User,
-	Computer,
-	File,
-	VulnerabilityRequirements,
-	Vulnerability,
-	Library
+  CustomFunction,
+  CustomList,
+  CustomNumber,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
+import BasicInterface from './interface';
+import { create as createMetaLib } from './meta-lib';
+import mockEnvironment from './mock/environment';
+import { create as createNetSession } from './net-session';
+import {
+  Computer,
+  File,
+  Library,
+  User,
+  Vulnerability,
+  VulnerabilityRequirements
 } from './types';
 import {
-	getFile,
-	getFileLibrary,
-	getTraversalPath,
-	getServiceLibrary,
-	getHomePath
+  getFile,
+  getFileLibrary,
+  getHomePath,
+  getServiceLibrary,
+  getTraversalPath
 } from './utils';
-import { create as createMetaLib } from './meta-lib';
-import { create as createNetSession } from './net-session';
-import mockEnvironment from './mock/environment';
 
 export function create(user: User, computer: Computer): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  const itrface = new BasicInterface('metaxploit');
 
-	itrface.set('load', (_: any, path: any): BasicInterface | null => {
-		const meta = {
-			path: path?.toString()
-		};
-		const traversalPath = getTraversalPath(meta.path, getHomePath(user, computer));
-		const file = getFile(computer.fileSystem, traversalPath) as File;
-		const library = getFileLibrary(file);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'load',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const path = args.get('path').toString();
+        const traversalPath = getTraversalPath(
+          path,
+          getHomePath(user, computer)
+        );
+        const file = getFile(computer.fileSystem, traversalPath) as File;
+        const library = getFileLibrary(file);
 
-		if (!library) {
-			return null;
-		}
+        if (!library) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-		return createMetaLib(computer, computer, library);
-	});
+        return Promise.resolve(createMetaLib(computer, computer, library));
+      }
+    ).addArgument('path')
+  );
 
-	itrface.set('net_use', (_: any, ipAddress: any, port: any): BasicInterface | null => {
-		const meta = {
-			ipAddress: ipAddress?.toString(),
-			port: Number(port?.valueOf())
-		};
-		const router = mockEnvironment.getRouterByIp(meta.ipAddress);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'net_use',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const ipAddress = args.get('ipAddress').toString();
+        const port = args.get('port').toInt();
+        const router = mockEnvironment.getRouterByIp(ipAddress);
 
-		if (!router) {
-			return null;
-		}
+        if (!router) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-		if (meta.port === 0 || Number.isNaN(meta.port)) {
-			return createNetSession(computer, router, Library.KERNEL_ROUTER);
-		}
+        if (port === 0) {
+          return Promise.resolve(
+            createNetSession(computer, router, Library.KERNEL_ROUTER)
+          );
+        }
 
-		const result = mockEnvironment.getForwardedPortOfRouter(router, meta.port);
+        const result = mockEnvironment.getForwardedPortOfRouter(router, port);
 
-		if (!result) {
-			return null;
-		}
+        if (!result) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-		const library = getServiceLibrary(result.port.service);
+        const library = getServiceLibrary(result.port.service);
 
-		if (!library) {
-			return null;
-		}
+        if (!library) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-		return createNetSession(computer, result.computer, library);
-	});
+        return Promise.resolve(
+          createNetSession(computer, result.computer, library)
+        );
+      }
+    )
+      .addArgument('ipAddress')
+      .addArgument('port', new CustomNumber(0))
+  );
 
-	itrface.set('scan', (_: any, metaLib: CustomMap): string[] => {
-		if (metaLib instanceof CustomMap) {
-			const meta = {
-				metaLib: metaLib as BasicInterface
-			};
-			const exploits: Vulnerability[] = meta.metaLib.value.get('exploits');
-	
-			if (exploits) {
-				const zones = exploits.map((x: Vulnerability) => {
-					return x.memAddress;
-				});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'scan',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const metaLib = args.get('metaLib');
+        if (metaLib instanceof BasicInterface) {
+          const exploits: Vulnerability[] = metaLib.getVariable('exploits');
 
-				return Array.from(new Set(zones));
-			}
-		}
+          if (exploits) {
+            const zones = exploits.map((x: Vulnerability) => {
+              return x.memAddress;
+            });
+            const result = Array.from(new Set(zones)).map(
+              (item) => new CustomString(item)
+            );
 
-		return [];
-	});
+            return Promise.resolve(new CustomList(result));
+          }
+        }
 
-	itrface.set('scan_address', (_: any, metaLib: CustomMap, memAddress: any): string => {
-		if (metaLib instanceof CustomMap) {
-			const meta = {
-				metaLib: metaLib as BasicInterface,
-				memAddress: memAddress?.toString()
-			};
-			const exploits: Vulnerability[] = meta.metaLib.value.get('exploits');
-	
-			if (exploits) {
-				const result = exploits
-					.filter((x: Vulnerability) => {
-						return x.memAddress === meta.memAddress;
-					})
-					.map((x: Vulnerability) => {
-						return [
-							`${x.details} <b>${x.sector}</b>. Buffer overflow.`,
-							...x.required.map((r: VulnerabilityRequirements) => {
-								switch (r) {
-									case VulnerabilityRequirements.LIBRARY:
-										return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-									case VulnerabilityRequirements.REGISTER_AMOUNT:
-										return '* Checking registered users equal to 2.';
-									case VulnerabilityRequirements.ANY_ACTIVE:
-										return '* Checking an active user.';
-									case VulnerabilityRequirements.ROOT_ACTIVE:
-										return '* Checking root active user.';
-									case VulnerabilityRequirements.LOCAL:
-										return '* Checking existing connection in the local network.';
-									case VulnerabilityRequirements.FORWARD:
-										return '* 1337 port forwarding configured from router to the target computer.';
-									case VulnerabilityRequirements.GATEWAY:
-										return '* 1337 computers using this router as gateway.';
-								}
-							})
-						].join('\n');
-					})
-					.join('\n');
+        return Promise.resolve(new CustomList());
+      }
+    ).addArgument('metaLib')
+  );
 
-				return result;
-			}
-		}
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'scan_address',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const metaLib = args.get('metaLib');
+        const memAddress = args.get('memAddress').toString();
+        if (metaLib instanceof BasicInterface) {
+          const exploits: Vulnerability[] = metaLib.getVariable('exploits');
 
-		return null;
-	});
+          if (exploits) {
+            const result = exploits
+              .filter((x: Vulnerability) => {
+                return x.memAddress === memAddress;
+              })
+              .map((x: Vulnerability) => {
+                return [
+                  `${x.details} <b>${x.sector}</b>. Buffer overflow.`,
+                  ...x.required.map((r: VulnerabilityRequirements): string => {
+                    switch (r) {
+                      case VulnerabilityRequirements.LIBRARY:
+                        return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
+                      case VulnerabilityRequirements.REGISTER_AMOUNT:
+                        return '* Checking registered users equal to 2.';
+                      case VulnerabilityRequirements.ANY_ACTIVE:
+                        return '* Checking an active user.';
+                      case VulnerabilityRequirements.ROOT_ACTIVE:
+                        return '* Checking root active user.';
+                      case VulnerabilityRequirements.LOCAL:
+                        return '* Checking existing connection in the local network.';
+                      case VulnerabilityRequirements.FORWARD:
+                        return '* 1337 port forwarding configured from router to the target computer.';
+                      case VulnerabilityRequirements.GATEWAY:
+                        return '* 1337 computers using this router as gateway.';
+                    }
+                    return '';
+                  })
+                ].join('\n');
+              })
+              .join('\n');
 
-	itrface.set('sniffer', (_: any): string => {
-		return 'No yet supported';
-	});
+            return Promise.resolve(new CustomString(result));
+          }
+        }
 
-	itrface.set('rshell_client', (_: any): boolean => {
-		return false;
-	});
+        return Promise.resolve(Defaults.Void);
+      }
+    )
+      .addArgument('metaLib')
+      .addArgument('memAddress')
+  );
 
-	itrface.set('rshell_server', (_: any): BasicInterface[] => {
-		return [];
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'sniffer',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('No yet supported'));
+      }
+    )
+  );
 
-	return new BasicInterface('metaxploit', itrface);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'rshell_client',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(Defaults.False);
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'rshell_server',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomList());
+      }
+    )
+  );
+
+  return itrface;
 }

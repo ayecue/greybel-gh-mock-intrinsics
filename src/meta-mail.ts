@@ -1,61 +1,114 @@
+import {
+  CustomFunction,
+  CustomList,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import BasicInterface from './interface';
-import { EMail } from './types';
 import mockEnvironment from './mock/environment';
+import { EMail } from './types';
 
 export function create(email: EMail): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  const itrface = new BasicInterface('metaMail');
 
-	itrface.set('fetch', (_: any): string[] => {
-		const result: string[] = [];
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'fetch',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result: Array<CustomValue> = [];
 
-		email.messages.forEach((item, id) => {
-			result.push([
-				`${id} - ${item.subject}`,
-				item.message
-			].join('\n'));
-		});
+        email.messages.forEach((item, id) => {
+          result.push(
+            new CustomString(
+              [`${id} - ${item.subject}`, item.message].join('\n')
+            )
+          );
+        });
 
-		return result;
-	});
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
 
-    itrface.set('read', (_: any, id: any): string => {
-		const mailId = id?.toString();
-		const item = email.messages.get(mailId);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'read',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const mailId = args.get('id').toString();
+        const item = email.messages.get(mailId);
 
-		if (!item) {
-			return;
-		}
+        if (!item) {
+          return;
+        }
 
-		return [
-			`${id} - ${item.subject}`,
-			item.message
-		].join('\n');
-	});
+        return Promise.resolve(
+          new CustomString(
+            [`${mailId} - ${item.subject}`, item.message].join('\n')
+          )
+        );
+      }
+    ).addArgument('id')
+  );
 
-    itrface.set('send', (_: any, address: any, subject: string, message: string): string | boolean => {
-		const targetEmail = mockEnvironment.getEmail(address?.toString());
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'send',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const address = args.get('address');
+        const subject = args.get('subject').toString();
+        const message = args.get('message').toString();
+        const targetEmail = mockEnvironment.getEmail(address.toString());
 
-		if (!targetEmail) {
-			return 'No email found';
-		}
-		
-		targetEmail.messages.set(mockEnvironment.generateUUID(), {
-			subject: subject?.toString(),
-			message: message?.toString()
-		});
+        if (!targetEmail) {
+          return Promise.resolve(new CustomString('No email found'));
+        }
 
-		return true;
-	});
+        targetEmail.messages.set(mockEnvironment.generateUUID(), {
+          subject,
+          message
+        });
 
-    itrface.set('delete', (_: any, id: any): string | boolean => {
-		const mailId = id?.toString();
-		
-		if (email.messages.delete(mailId)) {
-			return true;
-		}
+        return Promise.resolve(Defaults.True);
+      }
+    )
+      .addArgument('address')
+      .addArgument('subject')
+      .addArgument('message')
+  );
 
-		return 'No email with that id.';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'delete',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const mailId = args.get('id').toString();
 
-	return new BasicInterface('metaMail', itrface);
+        if (email.messages.delete(mailId)) {
+          return Promise.resolve(Defaults.True);
+        }
+
+        return Promise.resolve(new CustomString('No email with that id.'));
+      }
+    ).addArgument('id')
+  );
+
+  return itrface;
 }

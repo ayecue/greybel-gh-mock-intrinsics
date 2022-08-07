@@ -1,249 +1,477 @@
-import { CustomNil, CustomBoolean } from 'greybel-interpreter';
-import BasicInterface from './interface';
 import {
-	User,
-	Computer,
-	NetworkDevice,
-	Network,
-	Port,
-	FileType,
-	Folder,
-	Router
-} from './types';
+  CustomBoolean,
+  CustomFunction,
+  CustomList,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import { create as createFile } from './file';
+import BasicInterface from './interface';
+import { getUserFolder } from './mock/default-file-system';
+import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
 import {
-	getPermissions,
-	getFile,
-	hasFile,
-	removeFile,
-	getTraversalPath,
-	changePassword
+  Computer,
+  FileType,
+  Folder,
+  Network,
+  NetworkDevice,
+  Port,
+  Router,
+  User
+} from './types';
+import {
+  changePassword,
+  getFile,
+  getPermissions,
+  getTraversalPath,
+  hasFile,
+  removeFile
 } from './utils';
-import mockEnvironment from './mock/environment';
-import { getUserFolder } from './mock/default-file-system';
 
+export function create(
+  user: User,
+  computer: Computer,
+  options: { location?: string[] } = {}
+): BasicInterface {
+  const itrface = new BasicInterface('computer');
 
-export function create(user: User, computer: Computer, options: { location?: string[] } = {}): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'get_ports',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const ports =
+          computer?.ports.map((item: Port) => createPort(computer, item)) || [];
+        return Promise.resolve(new CustomList(ports));
+      }
+    )
+  );
 
-	itrface.set('get_ports', (_: any): BasicInterface[] => {
-		return computer?.ports.map((item: Port) => createPort(computer, item)) || [];
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'File',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const path = args.get('path').toString();
+        const target = getTraversalPath(path, null);
+        const entityResult = getFile(computer.fileSystem, target);
 
-	itrface.set('File', (_: any, path: any): BasicInterface | null => {
-		const target = getTraversalPath(path?.toString(), null);
-		const entityResult = getFile(computer.fileSystem, target);
+        if (!entityResult) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-		if (!entityResult) {
-			return null;
-		}
-		
-		return createFile(user, entityResult);
-	});
+        return Promise.resolve(createFile(user, entityResult));
+      }
+    ).addArgument('path')
+  );
 
-	itrface.set('create_folder', (_: any, path: any, folderName: any): boolean => {
-		const target = getTraversalPath(path?.toString(), options.location);
-		const entityResult = getFile(computer.fileSystem, target);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'create_folder',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const path = args.get('path').toString();
+        const folderName = args.get('folderName').toString();
+        const target = getTraversalPath(path, options.location);
+        const entityResult = getFile(computer.fileSystem, target);
 
-		if (entityResult && entityResult.isFolder) {
-			const { w } = getPermissions(user, entityResult);
-			const folder = entityResult as Folder;
+        if (entityResult && entityResult.isFolder) {
+          const { w } = getPermissions(user, entityResult);
+          const folder = entityResult as Folder;
 
-			if (w && !hasFile(folder, folderName?.toString())) {
-				folder.folders.push({
-					name: folderName?.toString(),
-					owner: user.username,
-					permissions: entityResult.permissions,
-					isFolder: true,
-					parent: folder,
-					folders: [],
-					files: []
-				});
+          if (w && !hasFile(folder, folderName)) {
+            folder.folders.push({
+              name: folderName,
+              owner: user.username,
+              permissions: entityResult.permissions,
+              isFolder: true,
+              parent: folder,
+              folders: [],
+              files: []
+            });
 
-				return true;
-			}
-		}
-		
-		return false;
-	});
+            return Promise.resolve(Defaults.True);
+          }
+        }
 
-	itrface.set('is_network_active', (_: any): boolean => {
-		return true;
-	});
+        return Promise.resolve(Defaults.False);
+      }
+    )
+      .addArgument('path')
+      .addArgument('folderName')
+  );
 
-	itrface.set('touch', (_: any, path: any, fileName: any): boolean => {
-		const containingFolder = getTraversalPath(path?.toString(), options.location);
-		const target = fileName?.toString();
-		const entityResult = getFile(computer.fileSystem, containingFolder);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'is_network_active',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(Defaults.True);
+      }
+    )
+  );
 
-		if (entityResult && entityResult.isFolder) {
-			const { w } = getPermissions(user, entityResult);
-			const folder = entityResult as Folder;
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'touch',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const path = args.get('path').toString();
+        const containingFolder = getTraversalPath(path, options.location);
+        const target = args.get('fileName').toString();
+        const entityResult = getFile(computer.fileSystem, containingFolder);
 
-			if (w && !hasFile(folder, target)) {
-				folder.files.push({
-					name: target,
-					owner: user.username,
-					permissions: entityResult.permissions,
-					type: FileType.Plain,
-					parent: folder
-				});
+        if (entityResult && entityResult.isFolder) {
+          const { w } = getPermissions(user, entityResult);
+          const folder = entityResult as Folder;
 
-				return true;
-			}
-		}
-		
-		return false;
-	});
+          if (w && !hasFile(folder, target)) {
+            folder.files.push({
+              name: target,
+              owner: user.username,
+              permissions: entityResult.permissions,
+              type: FileType.Plain,
+              parent: folder
+            });
 
-	itrface.set('show_procs', (_: any): string => {
-		return [
-			'USER PID CPU MEM COMMAND',
-			'root 2134 0.0% 13.37% kernel_task',
-			'root 1864 0.0% 4.20% Xorg'
-		].join('\n');
-	});
+            return Promise.resolve(Defaults.True);
+          }
+        }
 
-	itrface.set('network_devices', (_: any): string => {
-		return computer.networkDevices.map((item: NetworkDevice) => {
-			return `${item.type} ${item.id} ${item.active}`;
-		}).join('\n');
-	});
+        return Promise.resolve(Defaults.False);
+      }
+    )
+      .addArgument('path')
+      .addArgument('fileName')
+  );
 
-	itrface.set('change_password', (_: any, username: any, password: any): boolean => {
-		if (user.username === 'root') {
-			const meta = {
-				username: username?.toString(),
-				password: password?.toString()
-			};
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'show_procs',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = [
+          'USER PID CPU MEM COMMAND',
+          'root 2134 0.0% 13.37% kernel_task',
+          'root 1864 0.0% 4.20% Xorg'
+        ].join('\n');
 
-			return changePassword(computer, meta.username, meta.password);
-		}
+        return Promise.resolve(new CustomString(result));
+      }
+    )
+  );
 
-		return false;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'network_devices',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = computer.networkDevices
+          .map((item: NetworkDevice) => {
+            return `${item.type} ${item.id} ${item.active}`;
+          })
+          .join('\n');
 
-	itrface.set('create_user', (_: any, username: any, password: any): boolean => {
-		if (user.username === 'root') {
-			const meta = {
-				username: username?.toString(),
-				password: password?.toString()
-			};
-			const existingUser = computer.users.find((item: User) => {
-				return item.username === meta.username;
-			});
+        return Promise.resolve(new CustomString(result));
+      }
+    )
+  );
 
-			if (!existingUser) {
-				const homeFolder = getFile(computer.fileSystem, ['home']) as Folder;
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'change_password',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (user.username === 'root') {
+          const username = args.get('username').toString();
+          const password = args.get('password').toString();
 
-				if (!hasFile(homeFolder, meta.username)) {
-					computer.users.push(mockEnvironment.generateUser(meta.username, meta.password));
-					homeFolder.folders.push(getUserFolder(homeFolder, meta.username));
-					return true;
-				}
-			}
-		}
+          return Promise.resolve(
+            new CustomBoolean(changePassword(computer, username, password))
+          );
+        }
 
-		return false;
-	});
+        return Promise.resolve(Defaults.False);
+      }
+    )
+      .addArgument('username')
+      .addArgument('password')
+  );
 
-	itrface.set('delete_user', (_: any, username: any, removeHome: any): boolean => {
-		if (user.username === 'root') {
-			const meta = {
-				username: username?.toString(),
-				removeHome: removeHome && removeHome instanceof CustomBoolean ? removeHome.value : removeHome?.valueOf()
-			};
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'create_user',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (user.username === 'root') {
+          const username = args.get('username').toString();
+          const password = args.get('password').toString();
 
-			if (meta.username === 'root' || meta.username === 'guest') {
-				return false;
-			}
+          const existingUser = computer.users.find((item: User) => {
+            return item.username === username;
+          });
 
-			const userIndex = computer.users.findIndex((item: User) => {
-				return item.username === meta.username;
-			});
+          if (!existingUser) {
+            const homeFolder = getFile(computer.fileSystem, ['home']) as Folder;
 
-			if (userIndex != -1) {
-				computer.users.splice(userIndex, 1);
+            if (!hasFile(homeFolder, username)) {
+              computer.users.push(
+                mockEnvironment.generateUser(username, password)
+              );
+              homeFolder.folders.push(getUserFolder(homeFolder, username));
 
-				if (meta.removeHome) {
-					const homeFolder = getFile(computer.fileSystem, ['home']) as Folder;
-					
-					if (homeFolder) {
-						removeFile(homeFolder, meta.username);
-					}
-				}
+              return Promise.resolve(Defaults.True);
+            }
+          }
+        }
 
-				return true;
-			}
-		}
+        return Promise.resolve(Defaults.False);
+      }
+    )
+      .addArgument('username')
+      .addArgument('password')
+  );
 
-		return false;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'delete_user',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        if (user.username === 'root') {
+          const username = args.get('username').toString();
+          const removeHome = args.get('removeHome').toTruthy();
 
-	itrface.set('create_group', (_: any): boolean => {
-		// g is ignored for now
-		// todo: add group logic
-		return false;
-	});
+          if (username === 'root' || username === 'guest') {
+            return Promise.resolve(Defaults.False);
+          }
 
-	itrface.set('delete_group', (_: any): boolean => {
-		// g is ignored for now
-		// todo: add group logic
-		return false;
-	});
+          const userIndex = computer.users.findIndex((item: User) => {
+            return item.username === username;
+          });
 
-	itrface.set('groups', (_: any): string => {
-		// g is ignored for now
-		// todo: add group logic
-		return '';
-	});
+          if (userIndex !== -1) {
+            computer.users.splice(userIndex, 1);
 
-	itrface.set('close_program', (_: any): boolean => {
-		//programs are not supported for now
-		if (user.username !== 'root') {
-			return false;
-		}
+            if (removeHome) {
+              const homeFolder = getFile(computer.fileSystem, [
+                'home'
+              ]) as Folder;
 
-		return Math.random() < 0.5;
-	});
+              if (homeFolder) {
+                removeFile(homeFolder, username);
+              }
+            }
 
-	itrface.set('wifi_networks', (_: any): string[] => {
-		//programs are not supported for now
-		return mockEnvironment.networks.map((item: Network) => {
-			return `${item.mac} ${item.percentage}% ${item.name}`;
-		});
-	});
+            return Promise.resolve(Defaults.True);
+          }
+        }
 
-	itrface.set('connect_wifi', (_: any): boolean => {
-		//connect_wifi will always default to the standart one for now
-		return true;
-	});
+        return Promise.resolve(Defaults.False);
+      }
+    )
+      .addArgument('username')
+      .addArgument('removeHome', new CustomBoolean(true))
+  );
 
-	itrface.set('connect_ethernet', (_: any): boolean => {
-		//connect_ethernet not yet supported
-		return false;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'create_group',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // g is ignored for now
+        // todo: add group logic
+        return Promise.resolve(Defaults.False);
+      }
+    )
+  );
 
-	itrface.set('network_gateway', (): string => {
-		//connect_ethernet not yet supported
-		return computer.localIp;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'delete_group',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // g is ignored for now
+        // todo: add group logic
+        return Promise.resolve(Defaults.False);
+      }
+    )
+  );
 
-	itrface.set('active_net_card', (): string => {
-		//connect_ethernet not yet supported
-		return 'WIFI';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'groups',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // g is ignored for now
+        // todo: add group logic
+        return Promise.resolve(new CustomString(''));
+      }
+    )
+  );
 
-	itrface.set('local_ip', (): string => {
-		//connect_ethernet not yet supported
-		return computer.localIp;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'close_program',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // programs are not supported for now
+        if (user.username !== 'root') {
+          return Promise.resolve(Defaults.False);
+        }
 
-	itrface.set('public_ip', (): string => {
-		//connect_ethernet not yet supported
-		return computer.router?.publicIp || (computer as Router).publicIp;
-	});
+        return Promise.resolve(new CustomBoolean(Math.random() < 0.5));
+      }
+    )
+  );
 
-	return new BasicInterface('computer', itrface);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'wifi_networks',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = mockEnvironment.networks.map((item: Network) => {
+          return new CustomString(
+            `${item.mac} ${item.percentage}% ${item.name}`
+          );
+        });
+
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'connect_wifi',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // connect_wifi will always default to the standart one for now
+        return Promise.resolve(Defaults.True);
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'connect_ethernet',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        // connect_ethernet not yet supported
+        return Promise.resolve(Defaults.False);
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'network_gateway',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(computer.localIp));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'active_net_card',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('WIFI'));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'local_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(computer.localIp));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'public_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(
+          new CustomString(
+            computer.router?.publicIp || (computer as Router).publicIp
+          )
+        );
+      }
+    )
+  );
+
+  return itrface;
 }

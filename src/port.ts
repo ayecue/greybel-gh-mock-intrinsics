@@ -1,25 +1,61 @@
+import {
+  CustomBoolean,
+  CustomFunction,
+  CustomNumber,
+  CustomString,
+  CustomValue,
+  OperationContext
+} from 'greybel-interpreter';
+
 import BasicInterface from './interface';
 import { Computer, Port } from './types';
 
 export function create(computer: Computer, port: Port): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  const itrface = new BasicInterface('port');
 
-	itrface.set('get_lan_ip', (_: any): string => {
-		return computer.localIp;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'get_lan_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(computer.localIp));
+      }
+    )
+  );
 
-    itrface.set('is_closed', (_: any): boolean => {
-		return port.isClosed;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'is_closed',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomBoolean(port.isClosed));
+      }
+    )
+  );
 
-    itrface.set('port_number', (_: any): number => {
-		return port.port;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'is_closed',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomNumber(port.port));
+      }
+    )
+  );
 
-	return new BasicInterface('port', itrface, new Map<string, any>([
-		['port', port.port],
-		['isClosed', port.isClosed],
-		['service', port.service],
-		['forwarded', port.forwarded]
-	]));
+  itrface.setVariable('port', port.port);
+  itrface.setVariable('isClosed', port.isClosed);
+  itrface.setVariable('service', port.service);
+  itrface.setVariable('forwarded', port.forwarded);
+
+  return itrface;
 }
