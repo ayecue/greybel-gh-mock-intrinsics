@@ -1,872 +1,124 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`interpreter default scripts crypto.src 1`] = `
-CustomString {
-  "value": "crypto",
-}
-`;
+exports[`interpreter default scripts crypto.src 1`] = `"crypto"`;
 
-exports[`interpreter default scripts crypto.src 2`] = `
-BasicInterface {
-  "interface": Map {
-    "aireplay" => [Function],
-    "airmon" => [Function],
-    "aircrack" => [Function],
-    "decipher" => [Function],
-    "smtp_user_list" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "crypto",
-  },
-}
-`;
+exports[`interpreter default scripts crypto.src 2`] = `"crypto"`;
 
-exports[`interpreter default scripts crypto.src 3`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts crypto.src 3`] = `""`;
 
-exports[`interpreter default scripts crypto.src 4`] = `
-CustomString {
-  "value": "start",
-}
-`;
+exports[`interpreter default scripts crypto.src 4`] = `"start"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `
-CustomString {
-  "value": "test",
-}
-`;
+exports[`interpreter default scripts crypto.src 5`] = `"test"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `
-CustomString {
-  "value": "shallnotpass",
-}
-`;
+exports[`interpreter default scripts crypto.src 6`] = `"shallnotpass"`;
 
-exports[`interpreter default scripts generics.src 1`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts generics.src 1`] = `""`;
 
-exports[`interpreter default scripts generics.src 2`] = `
-CustomString {
-  "value": "098f6bcd4621d373cade4e832627b4f6",
-}
-`;
+exports[`interpreter default scripts generics.src 2`] = `"098f6bcd4621d373cade4e832627b4f6"`;
 
-exports[`interpreter default scripts generics.src 3`] = `
-CustomNumber {
-  "value": 1642924301240,
-}
-`;
+exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 
-exports[`interpreter default scripts generics.src 4`] = `
-CustomString {
-  "value": "142.567.134.56",
-}
-`;
+exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-CustomString {
-  "value": "Domain name: agreeable-merchant-86.de
+"Domain name: agreeable-merchant-86.de
 Administrative contact: philosophical-actuary-51
 Email address: philosophical-actuary-51@agreeable-merchant-86.de
-Phone: 123456891",
-}
+Phone: 123456891"
 `;
 
-exports[`interpreter default scripts generics.src 6`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts generics.src 6`] = `"true"`;
 
-exports[`interpreter default scripts generics.src 7`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts generics.src 7`] = `"true"`;
 
-exports[`interpreter default scripts generics.src 8`] = `
-CustomString {
-  "value": "COMMAND",
-}
-`;
+exports[`interpreter default scripts generics.src 8`] = `"COMMAND"`;
 
-exports[`interpreter default scripts generics.src 9`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts generics.src 9`] = `""`;
 
-exports[`interpreter default scripts generics.src 10`] = `
-CustomString {
-  "value": "/home/test",
-}
-`;
+exports[`interpreter default scripts generics.src 10`] = `"/home/test"`;
 
-exports[`interpreter default scripts generics.src 11`] = `
-CustomString {
-  "value": "/home/test/myprogramm",
-}
-`;
+exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogramm"`;
 
-exports[`interpreter default scripts generics.src 12`] = `
-CustomString {
-  "value": "test",
-}
-`;
+exports[`interpreter default scripts generics.src 12`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 13`] = `
-CustomString {
-  "value": "test@Unbelievable-player-76.tv",
-}
-`;
+exports[`interpreter default scripts generics.src 13`] = `"test@Unbelievable-player-76.tv"`;
 
-exports[`interpreter default scripts generics.src 14`] = `
-CustomString {
-  "value": "s1jbeulm",
-}
-`;
+exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
-exports[`interpreter default scripts generics.src 15`] = `
-CustomString {
-  "value": "test",
-}
-`;
+exports[`interpreter default scripts generics.src 15`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 16`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts generics.src 16`] = `""`;
 
-exports[`interpreter default scripts generics.src 17`] = `
-CustomString {
-  "value": "/home/test",
-}
-`;
+exports[`interpreter default scripts generics.src 17`] = `"/home/test"`;
 
-exports[`interpreter default scripts ls.src 1`] = `
-CustomString {
-  "value": "Desktop\\\\nDownloads\\\\nConfig\\\\nfile.cap",
-}
-`;
+exports[`interpreter default scripts ls.src 1`] = `"Desktop\\\\nDownloads\\\\nConfig\\\\nfile.cap"`;
 
-exports[`interpreter default scripts meta-mail.src 1`] = `
-CustomString {
-  "value": "metaMail",
-}
-`;
+exports[`interpreter default scripts meta-mail.src 1`] = `"metaMail"`;
 
-exports[`interpreter default scripts meta-mail.src 2`] = `
-BasicInterface {
-  "interface": Map {
-    "fetch" => [Function],
-    "read" => [Function],
-    "send" => [Function],
-    "delete" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "metaMail",
-  },
-}
-`;
+exports[`interpreter default scripts meta-mail.src 2`] = `"metaMail"`;
 
-exports[`interpreter default scripts meta-mail.src 3`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [],
-}
-`;
+exports[`interpreter default scripts meta-mail.src 3`] = `"[  ]"`;
 
-exports[`interpreter default scripts meta-mail.src 4`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 
-exports[`interpreter default scripts meta-mail.src 5`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    CustomString {
-      "value": "87ffc4dc-8555-4f07-a077-af1919e43718 - hello
-dude",
-    },
-  ],
-}
+"[ 87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `
-CustomString {
-  "value": "87ffc4dc-8555-4f07-a077-af1919e43718",
-}
-`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"87ffc4dc-8555-4f07-a077-af1919e43718"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-CustomString {
-  "value": "87ffc4dc-8555-4f07-a077-af1919e43718 - hello
-dude",
-}
+"87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+dude"
 `;
 
-exports[`interpreter default scripts meta-mail.src 9`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts meta-mail.src 9`] = `"true"`;
 
-exports[`interpreter default scripts meta-mail.src 10`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [],
-}
-`;
+exports[`interpreter default scripts meta-mail.src 10`] = `"[  ]"`;
 
-exports[`interpreter default scripts metaxploit.src 1`] = `
-CustomString {
-  "value": "metaxploit",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 1`] = `"metaxploit"`;
 
-exports[`interpreter default scripts metaxploit.src 2`] = `
-BasicInterface {
-  "interface": Map {
-    "load" => [Function],
-    "net_use" => [Function],
-    "scan" => [Function],
-    "scan_address" => [Function],
-    "sniffer" => [Function],
-    "rshell_client" => [Function],
-    "rshell_server" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "metaxploit",
-  },
-}
-`;
+exports[`interpreter default scripts metaxploit.src 2`] = `"metaxploit"`;
 
-exports[`interpreter default scripts metaxploit.src 3`] = `
-CustomString {
-  "value": "metaLib",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 3`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 4`] = `
-BasicInterface {
-  "interface": Map {
-    "lib_name" => [Function],
-    "version" => [Function],
-    "overflow" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "exploits" => Array [
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          2,
-        ],
-        "sector": "borg8kwtzu",
-        "user": 0,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          2,
-          0,
-        ],
-        "sector": "6iogj1qr7h",
-        "user": 0,
-      },
-      Object {
-        "action": 2,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          5,
-        ],
-        "sector": "4w2so9dmgw",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          0,
-          4,
-          1,
-        ],
-        "sector": "ueqg4x1o0v",
-        "user": 0,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          1,
-          2,
-          5,
-        ],
-        "sector": "y0arblna9a",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          2,
-          6,
-        ],
-        "sector": "i5cxta6sop",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [],
-        "sector": "q37eqpjlzy",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          5,
-        ],
-        "sector": "1f7paxxf7e",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [],
-        "sector": "7knf7ejdni",
-        "user": 1,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          5,
-          1,
-          3,
-        ],
-        "sector": "at0h9o477l",
-        "user": 0,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          3,
-        ],
-        "sector": "mwha9je4hh",
-        "user": 0,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "crypto",
-        "memAddress": "0xC8CE05AB",
-        "remote": false,
-        "required": Array [
-          6,
-          2,
-        ],
-        "sector": "2mxjo6mo50",
-        "user": 1,
-      },
-    ],
-    "classID" => "metaLib",
-  },
-}
-`;
+exports[`interpreter default scripts metaxploit.src 4`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 5`] = `
-CustomString {
-  "value": "netSession",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 5`] = `"netSession"`;
 
-exports[`interpreter default scripts metaxploit.src 6`] = `
-BasicInterface {
-  "interface": Map {
-    "dump_lib" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "netSession",
-  },
-}
-`;
+exports[`interpreter default scripts metaxploit.src 6`] = `"netSession"`;
 
-exports[`interpreter default scripts metaxploit.src 7`] = `
-CustomString {
-  "value": "metaLib",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 7`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 8`] = `
-BasicInterface {
-  "interface": Map {
-    "lib_name" => [Function],
-    "version" => [Function],
-    "overflow" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "exploits" => Array [
-      Object {
-        "action": 2,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          6,
-          1,
-        ],
-        "sector": "nmrp8uli0w",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          1,
-          6,
-          4,
-        ],
-        "sector": "ozyfeds5qk",
-        "user": 0,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          1,
-          5,
-        ],
-        "sector": "ck2gxafm2d",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          0,
-          5,
-          1,
-        ],
-        "sector": "g958o11uty",
-        "user": 1,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          5,
-        ],
-        "sector": "wu7hy0ojpz",
-        "user": 0,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x49F15300",
-        "remote": false,
-        "required": Array [
-          1,
-        ],
-        "sector": "r12hsw73b3",
-        "user": 2,
-      },
-      Object {
-        "action": 0,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x2FB30899",
-        "remote": false,
-        "required": Array [
-          6,
-          1,
-          5,
-        ],
-        "sector": "q7b63b1y6e",
-        "user": 0,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x2FB30899",
-        "remote": false,
-        "required": Array [
-          0,
-        ],
-        "sector": "rb1e197v19",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x2FB30899",
-        "remote": false,
-        "required": Array [
-          3,
-          0,
-        ],
-        "sector": "v1caw4cv6l",
-        "user": 0,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x2FB30899",
-        "remote": false,
-        "required": Array [],
-        "sector": "lfqy61z10a",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x60744A64",
-        "remote": false,
-        "required": Array [],
-        "sector": "laj5q5fy0b",
-        "user": 1,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x60744A64",
-        "remote": false,
-        "required": Array [
-          0,
-          4,
-          2,
-        ],
-        "sector": "otlt6u2mi1",
-        "user": 0,
-      },
-      Object {
-        "action": 2,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x60744A64",
-        "remote": false,
-        "required": Array [
-          6,
-          1,
-          3,
-        ],
-        "sector": "iv4otk4242",
-        "user": 0,
-      },
-      Object {
-        "action": 3,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x60744A64",
-        "remote": false,
-        "required": Array [
-          5,
-          3,
-        ],
-        "sector": "52vj1ouyuh",
-        "user": 0,
-      },
-      Object {
-        "action": 1,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x42CBFBA3",
-        "remote": false,
-        "required": Array [
-          3,
-          6,
-        ],
-        "sector": "58ndo1b2vg",
-        "user": 1,
-      },
-      Object {
-        "action": 4,
-        "details": "loop in array",
-        "folder": Array [
-          "home",
-          "guest",
-        ],
-        "library": "ssh",
-        "memAddress": "0x42CBFBA3",
-        "remote": false,
-        "required": Array [
-          0,
-          6,
-          4,
-        ],
-        "sector": "wsijit43t8",
-        "user": 0,
-      },
-    ],
-    "classID" => "metaLib",
-  },
-}
-`;
+exports[`interpreter default scripts metaxploit.src 8`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 9`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    CustomString {
-      "value": "0xC8CE05AB",
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts metaxploit.src 9`] = `"[ 0xC8CE05AB ]"`;
 
-exports[`interpreter default scripts metaxploit.src 10`] = `
-CustomString {
-  "value": "",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 10`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 11`] = `
-CustomString {
-  "value": "No yet supported",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 11`] = `"No yet supported"`;
 
-exports[`interpreter default scripts metaxploit.src 12`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts metaxploit.src 12`] = `"false"`;
 
-exports[`interpreter default scripts metaxploit.src 13`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [],
-}
-`;
+exports[`interpreter default scripts metaxploit.src 13`] = `"[  ]"`;
 
-exports[`interpreter default scripts metaxploit.src 14`] = `
-CustomString {
-  "value": "crypto",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 14`] = `"crypto"`;
 
-exports[`interpreter default scripts metaxploit.src 15`] = `
-CustomString {
-  "value": "1.0.0.0",
-}
-`;
+exports[`interpreter default scripts metaxploit.src 15`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 16`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts metaxploit.src 16`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 17`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts metaxploit.src 17`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 18`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts metaxploit.src 18`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 19`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    CustomString {
-      "value": "0xC8CE05AB",
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts metaxploit.src 19`] = `"[ 0xC8CE05AB ]"`;
 
 exports[`interpreter default scripts metaxploit.src 20`] = `
-CustomString {
-  "value": "loop in array <b>borg8kwtzu</b>. Buffer overflow.
+"loop in array <b>borg8kwtzu</b>. Buffer overflow.
 * Checking an active user.
 loop in array <b>6iogj1qr7h</b>. Buffer overflow.
 * Checking an active user.
@@ -896,796 +148,137 @@ loop in array <b>mwha9je4hh</b>. Buffer overflow.
 * Checking root active user.
 loop in array <b>2mxjo6mo50</b>. Buffer overflow.
 * 1337 computers using this router as gateway.
-* Checking an active user.",
-}
+* Checking an active user."
 `;
 
-exports[`interpreter default scripts mkdir.src 1`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts mkdir.src 1`] = `"false"`;
 
-exports[`interpreter default scripts router.src 1`] = `
-CustomString {
-  "value": "router",
-}
-`;
+exports[`interpreter default scripts router.src 1`] = `"router"`;
 
-exports[`interpreter default scripts router.src 2`] = `
-BasicInterface {
-  "interface": Map {
-    "public_ip" => [Function],
-    "local_ip" => [Function],
-    "bssid_name" => [Function],
-    "essid_name" => [Function],
-    "computers_lan_ip" => [Function],
-    "used_ports" => [Function],
-    "device_ports" => [Function],
-    "ping_port" => [Function],
-    "port_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "router",
-  },
-}
-`;
+exports[`interpreter default scripts router.src 2`] = `"router"`;
 
-exports[`interpreter default scripts router.src 3`] = `
-CustomString {
-  "value": "router",
-}
-`;
+exports[`interpreter default scripts router.src 3`] = `"router"`;
 
-exports[`interpreter default scripts router.src 4`] = `
-BasicInterface {
-  "interface": Map {
-    "public_ip" => [Function],
-    "local_ip" => [Function],
-    "bssid_name" => [Function],
-    "essid_name" => [Function],
-    "computers_lan_ip" => [Function],
-    "used_ports" => [Function],
-    "device_ports" => [Function],
-    "ping_port" => [Function],
-    "port_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "router",
-  },
-}
-`;
+exports[`interpreter default scripts router.src 4`] = `"router"`;
 
-exports[`interpreter default scripts router.src 5`] = `
-CustomString {
-  "value": "142.32.54.56",
-}
-`;
+exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `
-CustomString {
-  "value": "192.168.19.82",
-}
-`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.19.82"`;
 
-exports[`interpreter default scripts router.src 7`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts router.src 7`] = `""`;
 
-exports[`interpreter default scripts router.src 8`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts router.src 8`] = `""`;
 
-exports[`interpreter default scripts router.src 9`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 22,
-        "isClosed" => false,
-        "service" => "ssh",
-        "forwarded" => true,
-        "classID" => "port",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 559,
-        "isClosed" => false,
-        "service" => "rshell",
-        "forwarded" => true,
-        "classID" => "port",
-      },
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
 
-exports[`interpreter default scripts shell.src 1`] = `
-CustomString {
-  "value": "shell",
-}
-`;
+exports[`interpreter default scripts shell.src 1`] = `"shell"`;
 
-exports[`interpreter default scripts shell.src 2`] = `
-CustomString {
-  "value": "computer",
-}
-`;
+exports[`interpreter default scripts shell.src 2`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 3`] = `
-BasicInterface {
-  "interface": Map {
-    "get_ports" => [Function],
-    "File" => [Function],
-    "create_folder" => [Function],
-    "is_network_active" => [Function],
-    "touch" => [Function],
-    "show_procs" => [Function],
-    "network_devices" => [Function],
-    "change_password" => [Function],
-    "create_user" => [Function],
-    "delete_user" => [Function],
-    "create_group" => [Function],
-    "delete_group" => [Function],
-    "groups" => [Function],
-    "close_program" => [Function],
-    "wifi_networks" => [Function],
-    "connect_wifi" => [Function],
-    "connect_ethernet" => [Function],
-    "network_gateway" => [Function],
-    "active_net_card" => [Function],
-    "local_ip" => [Function],
-    "public_ip" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "computer",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 4`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 922,
-        "isClosed" => true,
-        "service" => "sql",
-        "forwarded" => false,
-        "classID" => "port",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 401,
-        "isClosed" => true,
-        "service" => "http",
-        "forwarded" => false,
-        "classID" => "port",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "get_lan_ip" => [Function],
-        "is_closed" => [Function],
-        "port_number" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "port" => 22,
-        "isClosed" => false,
-        "service" => "ssh",
-        "forwarded" => true,
-        "classID" => "port",
-      },
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts shell.src 4`] = `"[ port, port, port ]"`;
 
-exports[`interpreter default scripts shell.src 5`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 5`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 6`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 6`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 7`] = `
-BasicInterface {
-  "interface": Map {
-    "chmod" => [Function],
-    "copy" => [Function],
-    "move" => [Function],
-    "rename" => [Function],
-    "path" => [Function],
-    "parent" => [Function],
-    "name" => [Function],
-    "get_content" => [Function],
-    "set_content" => [Function],
-    "is_binary" => [Function],
-    "is_folder" => [Function],
-    "has_permission" => [Function],
-    "delete" => [Function],
-    "get_folders" => [Function],
-    "get_files" => [Function],
-    "permissions" => [Function],
-    "owner" => [Function],
-    "set_owner" => [Function],
-    "group" => [Function],
-    "set_group" => [Function],
-    "size" => [Function],
-    "meta_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "file",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 7`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 8`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 8`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 9`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 9`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 10`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 10`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 11`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-CustomString {
-  "value": "USER PID CPU MEM COMMAND
+"USER PID CPU MEM COMMAND
 root 2134 0.0% 13.37% kernel_task
-root 1864 0.0% 4.20% Xorg",
-}
+root 1864 0.0% 4.20% Xorg"
 `;
 
-exports[`interpreter default scripts shell.src 13`] = `
-CustomString {
-  "value": "eth0 38dr2pis true",
-}
-`;
+exports[`interpreter default scripts shell.src 13`] = `"eth0 38dr2pis true"`;
 
-exports[`interpreter default scripts shell.src 14`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 14`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 15`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 15`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 16`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 16`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 17`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 17`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 18`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 18`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 19`] = `
-CustomString {
-  "value": "",
-}
-`;
+exports[`interpreter default scripts shell.src 19`] = `""`;
 
-exports[`interpreter default scripts shell.src 20`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    CustomString {
-      "value": "0B:E4:A7:98:32:AA 26% reserved-sharp-59",
-    },
-    CustomString {
-      "value": "44:8E:73:9E:F2:63 38% romantic-tungay-41",
-    },
-    CustomString {
-      "value": "D4:3B:19:E1:AE:8A 27% independent-weevle-4",
-    },
-    CustomString {
-      "value": "D6:70:65:60:43:66 67% creative-robber-90",
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 26% reserved-sharp-59, 44:8E:73:9E:F2:63 38% romantic-tungay-41, D4:3B:19:E1:AE:8A 27% independent-weevle-4, D6:70:65:60:43:66 67% creative-robber-90 ]"`;
 
-exports[`interpreter default scripts shell.src 22`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 23`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 23`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 24`] = `
-CustomString {
-  "value": "192.168.166.167",
-}
-`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.166.167"`;
 
-exports[`interpreter default scripts shell.src 25`] = `
-CustomString {
-  "value": "WIFI",
-}
-`;
+exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `
-CustomString {
-  "value": "192.168.166.167",
-}
-`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.166.167"`;
 
-exports[`interpreter default scripts shell.src 27`] = `
-CustomString {
-  "value": "142.32.54.56",
-}
-`;
+exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts shell.src 28`] = `
-CustomString {
-  "value": "file",
-}
-`;
+exports[`interpreter default scripts shell.src 28`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 29`] = `
-BasicInterface {
-  "interface": Map {
-    "chmod" => [Function],
-    "copy" => [Function],
-    "move" => [Function],
-    "rename" => [Function],
-    "path" => [Function],
-    "parent" => [Function],
-    "name" => [Function],
-    "get_content" => [Function],
-    "set_content" => [Function],
-    "is_binary" => [Function],
-    "is_folder" => [Function],
-    "has_permission" => [Function],
-    "delete" => [Function],
-    "get_folders" => [Function],
-    "get_files" => [Function],
-    "permissions" => [Function],
-    "owner" => [Function],
-    "set_owner" => [Function],
-    "group" => [Function],
-    "set_group" => [Function],
-    "size" => [Function],
-    "meta_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "file",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 29`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 30`] = `
-CustomString {
-  "value": "No write permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 30`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 31`] = `
-CustomString {
-  "value": "No read permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 31`] = `"No read permissions"`;
 
-exports[`interpreter default scripts shell.src 32`] = `
-CustomString {
-  "value": "No read permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 32`] = `"No read permissions"`;
 
-exports[`interpreter default scripts shell.src 33`] = `
-CustomString {
-  "value": "No write permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 33`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 34`] = `
-CustomString {
-  "value": "/root",
-}
-`;
+exports[`interpreter default scripts shell.src 34`] = `"/root"`;
 
-exports[`interpreter default scripts shell.src 35`] = `
-BasicInterface {
-  "interface": Map {
-    "chmod" => [Function],
-    "copy" => [Function],
-    "move" => [Function],
-    "rename" => [Function],
-    "path" => [Function],
-    "parent" => [Function],
-    "name" => [Function],
-    "get_content" => [Function],
-    "set_content" => [Function],
-    "is_binary" => [Function],
-    "is_folder" => [Function],
-    "has_permission" => [Function],
-    "delete" => [Function],
-    "get_folders" => [Function],
-    "get_files" => [Function],
-    "permissions" => [Function],
-    "owner" => [Function],
-    "set_owner" => [Function],
-    "group" => [Function],
-    "set_group" => [Function],
-    "size" => [Function],
-    "meta_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "file",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 35`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 36`] = `
-CustomString {
-  "value": "root",
-}
-`;
+exports[`interpreter default scripts shell.src 36`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 37`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts shell.src 37`] = `""`;
 
-exports[`interpreter default scripts shell.src 38`] = `
-CustomString {
-  "value": "No write permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 38`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 39`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 39`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 40`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 40`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 41`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 41`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 42`] = `
-CustomString {
-  "value": "No write permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 42`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 43`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [
-    BasicInterface {
-      "interface": Map {
-        "chmod" => [Function],
-        "copy" => [Function],
-        "move" => [Function],
-        "rename" => [Function],
-        "path" => [Function],
-        "parent" => [Function],
-        "name" => [Function],
-        "get_content" => [Function],
-        "set_content" => [Function],
-        "is_binary" => [Function],
-        "is_folder" => [Function],
-        "has_permission" => [Function],
-        "delete" => [Function],
-        "get_folders" => [Function],
-        "get_files" => [Function],
-        "permissions" => [Function],
-        "owner" => [Function],
-        "set_owner" => [Function],
-        "group" => [Function],
-        "set_group" => [Function],
-        "size" => [Function],
-        "meta_info" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "classID" => "file",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "chmod" => [Function],
-        "copy" => [Function],
-        "move" => [Function],
-        "rename" => [Function],
-        "path" => [Function],
-        "parent" => [Function],
-        "name" => [Function],
-        "get_content" => [Function],
-        "set_content" => [Function],
-        "is_binary" => [Function],
-        "is_folder" => [Function],
-        "has_permission" => [Function],
-        "delete" => [Function],
-        "get_folders" => [Function],
-        "get_files" => [Function],
-        "permissions" => [Function],
-        "owner" => [Function],
-        "set_owner" => [Function],
-        "group" => [Function],
-        "set_group" => [Function],
-        "size" => [Function],
-        "meta_info" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "classID" => "file",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "chmod" => [Function],
-        "copy" => [Function],
-        "move" => [Function],
-        "rename" => [Function],
-        "path" => [Function],
-        "parent" => [Function],
-        "name" => [Function],
-        "get_content" => [Function],
-        "set_content" => [Function],
-        "is_binary" => [Function],
-        "is_folder" => [Function],
-        "has_permission" => [Function],
-        "delete" => [Function],
-        "get_folders" => [Function],
-        "get_files" => [Function],
-        "permissions" => [Function],
-        "owner" => [Function],
-        "set_owner" => [Function],
-        "group" => [Function],
-        "set_group" => [Function],
-        "size" => [Function],
-        "meta_info" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "classID" => "file",
-      },
-    },
-    BasicInterface {
-      "interface": Map {
-        "chmod" => [Function],
-        "copy" => [Function],
-        "move" => [Function],
-        "rename" => [Function],
-        "path" => [Function],
-        "parent" => [Function],
-        "name" => [Function],
-        "get_content" => [Function],
-        "set_content" => [Function],
-        "is_binary" => [Function],
-        "is_folder" => [Function],
-        "has_permission" => [Function],
-        "delete" => [Function],
-        "get_folders" => [Function],
-        "get_files" => [Function],
-        "permissions" => [Function],
-        "owner" => [Function],
-        "set_owner" => [Function],
-        "group" => [Function],
-        "set_group" => [Function],
-        "size" => [Function],
-        "meta_info" => [Function],
-      },
-      "isInstance": false,
-      "value": Map {
-        "classID" => "file",
-      },
-    },
-  ],
-}
-`;
+exports[`interpreter default scripts shell.src 43`] = `"[ file, file, file, file ]"`;
 
-exports[`interpreter default scripts shell.src 44`] = `
-CustomList {
-  "slice": [Function],
-  "value": Array [],
-}
-`;
+exports[`interpreter default scripts shell.src 44`] = `"[  ]"`;
 
-exports[`interpreter default scripts shell.src 45`] = `
-CustomString {
-  "value": "root",
-}
-`;
+exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 46`] = `
-CustomString {
-  "value": "No write permissions",
-}
-`;
+exports[`interpreter default scripts shell.src 46`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 47`] = `
-CustomString {
-  "value": "test-group",
-}
-`;
+exports[`interpreter default scripts shell.src 47`] = `"test-group"`;
 
-exports[`interpreter default scripts shell.src 48`] = `
-CustomString {
-  "value": "Not yet supported",
-}
-`;
+exports[`interpreter default scripts shell.src 48`] = `"Not yet supported"`;
 
-exports[`interpreter default scripts shell.src 49`] = `
-CustomString {
-  "value": "1337",
-}
-`;
+exports[`interpreter default scripts shell.src 49`] = `"1337"`;
 
-exports[`interpreter default scripts shell.src 50`] = `
-CustomNil {
-  "value": null,
-}
-`;
+exports[`interpreter default scripts shell.src 50`] = `""`;
 
-exports[`interpreter default scripts shell.src 51`] = `
-BasicInterface {
-  "interface": Map {
-    "get_ports" => [Function],
-    "File" => [Function],
-    "create_folder" => [Function],
-    "is_network_active" => [Function],
-    "touch" => [Function],
-    "show_procs" => [Function],
-    "network_devices" => [Function],
-    "change_password" => [Function],
-    "create_user" => [Function],
-    "delete_user" => [Function],
-    "create_group" => [Function],
-    "delete_group" => [Function],
-    "groups" => [Function],
-    "close_program" => [Function],
-    "wifi_networks" => [Function],
-    "connect_wifi" => [Function],
-    "connect_ethernet" => [Function],
-    "network_gateway" => [Function],
-    "active_net_card" => [Function],
-    "local_ip" => [Function],
-    "public_ip" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "computer",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 51`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 52`] = `
-CustomBoolean {
-  "value": false,
-}
-`;
+exports[`interpreter default scripts shell.src 52`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 53`] = `
-CustomBoolean {
-  "value": true,
-}
-`;
+exports[`interpreter default scripts shell.src 53`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 54`] = `
-BasicInterface {
-  "interface": Map {
-    "chmod" => [Function],
-    "copy" => [Function],
-    "move" => [Function],
-    "rename" => [Function],
-    "path" => [Function],
-    "parent" => [Function],
-    "name" => [Function],
-    "get_content" => [Function],
-    "set_content" => [Function],
-    "is_binary" => [Function],
-    "is_folder" => [Function],
-    "has_permission" => [Function],
-    "delete" => [Function],
-    "get_folders" => [Function],
-    "get_files" => [Function],
-    "permissions" => [Function],
-    "owner" => [Function],
-    "set_owner" => [Function],
-    "group" => [Function],
-    "set_group" => [Function],
-    "size" => [Function],
-    "meta_info" => [Function],
-  },
-  "isInstance": false,
-  "value": Map {
-    "classID" => "file",
-  },
-}
-`;
+exports[`interpreter default scripts shell.src 54`] = `"file"`;

@@ -1,100 +1,149 @@
+import {
+  CustomFunction,
+  CustomList,
+  CustomNumber,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import BasicInterface from './interface';
-import {
-    getFile,
-    getTraversalPath,
-    putFile,
-    getPermissions,
-    getHomePath
-} from './utils';
-import {
-	User,
-	Computer,
-	Network,
-	FileType,
-	Folder,
-	File
-} from './types';
 import mockEnvironment from './mock/environment';
+import { Computer, File, FileType, Folder, Network, User } from './types';
+import {
+  getFile,
+  getHomePath,
+  getPermissions,
+  getTraversalPath,
+  putFile
+} from './utils';
 
 export function create(user: User, computer: Computer): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  const itrface = new BasicInterface('crypto');
 
-    itrface.set('aireplay', (_: any, bssid: any, essid: any, maxAcks: any): string | null => {
-        const meta = {
-			bssid: bssid?.toString(),
-			essid: essid?.toString(),
-            maxAcks: Number(maxAcks?.valueOf())
-		};
-		const network = mockEnvironment.networks.find((item: Network) => {
-            return (
-                item.bssid === item.bssid &&
-                item.essid === item.essid
-            );
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'aireplay',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const bssid = args.get('bssid').toString();
+        const essid = args.get('essid').toString();
+        // Not yet implemented
+        // const maxAcks = args.get('maxAcks').toInt();
+        const network = mockEnvironment.networks.find((item: Network) => {
+          return item.bssid === bssid && item.essid === essid;
         });
 
         if (!network) {
-            return 'No network found';
+          return Promise.resolve(new CustomString('No network found'));
         }
 
-        const folder = getFile(computer.fileSystem, getHomePath(user, computer)) as Folder;
+        const folder = getFile(
+          computer.fileSystem,
+          getHomePath(user, computer)
+        ) as Folder;
 
         putFile(folder, {
-            name: 'file.cap',
-            content: network.password,
-            owner: user.username,
-            permissions: 'drwxr--r--',
-            type: FileType.Ack
+          name: 'file.cap',
+          content: network.password,
+          owner: user.username,
+          permissions: 'drwxr--r--',
+          type: FileType.Ack
         });
 
-        return null;
-	});
+        return Promise.resolve(Defaults.Void);
+      }
+    )
+      .addArgument('bssid')
+      .addArgument('essid')
+      .addArgument('maxAcks', new CustomNumber(25000))
+  );
 
-    itrface.set('airmon', (_: any): string => {
-        return 'start';
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'airmon',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString('start'));
+      }
+    )
+  );
 
-    itrface.set('aircrack', (_: any, path: any): string | null => {
-        const meta = {
-			path: path?.toString()
-		};
-        const traversalPath = getTraversalPath(meta.path, getHomePath(user, computer));
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'aircrack',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const path = args.get('path').toString();
+        const traversalPath = getTraversalPath(
+          path,
+          getHomePath(user, computer)
+        );
         const file = getFile(computer.fileSystem, traversalPath) as File;
 
         if (!file) {
-            return null;
+          return Promise.resolve(Defaults.Void);
         }
 
         const { r } = getPermissions(user, file);
 
-		if (!r) {
-			return null;
-		}
-
-        if (file.type !== FileType.Ack) {
-            return null;
+        if (!r) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return file.content;
-    });
+        if (file.type !== FileType.Ack) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-    itrface.set('decipher', (_: any, encryptedPass: string): string | null => {
-        const meta = {
-			encryptedPass: encryptedPass?.toString()
-		};
+        return Promise.resolve(new CustomString(file.content));
+      }
+    ).addArgument('path')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'decipher',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const encryptedPass = args.get('encryptedPass').toString();
         const user = mockEnvironment.users.find((item: User) => {
-            return item.passwordHashed === meta.encryptedPass;
+          return item.passwordHashed === encryptedPass;
         });
 
         if (!user) {
-            return null;
+          return Promise.resolve(Defaults.Void);
         }
 
-        return user.password;
-    });
+        return Promise.resolve(new CustomString(user.password));
+      }
+    ).addArgument('encryptedPass')
+  );
 
-    itrface.set('smtp_user_list', (_: any): string[] => {
-        return [];
-    });
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'smtp_user_list',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomList());
+      }
+    )
+  );
 
-	return new BasicInterface('crypto', itrface);
+  return itrface;
 }

@@ -1,187 +1,403 @@
-import { CustomString } from 'greybel-interpreter';
+import actualMd5 from 'blueimp-md5';
 import {
-	getFile,
-	getPermissions,
-	getTraversalPath,
-	getHomePath
-} from './utils';
-import { default as actualMd5 } from 'blueimp-md5';
-import { loginLocal } from './shell';
+  CustomBoolean,
+  CustomFunction,
+  CustomNumber,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import { create as createAptClient } from './apt-client';
 import { create as createCrypto } from './crypto';
-import { create as createMetaxploit } from './metaxploit';
-import { create as createRouter } from './router';
 import { create as createMetaMail } from './meta-mail';
-import {
-	FileType,
-	File
-} from './types';
+import { create as createMetaxploit } from './metaxploit';
 import mockEnvironment from './mock/environment';
-import BasicInterface from './interface';
+import { create as createRouter } from './router';
+import { loginLocal } from './shell';
+import { File, FileType } from './types';
+import {
+  getFile,
+  getHomePath,
+  getPermissions,
+  getTraversalPath
+} from './utils';
 
-export function getShell(user: any, password: any): BasicInterface {
-	return loginLocal(user, password);
-}
+export const getShell = CustomFunction.createExternal(
+  'getShell',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const user = args.get('user');
+    const password = args.get('password');
+    return Promise.resolve(loginLocal(user, password));
+  }
+)
+  .addArgument('user')
+  .addArgument('password');
 
-export function mailLogin(username: any, password: any): BasicInterface {
-	const email = mockEnvironment.getEmailViaLogin(username?.toString(), password?.toString());
-	
-	if (!email) {
-		return null;
-	}
+export const mailLogin = CustomFunction.createExternal(
+  'mailLogin',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const user = args.get('user');
+    const password = args.get('password');
+    const email = mockEnvironment.getEmailViaLogin(
+      user.toString(),
+      password.toString()
+    );
 
-	return createMetaMail(email);
-}
+    if (!email) {
+      return Promise.resolve(Defaults.Void);
+    }
 
-export function getRouter(ipAddress: any): BasicInterface {
-	const { user, computer } = mockEnvironment.getLocal();
-	const target = ipAddress?.toString();
-	const router = mockEnvironment.getRouterByIp(target || computer.router?.publicIp);
-	
-	return createRouter(user, router || computer.router);
-}
+    return Promise.resolve(createMetaMail(email));
+  }
+)
+  .addArgument('user')
+  .addArgument('password');
 
-export function getSwitch(ipAddress: any): BasicInterface {
-	const { user, computer } = mockEnvironment.getLocal();
-	const target = ipAddress?.toString();
-	const router = mockEnvironment.getRouterByIp(target || computer.router?.publicIp);
-	
-	return createRouter(user, router || computer.router);
-}
+export const getRouter = CustomFunction.createExternal(
+  'getRouter',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const { user, computer } = mockEnvironment.getLocal();
+    const target = args.get('ipAddress').toString();
+    const router = mockEnvironment.getRouterByIp(
+      target || computer.router?.publicIp
+    );
 
-export function includeLib(libPath: any): BasicInterface | null {
-	const { user, computer } = mockEnvironment.getLocal();
-	const target = getTraversalPath(libPath?.toString(), null);
-	const entityResult = getFile(computer.fileSystem, target);
+    return Promise.resolve(createRouter(user, router || computer.router));
+  }
+).addArgument('ipAddress');
 
-	if (entityResult && !entityResult.isFolder) {
-		const { r } = getPermissions(user, entityResult);
+export const getSwitch = CustomFunction.createExternal(
+  'getSwitch',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const { user, computer } = mockEnvironment.getLocal();
+    const target = args.get('ipAddress').toString();
+    const router = mockEnvironment.getRouterByIp(
+      target || computer.router?.publicIp
+    );
 
-		if (r) {
-			switch ((entityResult as File).type) {
-				case FileType.AptClient:
-					return createAptClient(user, computer);
-				case FileType.Crypto:
-					return createCrypto(user, computer);
-				case FileType.Metaxploit:
-					return createMetaxploit(user, computer);
-				default:
-			}
-		}
-	}
-	
-	return null;
-}
+    return Promise.resolve(createRouter(user, router || computer.router));
+  }
+).addArgument('ipAddress');
 
-export function md5(customValue: any): string | null {
-	if (customValue instanceof CustomString) {
-		return actualMd5(customValue?.toString());
-	}
-	return null;
-}
+export const includeLib = CustomFunction.createExternal(
+  'includeLib',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const libPath = args.get('libPath').toString();
+    const { user, computer } = mockEnvironment.getLocal();
+    const target = getTraversalPath(libPath, null);
+    const entityResult = getFile(computer.fileSystem, target);
 
-export function time(): number {
-	return Date.now();
-}
+    if (entityResult && !entityResult.isFolder) {
+      const { r } = getPermissions(user, entityResult);
 
-export function nslookup(hostname: any): string {
-	const target = hostname?.toString();
-	const router = mockEnvironment.findRouterViaNS(target);
-	return router?.publicIp;
-}
+      if (r) {
+        switch ((entityResult as File).type) {
+          case FileType.AptClient:
+            return Promise.resolve(createAptClient(user, computer));
+          case FileType.Crypto:
+            return Promise.resolve(createCrypto(user, computer));
+          case FileType.Metaxploit:
+            return Promise.resolve(createMetaxploit(user, computer));
+          default:
+        }
+      }
+    }
 
-export function whois(ipAddress: any): string {
-	const target = ipAddress?.toString();
-	if (isValidIp(target)) {
-		return mockEnvironment.getRouterByIp(target).whoisDescription;
-	}
-	return 'Invalid IP address: ${ipAddress}';
-}
+    return Promise.resolve(Defaults.Void);
+  }
+).addArgument('libPath');
 
-export function isValidIp(ipAddress: any): boolean {
-	const target = ipAddress?.toString();
-	return mockEnvironment.isValidIp(target);
-}
+export const md5 = CustomFunction.createExternal(
+  'md5',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const value = args.get('value');
+    if (value instanceof CustomString) {
+      return Promise.resolve(new CustomString(actualMd5(value.toString())));
+    }
+    return Promise.resolve(Defaults.Void);
+  }
+).addArgument('value');
 
-export function isLanIp(ipAddress: any): boolean {
-	const target = ipAddress?.toString();
-	return mockEnvironment.isLanIp(target);
-}
+export const time = CustomFunction.createExternal(
+  'time',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(new CustomNumber(Date.now()));
+  }
+);
 
-export function commandInfo(idCommand: any): string {
-	return idCommand?.toString().toUpperCase();
-}
+export const nslookup = CustomFunction.createExternal(
+  'nslookup',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const target = args.get('hostname').toString();
+    const router = mockEnvironment.findRouterViaNS(target);
+    return Promise.resolve(new CustomString(router?.publicIp));
+  }
+).addArgument('hostname');
 
-export function currentDate(): string {
-	const date = new Date(Date.now());
-	return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-}
+export const whois = CustomFunction.createExternal(
+  'whois',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const target = args.get('ipAddress').toString();
+    if (mockEnvironment.isValidIp(target)) {
+      return Promise.resolve(
+        new CustomString(mockEnvironment.getRouterByIp(target).whoisDescription)
+      );
+    }
+    return Promise.resolve(new CustomString(`Invalid IP address: ${target}`));
+  }
+).addArgument('ipAddress');
 
-export function currentPath(): string {
-	const path = getHomePath(
-		mockEnvironment.getLocal().user,
-		mockEnvironment.getLocal().computer
-	);
+export const isValidIp = CustomFunction.createExternal(
+  'isValidIp',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const target = args.get('ipAddress').toString();
+    return Promise.resolve(
+      new CustomBoolean(mockEnvironment.isValidIp(target))
+    );
+  }
+).addArgument('ipAddress');
 
-	return path ? '/' + path.join('/') : '/';
-}
+export const isLanIp = CustomFunction.createExternal(
+  'isLanIp',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const target = args.get('ipAddress').toString();
+    return Promise.resolve(new CustomBoolean(mockEnvironment.isLanIp(target)));
+  }
+).addArgument('ipAddress');
 
-export function parentPath(path: any): string {
-	return path?.toString().replace(/\/[^\/]+\/?$/i, '');
-}
+export const commandInfo = CustomFunction.createExternal(
+  'commandInfo',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(
+      new CustomString(args.get('idCommand').toString().toUpperCase())
+    );
+  }
+).addArgument('idCommand');
 
-export function homeDir(): string {
-	const path = getHomePath(
-		mockEnvironment.getLocal().user,
-		mockEnvironment.getLocal().computer
-	);
+export const currentDate = CustomFunction.createExternal(
+  'currentDate',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const date = new Date(Date.now());
+    const result = `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+    return Promise.resolve(new CustomString(result));
+  }
+);
 
-	return path ? '/' + path.join('/') : '/';
-}
+export const currentPath = CustomFunction.createExternal(
+  'currentPath',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const path = getHomePath(
+      mockEnvironment.getLocal().user,
+      mockEnvironment.getLocal().computer
+    );
 
-export function programPath(): string {
-	const path = getHomePath(
-		mockEnvironment.getLocal().user,
-		mockEnvironment.getLocal().computer
-	);
+    return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
+  }
+);
 
-	return path ? '/' + path.join('/') + '/myprogramm' : '/myprogramm';
-}
+export const parentPath = CustomFunction.createExternal(
+  'parentPath',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const path = args.get('path').toString();
+    return Promise.resolve(new CustomString(path.replace(/\/[^/]+\/?$/i, '')));
+  }
+).addArgument('path');
 
-export function activeUser(): string {
-	return mockEnvironment.getLocal().user.username;
-}
+export const homeDir = CustomFunction.createExternal(
+  'homeDir',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const path = getHomePath(
+      mockEnvironment.getLocal().user,
+      mockEnvironment.getLocal().computer
+    );
 
-export function userMailAddress(): string {
-	return mockEnvironment.getLocal().user.email;
-}
+    return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
+  }
+);
 
-export function userBankNumber(): string {
-	return mockEnvironment.getLocal().user.userBankNumber;
-}
+export const programPath = CustomFunction.createExternal(
+  'programPath',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const path = getHomePath(
+      mockEnvironment.getLocal().user,
+      mockEnvironment.getLocal().computer
+    );
 
-export function formatColumns(columns: any): string {
-	//todo add formating
-	return columns?.toString();
-}
+    return Promise.resolve(
+      new CustomString(
+        path ? '/' + path.join('/') + '/myprogramm' : '/myprogramm'
+      )
+    );
+  }
+);
 
-export function userInput(message: any, isPassword: any, anyKey: any): string {
-	return 'test-input';
-}
+export const activeUser = CustomFunction.createExternal(
+  'activeUser',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(
+      new CustomString(mockEnvironment.getLocal().user.username)
+    );
+  }
+);
 
-export function clearScreen(): null {
-	return null;
-}
+export const userMailAddress = CustomFunction.createExternal(
+  'userMailAddress',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(
+      new CustomString(mockEnvironment.getLocal().user.email)
+    );
+  }
+);
 
-export function launchPath(): string {
-	const path = getHomePath(
-		mockEnvironment.getLocal().user,
-		mockEnvironment.getLocal().computer
-	);
+export const userBankNumber = CustomFunction.createExternal(
+  'userMailAddress',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(
+      new CustomString(mockEnvironment.getLocal().user.userBankNumber)
+    );
+  }
+);
 
-	return path ? '/' + path.join('/') : '/';
-}
+export const formatColumns = CustomFunction.createExternal(
+  'formatColumns',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(new CustomString(args.get('columns').toString()));
+  }
+).addArgument('columns');
 
-export function typeOf(value: any): string {
-	return value.getType();
-}
+export const userInput = CustomFunction.createExternal(
+  'userInput',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(new CustomString('test-input'));
+  }
+);
+
+export const clearScreen = CustomFunction.createExternal(
+  'clearScreen',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(Defaults.Void);
+  }
+);
+
+export const launchPath = CustomFunction.createExternal(
+  'launchPath',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    _args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const path = getHomePath(
+      mockEnvironment.getLocal().user,
+      mockEnvironment.getLocal().computer
+    );
+
+    return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
+  }
+);
+
+export const typeOf = CustomFunction.createExternal(
+  'typeOf',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    return Promise.resolve(new CustomString(args.get('value').getCustomType()));
+  }
+).addArgument('value');

@@ -1,81 +1,200 @@
-import { CustomBoolean, CustomMap } from 'greybel-interpreter';
+import {
+  CustomFunction,
+  CustomList,
+  CustomString,
+  CustomValue,
+  Defaults,
+  OperationContext
+} from 'greybel-interpreter';
+
 import BasicInterface from './interface';
-import { Router, User, Port, Computer, Network } from './types';
-import { create as createPort } from './port';
 import mockEnvironment from './mock/environment';
+import { create as createPort } from './port';
+import { Computer, Network, Port, Router, User } from './types';
 
 export function create(user: User, router: Router): BasicInterface {
-	const itrface: Map<string, Function> = new Map();
+  const itrface = new BasicInterface('router');
 
-	itrface.set('public_ip', (_: any): string => {
-		return router.publicIp;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'public_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(router.publicIp));
+      }
+    )
+  );
 
-	itrface.set('local_ip', (_: any): string => {
-		return router.localIp;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'local_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(new CustomString(router.localIp));
+      }
+    )
+  );
 
-	itrface.set('bssid_name', (_: any): string => {
-		return mockEnvironment.networks
-			.find((v: Network) => v.router.publicIp === router.publicIp)
-			?.bssid;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'bssid_name',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = mockEnvironment.networks.find(
+          (v: Network) => v.router.publicIp === router.publicIp
+        );
 
-	itrface.set('essid_name', (_: any): string => {
-		return mockEnvironment.networks
-			.find((v: Network) => v.router.publicIp === router.publicIp)
-			?.essid;
-	});
+        return Promise.resolve(
+          result ? new CustomString(result.bssid) : Defaults.Void
+        );
+      }
+    )
+  );
 
-	itrface.set('computers_lan_ip', (_: any): string[] => {
-		return mockEnvironment.getComputersOfRouter(router)
-			.map((item: Computer) => item.localIp);
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'essid_name',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = mockEnvironment.networks.find(
+          (v: Network) => v.router.publicIp === router.publicIp
+        );
 
-	itrface.set('used_ports', (_: any): BasicInterface[] => {
-		return mockEnvironment.getForwardedPortsOfRouter(router)
-			.map((item: Port) => createPort(router, item)) || [];
-	});
+        return Promise.resolve(
+          result ? new CustomString(result.essid) : Defaults.Void
+        );
+      }
+    )
+  );
 
-	itrface.set('device_ports', (_: any, ipAddress: any): BasicInterface[] => {
-		const device = mockEnvironment.getComputerInLan(ipAddress?.toString(), router);
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'computers_lan_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result = mockEnvironment
+          .getComputersOfRouter(router)
+          .map((item: Computer) => new CustomString(item.localIp));
 
-		if (!device) {
-			return [];
-		}
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
 
-		return device.ports.map((item: Port) => createPort(device, item))
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'used_ports',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const result =
+          mockEnvironment
+            .getForwardedPortsOfRouter(router)
+            .map((item: Port) => createPort(router, item)) || [];
 
-	itrface.set('ping_port', (_: any, port: any): BasicInterface => {
-		const meta = {
-			port: Number(port?.valueOf())
-		};
-		const computers = mockEnvironment.getComputersOfRouterByIp(router.publicIp);
+        return Promise.resolve(new CustomList(result));
+      }
+    )
+  );
 
-		for (let item of computers) {
-			if (item.router.publicIp === router.publicIp) {
-				continue;
-			}
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'device_ports',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const ipAddress = args.get('ipAddress').toString();
+        const device = mockEnvironment.getComputerInLan(ipAddress, router);
 
-			for (let itemPort of item.ports) {
-				if (itemPort.port === meta.port) {
-					return createPort(router, itemPort);
-				}
-			}
-		}
+        if (!device) {
+          return Promise.resolve(new CustomList());
+        }
 
-		return null;
-	});
+        const result = device.ports.map((item: Port) =>
+          createPort(device, item)
+        );
 
-	itrface.set('port_info', (_: any, portObject: any): string | null => {
-		if (portObject instanceof CustomMap) {
-			const port = portObject as BasicInterface;
-			return `${port.value.get('port')} ${port.value.get('isClosed')} ${port.value.get('forwarded')} ${port.value.get('service')}`
-		}
+        return Promise.resolve(new CustomList(result));
+      }
+    ).addArgument('ipAddress')
+  );
 
-		return null;
-	});
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'ping_port',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const port = args.get('port').toInt();
+        const computers = mockEnvironment.getComputersOfRouterByIp(
+          router.publicIp
+        );
 
-	return new BasicInterface('router', itrface);
+        for (const item of computers) {
+          if (item.router.publicIp === router.publicIp) {
+            continue;
+          }
+
+          for (const itemPort of item.ports) {
+            if (itemPort.port === port) {
+              return Promise.resolve(createPort(router, itemPort));
+            }
+          }
+        }
+
+        return Promise.resolve(Defaults.Void);
+      }
+    ).addArgument('port')
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'port_info',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const portObject = args.get('portObject');
+
+        if (portObject instanceof BasicInterface) {
+          const port = portObject as BasicInterface;
+          return Promise.resolve(
+            new CustomString(
+              `${port.getVariable('port')} ${port.getVariable(
+                'isClosed'
+              )} ${port.getVariable('forwarded')} ${port.getVariable(
+                'service'
+              )}`
+            )
+          );
+        }
+
+        return Promise.resolve(Defaults.Void);
+      }
+    ).addArgument('portObject')
+  );
+
+  return itrface;
 }

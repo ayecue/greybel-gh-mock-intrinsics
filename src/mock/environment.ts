@@ -1,497 +1,588 @@
 import md5 from 'blueimp-md5';
 import randomSeed, { RandomSeed } from 'random-seed';
-const randomUsernameGenerator = require('random-username-generator');
+
 import {
-	User,
-	Computer,
-	NetworkDevice,
-	Router,
-	Network,
-	Service,
-	Library,
-	VulnerabilityRequirements,
-	VulnerabilityRequirementList,
-	VulnerabilityAction,
-	VulnerabilityActionList,
-	VulnerabilityActionUser,
-	Vulnerability,
-	Port,
-	ServiceList,
-	EMail
+  Computer,
+  EMail,
+  Library,
+  Network,
+  NetworkDevice,
+  Port,
+  Router,
+  Service,
+  ServiceList,
+  User,
+  Vulnerability,
+  VulnerabilityAction,
+  VulnerabilityActionList,
+  VulnerabilityActionUser,
+  VulnerabilityRequirementList,
+  VulnerabilityRequirements
 } from '../types';
 import getDefaultFileSystem from './default-file-system';
+const randomUsernameGenerator = require('random-username-generator');
 
 export class MockEnvironment {
-	seed: string;
+  seed: string;
 
-	vulnerabilityRng: RandomSeed;
-	bankIdRng: RandomSeed;
-	networkRng: RandomSeed;
-	macAddressRng: RandomSeed;
-	uuidRng: RandomSeed;
-	passwordRng: RandomSeed;
-	usernameRng: RandomSeed;
-	portRng: RandomSeed;
+  vulnerabilityRng: RandomSeed;
+  bankIdRng: RandomSeed;
+  networkRng: RandomSeed;
+  macAddressRng: RandomSeed;
+  uuidRng: RandomSeed;
+  passwordRng: RandomSeed;
+  usernameRng: RandomSeed;
+  portRng: RandomSeed;
 
-	users: User[];
-	routers: Router[];
-	computers: Computer[];
-	vulnerabilities: Vulnerability[];
-	networks: Network[];
-	emails: EMail[];
+  users: User[];
+  routers: Router[];
+  computers: Computer[];
+  vulnerabilities: Vulnerability[];
+  networks: Network[];
+  emails: EMail[];
 
-	localComputer: Computer;
+  localComputer: Computer;
 
-	constructor(seed: string = 'test', localUser: { username: string, password: string }) {
-		this.seed = seed;
-		this.vulnerabilityRng = randomSeed.create(`${seed}-vul-number`);
-		this.bankIdRng = randomSeed.create(`${seed}-bank-number`);
-		this.networkRng = randomSeed.create(`${seed}-network-devices`);
-		this.macAddressRng = randomSeed.create(`${seed}-mac-address`);
-		this.uuidRng = randomSeed.create(`${seed}-uuid`);
-		this.passwordRng = randomSeed.create(`${seed}-password`);
-		this.usernameRng = randomSeed.create(`${seed}-username`);
-		this.portRng = randomSeed.create(`${seed}-port`);
-		this.users = [];
-		this.routers = [];
-		this.computers = [];
-		this.vulnerabilities = [];
-		this.networks = [];
-		this.emails = [];
-		this.localComputer = this.generateComputer(null, [
-			this.generateUser(localUser.username, localUser.password)
-		], 'test');
-	}
+  constructor(
+    seed: string = 'test',
+    localUser: { username: string; password: string }
+  ) {
+    this.seed = seed;
+    this.vulnerabilityRng = randomSeed.create(`${seed}-vul-number`);
+    this.bankIdRng = randomSeed.create(`${seed}-bank-number`);
+    this.networkRng = randomSeed.create(`${seed}-network-devices`);
+    this.macAddressRng = randomSeed.create(`${seed}-mac-address`);
+    this.uuidRng = randomSeed.create(`${seed}-uuid`);
+    this.passwordRng = randomSeed.create(`${seed}-password`);
+    this.usernameRng = randomSeed.create(`${seed}-username`);
+    this.portRng = randomSeed.create(`${seed}-port`);
+    this.users = [];
+    this.routers = [];
+    this.computers = [];
+    this.vulnerabilities = [];
+    this.networks = [];
+    this.emails = [];
+    this.localComputer = this.generateComputer(
+      null,
+      [this.generateUser(localUser.username, localUser.password)],
+      'test'
+    );
+  }
 
-	generateUser(username: string, password: string): User {
-		const me = this;
-		const user: User = {
-			username,
-			password,
-			passwordHashed: md5(password),
-			email: me.generateEmail({
-				name: username,
-				password: password
-			}),
-			userBankNumber: me.bankIdRng.random().toString(36).substring(2, 10)
-		};
-	
-		me.users.push(user);
-	
-		return user;
-	}
+  generateUser(username: string, password: string): User {
+    const me = this;
+    const user: User = {
+      username,
+      password,
+      passwordHashed: md5(password),
+      email: me.generateEmail({
+        name: username,
+        password
+      }),
+      userBankNumber: me.bankIdRng.random().toString(36).substring(2, 10)
+    };
 
-	generateDomain(): string {
-		const me = this;
-		return `${me.generateUsername()}.${['org','com','de','tv'][me.networkRng.intBetween(0, 3)]}`;
-	}
+    me.users.push(user);
 
-	generateEmail(options: { name?: string, domain?: string, password?: string }): string {
-		const me = this;
-		const email = `${options.name || me.generateUsername()}@${options.domain || me.generateDomain()}`;
-		me.emails.push({
-			email,
-			password: options.password || me.generatePassword(),
-			messages: new Map()
-		});
-		return email;
-	}
+    return user;
+  }
 
-	generateRouter(options: Partial<Router> = {}): Router {
-		const me = this;
-		const networkDevice = me.generateNetworkDevice();
-		const routerUsers = [
-			me.generateUser('root', me.generatePassword()),
-			me.generateUser(me.generateUsername(), me.generatePassword())
-		];
-		const domain = me.generateDomain();
-		const name = me.generateUsername();
-		const router = {
-			domain: options.domain || `www.${domain}`,
-			whoisDescription: options.whoisDescription || [
-				`Domain name: ${domain}`,
-				`Administrative contact: ${name}`,
-				`Email address: ${me.generateEmail({ name, domain })}`,
-				'Phone: 123456891'
-			].join('\n'),
-			publicIp: options.publicIp || me.generateIp(),
-			localIp: options.localIp || me.generateLocalIp(),
-			activeNetCard: options.activeNetCard || networkDevice.type,
-			networkDevices: options.networkDevices || [
-				networkDevice
-			],
-			users: options.users || routerUsers,
-			fileSystem: options.fileSystem || getDefaultFileSystem(routerUsers),
-		};
+  generateDomain(): string {
+    const me = this;
+    return `${me.generateUsername()}.${
+      ['org', 'com', 'de', 'tv'][me.networkRng.intBetween(0, 3)]
+    }`;
+  }
 
-		for (let index = me.networkRng.intBetween(4, 10); index >= 0; index--) {
-			me.generateComputer(router, [
-				me.generateUser(me.generateUsername(), me.generatePassword())
-			]);
-		}
+  generateEmail(options: {
+    name?: string;
+    domain?: string;
+    password?: string;
+  }): string {
+    const me = this;
+    const email = `${options.name || me.generateUsername()}@${
+      options.domain || me.generateDomain()
+    }`;
+    me.emails.push({
+      email,
+      password: options.password || me.generatePassword(),
+      messages: new Map()
+    });
+    return email;
+  }
 
-		me.routers.push(router);
+  generateRouter(options: Partial<Router> = {}): Router {
+    const me = this;
+    const networkDevice = me.generateNetworkDevice();
+    const routerUsers = [
+      me.generateUser('root', me.generatePassword()),
+      me.generateUser(me.generateUsername(), me.generatePassword())
+    ];
+    const domain = me.generateDomain();
+    const name = me.generateUsername();
+    const router = {
+      domain: options.domain || `www.${domain}`,
+      whoisDescription:
+        options.whoisDescription ||
+        [
+          `Domain name: ${domain}`,
+          `Administrative contact: ${name}`,
+          `Email address: ${me.generateEmail({ name, domain })}`,
+          'Phone: 123456891'
+        ].join('\n'),
+      publicIp: options.publicIp || me.generateIp(),
+      localIp: options.localIp || me.generateLocalIp(),
+      activeNetCard: options.activeNetCard || networkDevice.type,
+      networkDevices: options.networkDevices || [networkDevice],
+      users: options.users || routerUsers,
+      fileSystem: options.fileSystem || getDefaultFileSystem(routerUsers)
+    };
 
-		return router;
-	}
+    for (let index = me.networkRng.intBetween(4, 10); index >= 0; index--) {
+      me.generateComputer(router, [
+        me.generateUser(me.generateUsername(), me.generatePassword())
+      ]);
+    }
 
-	generateComputer(router: Router | null, users: User[], rootPassword?: string): Computer {
-		const me = this;
-		const networkDevice = me.generateNetworkDevice();
-		const computerUsers = [
-			me.generateUser('root', rootPassword || me.generatePassword()),
-			...users
-		];
-		const computer = {
-			router,
-			localIp: me.generateLocalIp(),
-			activeNetCard: networkDevice.type,
-			networkDevices: [
-				networkDevice
-			],
-			users: computerUsers,
-			fileSystem: getDefaultFileSystem(computerUsers),
-			ports: <Port[]>[]
-		};
+    me.routers.push(router);
 
-		computer.ports =  me.generatePorts(computer);
-		me.computers.push(computer);
-		
-		return computer;
-	}
+    return router;
+  }
 
-	generatePorts(computer: Computer): Port[] {
-		const me = this;
-		const portNumber = me.portRng.intBetween(1, 1000);
-		const router = computer.router;
-		let forwarded = false;
+  generateComputer(
+    router: Router | null,
+    users: User[],
+    rootPassword?: string
+  ): Computer {
+    const me = this;
+    const networkDevice = me.generateNetworkDevice();
+    const computerUsers = [
+      me.generateUser('root', rootPassword || me.generatePassword()),
+      ...users
+    ];
+    const computer = {
+      router,
+      localIp: me.generateLocalIp(),
+      activeNetCard: networkDevice.type,
+      networkDevices: [networkDevice],
+      users: computerUsers,
+      fileSystem: getDefaultFileSystem(computerUsers),
+      ports: <Port[]>[]
+    };
 
-		if (router) {
-			const forwardedPort = me.getForwardedPortOfRouter(router, portNumber);
+    computer.ports = me.generatePorts(computer);
+    me.computers.push(computer);
 
-			if (!forwardedPort) {
-				forwarded = me.networkRng.intBetween(0, 2) === 1;
-			}
-		}
+    return computer;
+  }
 
-		return [...Array(me.portRng.intBetween(1, 3)).keys()].map(() => {
-			return {
-				port: me.portRng.intBetween(1, 1000),
-				isClosed: !!me.portRng.intBetween(0, 1),
-				service: ServiceList[me.portRng.intBetween(0, 5)],
-				forwarded
-			};
-		});
-	}
+  generatePorts(computer: Computer): Port[] {
+    const me = this;
+    const portNumber = me.portRng.intBetween(1, 1000);
+    const router = computer.router;
+    let forwarded = false;
 
-	getComputerInLan(ipAddress: string, router: Router): Computer | null {
-		const me = this;
+    if (router) {
+      const forwardedPort = me.getForwardedPortOfRouter(router, portNumber);
 
-		return me.getComputersOfRouter(router).find((v) => {
-			return v.localIp === ipAddress;
-		});
-	}
+      if (!forwardedPort) {
+        forwarded = me.networkRng.intBetween(0, 2) === 1;
+      }
+    }
 
-	getComputersOfRouter(router: Router): Computer[] {
-		const me = this;
-		
-		return me.computers.filter((v) => {
-			return v.router?.publicIp === router.publicIp;
-		});
-	}
+    return [...Array(me.portRng.intBetween(1, 3)).keys()].map(() => {
+      return {
+        port: me.portRng.intBetween(1, 1000),
+        isClosed: !!me.portRng.intBetween(0, 1),
+        service: ServiceList[me.portRng.intBetween(0, 5)],
+        forwarded
+      };
+    });
+  }
 
-	getPortsOfRouter(router: Router): Port[] {
-		const me = this;
-		const computers = me.getComputersOfRouter(router);
-		
-		return [].concat(...computers.map((v: Computer) => {
-			return v.ports;
-		}));
-	}
+  getComputerInLan(ipAddress: string, router: Router): Computer | null {
+    const me = this;
 
-	getForwardedPortsOfRouter(router: Router): Port[] {
-		const me = this;
+    return me.getComputersOfRouter(router).find((v) => {
+      return v.localIp === ipAddress;
+    });
+  }
 
-		return me.getPortsOfRouter(router).filter((v) => v.forwarded);
-	}
+  getComputersOfRouter(router: Router): Computer[] {
+    const me = this;
 
-	getForwardedPortOfRouter(router: Router, port: number): { computer: Computer, port: Port } | null {
-		const me = this;
-		const computers = me.computers.filter((v) => {
-			return v.router?.publicIp === router.publicIp;
-		});
-		let computerResult;
-		let portResult;
+    return me.computers.filter((v) => {
+      return v.router?.publicIp === router.publicIp;
+    });
+  }
 
-		for (let item of computers) {
-			if (item.ports) {
-				for (let itemPort of item.ports) {
-					if (itemPort.port === port && itemPort.forwarded) {
-						computerResult = item;
-						portResult = itemPort;
-						break;
-					}
-				}
-			}
+  getPortsOfRouter(router: Router): Port[] {
+    const me = this;
+    const computers = me.getComputersOfRouter(router);
 
-			if (computerResult || portResult) {
-				break;
-			}
-		}
+    return [].concat(
+      ...computers.map((v: Computer) => {
+        return v.ports;
+      })
+    );
+  }
 
-		if (!computerResult || !portResult) {
-			return null;
-		}
+  getForwardedPortsOfRouter(router: Router): Port[] {
+    const me = this;
 
-		return {
-			computer: computerResult,
-			port: portResult
-		};
-	}
+    return me.getPortsOfRouter(router).filter((v) => v.forwarded);
+  }
 
-	generateNetworkDevice(): NetworkDevice {
-		return {
-			type: this.networkRng.intBetween(0, 1) === 0 ? 'wlan0' : 'eth0',
-			id: this.networkRng.random().toString(36).substring(2, 10),
-			active: true
-		};
-	}
+  getForwardedPortOfRouter(
+    router: Router,
+    port: number
+  ): { computer: Computer; port: Port } | null {
+    const me = this;
+    const computers = me.computers.filter((v) => {
+      return v.router?.publicIp === router.publicIp;
+    });
+    let computerResult;
+    let portResult;
 
-	generateIp(): string {
-		const me = this;
-		return `${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(0, 255)}`
-	}
+    for (const item of computers) {
+      if (item.ports) {
+        for (const itemPort of item.ports) {
+          if (itemPort.port === port && itemPort.forwarded) {
+            computerResult = item;
+            portResult = itemPort;
+            break;
+          }
+        }
+      }
 
-	generateLocalIp(): string {
-		const me = this;
-		return `192.168.${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(0, 255)}`
-	}
+      if (computerResult || portResult) {
+        break;
+      }
+    }
 
-	generateMAC(): string {
-		const me = this;
-		const d = '0123456789ABCDEF';
-		return [...Array(6).keys()].map(() => {
-			return d[me.macAddressRng.intBetween(0, 15)] + d[me.macAddressRng.intBetween(0, 15)];
-		}).join(':');
-	}
+    if (!computerResult || !portResult) {
+      return null;
+    }
 
-	generateUUID(): string {
-		const me = this;
-		let dt = me.uuidRng.random();
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			const r = (dt + me.uuidRng.random()*16)%16 | 0;
-			dt = Math.floor(dt/16);
-			return (c=='x' ? r :(r&0x3|0x8)).toString(16);
-		});
-	}
+    return {
+      computer: computerResult,
+      port: portResult
+    };
+  }
 
-	generateUsername(): string {
-		const me = this;
-		const nativeMath = Math.random;
-		Math.random = () => me.usernameRng.random();
-		const username = randomUsernameGenerator.generate();
-		Math.random = nativeMath;
-		return username;
-	}
+  generateNetworkDevice(): NetworkDevice {
+    return {
+      type: this.networkRng.intBetween(0, 1) === 0 ? 'wlan0' : 'eth0',
+      id: this.networkRng.random().toString(36).substring(2, 10),
+      active: true
+    };
+  }
 
-	generatePassword(): string {
-		const me = this;
-		return me.passwordRng.string(me.passwordRng.intBetween(4, 8));
-	}
+  generateIp(): string {
+    const me = this;
+    return `${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(
+      0,
+      255
+    )}.${me.networkRng.intBetween(0, 255)}.${me.networkRng.intBetween(0, 255)}`;
+  }
 
-	generateNetwork(router: Router, options: Partial<Network> = {}): Network {
-		const me = this;
-		const network = {
-			mac: options.mac || me.generateMAC(),
-			percentage: options.percentage || me.networkRng.intBetween(20, 70),
-			name: options.name || me.generateUsername(),
-			bssid: options.bssid || me.generateUUID(),
-			essid: options.essid || me.generateUUID(),
-			password: options.password || me.generatePassword(),
-			router
-		};
+  generateLocalIp(): string {
+    const me = this;
+    return `192.168.${me.networkRng.intBetween(
+      0,
+      255
+    )}.${me.networkRng.intBetween(0, 255)}`;
+  }
 
-		me.networks.push(network);
+  generateMAC(): string {
+    const me = this;
+    const d = '0123456789ABCDEF';
+    return [...Array(6).keys()]
+      .map(() => {
+        return (
+          d[me.macAddressRng.intBetween(0, 15)] +
+          d[me.macAddressRng.intBetween(0, 15)]
+        );
+      })
+      .join(':');
+  }
 
-		return network;
-	}
+  generateUUID(): string {
+    const me = this;
+    let dt = me.uuidRng.random();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        const r = (dt + me.uuidRng.random() * 16) % 16 | 0;
+        dt = Math.floor(dt / 16);
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+      }
+    );
+  }
 
-	generateVulnerabilityAddress(): string {
-		const me = this;
-		const d = '0123456789ABCDEF';
-		return '0x' + [...Array(8).keys()].map(() => {
-			return d[me.vulnerabilityRng.intBetween(0, 15)];
-		}).join('');
-	}
+  generateUsername(): string {
+    const me = this;
+    const nativeMath = Math.random;
+    Math.random = () => me.usernameRng.random();
+    const username = randomUsernameGenerator.generate();
+    Math.random = nativeMath;
+    return username;
+  }
 
-	generateVulnerability(library: Library, memAddress: string, remote: boolean): Vulnerability {
-		const me = this;
-		const requirementAmount = me.vulnerabilityRng.intBetween(0, 3);
-		const required: VulnerabilityRequirements[] = [];
-		const action = VulnerabilityActionList[me.vulnerabilityRng.intBetween(0, 4)] as VulnerabilityAction;
-		let user;
-	
-		while (required.length < requirementAmount) {
-			const index = me.vulnerabilityRng.intBetween(0, 6);
-			const req = VulnerabilityRequirementList[index] as VulnerabilityRequirements;
-	
-			if (!required.includes(req)) {
-				required.push(req);
-			}
-		}
-	
-		const userType = me.vulnerabilityRng.intBetween(0, 5);
-	
-		switch (userType) {
-			case 0:
-				user = VulnerabilityActionUser.ROOT;
-				break;
-			case 1:
-			case 2:
-				user = VulnerabilityActionUser.NORMAL;
-				break;
-			default:
-				user = VulnerabilityActionUser.GUEST;
-				break;
-		}
-	
-		return {
-			required,
-			memAddress,
-			sector: me.vulnerabilityRng.random().toString(36).substring(2, 12),
-			details: 'loop in array',
-			remote,
-			library,
-			action,
-			user,
-			folder: ['home', 'guest']
-		};
-	}
+  generatePassword(): string {
+    const me = this;
+    return me.passwordRng.string(me.passwordRng.intBetween(4, 8));
+  }
 
-	generateSectorVulnerabilities(library: Library, sector: string, remote: boolean): Vulnerability[]  {
-		const me = this;
-		const vulAmount = me.vulnerabilityRng.intBetween(1, 4);
-		const result = [];
-	
-		for (let index = vulAmount; index >= 0; index--) {
-			result.push(me.generateVulnerability(library, sector, remote));
-		}
+  generateNetwork(router: Router, options: Partial<Network> = {}): Network {
+    const me = this;
+    const network = {
+      mac: options.mac || me.generateMAC(),
+      percentage: options.percentage || me.networkRng.intBetween(20, 70),
+      name: options.name || me.generateUsername(),
+      bssid: options.bssid || me.generateUUID(),
+      essid: options.essid || me.generateUUID(),
+      password: options.password || me.generatePassword(),
+      router
+    };
 
-		this.vulnerabilities.push(...result);
-	
-		return result;
-	}
+    me.networks.push(network);
 
-	generateVulnerabilitiesForLibrary(library: Library, options: { remote?: boolean; local?: boolean; } = {}) {
-		const me = this;
-		let address = me.generateVulnerabilityAddress();
+    return network;
+  }
 
-		for (let amount = me.vulnerabilityRng.intBetween(2, 5); amount >= 0; amount--) {
-			if (options.remote) me.generateSectorVulnerabilities(library, address, true);
-			if (options.local) me.generateSectorVulnerabilities(library, address, false);
+  generateVulnerabilityAddress(): string {
+    const me = this;
+    const d = '0123456789ABCDEF';
+    return (
+      '0x' +
+      [...Array(8).keys()]
+        .map(() => {
+          return d[me.vulnerabilityRng.intBetween(0, 15)];
+        })
+        .join('')
+    );
+  }
 
-			address = me.vulnerabilityRng.intBetween(0, 3) === 1 ? me.generateVulnerabilityAddress() : address;
-		}
-	}
+  generateVulnerability(
+    library: Library,
+    memAddress: string,
+    remote: boolean
+  ): Vulnerability {
+    const me = this;
+    const requirementAmount = me.vulnerabilityRng.intBetween(0, 3);
+    const required: VulnerabilityRequirements[] = [];
+    const action = VulnerabilityActionList[
+      me.vulnerabilityRng.intBetween(0, 4)
+    ] as VulnerabilityAction;
+    let user;
 
-	setupLibraries() {
-		const me = this;
-		me.generateVulnerabilitiesForLibrary(Library.CRYPTO, { local: true });
-		me.generateVulnerabilitiesForLibrary(Library.FTP, { local: true, remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.HTTP, { local: true, remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.INIT, { local: true });
-		me.generateVulnerabilitiesForLibrary(Library.KERNEL_MODULE, { local: true });
-		me.generateVulnerabilitiesForLibrary(Library.KERNEL_ROUTER, { remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.METAXPLOIT, { local: true });
-		me.generateVulnerabilitiesForLibrary(Library.NET, { local: true });
-		me.generateVulnerabilitiesForLibrary(Library.RSHELL, { local: true, remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.SMTP, { local: true, remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.SQL, { local: true, remote: true });
-		me.generateVulnerabilitiesForLibrary(Library.SSH, { local: true, remote: true });
-	}
+    while (required.length < requirementAmount) {
+      const index = me.vulnerabilityRng.intBetween(0, 6);
+      const req = VulnerabilityRequirementList[
+        index
+      ] as VulnerabilityRequirements;
 
-	getLocal(): { computer: Computer, user: User } {
-		const computer = this.localComputer;
-		const user = computer.users[1];
+      if (!required.includes(req)) {
+        required.push(req);
+      }
+    }
 
-		return {
-			computer,
-			user
-		};
-	}
+    const userType = me.vulnerabilityRng.intBetween(0, 5);
 
-	connectLocal(router: Router) {
-		this.localComputer.router = router;
-	}
+    switch (userType) {
+      case 0:
+        user = VulnerabilityActionUser.ROOT;
+        break;
+      case 1:
+      case 2:
+        user = VulnerabilityActionUser.NORMAL;
+        break;
+      default:
+        user = VulnerabilityActionUser.GUEST;
+        break;
+    }
 
-	getRouterByIp(ipAddress: string): Router | null {
-		const me = this;
+    return {
+      required,
+      memAddress,
+      sector: me.vulnerabilityRng.random().toString(36).substring(2, 12),
+      details: 'loop in array',
+      remote,
+      library,
+      action,
+      user,
+      folder: ['home', 'guest']
+    };
+  }
 
-		if (!me.isValidIp(ipAddress)) {
-			return null;
-		}
+  generateSectorVulnerabilities(
+    library: Library,
+    sector: string,
+    remote: boolean
+  ): Vulnerability[] {
+    const me = this;
+    const vulAmount = me.vulnerabilityRng.intBetween(1, 4);
+    const result = [];
 
-		return me.routers.find((item: Router) => {
-			return item.publicIp === ipAddress;
-		}) || me.generateRouter({
-			publicIp: ipAddress
-		});
-	}
+    for (let index = vulAmount; index >= 0; index--) {
+      result.push(me.generateVulnerability(library, sector, remote));
+    }
 
-	getComputersOfRouterByIp(ipAddress: string): Computer[] {
-		const me = this;
-		const router = me.getRouterByIp(ipAddress);
+    this.vulnerabilities.push(...result);
 
-		if (!router) {
-			return [];
-		}
+    return result;
+  }
 
-		return me.computers.filter((v) => {
-			return v.router.publicIp === router.publicIp;
-		});
-	}
+  generateVulnerabilitiesForLibrary(
+    library: Library,
+    options: { remote?: boolean; local?: boolean } = {}
+  ) {
+    const me = this;
+    let address = me.generateVulnerabilityAddress();
 
-	findRouterViaNS(name: string): Router {
-		const me = this;
+    for (
+      let amount = me.vulnerabilityRng.intBetween(2, 5);
+      amount >= 0;
+      amount--
+    ) {
+      if (options.remote)
+        me.generateSectorVulnerabilities(library, address, true);
+      if (options.local)
+        me.generateSectorVulnerabilities(library, address, false);
 
-		return me.routers.find((item: Router) => {
-			return item.domain === name;
-		});
-	}
+      address =
+        me.vulnerabilityRng.intBetween(0, 3) === 1
+          ? me.generateVulnerabilityAddress()
+          : address;
+    }
+  }
 
-	getEmailViaLogin(email: string, password: string): EMail | null {
-		const me = this;
-		return me.emails.find((v) => v.email === email && v.password === password);
-	}
+  setupLibraries() {
+    const me = this;
+    me.generateVulnerabilitiesForLibrary(Library.CRYPTO, { local: true });
+    me.generateVulnerabilitiesForLibrary(Library.FTP, {
+      local: true,
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.HTTP, {
+      local: true,
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.INIT, { local: true });
+    me.generateVulnerabilitiesForLibrary(Library.KERNEL_MODULE, {
+      local: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.KERNEL_ROUTER, {
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.METAXPLOIT, { local: true });
+    me.generateVulnerabilitiesForLibrary(Library.NET, { local: true });
+    me.generateVulnerabilitiesForLibrary(Library.RSHELL, {
+      local: true,
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.SMTP, {
+      local: true,
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.SQL, {
+      local: true,
+      remote: true
+    });
+    me.generateVulnerabilitiesForLibrary(Library.SSH, {
+      local: true,
+      remote: true
+    });
+  }
 
-	getEmail(email: string): EMail | null {
-		const me = this;
-		return me.emails.find((v) => v.email === email);
-	}
+  getLocal(): { computer: Computer; user: User } {
+    const computer = this.localComputer;
+    const user = computer.users[1];
 
-	isValidIp(target: string): boolean {
-		return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(target);
-	}
-	
-	isLanIp(target: string): boolean {
-		return /^1(0|27|69\.254|72\.(1[6-9]|2[0-9]|3[0-1])|92\.168)\./.test(target);
-	}
+    return {
+      computer,
+      user
+    };
+  }
+
+  connectLocal(router: Router) {
+    this.localComputer.router = router;
+  }
+
+  getRouterByIp(ipAddress: string): Router | null {
+    const me = this;
+
+    if (!me.isValidIp(ipAddress)) {
+      return null;
+    }
+
+    return (
+      me.routers.find((item: Router) => {
+        return item.publicIp === ipAddress;
+      }) ||
+      me.generateRouter({
+        publicIp: ipAddress
+      })
+    );
+  }
+
+  getComputersOfRouterByIp(ipAddress: string): Computer[] {
+    const me = this;
+    const router = me.getRouterByIp(ipAddress);
+
+    if (!router) {
+      return [];
+    }
+
+    return me.computers.filter((v) => {
+      return v.router.publicIp === router.publicIp;
+    });
+  }
+
+  findRouterViaNS(name: string): Router {
+    const me = this;
+
+    return me.routers.find((item: Router) => {
+      return item.domain === name;
+    });
+  }
+
+  getEmailViaLogin(email: string, password: string): EMail | null {
+    const me = this;
+    return me.emails.find((v) => v.email === email && v.password === password);
+  }
+
+  getEmail(email: string): EMail | null {
+    const me = this;
+    return me.emails.find((v) => v.email === email);
+  }
+
+  isValidIp(target: string): boolean {
+    return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+      target
+    );
+  }
+
+  isLanIp(target: string): boolean {
+    return /^1(0|27|69\.254|72\.(1[6-9]|2[0-9]|3[0-1])|92\.168)\./.test(target);
+  }
 }
 
 const mockEnvironment = new MockEnvironment('test', {
-	username: 'test',
-	password: 'test'
+  username: 'test',
+  password: 'test'
 });
 
 mockEnvironment.setupLibraries();
 
 const localRouters = [
-	mockEnvironment.generateRouter({
-		publicIp: '142.32.54.56'
-	}),
-	mockEnvironment.generateRouter(),
-	mockEnvironment.generateRouter(),
-	mockEnvironment.generateRouter()
+  mockEnvironment.generateRouter({
+    publicIp: '142.32.54.56'
+  }),
+  mockEnvironment.generateRouter(),
+  mockEnvironment.generateRouter(),
+  mockEnvironment.generateRouter()
 ];
 
 localRouters.forEach((v) => mockEnvironment.generateNetwork(v));
@@ -500,23 +591,23 @@ mockEnvironment.networks[0].essid = 'essid-test-uuid';
 mockEnvironment.networks[0].password = 'test';
 mockEnvironment.connectLocal(localRouters[0]);
 mockEnvironment.generateRouter({
-	publicIp: '142.567.134.56',
-	domain: 'www.mytest.org',
-	users: [
-		mockEnvironment.generateUser('root', 'test'),
-		mockEnvironment.generateUser('gandalf', 'shallnotpass')
-	]
+  publicIp: '142.567.134.56',
+  domain: 'www.mytest.org',
+  users: [
+    mockEnvironment.generateUser('root', 'test'),
+    mockEnvironment.generateUser('gandalf', 'shallnotpass')
+  ]
 });
 mockEnvironment.getLocal().computer.ports.push({
-	port: 22,
-	service: Service.SSH,
-	isClosed: false,
-	forwarded: true
+  port: 22,
+  service: Service.SSH,
+  isClosed: false,
+  forwarded: true
 });
 mockEnvironment.generateEmail({
-	name: 'test',
-	domain: 'test.org',
-	password: 'test'
+  name: 'test',
+  domain: 'test.org',
+  password: 'test'
 });
 
 export default mockEnvironment;

@@ -1,101 +1,24 @@
-import {
-	CustomMap,
-	CustomNil
-} from 'greybel-interpreter';
-import crypto from 'crypto';
+import { CustomFunction, CustomInterface } from 'greybel-interpreter';
 
-export default class BasicInterface extends CustomMap {
-	interface: Map<string, Function>;
+export default class BasicInterface extends CustomInterface {
+  values: Map<string, any>;
 
-	constructor(type: string, itrface: Map<string, Function>, values?: Map<string, any>) {
-		super(values);
-		const me = this;
+  constructor(type: string, values?: Map<string, any>) {
+    super(type);
+    this.values = new Map<string, any>(values);
+  }
 
-		me.value.set('classID', type);
-		me.interface = itrface;
-	}
+  addMethod(fn: CustomFunction): BasicInterface {
+    this.addFunction(fn.name, fn);
+    return this;
+  }
 
-	[Symbol.iterator](): null {
-		return null;
-	}
+  setVariable(key: string, value: any): BasicInterface {
+    this.values.set(key, value);
+    return this;
+  }
 
-	extend(value: Map<string, any>): null {
-		return null;
-	}
-
-	set(path: string[], value: any): Promise<void> {
-		return Promise.reject('You cannot set a property on an interface.');
-	}
-
-	get(path: string[]): Promise<any> {
-		const me = this;
-
-		if (path.length === 0) {
-			return Promise.resolve(me);
-		}
-
-		const traversalPath = [].concat(path);
-		const current = traversalPath.shift();
-		const currentValue = current?.valueOf();
-
-		if (currentValue != null) {
-			if (path.length === 1 && me.interface.has(currentValue)) {
-				return Promise.resolve(
-					me.interface.get(currentValue).bind(null, me)
-				);
-			} else {
-				throw new Error(`Cannot get path ${path.join('.')}`);
-			}
-		}
-		
-		return null;
-	}
-
-	getCallable(path: string[]): Promise<any> {
-		const me = this;
-		const traversalPath = [].concat(path);
-		const current = traversalPath.shift();
-		const currentValue = current?.valueOf();
-
-		if (currentValue != null) {
-			if (path.length === 1 && me.interface.has(currentValue)) {
-				return Promise.resolve({
-					origin: me.interface.get(currentValue).bind(null, me),
-					context: me
-				});
-			} else {
-				throw new Error(`Cannot get path ${path.join('.')}`);
-			}
-		}
-		
-		return null;
-	}
-
-	callMethod(method: string[], ...args: any[]): any {
-		if (method.length === 0) {
-			throw new Error('Unexpected method length');
-		}
-
-		const me = this;
-		const key = method?.[0]?.valueOf();
-
-		if (!me.interface.has(key)) {
-			throw new Error(`Cannot access ${key} in map`);
-		}
-
-		return me.interface.get(key)(me, ...args);
-	}
-
-	createInstance(): null {
-		return null;
-	}
-
-	toString(): string {
-		return this.getType();
-	}
-
-	fork(): BasicInterface {
-		const me = this;
-		return new BasicInterface(me.value.get('classID'), me.interface);
-	}
+  getVariable(key: string): any {
+    return this.values.get(key);
+  }
 }
