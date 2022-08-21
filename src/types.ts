@@ -87,7 +87,14 @@ export enum FileType {
   Ack,
   Net,
   Init,
-  KernelModule
+  KernelModule,
+  Blockchain,
+  SSH,
+  FTP,
+  HTTP,
+  Chat,
+  RShell,
+  Repository
 }
 
 export interface FileSystemEntity {

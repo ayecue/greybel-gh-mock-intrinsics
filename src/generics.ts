@@ -13,6 +13,8 @@ import { create as createAptClient } from './apt-client';
 import { create as createCrypto } from './crypto';
 import { create as createMetaMail } from './meta-mail';
 import { create as createMetaxploit } from './metaxploit';
+import { create as createBlockchain } from './blockchain';
+import { create as createService } from './service';
 import mockEnvironment from './mock/environment';
 import { create as createRouter } from './router';
 import { loginLocal } from './shell';
@@ -114,12 +116,21 @@ export const includeLib = CustomFunction.createExternal(
 
       if (r) {
         switch ((entityResult as File).type) {
+          case FileType.SSH:
+          case FileType.FTP:
+          case FileType.HTTP:
+          case FileType.Chat:
+          case FileType.RShell:
+          case FileType.Repository:
+            return Promise.resolve(createService(user, computer));
           case FileType.AptClient:
             return Promise.resolve(createAptClient(user, computer));
           case FileType.Crypto:
             return Promise.resolve(createCrypto(user, computer));
           case FileType.Metaxploit:
             return Promise.resolve(createMetaxploit(user, computer));
+          case FileType.Blockchain:
+            return Promise.resolve(createBlockchain(user, computer));
           default:
         }
       }

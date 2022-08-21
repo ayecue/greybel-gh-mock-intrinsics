@@ -1,0 +1,8 @@
+ssh = include_lib("/lib/ssh.so")
+
+print(typeof(ssh))
+print(ssh)
+
+print(ssh.install_service)
+print(ssh.start_service)
+print(ssh.stop_service)

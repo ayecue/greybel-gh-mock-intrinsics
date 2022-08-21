@@ -1,0 +1,12 @@
+blockchain = include_lib("/lib/blockchain.so")
+
+print(typeof(blockchain))
+print(blockchain)
+
+print(blockchain.coin_price)
+print(blockchain.show_history)
+print(blockchain.amount_mined)
+print(blockchain.get_coin)
+print(blockchain.login_wallet)
+print(blockchain.create_wallet)
+print(blockchain.delete_coin)

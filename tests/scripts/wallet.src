@@ -1,0 +1,16 @@
+blockchain = include_lib("/lib/blockchain.so")
+wallet = blockchain.login_wallet
+
+print(typeof(wallet))
+print(wallet)
+
+print(wallet.list_coins)
+print(wallet.get_balance)
+print(wallet.buy_coin)
+print(wallet.sell_coin)
+print(wallet.get_pending_trade)
+print(wallet.cancel_pending_trade)
+print(wallet.list_global_coins)
+print(wallet.show_nodes)
+print(wallet.reset_password)
+print(wallet.get_pin)

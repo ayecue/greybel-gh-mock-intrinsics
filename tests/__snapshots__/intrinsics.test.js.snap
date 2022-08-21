@@ -1,5 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`interpreter default scripts blockchain.src 1`] = `"blockchain"`;
+
+exports[`interpreter default scripts blockchain.src 2`] = `"blockchain"`;
+
+exports[`interpreter default scripts blockchain.src 3`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts blockchain.src 4`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts blockchain.src 5`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts blockchain.src 6`] = `"coin"`;
+
+exports[`interpreter default scripts blockchain.src 7`] = `"wallet"`;
+
+exports[`interpreter default scripts blockchain.src 8`] = `"wallet"`;
+
+exports[`interpreter default scripts blockchain.src 9`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 1`] = `"coin"`;
+
+exports[`interpreter default scripts coin.src 2`] = `"coin"`;
+
+exports[`interpreter default scripts coin.src 3`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 4`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 5`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 6`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 7`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 8`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 9`] = `"subWallet"`;
+
+exports[`interpreter default scripts coin.src 10`] = `"[ subWallet ]"`;
+
+exports[`interpreter default scripts coin.src 11`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 12`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts coin.src 13`] = `"Not yet supported"`;
+
 exports[`interpreter default scripts crypto.src 1`] = `"crypto"`;
 
 exports[`interpreter default scripts crypto.src 2`] = `"crypto"`;
@@ -171,6 +215,16 @@ exports[`interpreter default scripts router.src 8`] = `""`;
 
 exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
 
+exports[`interpreter default scripts service.src 1`] = `"service"`;
+
+exports[`interpreter default scripts service.src 2`] = `"service"`;
+
+exports[`interpreter default scripts service.src 3`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts service.src 4`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts service.src 5`] = `"Not yet supported"`;
+
 exports[`interpreter default scripts shell.src 1`] = `"shell"`;
 
 exports[`interpreter default scripts shell.src 2`] = `"computer"`;
@@ -282,3 +336,49 @@ exports[`interpreter default scripts shell.src 52`] = `"false"`;
 exports[`interpreter default scripts shell.src 53`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 54`] = `"file"`;
+
+exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
+
+exports[`interpreter default scripts sub-wallet.src 2`] = `"subWallet"`;
+
+exports[`interpreter default scripts sub-wallet.src 3`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 4`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 5`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 6`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 7`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 8`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 9`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 10`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts sub-wallet.src 11`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 1`] = `"wallet"`;
+
+exports[`interpreter default scripts wallet.src 2`] = `"wallet"`;
+
+exports[`interpreter default scripts wallet.src 3`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 4`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 5`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 6`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 7`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 8`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 9`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 10`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 11`] = `"Not yet supported"`;
+
+exports[`interpreter default scripts wallet.src 12`] = `"Not yet supported"`;

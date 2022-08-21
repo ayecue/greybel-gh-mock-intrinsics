@@ -122,7 +122,56 @@ function getLibFiles(parent: FileSystemEntity): File[] {
       owner: 'root',
       type: FileType.Metaxploit,
       parent
-    }
+    },
+    {
+      name: 'blockchain.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.Blockchain,
+      parent
+    },
+    {
+      name: 'ssh.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.SSH,
+      parent
+    },
+    {
+      name: 'ftp.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.FTP,
+      parent
+    },
+    {
+      name: 'http.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.HTTP,
+      parent
+    },
+    {
+      name: 'chat.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.Chat,
+      parent
+    },
+    {
+      name: 'rshell.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.RShell,
+      parent
+    },
+    {
+      name: 'repository.so',
+      permissions: '-rw-r--r--',
+      owner: 'root',
+      type: FileType.Repository,
+      parent
+    },
   ];
 }
 

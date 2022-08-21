@@ -1,0 +1,17 @@
+blockchain = include_lib("/lib/blockchain.so")
+coin = blockchain.get_coin
+
+print(typeof(coin))
+print(coin)
+
+print(coin.set_cycle_mining)
+print(coin.get_cycle_mining)
+print(coin.get_reward)
+print(coin.set_reward)
+print(coin.transaction)
+print(coin.create_subwallet)
+print(coin.get_subwallet)
+print(coin.get_subwallets)
+print(coin.set_address)
+print(coin.get_address)
+print(coin.get_mined_coins)

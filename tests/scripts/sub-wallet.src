@@ -1,0 +1,16 @@
+blockchain = include_lib("/lib/blockchain.so")
+coin = blockchain.get_coin
+subWallet = coin.get_subwallet
+
+print(typeof(subWallet))
+print(subWallet)
+
+print(subWallet.get_balance)
+print(subWallet.set_info)
+print(subWallet.get_info)
+print(subWallet.delete)
+print(subWallet.get_user)
+print(subWallet.last_transaction)
+print(subWallet.mining)
+print(subWallet.check_password)
+print(subWallet.wallet_username)
