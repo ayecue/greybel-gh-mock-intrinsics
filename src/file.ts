@@ -259,6 +259,19 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
+      'allow_import',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(Defaults.False);
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
       'parent',
       (
         _ctx: OperationContext,
@@ -577,19 +590,6 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('1337'));
-      }
-    )
-  );
-
-  itrface.addMethod(
-    CustomFunction.createExternalWithSelf(
-      'meta_info',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
       }
     )
   );

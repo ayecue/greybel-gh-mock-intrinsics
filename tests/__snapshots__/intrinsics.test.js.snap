@@ -327,7 +327,7 @@ exports[`interpreter default scripts shell.src 48`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts shell.src 49`] = `"1337"`;
 
-exports[`interpreter default scripts shell.src 50`] = `""`;
+exports[`interpreter default scripts shell.src 50`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 51`] = `"computer"`;
 

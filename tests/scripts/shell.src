@@ -54,7 +54,7 @@ print(file.set_owner("test", true))
 print(file.group)
 print(file.set_group)
 print(file.size)
-print(file.meta_info)
+print(file.allow_import)
 
 
 print(globals.get_shell.host_computer)
