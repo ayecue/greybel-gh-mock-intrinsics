@@ -328,7 +328,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(new CustomString(file.content));
+        return Promise.resolve(new CustomString(file.content || ''));
       }
     )
   );
