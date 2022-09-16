@@ -8,9 +8,9 @@ import {
 } from 'greybel-interpreter';
 
 import BasicInterface from './interface';
-import { Computer, Port } from './types';
+import { Type } from 'greybel-mock-environment';
 
-export function create(computer: Computer, port: Port): BasicInterface {
+export function create(computer: Type.Computer, port: Type.Port): BasicInterface {
   const itrface = new BasicInterface('port');
 
   itrface.addMethod(

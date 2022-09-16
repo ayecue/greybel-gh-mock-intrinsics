@@ -9,9 +9,9 @@ import {
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { EMail } from './types';
+import { Type } from 'greybel-mock-environment';
 
-export function create(email: EMail): BasicInterface {
+export function create(email: Type.EMail): BasicInterface {
   const itrface = new BasicInterface('metaMail');
 
   itrface.addMethod(
@@ -72,13 +72,13 @@ export function create(email: EMail): BasicInterface {
         const address = args.get('address');
         const subject = args.get('subject').toString();
         const message = args.get('message').toString();
-        const targetEmail = mockEnvironment.getEmail(address.toString());
+        const targetEmail = mockEnvironment.get().getEmail(address.toString());
 
         if (!targetEmail) {
           return Promise.resolve(new CustomString('No email found'));
         }
 
-        targetEmail.messages.set(mockEnvironment.generateUUID(), {
+        targetEmail.messages.set(mockEnvironment.get().generateUUID(), {
           subject,
           message
         });

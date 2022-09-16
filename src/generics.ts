@@ -18,7 +18,7 @@ import { create as createService } from './service';
 import mockEnvironment from './mock/environment';
 import { create as createRouter } from './router';
 import { loginLocal } from './shell';
-import { File, FileType } from './types';
+import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getHomePath,
@@ -50,7 +50,7 @@ export const mailLogin = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const user = args.get('user');
     const password = args.get('password');
-    const email = mockEnvironment.getEmailViaLogin(
+    const email = mockEnvironment.get().getEmailViaLogin(
       user.toString(),
       password.toString()
     );
@@ -72,9 +72,9 @@ export const getRouter = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.getLocal();
+    const { user, computer } = mockEnvironment.get().getLocal();
     const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.getRouterByIp(
+    const router = mockEnvironment.get().getRouterByIp(
       target || computer.router?.publicIp
     );
 
@@ -89,9 +89,9 @@ export const getSwitch = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.getLocal();
+    const { user, computer } = mockEnvironment.get().getLocal();
     const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.getRouterByIp(
+    const router = mockEnvironment.get().getRouterByIp(
       target || computer.router?.publicIp
     );
 
@@ -107,7 +107,7 @@ export const includeLib = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const libPath = args.get('libPath').toString();
-    const { user, computer } = mockEnvironment.getLocal();
+    const { user, computer } = mockEnvironment.get().getLocal();
     const target = getTraversalPath(libPath, null);
     const entityResult = getFile(computer.fileSystem, target);
 
@@ -115,21 +115,21 @@ export const includeLib = CustomFunction.createExternal(
       const { r } = getPermissions(user, entityResult);
 
       if (r) {
-        switch ((entityResult as File).type) {
-          case FileType.SSH:
-          case FileType.FTP:
-          case FileType.HTTP:
-          case FileType.Chat:
-          case FileType.RShell:
-          case FileType.Repository:
+        switch ((entityResult as Type.File).type) {
+          case Type.FileType.SSH:
+          case Type.FileType.FTP:
+          case Type.FileType.HTTP:
+          case Type.FileType.Chat:
+          case Type.FileType.RShell:
+          case Type.FileType.Repository:
             return Promise.resolve(createService(user, computer));
-          case FileType.AptClient:
+          case Type.FileType.AptClient:
             return Promise.resolve(createAptClient(user, computer));
-          case FileType.Crypto:
+          case Type.FileType.Crypto:
             return Promise.resolve(createCrypto(user, computer));
-          case FileType.Metaxploit:
+          case Type.FileType.Metaxploit:
             return Promise.resolve(createMetaxploit(user, computer));
-          case FileType.Blockchain:
+          case Type.FileType.Blockchain:
             return Promise.resolve(createBlockchain(user, computer));
           default:
         }
@@ -174,7 +174,7 @@ export const nslookup = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('hostname').toString();
-    const router = mockEnvironment.findRouterViaNS(target);
+    const router = mockEnvironment.get().findRouterViaNS(target);
     return Promise.resolve(new CustomString(router?.publicIp));
   }
 ).addArgument('hostname');
@@ -187,9 +187,9 @@ export const whois = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    if (mockEnvironment.isValidIp(target)) {
+    if (mockEnvironment.get().isValidIp(target)) {
       return Promise.resolve(
-        new CustomString(mockEnvironment.getRouterByIp(target).whoisDescription)
+        new CustomString(mockEnvironment.get().getRouterByIp(target).whoisDescription)
       );
     }
     return Promise.resolve(new CustomString(`Invalid IP address: ${target}`));
@@ -205,7 +205,7 @@ export const isValidIp = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
     return Promise.resolve(
-      new CustomBoolean(mockEnvironment.isValidIp(target))
+      new CustomBoolean(mockEnvironment.get().isValidIp(target))
     );
   }
 ).addArgument('ipAddress');
@@ -218,7 +218,7 @@ export const isLanIp = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    return Promise.resolve(new CustomBoolean(mockEnvironment.isLanIp(target)));
+    return Promise.resolve(new CustomBoolean(mockEnvironment.get().isLanIp(target)));
   }
 ).addArgument('ipAddress');
 
@@ -258,8 +258,8 @@ export const currentPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
@@ -286,8 +286,8 @@ export const homeDir = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
@@ -302,8 +302,8 @@ export const programPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(
@@ -322,7 +322,7 @@ export const activeUser = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.username)
+      new CustomString(mockEnvironment.get().getLocal().user.username)
     );
   }
 );
@@ -335,7 +335,7 @@ export const userMailAddress = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.email)
+      new CustomString(mockEnvironment.get().getLocal().user.email)
     );
   }
 );
@@ -348,7 +348,7 @@ export const userBankNumber = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.userBankNumber)
+      new CustomString(mockEnvironment.get().getLocal().user.userBankNumber)
     );
   }
 );
@@ -394,8 +394,8 @@ export const launchPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));

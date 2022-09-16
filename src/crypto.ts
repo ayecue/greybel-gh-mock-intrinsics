@@ -10,7 +10,7 @@ import {
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { Computer, File, FileType, Folder, Network, User } from './types';
+import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getHomePath,
@@ -19,7 +19,7 @@ import {
   putFile
 } from './utils';
 
-export function create(user: User, computer: Computer): BasicInterface {
+export function create(user: Type.User, computer: Type.Computer): BasicInterface {
   const itrface = new BasicInterface('crypto');
 
   itrface.addMethod(
@@ -34,7 +34,7 @@ export function create(user: User, computer: Computer): BasicInterface {
         const essid = args.get('essid').toString();
         // Not yet implemented
         // const maxAcks = args.get('maxAcks').toInt();
-        const network = mockEnvironment.networks.find((item: Network) => {
+        const network = mockEnvironment.get().networks.find((item: Type.Network) => {
           return item.bssid === bssid && item.essid === essid;
         });
 
@@ -45,14 +45,14 @@ export function create(user: User, computer: Computer): BasicInterface {
         const folder = getFile(
           computer.fileSystem,
           getHomePath(user, computer)
-        ) as Folder;
+        ) as Type.Folder;
 
         putFile(folder, {
           name: 'file.cap',
           content: network.password,
           owner: user.username,
           permissions: 'drwxr--r--',
-          type: FileType.Ack
+          type: Type.FileType.Ack
         });
 
         return Promise.resolve(Defaults.Void);
@@ -89,7 +89,7 @@ export function create(user: User, computer: Computer): BasicInterface {
           path,
           getHomePath(user, computer)
         );
-        const file = getFile(computer.fileSystem, traversalPath) as File;
+        const file = getFile(computer.fileSystem, traversalPath) as Type.File;
 
         if (!file) {
           return Promise.resolve(Defaults.Void);
@@ -101,7 +101,7 @@ export function create(user: User, computer: Computer): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        if (file.type !== FileType.Ack) {
+        if (file.type !== Type.FileType.Ack) {
           return Promise.resolve(Defaults.Void);
         }
 
@@ -119,7 +119,7 @@ export function create(user: User, computer: Computer): BasicInterface {
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const encryptedPass = args.get('encryptedPass').toString();
-        const user = mockEnvironment.users.find((item: User) => {
+        const user = mockEnvironment.get().users.find((item: Type.User) => {
           return item.passwordHashed === encryptedPass;
         });
 

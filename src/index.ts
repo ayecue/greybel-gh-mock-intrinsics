@@ -3,7 +3,6 @@ import { CustomFunction } from 'greybel-interpreter';
 import * as generics from './generics';
 
 export { default as mockEnvironment } from './mock/environment';
-export * from './types';
 
 export function getAPI(): Map<string, CustomFunction> {
   const apiInterface = new Map();

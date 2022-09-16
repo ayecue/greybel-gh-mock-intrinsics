@@ -9,9 +9,9 @@ import { create as createCoin } from './coin';
 import { create as createWallet } from './wallet';
 
 import BasicInterface from './interface';
-import { Computer, User } from './types';
+import { Type } from 'greybel-mock-environment';
 
-export function create(user: User, computer: Computer): BasicInterface {
+export function create(user: Type.User, computer: Type.Computer): BasicInterface {
   const itrface = new BasicInterface('blockchain');
 
   itrface.addMethod(

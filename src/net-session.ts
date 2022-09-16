@@ -6,12 +6,12 @@ import {
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
-import { Computer, Library } from './types';
+import { Type } from 'greybel-mock-environment';
 
 export function create(
-  computer: Computer,
-  targetComputer: Computer,
-  library: Library
+  computer: Type.Computer,
+  targetComputer: Type.Computer,
+  library: Type.Library
 ): BasicInterface {
   const itrface = new BasicInterface('netSession');
 

@@ -10,19 +10,9 @@ import {
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
-import { getUserFolder } from './mock/default-file-system';
+import { FS, Type } from 'greybel-mock-environment';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import {
-  Computer,
-  FileType,
-  Folder,
-  Network,
-  NetworkDevice,
-  Port,
-  Router,
-  User
-} from './types';
 import {
   changePassword,
   getFile,
@@ -33,8 +23,8 @@ import {
 } from './utils';
 
 export function create(
-  user: User,
-  computer: Computer,
+  user: Type.User,
+  computer: Type.Computer,
   options: { location?: string[] } = {}
 ): BasicInterface {
   const itrface = new BasicInterface('computer');
@@ -48,7 +38,7 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const ports =
-          computer?.ports.map((item: Port) => createPort(computer, item)) || [];
+          computer?.ports.map((item: Type.Port) => createPort(computer, item)) || [];
         return Promise.resolve(new CustomList(ports));
       }
     )
@@ -90,7 +80,7 @@ export function create(
 
         if (entityResult && entityResult.isFolder) {
           const { w } = getPermissions(user, entityResult);
-          const folder = entityResult as Folder;
+          const folder = entityResult as Type.Folder;
 
           if (w && !hasFile(folder, folderName)) {
             folder.folders.push({
@@ -142,14 +132,14 @@ export function create(
 
         if (entityResult && entityResult.isFolder) {
           const { w } = getPermissions(user, entityResult);
-          const folder = entityResult as Folder;
+          const folder = entityResult as Type.Folder;
 
           if (w && !hasFile(folder, target)) {
             folder.files.push({
               name: target,
               owner: user.username,
               permissions: entityResult.permissions,
-              type: FileType.Plain,
+              type: Type.FileType.Plain,
               parent: folder
             });
 
@@ -192,7 +182,7 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const result = computer.networkDevices
-          .map((item: NetworkDevice) => {
+          .map((item: Type.NetworkDevice) => {
             return `${item.type} ${item.id} ${item.active}`;
           })
           .join('\n');
@@ -238,18 +228,18 @@ export function create(
           const username = args.get('username').toString();
           const password = args.get('password').toString();
 
-          const existingUser = computer.users.find((item: User) => {
+          const existingUser = computer.users.find((item: Type.User) => {
             return item.username === username;
           });
 
           if (!existingUser) {
-            const homeFolder = getFile(computer.fileSystem, ['home']) as Folder;
+            const homeFolder = getFile(computer.fileSystem, ['home']) as Type.Folder;
 
             if (!hasFile(homeFolder, username)) {
               computer.users.push(
-                mockEnvironment.generateUser(username, password)
+                mockEnvironment.get().generateUser(username, password)
               );
-              homeFolder.folders.push(getUserFolder(homeFolder, username));
+              homeFolder.folders.push(FS.getUserFolder(homeFolder, username));
 
               return Promise.resolve(Defaults.True);
             }
@@ -279,7 +269,7 @@ export function create(
             return Promise.resolve(Defaults.False);
           }
 
-          const userIndex = computer.users.findIndex((item: User) => {
+          const userIndex = computer.users.findIndex((item: Type.User) => {
             return item.username === username;
           });
 
@@ -289,7 +279,7 @@ export function create(
             if (removeHome) {
               const homeFolder = getFile(computer.fileSystem, [
                 'home'
-              ]) as Folder;
+              ]) as Type.Folder;
 
               if (homeFolder) {
                 removeFile(homeFolder, username);
@@ -378,7 +368,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment.networks.map((item: Network) => {
+        const result = mockEnvironment.get().networks.map((item: Type.Network) => {
           return new CustomString(
             `${item.mac} ${item.percentage}% ${item.name}`
           );
@@ -466,7 +456,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(
           new CustomString(
-            computer.router?.publicIp || (computer as Router).publicIp
+            computer.router?.publicIp || (computer as Type.Router).publicIp
           )
         );
       }

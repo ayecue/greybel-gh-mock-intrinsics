@@ -6,9 +6,9 @@ import {
 } from 'greybel-interpreter';
 
 import BasicInterface from './interface';
-import { Computer, User } from './types';
+import { Type } from 'greybel-mock-environment';
 
-export function create(_user: User, _computer: Computer): BasicInterface {
+export function create(_user: Type.User, _computer: Type.Computer): BasicInterface {
   const itrface = new BasicInterface('subWallet');
 
   itrface.addMethod(
