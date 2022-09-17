@@ -12,6 +12,10 @@ print(program_path)
 print(active_user)
 print(user_mail_address)
 print(user_bank_number)
-print(format_columns("test"))
 print(clear_screen)
 print(launch_path)
+
+data = "COL1 COL2 COL3"
+data = data + "\none two three"
+data = data + "\nthing1 thing2 thing3"
+print(format_columns(data))

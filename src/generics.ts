@@ -2,6 +2,7 @@ import actualMd5 from 'blueimp-md5';
 import {
   CustomBoolean,
   CustomFunction,
+  CustomNil,
   CustomNumber,
   CustomString,
   CustomValue,
@@ -360,7 +361,49 @@ export const formatColumns = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString(args.get('columns').toString()));
+    const columns = args.get('columns');
+
+    if (columns instanceof CustomNil) {
+      return Promise.resolve(new CustomString(''));
+    }
+
+    const list = columns.toString().replace(/\\n/g, '\n').split('\n');
+    const v: Array<Array<string>> = [];
+    const l: Array<number> = [];
+
+    for (let i = 0; i < list.length; i++) {
+      const rows = list[i].split(/\s+/);
+      v.push([]);
+
+      for (let j = 0; j < rows.length; j++) {
+        if (rows.length > l.length) {
+          l.push(j);
+        }
+        const txt = rows[j];
+
+        if (txt.length > l[j]) {
+          l[j] = txt.length;
+        }
+
+        v[i].push(txt);
+      }
+    }
+
+    const seperation = 2;
+    const lines = [];
+
+    for (let i = 0; i < v.length; i++) {
+      let output = '';
+      for (let j = 0; j < v[i].length; j++) {
+        const txt = v[i][j];
+        output += txt;
+        const len = l[j] - txt.length + seperation;
+        output += ' '.repeat(len);
+      }
+      lines.push(output);
+    }
+
+    return Promise.resolve(new CustomString(lines.join('\n')));
   }
 ).addArgument('columns');
 
