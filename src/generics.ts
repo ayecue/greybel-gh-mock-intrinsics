@@ -9,7 +9,11 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import {
+  isLanIp as isLanIpInternal,
+  isValidIp as isValidIpInternal,
+  Type
+} from 'greybel-mock-environment';
 
 import { create as createAptClient } from './apt-client';
 import { create as createBlockchain } from './blockchain';
@@ -77,15 +81,28 @@ export const getRouter = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.get().getLocal();
-    const target = args.get('ipAddress').toString();
-    const router = mockEnvironment
-      .get()
-      .getRouterByIp(target || computer.router?.publicIp);
+    const ipAddress = args.get('ipAddress');
 
-    return Promise.resolve(createRouter(user, router || computer.router));
+    if (!(ipAddress instanceof CustomString)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const target = ipAddress.toString();
+
+    if (!isValidIpInternal(target) && target !== '') {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const { user, computer } = mockEnvironment.get().getLocal();
+    let router = computer.router;
+
+    if (target !== '') {
+      router = mockEnvironment.get().getRouterByIp(target);
+    }
+
+    return Promise.resolve(createRouter(user, router));
   }
-).addArgument('ipAddress');
+).addArgument('ipAddress', new CustomString(''));
 
 export const getSwitch = CustomFunction.createExternal(
   'getSwitch',
@@ -94,13 +111,30 @@ export const getSwitch = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.get().getLocal();
-    const target = args.get('ipAddress').toString();
-    const router = mockEnvironment
-      .get()
-      .getRouterByIp(target || computer.router?.publicIp);
+    const ipAddress = args.get('ipAddress');
 
-    return Promise.resolve(createRouter(user, router || computer.router));
+    if (!(ipAddress instanceof CustomString)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const target = ipAddress.toString();
+
+    if (!isValidIpInternal(target)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    if (!isLanIpInternal(target)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const { user } = mockEnvironment.get().getLocal();
+    const router = mockEnvironment.get().getSwitchByIp(target);
+
+    if (router) {
+      return Promise.resolve(createRouter(user, router));
+    }
+
+    return Promise.resolve(Defaults.Void);
   }
 ).addArgument('ipAddress');
 
@@ -208,11 +242,11 @@ export const whois = CustomFunction.createExternal(
       throw new Error('whois: Invalid arguments');
     }
 
-    if (!mockEnvironment.get().isValidIp(target)) {
+    if (!isValidIpInternal(target)) {
       return Promise.resolve(new CustomString(`Invalid IP adress ${target}`));
     }
 
-    if (mockEnvironment.get().isLanIp(target)) {
+    if (isLanIpInternal(target)) {
       return Promise.resolve(
         new CustomString('Error: the IP address must be public')
       );
@@ -236,9 +270,7 @@ export const isValidIp = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    return Promise.resolve(
-      new CustomBoolean(mockEnvironment.get().isValidIp(target))
-    );
+    return Promise.resolve(new CustomBoolean(isValidIpInternal(target)));
   }
 ).addArgument('ipAddress');
 
@@ -251,10 +283,7 @@ export const isLanIp = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
     return Promise.resolve(
-      new CustomBoolean(
-        mockEnvironment.get().isValidIp(target) &&
-          mockEnvironment.get().isLanIp(target)
-      )
+      new CustomBoolean(isValidIpInternal(target) && isLanIpInternal(target))
     );
   }
 ).addArgument('ipAddress');
@@ -392,7 +421,7 @@ export const userBankNumber = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.get().getLocal().user.userBankNumber)
+      new CustomString(mockEnvironment.get().getLocal().user.bankNumber)
     );
   }
 );

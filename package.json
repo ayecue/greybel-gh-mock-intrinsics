@@ -56,6 +56,6 @@
     "dependencies": {
         "blueimp-md5": "^2.19.0",
         "greybel-interpreter": "^1.2.2",
-        "greybel-mock-environment": "^1.0.3"
+        "greybel-mock-environment": "^1.0.9"
     }
 }

@@ -1,5 +1,5 @@
 router = get_router
-switch = get_switch
+switch = get_switch("192.168.247.187")
 
 print(typeof(router))
 print(router)

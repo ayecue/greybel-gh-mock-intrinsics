@@ -29,9 +29,11 @@ export function create(
   const isLocal = isLan && computer.localIp === targetComputer.localIp;
   const exploits = mockEnvironment
     .get()
-    .vulnerabilities.filter((item: Type.Vulnerability) => {
-      return item.library === library && item.remote !== isLocal;
-    });
+    .vulnerabilityGenerator.vulnerabilities.filter(
+      (item: Type.Vulnerability) => {
+        return item.library === library && item.remote !== isLocal;
+      }
+    );
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(

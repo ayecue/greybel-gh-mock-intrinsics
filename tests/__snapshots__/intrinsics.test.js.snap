@@ -65,9 +65,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: agreeable-merchant-86.de
-Administrative contact: philosophical-actuary-51
-Email address: philosophical-actuary-51@agreeable-merchant-86.de
+"Domain name: ambitious-barbara-20.de
+Administrative contact: Unbelievable-defarge-44
+Email address: Unbelievable-defarge-44@ambitious-barbara-20.de
 Phone: 123456891"
 `;
 
@@ -85,7 +85,7 @@ exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogramm
 
 exports[`interpreter default scripts generics.src 12`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 13`] = `"test@Unbelievable-player-76.tv"`;
+exports[`interpreter default scripts generics.src 13`] = `"test@Unbelievable-player-76.org"`;
 
 exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
@@ -117,14 +117,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+"[ 5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"87ffc4dc-8555-4f07-a077-af1919e43718"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"87ffc4dc-8555-4f07-a077-af1919e43718 - hello
+"5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
 dude"
 `;
 
@@ -216,13 +216,13 @@ exports[`interpreter default scripts router.src 4`] = `"router"`;
 
 exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `"192.168.19.82"`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.0.8"`;
 
 exports[`interpreter default scripts router.src 7`] = `""`;
 
 exports[`interpreter default scripts router.src 8`] = `""`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port, port, port, port, port, port, port ]"`;
 
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
@@ -240,7 +240,7 @@ exports[`interpreter default scripts shell.src 2`] = `"computer"`;
 
 exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 4`] = `"[ port, port, port ]"`;
+exports[`interpreter default scripts shell.src 4`] = `"[ port ]"`;
 
 exports[`interpreter default scripts shell.src 5`] = `"false"`;
 
@@ -262,7 +262,7 @@ root 2134 0.0% 13.37% kernel_task
 root 1864 0.0% 4.20% Xorg"
 `;
 
-exports[`interpreter default scripts shell.src 13`] = `"eth0 38dr2pis true"`;
+exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
 
 exports[`interpreter default scripts shell.src 14`] = `"false"`;
 
@@ -278,17 +278,17 @@ exports[`interpreter default scripts shell.src 19`] = `""`;
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 26% reserved-sharp-59, 44:8E:73:9E:F2:63 38% romantic-tungay-41, D4:3B:19:E1:AE:8A 27% independent-weevle-4, D6:70:65:60:43:66 67% creative-robber-90 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 28% Outstanding-biddy-10, 44:8E:73:9E:F2:63 31% Fortuitous-lady-55, D4:3B:19:E1:AE:8A 56% easygoing-marion-94, D6:70:65:60:43:66 56% determined-emily-19 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 23`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 24`] = `"192.168.166.167"`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.96.123"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.166.167"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.96.123"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

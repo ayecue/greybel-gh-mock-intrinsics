@@ -78,10 +78,13 @@ export function create(email: Type.EMail): BasicInterface {
           return Promise.resolve(new CustomString('No email found'));
         }
 
-        targetEmail.messages.set(mockEnvironment.get().generateUUID(), {
-          subject,
-          message
-        });
+        targetEmail.messages.set(
+          mockEnvironment.get().basicGenerator.generateUUID(),
+          {
+            subject,
+            message
+          }
+        );
 
         return Promise.resolve(Defaults.True);
       }

@@ -25,7 +25,7 @@ export function create(
   options: { port?: Type.Port; location?: string[] } = {}
 ): CustomInterface {
   const activePort = options.port
-    ? computer.ports.find((item) => item.port === options.port.port)
+    ? computer.ports.get(options.port.port)
     : null;
   const currentService =
     activePort?.service === Type.Service.FTP
@@ -59,13 +59,13 @@ export function create(
               return false;
             }
 
-            for (const portItem of item.ports) {
+            for (const [computerPortKey, computerPort] of item.ports) {
               if (
-                (portItem.service === Type.Service.SSH ||
-                  portItem.service === Type.Service.FTP) &&
-                portItem.port === port
+                (computerPort.service === Type.Service.SSH ||
+                  computerPort.service === Type.Service.FTP) &&
+                computerPortKey === port
               ) {
-                resultPort = portItem;
+                resultPort = computerPort;
                 break;
               }
             }

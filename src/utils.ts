@@ -21,7 +21,7 @@ export function transformFlagsToPermissions(
   return segments.join('');
 }
 
-export function parsePermissions(file: Type.FileSystemEntity): PermissionMap {
+export function parsePermissions(file: Type.FSEntity): PermissionMap {
   const permSegments = file.permissions.substr(1).match(/.{1,3}/g);
 
   if (permSegments.length !== 3) {
@@ -51,7 +51,7 @@ export function parsePermissions(file: Type.FileSystemEntity): PermissionMap {
 
 export function getPermissions(
   user: Type.User,
-  file: Type.FileSystemEntity
+  file: Type.FSEntity
 ): PermissionSegment {
   // g is ignored for now
   // todo: add group logic
@@ -65,9 +65,9 @@ export function getPermissions(
 }
 
 export function getFile(
-  entity: Type.FileSystemEntity,
+  entity: Type.FSEntity,
   path: string[]
-): Type.FileSystemEntity | null {
+): Type.FSEntity | null {
   if (!path || !entity.isFolder) {
     return null;
   }
@@ -79,7 +79,7 @@ export function getFile(
   const nextPath = [].concat(path);
   const currentSegment = nextPath.shift();
   const folder = entity as Type.Folder;
-  const nextEntity: Type.FileSystemEntity =
+  const nextEntity: Type.FSEntity =
     folder.files.find((item: Type.File) => item.name === currentSegment) ||
     folder.folders.find((item: Type.Folder) => item.name === currentSegment);
 
@@ -153,7 +153,7 @@ export function removeFile(folder: Type.Folder, fileName: string): boolean {
     folder.files.splice(index, 1);
   }
 
-  traverseChildren(entity, (item: Type.FileSystemEntity) => {
+  traverseChildren(entity, (item: Type.FSEntity) => {
     item.deleted = true;
   });
 
@@ -161,8 +161,8 @@ export function removeFile(folder: Type.Folder, fileName: string): boolean {
 }
 
 export function traverseChildren(
-  entity: Type.FileSystemEntity,
-  callback: (v: Type.FileSystemEntity) => void,
+  entity: Type.FSEntity,
+  callback: (v: Type.FSEntity) => void,
   skip?: boolean
 ): void {
   if (!entity.isFolder) {
@@ -182,10 +182,10 @@ export function traverseChildren(
 }
 
 export function copyFile(
-  entity: Type.FileSystemEntity,
-  parent: Type.FileSystemEntity
-): Type.FileSystemEntity {
-  const newEntity: Type.FileSystemEntity = {
+  entity: Type.FSEntity,
+  parent: Type.FSEntity
+): Type.FSEntity {
+  const newEntity: Type.FSEntity = {
     name: entity.name,
     permissions: entity.permissions,
     owner: entity.owner,
@@ -238,7 +238,7 @@ export function getHomePath(
   return folder ? traversalPath : null;
 }
 
-export function getFilePath(entity: Type.FileSystemEntity): string[] | null {
+export function getFilePath(entity: Type.FSEntity): string[] | null {
   const path = [entity.name];
   let current = entity.parent;
 
@@ -330,7 +330,7 @@ export function getUserByVulnerability(
     password: '',
     passwordHashed: '',
     email: '',
-    userBankNumber: ''
+    bankNumber: ''
   };
 }
 

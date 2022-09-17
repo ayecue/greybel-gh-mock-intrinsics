@@ -23,10 +23,7 @@ import {
   traverseChildren
 } from './utils';
 
-export function create(
-  user: Type.User,
-  entity: Type.FileSystemEntity
-): BasicInterface {
+export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
   const itrface = new BasicInterface('file');
 
   itrface.addMethod(
@@ -58,7 +55,7 @@ export function create(
 
         const userType: string = permissions[0];
         const operator = permissions[1];
-        const getNewPermissions = (itemFile: Type.FileSystemEntity) => {
+        const getNewPermissions = (itemFile: Type.FSEntity) => {
           const flags = parsePermissions(itemFile);
 
           permissions
@@ -80,7 +77,7 @@ export function create(
         if (isRecursive) {
           traverseChildren(
             entity,
-            (item: Type.FileSystemEntity) => {
+            (item: Type.FSEntity) => {
               const { w } = getPermissions(user, item);
 
               if (w) {
@@ -544,7 +541,7 @@ export function create(
         if (isRecursive) {
           traverseChildren(
             entity,
-            (item: Type.FileSystemEntity) => {
+            (item: Type.FSEntity) => {
               const { w } = getPermissions(user, item);
 
               if (w) {

@@ -5,38 +5,48 @@ function createDefaultEnvironment(): MockEnvironment {
     username: 'test',
     password: 'test'
   });
+  const userGenerator = mockEnvironment.userGenerator;
+  const emailGenerator = mockEnvironment.emailGenerator;
+  const networkGenerator = mockEnvironment.networkGenerator;
 
   mockEnvironment.setupLibraries();
 
   const localRouters = [
-    mockEnvironment.generateRouter({
+    networkGenerator.generateRouter({
       publicIp: '142.32.54.56'
     }),
-    mockEnvironment.generateRouter(),
-    mockEnvironment.generateRouter(),
-    mockEnvironment.generateRouter()
+    networkGenerator.generateRouter(),
+    networkGenerator.generateRouter(),
+    networkGenerator.generateRouter()
   ];
 
-  localRouters.forEach((v) => mockEnvironment.generateNetwork(v));
-  mockEnvironment.networks[0].bssid = 'bssid-test-uuid';
-  mockEnvironment.networks[0].essid = 'essid-test-uuid';
-  mockEnvironment.networks[0].password = 'test';
+  localRouters.forEach((v) => networkGenerator.generateWifiNetwork(v));
+  networkGenerator.wifiNetworks[0].router.bssid = 'bssid-test-uuid';
+  networkGenerator.wifiNetworks[0].router.essid = 'essid-test-uuid';
+  networkGenerator.wifiNetworks[0].password = 'test';
   mockEnvironment.connectLocal(localRouters[0]);
-  mockEnvironment.generateRouter({
+  networkGenerator.generateRouter({
     publicIp: '142.567.134.56',
     domain: 'www.mytest.org',
     users: [
-      mockEnvironment.generateUser('root', 'test'),
-      mockEnvironment.generateUser('gandalf', 'shallnotpass')
+      userGenerator.generate('root', 'test'),
+      userGenerator.generate('gandalf', 'shallnotpass')
     ]
   });
-  mockEnvironment.getLocal().computer.ports.push({
+
+  const sshTestPort = new Type.Port({
     port: 22,
     service: Type.Service.SSH,
     isClosed: false,
     forwarded: true
   });
-  mockEnvironment.generateEmail({
+
+  const { computer } = mockEnvironment.getLocal();
+
+  computer.ports.set(sshTestPort.port, sshTestPort);
+  computer.router.ports.set(sshTestPort.port, sshTestPort);
+
+  emailGenerator.generate({
     name: 'test',
     domain: 'test.org',
     password: 'test'

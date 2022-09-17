@@ -39,8 +39,8 @@ export function create(
         // const maxAcks = args.get('maxAcks').toInt();
         const network = mockEnvironment
           .get()
-          .networks.find((item: Type.Network) => {
-            return item.bssid === bssid && item.essid === essid;
+          .networkGenerator.wifiNetworks.find((item: Type.WifiNetwork) => {
+            return item.router.bssid === bssid && item.router.essid === essid;
           });
 
         if (!network) {
@@ -124,9 +124,11 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const encryptedPass = args.get('encryptedPass').toString();
-        const user = mockEnvironment.get().users.find((item: Type.User) => {
-          return item.passwordHashed === encryptedPass;
-        });
+        const user = mockEnvironment
+          .get()
+          .userGenerator.users.find((item: Type.User) => {
+            return item.passwordHashed === encryptedPass;
+          });
 
         if (!user) {
           return Promise.resolve(Defaults.Void);

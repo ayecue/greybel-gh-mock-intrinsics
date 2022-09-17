@@ -49,15 +49,7 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment
-          .get()
-          .networks.find(
-            (v: Type.Network) => v.router.publicIp === router.publicIp
-          );
-
-        return Promise.resolve(
-          result ? new CustomString(result.bssid) : Defaults.Void
-        );
+        return Promise.resolve(new CustomString(router.bssid));
       }
     )
   );
@@ -70,15 +62,7 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment
-          .get()
-          .networks.find(
-            (v: Type.Network) => v.router.publicIp === router.publicIp
-          );
-
-        return Promise.resolve(
-          result ? new CustomString(result.essid) : Defaults.Void
-        );
+        return Promise.resolve(new CustomString(router.essid));
       }
     )
   );
@@ -137,8 +121,8 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
           return Promise.resolve(new CustomList());
         }
 
-        const result = device.ports.map((item: Type.Port) =>
-          createPort(device, item)
+        const result = Array.from(device.ports.values()).map(
+          (item: Type.Port) => createPort(device, item)
         );
 
         return Promise.resolve(new CustomList(result));
@@ -164,9 +148,9 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
             continue;
           }
 
-          for (const itemPort of item.ports) {
-            if (itemPort.port === port) {
-              return Promise.resolve(createPort(router, itemPort));
+          for (const [computerPortKey, computerPort] of item.ports) {
+            if (computerPortKey === port) {
+              return Promise.resolve(createPort(router, computerPort));
             }
           }
         }

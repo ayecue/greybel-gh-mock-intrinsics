@@ -38,7 +38,7 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const ports =
-          computer?.ports.map((item: Type.Port) =>
+          Array.from(computer.ports.values()).map((item: Type.Port) =>
             createPort(computer, item)
           ) || [];
         return Promise.resolve(new CustomList(ports));
@@ -241,7 +241,7 @@ export function create(
 
             if (!hasFile(homeFolder, username)) {
               computer.users.push(
-                mockEnvironment.get().generateUser(username, password)
+                mockEnvironment.get().userGenerator.generate(username, password)
               );
               homeFolder.folders.push(FS.getUserFolder(homeFolder, username));
 
@@ -374,7 +374,7 @@ export function create(
       ): Promise<CustomValue> => {
         const result = mockEnvironment
           .get()
-          .networks.map((item: Type.Network) => {
+          .networkGenerator.wifiNetworks.map((item: Type.WifiNetwork) => {
             return new CustomString(
               `${item.mac} ${item.percentage}% ${item.name}`
             );
