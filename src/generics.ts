@@ -251,7 +251,10 @@ export const isLanIp = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
     return Promise.resolve(
-      new CustomBoolean(mockEnvironment.get().isLanIp(target))
+      new CustomBoolean(
+        mockEnvironment.get().isValidIp(target) &&
+          mockEnvironment.get().isLanIp(target)
+      )
     );
   }
 ).addArgument('ipAddress');
