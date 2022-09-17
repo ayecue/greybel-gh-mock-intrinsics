@@ -196,15 +196,35 @@ export const whois = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const target = args.get('ipAddress').toString();
-    if (mockEnvironment.get().isValidIp(target)) {
+    const ipAddress = args.get('ipAddress');
+
+    if (ipAddress instanceof CustomNil) {
+      throw new Error('whois: Invalid arguments');
+    }
+
+    const target = ipAddress.toString();
+
+    if (target === '') {
+      throw new Error('whois: Invalid arguments');
+    }
+
+    if (!mockEnvironment.get().isValidIp(target)) {
+      return Promise.resolve(new CustomString(`Invalid IP adress ${target}`));
+    }
+
+    if (mockEnvironment.get().isLanIp(target)) {
       return Promise.resolve(
-        new CustomString(
-          mockEnvironment.get().getRouterByIp(target).whoisDescription
-        )
+        new CustomString('Error: the IP address must be public')
       );
     }
-    return Promise.resolve(new CustomString(`Invalid IP address: ${target}`));
+
+    const router = mockEnvironment.get().getRouterByIp(target);
+
+    if (router) {
+      return Promise.resolve(new CustomString(router.whoisDescription));
+    }
+
+    return Promise.resolve(new CustomString('Address not found'));
   }
 ).addArgument('ipAddress');
 
