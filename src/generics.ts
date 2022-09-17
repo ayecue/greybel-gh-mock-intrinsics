@@ -111,9 +111,14 @@ export const includeLib = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const libPath = args.get('libPath').toString();
+    const libPath = args.get('libPath');
+
+    if (libPath instanceof CustomNil && libPath.toString() === '') {
+      throw new Error('include_lib: Invalid arguments');
+    }
+
     const { user, computer } = mockEnvironment.get().getLocal();
-    const target = getTraversalPath(libPath, null);
+    const target = getTraversalPath(libPath.toString(), null);
     const entityResult = getFile(computer.fileSystem, target);
 
     if (entityResult && !entityResult.isFolder) {
