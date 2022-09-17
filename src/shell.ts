@@ -325,7 +325,7 @@ export function loginLocal(
   const usr = user.toString();
   const pwd = password.toString();
 
-  if (!usr && !pwd) {
+  if (usr === '' && pwd === '') {
     return create(mockEnvironment.get().getLocal().user, computer);
   }
 

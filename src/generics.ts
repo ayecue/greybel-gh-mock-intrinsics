@@ -36,11 +36,16 @@ export const getShell = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const user = args.get('user');
     const password = args.get('password');
+
+    if (user instanceof CustomNil || password instanceof CustomNil) {
+      throw new Error('get_shell: Invalid arguments');
+    }
+
     return Promise.resolve(loginLocal(user, password));
   }
 )
-  .addArgument('user')
-  .addArgument('password');
+  .addArgument('user', new CustomString(''))
+  .addArgument('password', new CustomString(''));
 
 export const mailLogin = CustomFunction.createExternal(
   'mailLogin',
