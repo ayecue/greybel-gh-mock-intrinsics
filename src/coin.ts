@@ -5,13 +5,15 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-
-import { create as createSubWallet } from './sub-wallet';
-
-import BasicInterface from './interface';
 import { Type } from 'greybel-mock-environment';
 
-export function create(user: Type.User, computer: Type.Computer): BasicInterface {
+import BasicInterface from './interface';
+import { create as createSubWallet } from './sub-wallet';
+
+export function create(
+  user: Type.User,
+  computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('coin');
 
   itrface.addMethod(
@@ -113,7 +115,9 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomList([createSubWallet(user, computer)]));
+        return Promise.resolve(
+          new CustomList([createSubWallet(user, computer)])
+        );
       }
     )
   );

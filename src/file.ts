@@ -7,9 +7,9 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { Type } from 'greybel-mock-environment';
 import {
   copyFile,
   getFile,
@@ -23,7 +23,10 @@ import {
   traverseChildren
 } from './utils';
 
-export function create(user: Type.User, entity: Type.FileSystemEntity): BasicInterface {
+export function create(
+  user: Type.User,
+  entity: Type.FileSystemEntity
+): BasicInterface {
   const itrface = new BasicInterface('file');
 
   itrface.addMethod(
@@ -378,7 +381,9 @@ export function create(user: Type.User, entity: Type.FileSystemEntity): BasicInt
         }
 
         const file = entity as Type.File;
-        return Promise.resolve(new CustomBoolean(file.type !== Type.FileType.Plain));
+        return Promise.resolve(
+          new CustomBoolean(file.type !== Type.FileType.Plain)
+        );
       }
     )
   );
@@ -453,9 +458,11 @@ export function create(user: Type.User, entity: Type.FileSystemEntity): BasicInt
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Type.Folder).folders.map((folder: Type.Folder) => {
-          return create(user, folder);
-        });
+        const result = (entity as Type.Folder).folders.map(
+          (folder: Type.Folder) => {
+            return create(user, folder);
+          }
+        );
 
         return Promise.resolve(new CustomList(result));
       }

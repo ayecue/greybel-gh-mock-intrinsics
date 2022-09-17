@@ -1,5 +1,4 @@
 import md5 from 'blueimp-md5';
-
 import { Type } from 'greybel-mock-environment';
 
 export interface PermissionSegment {
@@ -177,7 +176,9 @@ export function traverseChildren(
   }
 
   folder.files.forEach((item: Type.File) => callback(item));
-  folder.folders.forEach((item: Type.Folder) => traverseChildren(item, callback));
+  folder.folders.forEach((item: Type.Folder) =>
+    traverseChildren(item, callback)
+  );
 }
 
 export function copyFile(
@@ -215,7 +216,10 @@ export function copyFile(
   return newFile;
 }
 
-export function getHomePath(user: Type.User, computer: Type.Computer): string[] | null {
+export function getHomePath(
+  user: Type.User,
+  computer: Type.Computer
+): string[] | null {
   let path;
 
   switch (user.username) {

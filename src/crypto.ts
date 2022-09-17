@@ -7,10 +7,10 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getHomePath,
@@ -19,7 +19,10 @@ import {
   putFile
 } from './utils';
 
-export function create(user: Type.User, computer: Type.Computer): BasicInterface {
+export function create(
+  user: Type.User,
+  computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('crypto');
 
   itrface.addMethod(
@@ -34,9 +37,11 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
         const essid = args.get('essid').toString();
         // Not yet implemented
         // const maxAcks = args.get('maxAcks').toInt();
-        const network = mockEnvironment.get().networks.find((item: Type.Network) => {
-          return item.bssid === bssid && item.essid === essid;
-        });
+        const network = mockEnvironment
+          .get()
+          .networks.find((item: Type.Network) => {
+            return item.bssid === bssid && item.essid === essid;
+          });
 
         if (!network) {
           return Promise.resolve(new CustomString('No network found'));

@@ -4,11 +4,14 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-
-import BasicInterface from './interface';
 import { Type } from 'greybel-mock-environment';
 
-export function create(_user: Type.User, _computer: Type.Computer): BasicInterface {
+import BasicInterface from './interface';
+
+export function create(
+  _user: Type.User,
+  _computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('aptClient');
 
   itrface.addMethod(

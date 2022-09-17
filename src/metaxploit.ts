@@ -7,12 +7,12 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 import mockEnvironment from './mock/environment';
 import { create as createNetSession } from './net-session';
-import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getFileLibrary,
@@ -21,7 +21,10 @@ import {
   getTraversalPath
 } from './utils';
 
-export function create(user: Type.User, computer: Type.Computer): BasicInterface {
+export function create(
+  user: Type.User,
+  computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('metaxploit');
 
   itrface.addMethod(
@@ -71,7 +74,9 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
           );
         }
 
-        const result = mockEnvironment.get().getForwardedPortOfRouter(router, port);
+        const result = mockEnvironment
+          .get()
+          .getForwardedPortOfRouter(router, port);
 
         if (!result) {
           return Promise.resolve(Defaults.Void);
@@ -102,7 +107,8 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
       ): Promise<CustomValue> => {
         const metaLib = args.get('metaLib');
         if (metaLib instanceof BasicInterface) {
-          const exploits: Type.Vulnerability[] = metaLib.getVariable('exploits');
+          const exploits: Type.Vulnerability[] =
+            metaLib.getVariable('exploits');
 
           if (exploits) {
             const zones = exploits.map((x: Type.Vulnerability) => {
@@ -132,7 +138,8 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
         const metaLib = args.get('metaLib');
         const memAddress = args.get('memAddress').toString();
         if (metaLib instanceof BasicInterface) {
-          const exploits: Type.Vulnerability[] = metaLib.getVariable('exploits');
+          const exploits: Type.Vulnerability[] =
+            metaLib.getVariable('exploits');
 
           if (exploits) {
             const result = exploits
@@ -142,25 +149,27 @@ export function create(user: Type.User, computer: Type.Computer): BasicInterface
               .map((x: Type.Vulnerability) => {
                 return [
                   `${x.details} <b>${x.sector}</b>. Buffer overflow.`,
-                  ...x.required.map((r: Type.VulnerabilityRequirements): string => {
-                    switch (r) {
-                      case Type.VulnerabilityRequirements.LIBRARY:
-                        return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-                      case Type.VulnerabilityRequirements.REGISTER_AMOUNT:
-                        return '* Checking registered users equal to 2.';
-                      case Type.VulnerabilityRequirements.ANY_ACTIVE:
-                        return '* Checking an active user.';
-                      case Type.VulnerabilityRequirements.ROOT_ACTIVE:
-                        return '* Checking root active user.';
-                      case Type.VulnerabilityRequirements.LOCAL:
-                        return '* Checking existing connection in the local network.';
-                      case Type.VulnerabilityRequirements.FORWARD:
-                        return '* 1337 port forwarding configured from router to the target computer.';
-                      case Type.VulnerabilityRequirements.GATEWAY:
-                        return '* 1337 computers using this router as gateway.';
+                  ...x.required.map(
+                    (r: Type.VulnerabilityRequirements): string => {
+                      switch (r) {
+                        case Type.VulnerabilityRequirements.LIBRARY:
+                          return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
+                        case Type.VulnerabilityRequirements.REGISTER_AMOUNT:
+                          return '* Checking registered users equal to 2.';
+                        case Type.VulnerabilityRequirements.ANY_ACTIVE:
+                          return '* Checking an active user.';
+                        case Type.VulnerabilityRequirements.ROOT_ACTIVE:
+                          return '* Checking root active user.';
+                        case Type.VulnerabilityRequirements.LOCAL:
+                          return '* Checking existing connection in the local network.';
+                        case Type.VulnerabilityRequirements.FORWARD:
+                          return '* 1337 port forwarding configured from router to the target computer.';
+                        case Type.VulnerabilityRequirements.GATEWAY:
+                          return '* 1337 computers using this router as gateway.';
+                      }
+                      return '';
                     }
-                    return '';
-                  })
+                  )
                 ].join('\n');
               })
               .join('\n');

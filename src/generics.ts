@@ -9,17 +9,17 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import { create as createAptClient } from './apt-client';
+import { create as createBlockchain } from './blockchain';
 import { create as createCrypto } from './crypto';
 import { create as createMetaMail } from './meta-mail';
 import { create as createMetaxploit } from './metaxploit';
-import { create as createBlockchain } from './blockchain';
-import { create as createService } from './service';
 import mockEnvironment from './mock/environment';
 import { create as createRouter } from './router';
+import { create as createService } from './service';
 import { loginLocal } from './shell';
-import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getHomePath,
@@ -51,10 +51,9 @@ export const mailLogin = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const user = args.get('user');
     const password = args.get('password');
-    const email = mockEnvironment.get().getEmailViaLogin(
-      user.toString(),
-      password.toString()
-    );
+    const email = mockEnvironment
+      .get()
+      .getEmailViaLogin(user.toString(), password.toString());
 
     if (!email) {
       return Promise.resolve(Defaults.Void);
@@ -75,9 +74,9 @@ export const getRouter = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const { user, computer } = mockEnvironment.get().getLocal();
     const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.get().getRouterByIp(
-      target || computer.router?.publicIp
-    );
+    const router = mockEnvironment
+      .get()
+      .getRouterByIp(target || computer.router?.publicIp);
 
     return Promise.resolve(createRouter(user, router || computer.router));
   }
@@ -92,9 +91,9 @@ export const getSwitch = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const { user, computer } = mockEnvironment.get().getLocal();
     const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.get().getRouterByIp(
-      target || computer.router?.publicIp
-    );
+    const router = mockEnvironment
+      .get()
+      .getRouterByIp(target || computer.router?.publicIp);
 
     return Promise.resolve(createRouter(user, router || computer.router));
   }
@@ -190,7 +189,9 @@ export const whois = CustomFunction.createExternal(
     const target = args.get('ipAddress').toString();
     if (mockEnvironment.get().isValidIp(target)) {
       return Promise.resolve(
-        new CustomString(mockEnvironment.get().getRouterByIp(target).whoisDescription)
+        new CustomString(
+          mockEnvironment.get().getRouterByIp(target).whoisDescription
+        )
       );
     }
     return Promise.resolve(new CustomString(`Invalid IP address: ${target}`));
@@ -219,7 +220,9 @@ export const isLanIp = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    return Promise.resolve(new CustomBoolean(mockEnvironment.get().isLanIp(target)));
+    return Promise.resolve(
+      new CustomBoolean(mockEnvironment.get().isLanIp(target))
+    );
   }
 ).addArgument('ipAddress');
 
@@ -452,6 +455,8 @@ export const typeOf = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString(args.get('value').getCustomType()));
+    const type = args.get('value')?.getCustomType() || 'undefined';
+
+    return Promise.resolve(new CustomString(type));
   }
 ).addArgument('value');

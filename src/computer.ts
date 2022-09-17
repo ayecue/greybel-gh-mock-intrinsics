@@ -7,10 +7,10 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { FS, Type } from 'greybel-mock-environment';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
-import { FS, Type } from 'greybel-mock-environment';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
 import {
@@ -38,7 +38,9 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const ports =
-          computer?.ports.map((item: Type.Port) => createPort(computer, item)) || [];
+          computer?.ports.map((item: Type.Port) =>
+            createPort(computer, item)
+          ) || [];
         return Promise.resolve(new CustomList(ports));
       }
     )
@@ -233,7 +235,9 @@ export function create(
           });
 
           if (!existingUser) {
-            const homeFolder = getFile(computer.fileSystem, ['home']) as Type.Folder;
+            const homeFolder = getFile(computer.fileSystem, [
+              'home'
+            ]) as Type.Folder;
 
             if (!hasFile(homeFolder, username)) {
               computer.users.push(
@@ -368,11 +372,13 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment.get().networks.map((item: Type.Network) => {
-          return new CustomString(
-            `${item.mac} ${item.percentage}% ${item.name}`
-          );
-        });
+        const result = mockEnvironment
+          .get()
+          .networks.map((item: Type.Network) => {
+            return new CustomString(
+              `${item.mac} ${item.percentage}% ${item.name}`
+            );
+          });
 
         return Promise.resolve(new CustomList(result));
       }

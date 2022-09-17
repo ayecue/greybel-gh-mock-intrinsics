@@ -6,13 +6,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createShell } from './shell';
-import { Type } from 'greybel-mock-environment';
 import { changePassword, getFile, getUserByVulnerability } from './utils';
 
 export function create(
@@ -27,11 +27,11 @@ export function create(
     ? computer.router.publicIp === (targetComputer as Type.Router).publicIp
     : computer.router.publicIp === targetComputer.router.publicIp;
   const isLocal = isLan && computer.localIp === targetComputer.localIp;
-  const exploits = mockEnvironment.get().vulnerabilities.filter(
-    (item: Type.Vulnerability) => {
+  const exploits = mockEnvironment
+    .get()
+    .vulnerabilities.filter((item: Type.Vulnerability) => {
       return item.library === library && item.remote !== isLocal;
-    }
-  );
+    });
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(

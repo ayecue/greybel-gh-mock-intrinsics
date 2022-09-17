@@ -6,11 +6,11 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { Type } from 'greybel-mock-environment';
 import {
   getFile,
   getHomePath,
@@ -28,7 +28,9 @@ export function create(
     ? computer.ports.find((item) => item.port === options.port.port)
     : null;
   const currentService =
-    activePort?.service === Type.Service.FTP ? Type.Service.FTP : Type.Service.SSH;
+    activePort?.service === Type.Service.FTP
+      ? Type.Service.FTP
+      : Type.Service.SSH;
   const currentLocation = options.location || getHomePath(user, computer);
   const itrface = new BasicInterface(
     Type.Service.SSH === currentService ? 'shell' : 'ftpShell'

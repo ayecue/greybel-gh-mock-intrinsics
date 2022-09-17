@@ -6,10 +6,10 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { Type } from 'greybel-mock-environment';
 
 export function create(email: Type.EMail): BasicInterface {
   const itrface = new BasicInterface('metaMail');

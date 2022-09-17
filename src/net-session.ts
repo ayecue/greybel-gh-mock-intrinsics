@@ -3,10 +3,10 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
-import { Type } from 'greybel-mock-environment';
 
 export function create(
   computer: Type.Computer,

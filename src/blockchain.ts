@@ -4,14 +4,16 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-
-import { create as createCoin } from './coin';
-import { create as createWallet } from './wallet';
-
-import BasicInterface from './interface';
 import { Type } from 'greybel-mock-environment';
 
-export function create(user: Type.User, computer: Type.Computer): BasicInterface {
+import { create as createCoin } from './coin';
+import BasicInterface from './interface';
+import { create as createWallet } from './wallet';
+
+export function create(
+  user: Type.User,
+  computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('blockchain');
 
   itrface.addMethod(
