@@ -310,8 +310,15 @@ export const parentPath = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = args.get('path').toString();
-    return Promise.resolve(new CustomString(path.replace(/\/[^/]+\/?$/i, '')));
+    const path = args.get('path');
+
+    if (path instanceof CustomNil || path.toString() === '') {
+      throw new Error('parent_path: Invalid arguments');
+    }
+
+    const result = path.toString().replace(/\/[^/]+\/?$/i, '');
+
+    return Promise.resolve(new CustomString(result));
   }
 ).addArgument('path');
 

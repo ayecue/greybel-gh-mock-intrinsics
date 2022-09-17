@@ -77,7 +77,7 @@ exports[`interpreter default scripts generics.src 7`] = `"true"`;
 
 exports[`interpreter default scripts generics.src 8`] = `"COMMAND"`;
 
-exports[`interpreter default scripts generics.src 9`] = `""`;
+exports[`interpreter default scripts generics.src 9`] = `"/home"`;
 
 exports[`interpreter default scripts generics.src 10`] = `"/home/test"`;
 
