@@ -28,8 +28,8 @@ export function create(
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'aireplay',
-      (
-        _ctx: OperationContext,
+      async (
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -44,8 +44,12 @@ export function create(
           });
 
         if (!network) {
-          return Promise.resolve(new CustomString('No network found'));
+          return new CustomString('No network found');
         }
+
+        const time = 300000 / (network.percentage + 15);
+
+        await ctx.handler.outputHandler.progress(time);
 
         const folder = getFile(
           computer.fileSystem,
@@ -60,7 +64,7 @@ export function create(
           type: Type.FileType.Ack
         });
 
-        return Promise.resolve(Defaults.Void);
+        return Defaults.Void;
       }
     )
       .addArgument('bssid')
@@ -118,12 +122,15 @@ export function create(
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'decipher',
-      (
-        _ctx: OperationContext,
+      async (
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const encryptedPass = args.get('encryptedPass').toString();
+
+        await ctx.handler.outputHandler.progress(5000);
+
         const user = mockEnvironment
           .get()
           .userGenerator.users.find((item: Type.User) => {
@@ -131,10 +138,10 @@ export function create(
           });
 
         if (!user) {
-          return Promise.resolve(Defaults.Void);
+          return Defaults.Void;
         }
 
-        return Promise.resolve(new CustomString(user.password));
+        return new CustomString(user.password);
       }
     ).addArgument('encryptedPass')
   );

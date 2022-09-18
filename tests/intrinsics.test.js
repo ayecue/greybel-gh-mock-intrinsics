@@ -12,7 +12,6 @@ const path = require('path');
 const testFolder = path.resolve(__dirname, 'scripts');
 
 let printMock;
-const pseudoAPI = new Map();
 
 const testDate = new Date(1642924301240);
 
@@ -21,6 +20,25 @@ Date.now = () => testDate.getTime();
 class TestOutputHandler extends OutputHandler {
   print(value) {
     printMock(value);
+  }
+
+  progress(time) {
+    return Promise.resolve();
+  }
+
+  waitForInput() {
+    return Promise.resolve('test');
+  }
+
+  waitForKeyPress() {
+    return Promise.resolve({
+      keyCode: 13,
+      code: 'Enter'
+    });
+  }
+
+  clear() {
+    printMock('clearing screen');
   }
 }
 
@@ -47,14 +65,7 @@ describe('interpreter', function () {
         });
         let success = false;
 
-        pseudoAPI.set(
-          'exit',
-          CustomFunction.createExternal('exit', (fnCtx, self, args) => {
-            interpreter.exit();
-          })
-        );
-
-        interpreter.setApi(defaultInit(init(pseudoAPI)));
+        interpreter.setApi(defaultInit(init()));
 
         try {
           await interpreter.run();

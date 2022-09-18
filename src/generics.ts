@@ -28,7 +28,8 @@ import {
   getFile,
   getHomePath,
   getPermissions,
-  getTraversalPath
+  getTraversalPath,
+  keyEventToString
 } from './utils';
 
 export const getShell = CustomFunction.createExternal(
@@ -481,22 +482,41 @@ export const formatColumns = CustomFunction.createExternal(
 
 export const userInput = CustomFunction.createExternal(
   'userInput',
-  (
-    _ctx: OperationContext,
+  async (
+    ctx: OperationContext,
     _self: CustomValue,
-    _args: Map<string, CustomValue>
+    args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString('test-input'));
+    const message = args.get('message').toString();
+    const isPassword = args.get('isPassword').toTruthy();
+    const anyKey = args.get('anyKey').toTruthy();
+
+    ctx.handler.outputHandler.print(message);
+
+    if (anyKey) {
+      const keyPress = await ctx.handler.outputHandler.waitForKeyPress();
+      const value = keyEventToString(keyPress);
+
+      return new CustomString(value);
+    }
+
+    const input = await ctx.handler.outputHandler.waitForInput(isPassword);
+
+    return new CustomString(input);
   }
-);
+)
+  .addArgument('message')
+  .addArgument('isPassword')
+  .addArgument('anyKey');
 
 export const clearScreen = CustomFunction.createExternal(
   'clearScreen',
   (
-    _ctx: OperationContext,
+    ctx: OperationContext,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
+    ctx.handler.outputHandler.clear();
     return Promise.resolve(Defaults.Void);
   }
 );

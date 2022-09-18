@@ -89,14 +89,31 @@ exports[`interpreter default scripts generics.src 13`] = `"test@Unbelievable-pla
 
 exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
-exports[`interpreter default scripts generics.src 15`] = `""`;
+exports[`interpreter default scripts generics.src 15`] = `"clearing screen"`;
 
-exports[`interpreter default scripts generics.src 16`] = `"/home/test"`;
+exports[`interpreter default scripts generics.src 16`] = `""`;
 
-exports[`interpreter default scripts generics.src 17`] = `
+exports[`interpreter default scripts generics.src 17`] = `"/home/test"`;
+
+exports[`interpreter default scripts generics.src 18`] = `
 "COL1    COL2    COL3    
 one     two     three   
 thing1  thing2  thing3  "
+`;
+
+exports[`interpreter default scripts generics.src 19`] = `"test"`;
+
+exports[`interpreter default scripts generics.src 20`] = `"test"`;
+
+exports[`interpreter default scripts generics.src 21`] = `"test"`;
+
+exports[`interpreter default scripts generics.src 22`] = `"test"`;
+
+exports[`interpreter default scripts generics.src 23`] = `"test"`;
+
+exports[`interpreter default scripts generics.src 24`] = `
+"
+"
 `;
 
 exports[`interpreter default scripts ls.src 1`] = `
