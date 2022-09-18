@@ -1,4 +1,10 @@
-const { Interpreter, Debugger, CustomFunction } = require('greybel-interpreter');
+const {
+  Interpreter,
+  Debugger,
+  CustomFunction,
+  OutputHandler,
+  HandlerContainer
+} = require('greybel-interpreter');
 const defaultInit = require('greybel-intrinsics').init;
 const { init } = require('../dist');
 const fs = require('fs');
@@ -12,13 +18,11 @@ const testDate = new Date(1642924301240);
 
 Date.now = () => testDate.getTime();
 
-pseudoAPI.set(
-  'print',
-  CustomFunction.createExternal('print', (fnCtx, self, args) => {
-    // console.log(args);
-    printMock(args.get('value').toString());
-  }).addArgument('value')
-);
+class TestOutputHandler extends OutputHandler {
+  print(value) {
+    printMock(value);
+  }
+}
 
 class TestDebugger extends Debugger {
   debug() {}
@@ -36,6 +40,9 @@ describe('interpreter', function () {
       test(path.basename(filepath), async () => {
         const interpreter = new Interpreter({
           target: filepath,
+          handler: new HandlerContainer({
+            outputHandler: new TestOutputHandler()
+          }),
           debugger: new TestDebugger()
         });
         let success = false;
