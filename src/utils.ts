@@ -1,16 +1,6 @@
 import md5 from 'blueimp-md5';
-
-import {
-  Computer,
-  File,
-  FileSystemEntity,
-  FileType,
-  Folder,
-  Library,
-  Service,
-  User,
-  VulnerabilityActionUser
-} from './types';
+import { KeyEvent } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 export interface PermissionSegment {
   [permissionType: string]: boolean;
@@ -32,7 +22,7 @@ export function transformFlagsToPermissions(
   return segments.join('');
 }
 
-export function parsePermissions(file: FileSystemEntity): PermissionMap {
+export function parsePermissions(file: Type.FSEntity): PermissionMap {
   const permSegments = file.permissions.substr(1).match(/.{1,3}/g);
 
   if (permSegments.length !== 3) {
@@ -61,8 +51,8 @@ export function parsePermissions(file: FileSystemEntity): PermissionMap {
 }
 
 export function getPermissions(
-  user: User,
-  file: FileSystemEntity
+  user: Type.User,
+  file: Type.FSEntity
 ): PermissionSegment {
   // g is ignored for now
   // todo: add group logic
@@ -76,9 +66,9 @@ export function getPermissions(
 }
 
 export function getFile(
-  entity: FileSystemEntity,
+  entity: Type.FSEntity,
   path: string[]
-): FileSystemEntity | null {
+): Type.FSEntity | null {
   if (!path || !entity.isFolder) {
     return null;
   }
@@ -89,10 +79,10 @@ export function getFile(
 
   const nextPath = [].concat(path);
   const currentSegment = nextPath.shift();
-  const folder = entity as Folder;
-  const nextEntity: FileSystemEntity =
-    folder.files.find((item: File) => item.name === currentSegment) ||
-    folder.folders.find((item: Folder) => item.name === currentSegment);
+  const folder = entity as Type.Folder;
+  const nextEntity: Type.FSEntity =
+    folder.files.find((item: Type.File) => item.name === currentSegment) ||
+    folder.folders.find((item: Type.Folder) => item.name === currentSegment);
 
   if (!nextEntity) {
     return null;
@@ -105,16 +95,16 @@ export function getFile(
   return getFile(nextEntity, nextPath);
 }
 
-export function hasFile(folder: Folder, fileName: string): boolean {
+export function hasFile(folder: Type.Folder, fileName: string): boolean {
   return !!getFileIndex(folder, fileName);
 }
 
 export function getFileIndex(
-  folder: Folder,
+  folder: Type.Folder,
   fileName: string
 ): { isFolder: boolean; index: number } {
   const fileIndex = folder.files.findIndex(
-    (item: File) => item.name === fileName
+    (item: Type.File) => item.name === fileName
   );
 
   if (fileIndex !== -1 && fileIndex !== undefined) {
@@ -125,7 +115,7 @@ export function getFileIndex(
   }
 
   const folderIndex = folder.folders.findIndex(
-    (item: Folder) => item.name === fileName
+    (item: Type.Folder) => item.name === fileName
   );
 
   if (folderIndex !== -1 && folderIndex !== undefined) {
@@ -138,13 +128,13 @@ export function getFileIndex(
   return null;
 }
 
-export function putFile(folder: Folder, file: File): void {
+export function putFile(folder: Type.Folder, file: Type.File): void {
   removeFile(folder, file.name);
   file.parent = folder;
   folder.files.push(file);
 }
 
-export function removeFile(folder: Folder, fileName: string): boolean {
+export function removeFile(folder: Type.Folder, fileName: string): boolean {
   const result = getFileIndex(folder, fileName);
 
   if (!result) {
@@ -164,7 +154,7 @@ export function removeFile(folder: Folder, fileName: string): boolean {
     folder.files.splice(index, 1);
   }
 
-  traverseChildren(entity, (item: FileSystemEntity) => {
+  traverseChildren(entity, (item: Type.FSEntity) => {
     item.deleted = true;
   });
 
@@ -172,29 +162,31 @@ export function removeFile(folder: Folder, fileName: string): boolean {
 }
 
 export function traverseChildren(
-  entity: FileSystemEntity,
-  callback: (v: FileSystemEntity) => void,
+  entity: Type.FSEntity,
+  callback: (v: Type.FSEntity) => void,
   skip?: boolean
 ): void {
   if (!entity.isFolder) {
     return;
   }
 
-  const folder = entity as Folder;
+  const folder = entity as Type.Folder;
 
   if (!skip) {
     callback(entity);
   }
 
-  folder.files.forEach((item: File) => callback(item));
-  folder.folders.forEach((item: Folder) => traverseChildren(item, callback));
+  folder.files.forEach((item: Type.File) => callback(item));
+  folder.folders.forEach((item: Type.Folder) =>
+    traverseChildren(item, callback)
+  );
 }
 
 export function copyFile(
-  entity: FileSystemEntity,
-  parent: FileSystemEntity
-): FileSystemEntity {
-  const newEntity: FileSystemEntity = {
+  entity: Type.FSEntity,
+  parent: Type.FSEntity
+): Type.FSEntity {
+  const newEntity: Type.FSEntity = {
     name: entity.name,
     permissions: entity.permissions,
     owner: entity.owner,
@@ -203,21 +195,21 @@ export function copyFile(
   };
 
   if (entity.isFolder) {
-    const folder = entity as Folder;
-    const newFolder = newEntity as Folder;
+    const folder = entity as Type.Folder;
+    const newFolder = newEntity as Type.Folder;
 
     newFolder.files = folder.files.map(
-      (item: File) => copyFile(item, newFolder) as File
+      (item: Type.File) => copyFile(item, newFolder) as Type.File
     );
     newFolder.folders = folder.folders.map(
-      (item: Folder) => copyFile(item, newFolder) as Folder
+      (item: Type.Folder) => copyFile(item, newFolder) as Type.Folder
     );
 
     return newFolder;
   }
 
-  const file = entity as File;
-  const newFile = newEntity as File;
+  const file = entity as Type.File;
+  const newFile = newEntity as Type.File;
 
   newFile.content = file.content;
   newFile.type = file.type;
@@ -225,7 +217,10 @@ export function copyFile(
   return newFile;
 }
 
-export function getHomePath(user: User, computer: Computer): string[] | null {
+export function getHomePath(
+  user: Type.User,
+  computer: Type.Computer
+): string[] | null {
   let path;
 
   switch (user.username) {
@@ -244,7 +239,7 @@ export function getHomePath(user: User, computer: Computer): string[] | null {
   return folder ? traversalPath : null;
 }
 
-export function getFilePath(entity: FileSystemEntity): string[] | null {
+export function getFilePath(entity: Type.FSEntity): string[] | null {
   const path = [entity.name];
   let current = entity.parent;
 
@@ -279,40 +274,40 @@ export function getTraversalPath(
   return path.split('/');
 }
 
-export function getFileLibrary(file: File): Library | null {
+export function getFileLibrary(file: Type.File): Type.Library | null {
   switch (file.type) {
-    case FileType.AptClient:
-      return Library.APT;
-    case FileType.Crypto:
-      return Library.CRYPTO;
-    case FileType.Init:
-      return Library.INIT;
-    case FileType.KernelModule:
-      return Library.KERNEL_MODULE;
-    case FileType.Metaxploit:
-      return Library.METAXPLOIT;
-    case FileType.Net:
-      return Library.NET;
+    case Type.FileType.AptClient:
+      return Type.Library.APT;
+    case Type.FileType.Crypto:
+      return Type.Library.CRYPTO;
+    case Type.FileType.Init:
+      return Type.Library.INIT;
+    case Type.FileType.KernelModule:
+      return Type.Library.KERNEL_MODULE;
+    case Type.FileType.Metaxploit:
+      return Type.Library.METAXPLOIT;
+    case Type.FileType.Net:
+      return Type.Library.NET;
     default:
   }
 
   return null;
 }
 
-export function getServiceLibrary(service: Service): Library | null {
+export function getServiceLibrary(service: Type.Service): Type.Library | null {
   switch (service) {
-    case Service.FTP:
-      return Library.FTP;
-    case Service.HTTP:
-      return Library.HTTP;
-    case Service.RSHELL:
-      return Library.RSHELL;
-    case Service.SMTP:
-      return Library.SMTP;
-    case Service.SQL:
-      return Library.SQL;
-    case Service.SSH:
-      return Library.SSH;
+    case Type.Service.FTP:
+      return Type.Library.FTP;
+    case Type.Service.HTTP:
+      return Type.Library.HTTP;
+    case Type.Service.RSHELL:
+      return Type.Library.RSHELL;
+    case Type.Service.SMTP:
+      return Type.Library.SMTP;
+    case Type.Service.SQL:
+      return Type.Library.SQL;
+    case Type.Service.SSH:
+      return Type.Library.SSH;
     default:
   }
 
@@ -320,13 +315,13 @@ export function getServiceLibrary(service: Service): Library | null {
 }
 
 export function getUserByVulnerability(
-  vulActionUser: VulnerabilityActionUser,
-  computer: Computer
-): User {
+  vulActionUser: Type.VulnerabilityActionUser,
+  computer: Type.Computer
+): Type.User {
   switch (vulActionUser) {
-    case VulnerabilityActionUser.NORMAL:
+    case Type.VulnerabilityActionUser.NORMAL:
       return computer.users[1];
-    case VulnerabilityActionUser.ROOT:
+    case Type.VulnerabilityActionUser.ROOT:
       return computer.users[0];
     default:
   }
@@ -336,16 +331,16 @@ export function getUserByVulnerability(
     password: '',
     passwordHashed: '',
     email: '',
-    userBankNumber: ''
+    bankNumber: ''
   };
 }
 
 export function changePassword(
-  computer: Computer,
+  computer: Type.Computer,
   username: string,
   password: string
 ): boolean {
-  const user = computer.users.find((item: User) => {
+  const user = computer.users.find((item: Type.User) => {
     return item.username === username && item.password === password;
   });
 
@@ -356,4 +351,92 @@ export function changePassword(
   }
 
   return false;
+}
+
+export enum KeyCode {
+  Enter = 13,
+  LeftArrow = 37,
+  UpArrow = 38,
+  RightArrow = 39,
+  DownArrow = 40,
+  Insert = 45,
+  Home = 36,
+  End = 35,
+  PageDown = 34,
+  PageUp = 33,
+  Backspace = 8,
+  Delete = 46,
+  Tab = 9,
+  F1 = 112,
+  F2 = 113,
+  F3 = 114,
+  F4 = 115,
+  F5 = 116,
+  F6 = 117,
+  F7 = 118,
+  F8 = 119,
+  F9 = 120,
+  F10 = 121,
+  F11 = 122,
+  F12 = 123,
+  Escape = 27,
+  Space = 32,
+  Shift = 16,
+  Control = 17,
+  Alt = 18
+}
+
+export function keyEventToString(keyEvent: KeyEvent): string {
+  switch (keyEvent.keyCode) {
+    case KeyCode.LeftArrow:
+    case KeyCode.UpArrow:
+    case KeyCode.RightArrow:
+    case KeyCode.DownArrow:
+    case KeyCode.Insert:
+    case KeyCode.Home:
+    case KeyCode.End:
+    case KeyCode.PageDown:
+    case KeyCode.PageUp:
+    case KeyCode.Backspace:
+    case KeyCode.Delete:
+    case KeyCode.Tab:
+    case KeyCode.F1:
+    case KeyCode.F2:
+    case KeyCode.F3:
+    case KeyCode.F4:
+    case KeyCode.F5:
+    case KeyCode.F6:
+    case KeyCode.F7:
+    case KeyCode.F8:
+    case KeyCode.F9:
+    case KeyCode.F10:
+    case KeyCode.F11:
+    case KeyCode.F12:
+    case KeyCode.Escape:
+      return KeyCode[keyEvent.keyCode];
+    case KeyCode.Enter:
+      return '\n';
+    case KeyCode.Space:
+      return ' ';
+    case KeyCode.Shift: {
+      if (keyEvent.code === 'ShiftLeft') {
+        return 'LeftShift';
+      }
+      return 'RightShift';
+    }
+    case KeyCode.Control: {
+      if (keyEvent.code === 'ControlLeft') {
+        return 'LeftControl';
+      }
+      return 'RightControl';
+    }
+    case KeyCode.Alt: {
+      if (keyEvent.code === 'AltLeft') {
+        return 'LeftAlt';
+      }
+      return 'RightAlt';
+    }
+    default:
+      return String.fromCharCode(keyEvent.keyCode).toLowerCase();
+  }
 }

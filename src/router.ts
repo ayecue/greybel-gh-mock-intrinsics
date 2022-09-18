@@ -6,13 +6,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import { Computer, Network, Port, Router, User } from './types';
 
-export function create(user: User, router: Router): BasicInterface {
+export function create(user: Type.User, router: Type.Router): BasicInterface {
   const itrface = new BasicInterface('router');
 
   itrface.addMethod(
@@ -49,13 +49,7 @@ export function create(user: User, router: Router): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment.networks.find(
-          (v: Network) => v.router.publicIp === router.publicIp
-        );
-
-        return Promise.resolve(
-          result ? new CustomString(result.bssid) : Defaults.Void
-        );
+        return Promise.resolve(new CustomString(router.bssid));
       }
     )
   );
@@ -68,13 +62,7 @@ export function create(user: User, router: Router): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment.networks.find(
-          (v: Network) => v.router.publicIp === router.publicIp
-        );
-
-        return Promise.resolve(
-          result ? new CustomString(result.essid) : Defaults.Void
-        );
+        return Promise.resolve(new CustomString(router.essid));
       }
     )
   );
@@ -88,8 +76,9 @@ export function create(user: User, router: Router): BasicInterface {
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const result = mockEnvironment
+          .get()
           .getComputersOfRouter(router)
-          .map((item: Computer) => new CustomString(item.localIp));
+          .map((item: Type.Computer) => new CustomString(item.localIp));
 
         return Promise.resolve(new CustomList(result));
       }
@@ -106,8 +95,9 @@ export function create(user: User, router: Router): BasicInterface {
       ): Promise<CustomValue> => {
         const result =
           mockEnvironment
+            .get()
             .getForwardedPortsOfRouter(router)
-            .map((item: Port) => createPort(router, item)) || [];
+            .map((item: Type.Port) => createPort(router, item)) || [];
 
         return Promise.resolve(new CustomList(result));
       }
@@ -123,14 +113,16 @@ export function create(user: User, router: Router): BasicInterface {
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const ipAddress = args.get('ipAddress').toString();
-        const device = mockEnvironment.getComputerInLan(ipAddress, router);
+        const device = mockEnvironment
+          .get()
+          .getComputerInLan(ipAddress, router);
 
         if (!device) {
           return Promise.resolve(new CustomList());
         }
 
-        const result = device.ports.map((item: Port) =>
-          createPort(device, item)
+        const result = Array.from(device.ports.values()).map(
+          (item: Type.Port) => createPort(device, item)
         );
 
         return Promise.resolve(new CustomList(result));
@@ -147,18 +139,18 @@ export function create(user: User, router: Router): BasicInterface {
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const port = args.get('port').toInt();
-        const computers = mockEnvironment.getComputersOfRouterByIp(
-          router.publicIp
-        );
+        const computers = mockEnvironment
+          .get()
+          .getComputersOfRouterByIp(router.publicIp);
 
         for (const item of computers) {
           if (item.router.publicIp === router.publicIp) {
             continue;
           }
 
-          for (const itemPort of item.ports) {
-            if (itemPort.port === port) {
-              return Promise.resolve(createPort(router, itemPort));
+          for (const [computerPortKey, computerPort] of item.ports) {
+            if (computerPortKey === port) {
+              return Promise.resolve(createPort(router, computerPort));
             }
           }
         }

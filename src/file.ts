@@ -7,9 +7,9 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { File, FileSystemEntity, FileType, Folder, User } from './types';
 import {
   copyFile,
   getFile,
@@ -23,7 +23,7 @@ import {
   traverseChildren
 } from './utils';
 
-export function create(user: User, entity: FileSystemEntity): BasicInterface {
+export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
   const itrface = new BasicInterface('file');
 
   itrface.addMethod(
@@ -55,7 +55,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
 
         const userType: string = permissions[0];
         const operator = permissions[1];
-        const getNewPermissions = (itemFile: FileSystemEntity) => {
+        const getNewPermissions = (itemFile: Type.FSEntity) => {
           const flags = parsePermissions(itemFile);
 
           permissions
@@ -77,7 +77,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
         if (isRecursive) {
           traverseChildren(
             entity,
-            (item: FileSystemEntity) => {
+            (item: Type.FSEntity) => {
               const { w } = getPermissions(user, item);
 
               if (w) {
@@ -118,7 +118,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
         const path = args.get('path').toString();
         const newName = args.get('newName').toString();
         const traversalPath = getTraversalPath(path, getFilePath(entity));
-        const folder = getFile(entity, traversalPath) as Folder;
+        const folder = getFile(entity, traversalPath) as Type.Folder;
 
         if (folder && folder.isFolder) {
           const { w } = getPermissions(user, folder);
@@ -134,11 +134,11 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           }
 
           if (entity.isFolder) {
-            const newFolder = copyFile(entity, folder) as Folder;
+            const newFolder = copyFile(entity, folder) as Type.Folder;
             newFolder.name = newName;
             folder.folders.push(newFolder);
           } else {
-            const newFile = copyFile(entity, folder) as File;
+            const newFile = copyFile(entity, folder) as Type.File;
             newFile.name = newName;
             folder.files.push(newFile);
           }
@@ -174,7 +174,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
         const path = args.get('path').toString();
         const newName = args.get('newName').toString();
         const traversalPath = getTraversalPath(path, getFilePath(entity));
-        const folder = getFile(entity, traversalPath) as Folder;
+        const folder = getFile(entity, traversalPath) as Type.Folder;
 
         if (folder && folder.isFolder) {
           const { w } = getPermissions(user, folder);
@@ -190,16 +190,16 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           }
 
           if (entity.isFolder) {
-            const newFolder = copyFile(entity, folder) as Folder;
+            const newFolder = copyFile(entity, folder) as Type.Folder;
             newFolder.name = newName;
             folder.folders.push(newFolder);
           } else {
-            const newFile = copyFile(entity, folder) as File;
+            const newFile = copyFile(entity, folder) as Type.File;
             newFile.name = newName;
             folder.files.push(newFile);
           }
 
-          removeFile(entity.parent as Folder, entity.name);
+          removeFile(entity.parent as Type.Folder, entity.name);
 
           return Promise.resolve(Defaults.True);
         }
@@ -322,9 +322,9 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const file = entity as File;
+        const file = entity as Type.File;
 
-        if (file.type !== FileType.Plain) {
+        if (file.type !== Type.FileType.Plain) {
           return Promise.resolve(Defaults.Void);
         }
 
@@ -351,10 +351,10 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(new CustomString('No write permissions'));
         }
 
-        const file = entity as File;
+        const file = entity as Type.File;
         const content = args.get('content').toString();
 
-        if (file.type !== FileType.Plain) {
+        if (file.type !== Type.FileType.Plain) {
           return Promise.resolve(new CustomString('Invalid file type'));
         }
 
@@ -377,8 +377,10 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(Defaults.False);
         }
 
-        const file = entity as File;
-        return Promise.resolve(new CustomBoolean(file.type !== FileType.Plain));
+        const file = entity as Type.File;
+        return Promise.resolve(
+          new CustomBoolean(file.type !== Type.FileType.Plain)
+        );
       }
     )
   );
@@ -430,7 +432,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(new CustomString('No write permissions'));
         }
 
-        removeFile(entity.parent as Folder, entity.name);
+        removeFile(entity.parent as Type.Folder, entity.name);
 
         return Promise.resolve(new CustomString(''));
       }
@@ -453,9 +455,11 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Folder).folders.map((folder: Folder) => {
-          return create(user, folder);
-        });
+        const result = (entity as Type.Folder).folders.map(
+          (folder: Type.Folder) => {
+            return create(user, folder);
+          }
+        );
 
         return Promise.resolve(new CustomList(result));
       }
@@ -478,7 +482,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Folder).files.map((file: File) => {
+        const result = (entity as Type.Folder).files.map((file: Type.File) => {
           return create(user, file);
         });
 
@@ -537,7 +541,7 @@ export function create(user: User, entity: FileSystemEntity): BasicInterface {
         if (isRecursive) {
           traverseChildren(
             entity,
-            (item: FileSystemEntity) => {
+            (item: Type.FSEntity) => {
               const { w } = getPermissions(user, item);
 
               if (w) {

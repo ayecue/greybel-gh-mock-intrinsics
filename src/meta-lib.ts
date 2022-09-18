@@ -6,38 +6,34 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createShell } from './shell';
-import {
-  Computer,
-  Library,
-  Router,
-  Vulnerability,
-  VulnerabilityAction
-} from './types';
 import { changePassword, getFile, getUserByVulnerability } from './utils';
 
 export function create(
-  computer: Computer,
-  targetComputer: Computer,
-  library: Library
+  computer: Type.Computer,
+  targetComputer: Type.Computer,
+  library: Type.Library
 ): BasicInterface {
   const itrface = new BasicInterface('metaLib');
   const isRouter =
-    (targetComputer as Router).publicIp && targetComputer.router == null;
+    (targetComputer as Type.Router).publicIp && targetComputer.router == null;
   const isLan = isRouter
-    ? computer.router.publicIp === (targetComputer as Router).publicIp
+    ? computer.router.publicIp === (targetComputer as Type.Router).publicIp
     : computer.router.publicIp === targetComputer.router.publicIp;
   const isLocal = isLan && computer.localIp === targetComputer.localIp;
-  const exploits = mockEnvironment.vulnerabilities.filter(
-    (item: Vulnerability) => {
-      return item.library === library && item.remote !== isLocal;
-    }
-  );
+  const exploits = mockEnvironment
+    .get()
+    .vulnerabilityGenerator.vulnerabilities.filter(
+      (item: Type.Vulnerability) => {
+        return item.library === library && item.remote !== isLocal;
+      }
+    );
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
@@ -76,7 +72,7 @@ export function create(
         const memAddress = args.get('memAddress').toString();
         const sector = args.get('sector').toString();
         const optArgs = args.get('optArgs').toString();
-        const vul = exploits.find((item: Vulnerability) => {
+        const vul = exploits.find((item: Type.Vulnerability) => {
           return item.memAddress === memAddress && item.sector === sector;
         });
 
@@ -85,29 +81,29 @@ export function create(
         }
 
         switch (vul.action) {
-          case VulnerabilityAction.COMPUTER:
+          case Type.VulnerabilityAction.COMPUTER:
             return Promise.resolve(
               createComputer(
                 getUserByVulnerability(vul.user, targetComputer),
                 targetComputer
               )
             );
-          case VulnerabilityAction.SHELL:
+          case Type.VulnerabilityAction.SHELL:
             return Promise.resolve(
               createShell(
                 getUserByVulnerability(vul.user, targetComputer),
                 targetComputer
               )
             );
-          case VulnerabilityAction.FOLDER: {
+          case Type.VulnerabilityAction.FOLDER: {
             const file = getFile(targetComputer.fileSystem, vul.folder);
             return Promise.resolve(
               createFile(getUserByVulnerability(vul.user, targetComputer), file)
             );
           }
-          case VulnerabilityAction.FIREWALL:
+          case Type.VulnerabilityAction.FIREWALL:
             return Promise.resolve(new CustomString('Firewall test'));
-          case VulnerabilityAction.PASSWORD: {
+          case Type.VulnerabilityAction.PASSWORD: {
             if (!optArgs) {
               return Promise.resolve(new CustomString('Invalid args'));
             }

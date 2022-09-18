@@ -2,28 +2,34 @@ import actualMd5 from 'blueimp-md5';
 import {
   CustomBoolean,
   CustomFunction,
+  CustomNil,
   CustomNumber,
   CustomString,
   CustomValue,
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import {
+  isLanIp as isLanIpInternal,
+  isValidIp as isValidIpInternal,
+  Type
+} from 'greybel-mock-environment';
 
 import { create as createAptClient } from './apt-client';
+import { create as createBlockchain } from './blockchain';
 import { create as createCrypto } from './crypto';
 import { create as createMetaMail } from './meta-mail';
 import { create as createMetaxploit } from './metaxploit';
-import { create as createBlockchain } from './blockchain';
-import { create as createService } from './service';
 import mockEnvironment from './mock/environment';
 import { create as createRouter } from './router';
+import { create as createService } from './service';
 import { loginLocal } from './shell';
-import { File, FileType } from './types';
 import {
   getFile,
   getHomePath,
   getPermissions,
-  getTraversalPath
+  getTraversalPath,
+  keyEventToString
 } from './utils';
 
 export const getShell = CustomFunction.createExternal(
@@ -35,11 +41,16 @@ export const getShell = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const user = args.get('user');
     const password = args.get('password');
+
+    if (user instanceof CustomNil || password instanceof CustomNil) {
+      throw new Error('get_shell: Invalid arguments');
+    }
+
     return Promise.resolve(loginLocal(user, password));
   }
 )
-  .addArgument('user')
-  .addArgument('password');
+  .addArgument('user', new CustomString(''))
+  .addArgument('password', new CustomString(''));
 
 export const mailLogin = CustomFunction.createExternal(
   'mailLogin',
@@ -50,10 +61,9 @@ export const mailLogin = CustomFunction.createExternal(
   ): Promise<CustomValue> => {
     const user = args.get('user');
     const password = args.get('password');
-    const email = mockEnvironment.getEmailViaLogin(
-      user.toString(),
-      password.toString()
-    );
+    const email = mockEnvironment
+      .get()
+      .getEmailViaLogin(user.toString(), password.toString());
 
     if (!email) {
       return Promise.resolve(Defaults.Void);
@@ -72,15 +82,28 @@ export const getRouter = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.getLocal();
-    const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.getRouterByIp(
-      target || computer.router?.publicIp
-    );
+    const ipAddress = args.get('ipAddress');
 
-    return Promise.resolve(createRouter(user, router || computer.router));
+    if (!(ipAddress instanceof CustomString)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const target = ipAddress.toString();
+
+    if (!isValidIpInternal(target) && target !== '') {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const { user, computer } = mockEnvironment.get().getLocal();
+    let router = computer.router;
+
+    if (target !== '') {
+      router = mockEnvironment.get().getRouterByIp(target);
+    }
+
+    return Promise.resolve(createRouter(user, router));
   }
-).addArgument('ipAddress');
+).addArgument('ipAddress', new CustomString(''));
 
 export const getSwitch = CustomFunction.createExternal(
   'getSwitch',
@@ -89,13 +112,30 @@ export const getSwitch = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const { user, computer } = mockEnvironment.getLocal();
-    const target = args.get('ipAddress').toString();
-    const router = mockEnvironment.getRouterByIp(
-      target || computer.router?.publicIp
-    );
+    const ipAddress = args.get('ipAddress');
 
-    return Promise.resolve(createRouter(user, router || computer.router));
+    if (!(ipAddress instanceof CustomString)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const target = ipAddress.toString();
+
+    if (!isValidIpInternal(target)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    if (!isLanIpInternal(target)) {
+      return Promise.resolve(Defaults.Void);
+    }
+
+    const { user } = mockEnvironment.get().getLocal();
+    const router = mockEnvironment.get().getSwitchByIp(target);
+
+    if (router) {
+      return Promise.resolve(createRouter(user, router));
+    }
+
+    return Promise.resolve(Defaults.Void);
   }
 ).addArgument('ipAddress');
 
@@ -106,30 +146,35 @@ export const includeLib = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const libPath = args.get('libPath').toString();
-    const { user, computer } = mockEnvironment.getLocal();
-    const target = getTraversalPath(libPath, null);
+    const libPath = args.get('libPath');
+
+    if (libPath instanceof CustomNil && libPath.toString() === '') {
+      throw new Error('include_lib: Invalid arguments');
+    }
+
+    const { user, computer } = mockEnvironment.get().getLocal();
+    const target = getTraversalPath(libPath.toString(), null);
     const entityResult = getFile(computer.fileSystem, target);
 
     if (entityResult && !entityResult.isFolder) {
       const { r } = getPermissions(user, entityResult);
 
       if (r) {
-        switch ((entityResult as File).type) {
-          case FileType.SSH:
-          case FileType.FTP:
-          case FileType.HTTP:
-          case FileType.Chat:
-          case FileType.RShell:
-          case FileType.Repository:
+        switch ((entityResult as Type.File).type) {
+          case Type.FileType.SSH:
+          case Type.FileType.FTP:
+          case Type.FileType.HTTP:
+          case Type.FileType.Chat:
+          case Type.FileType.RShell:
+          case Type.FileType.Repository:
             return Promise.resolve(createService(user, computer));
-          case FileType.AptClient:
+          case Type.FileType.AptClient:
             return Promise.resolve(createAptClient(user, computer));
-          case FileType.Crypto:
+          case Type.FileType.Crypto:
             return Promise.resolve(createCrypto(user, computer));
-          case FileType.Metaxploit:
+          case Type.FileType.Metaxploit:
             return Promise.resolve(createMetaxploit(user, computer));
-          case FileType.Blockchain:
+          case Type.FileType.Blockchain:
             return Promise.resolve(createBlockchain(user, computer));
           default:
         }
@@ -174,7 +219,7 @@ export const nslookup = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('hostname').toString();
-    const router = mockEnvironment.findRouterViaNS(target);
+    const router = mockEnvironment.get().findRouterViaNS(target);
     return Promise.resolve(new CustomString(router?.publicIp));
   }
 ).addArgument('hostname');
@@ -186,13 +231,35 @@ export const whois = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const target = args.get('ipAddress').toString();
-    if (mockEnvironment.isValidIp(target)) {
+    const ipAddress = args.get('ipAddress');
+
+    if (ipAddress instanceof CustomNil) {
+      throw new Error('whois: Invalid arguments');
+    }
+
+    const target = ipAddress.toString();
+
+    if (target === '') {
+      throw new Error('whois: Invalid arguments');
+    }
+
+    if (!isValidIpInternal(target)) {
+      return Promise.resolve(new CustomString(`Invalid IP adress ${target}`));
+    }
+
+    if (isLanIpInternal(target)) {
       return Promise.resolve(
-        new CustomString(mockEnvironment.getRouterByIp(target).whoisDescription)
+        new CustomString('Error: the IP address must be public')
       );
     }
-    return Promise.resolve(new CustomString(`Invalid IP address: ${target}`));
+
+    const router = mockEnvironment.get().getRouterByIp(target);
+
+    if (router) {
+      return Promise.resolve(new CustomString(router.whoisDescription));
+    }
+
+    return Promise.resolve(new CustomString('Address not found'));
   }
 ).addArgument('ipAddress');
 
@@ -204,9 +271,7 @@ export const isValidIp = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    return Promise.resolve(
-      new CustomBoolean(mockEnvironment.isValidIp(target))
-    );
+    return Promise.resolve(new CustomBoolean(isValidIpInternal(target)));
   }
 ).addArgument('ipAddress');
 
@@ -218,7 +283,9 @@ export const isLanIp = CustomFunction.createExternal(
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const target = args.get('ipAddress').toString();
-    return Promise.resolve(new CustomBoolean(mockEnvironment.isLanIp(target)));
+    return Promise.resolve(
+      new CustomBoolean(isValidIpInternal(target) && isLanIpInternal(target))
+    );
   }
 ).addArgument('ipAddress');
 
@@ -258,8 +325,8 @@ export const currentPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
@@ -273,8 +340,15 @@ export const parentPath = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = args.get('path').toString();
-    return Promise.resolve(new CustomString(path.replace(/\/[^/]+\/?$/i, '')));
+    const path = args.get('path');
+
+    if (path instanceof CustomNil || path.toString() === '') {
+      throw new Error('parent_path: Invalid arguments');
+    }
+
+    const result = path.toString().replace(/\/[^/]+\/?$/i, '');
+
+    return Promise.resolve(new CustomString(result));
   }
 ).addArgument('path');
 
@@ -286,8 +360,8 @@ export const homeDir = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
@@ -302,8 +376,8 @@ export const programPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(
@@ -322,7 +396,7 @@ export const activeUser = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.username)
+      new CustomString(mockEnvironment.get().getLocal().user.username)
     );
   }
 );
@@ -335,7 +409,7 @@ export const userMailAddress = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.email)
+      new CustomString(mockEnvironment.get().getLocal().user.email)
     );
   }
 );
@@ -348,7 +422,7 @@ export const userBankNumber = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     return Promise.resolve(
-      new CustomString(mockEnvironment.getLocal().user.userBankNumber)
+      new CustomString(mockEnvironment.get().getLocal().user.bankNumber)
     );
   }
 );
@@ -360,28 +434,89 @@ export const formatColumns = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString(args.get('columns').toString()));
+    const columns = args.get('columns');
+
+    if (columns instanceof CustomNil) {
+      return Promise.resolve(new CustomString(''));
+    }
+
+    const list = columns.toString().replace(/\\n/g, '\n').split('\n');
+    const v: Array<Array<string>> = [];
+    const l: Array<number> = [];
+
+    for (let i = 0; i < list.length; i++) {
+      const rows = list[i].split(/\s+/);
+      v.push([]);
+
+      for (let j = 0; j < rows.length; j++) {
+        if (rows.length > l.length) {
+          l.push(j);
+        }
+        const txt = rows[j];
+
+        if (txt.length > l[j]) {
+          l[j] = txt.length;
+        }
+
+        v[i].push(txt);
+      }
+    }
+
+    const seperation = 2;
+    const lines = [];
+
+    for (let i = 0; i < v.length; i++) {
+      let output = '';
+      for (let j = 0; j < v[i].length; j++) {
+        const txt = v[i][j];
+        output += txt;
+        const len = l[j] - txt.length + seperation;
+        output += ' '.repeat(len);
+      }
+      lines.push(output);
+    }
+
+    return Promise.resolve(new CustomString(lines.join('\n')));
   }
 ).addArgument('columns');
 
 export const userInput = CustomFunction.createExternal(
   'userInput',
-  (
-    _ctx: OperationContext,
+  async (
+    ctx: OperationContext,
     _self: CustomValue,
-    _args: Map<string, CustomValue>
+    args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString('test-input'));
+    const message = args.get('message').toString();
+    const isPassword = args.get('isPassword').toTruthy();
+    const anyKey = args.get('anyKey').toTruthy();
+
+    ctx.handler.outputHandler.print(message);
+
+    if (anyKey) {
+      const keyPress = await ctx.handler.outputHandler.waitForKeyPress();
+      const value = keyEventToString(keyPress);
+
+      return new CustomString(value);
+    }
+
+    const input = await ctx.handler.outputHandler.waitForInput(isPassword);
+
+    return new CustomString(input);
   }
-);
+)
+  .addArgument('message')
+  .addArgument('isPassword')
+  .addArgument('anyKey');
 
 export const clearScreen = CustomFunction.createExternal(
   'clearScreen',
   (
-    _ctx: OperationContext,
+    ctx: OperationContext,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
+    ctx.handler.outputHandler.clear();
     return Promise.resolve(Defaults.Void);
   }
 );
@@ -394,8 +529,8 @@ export const launchPath = CustomFunction.createExternal(
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
     const path = getHomePath(
-      mockEnvironment.getLocal().user,
-      mockEnvironment.getLocal().computer
+      mockEnvironment.get().getLocal().user,
+      mockEnvironment.get().getLocal().computer
     );
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
@@ -409,6 +544,8 @@ export const typeOf = CustomFunction.createExternal(
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(new CustomString(args.get('value').getCustomType()));
+    const type = args.get('value')?.getCustomType() || 'undefined';
+
+    return Promise.resolve(new CustomString(type));
   }
 ).addArgument('value');

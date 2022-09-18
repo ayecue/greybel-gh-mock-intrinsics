@@ -6,11 +6,14 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { Computer, Port } from './types';
 
-export function create(computer: Computer, port: Port): BasicInterface {
+export function create(
+  computer: Type.Computer,
+  port: Type.Port
+): BasicInterface {
   const itrface = new BasicInterface('port');
 
   itrface.addMethod(

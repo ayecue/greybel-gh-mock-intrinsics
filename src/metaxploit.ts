@@ -7,19 +7,12 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 import mockEnvironment from './mock/environment';
 import { create as createNetSession } from './net-session';
-import {
-  Computer,
-  File,
-  Library,
-  User,
-  Vulnerability,
-  VulnerabilityRequirements
-} from './types';
 import {
   getFile,
   getFileLibrary,
@@ -28,7 +21,10 @@ import {
   getTraversalPath
 } from './utils';
 
-export function create(user: User, computer: Computer): BasicInterface {
+export function create(
+  user: Type.User,
+  computer: Type.Computer
+): BasicInterface {
   const itrface = new BasicInterface('metaxploit');
 
   itrface.addMethod(
@@ -44,7 +40,7 @@ export function create(user: User, computer: Computer): BasicInterface {
           path,
           getHomePath(user, computer)
         );
-        const file = getFile(computer.fileSystem, traversalPath) as File;
+        const file = getFile(computer.fileSystem, traversalPath) as Type.File;
         const library = getFileLibrary(file);
 
         if (!library) {
@@ -66,7 +62,7 @@ export function create(user: User, computer: Computer): BasicInterface {
       ): Promise<CustomValue> => {
         const ipAddress = args.get('ipAddress').toString();
         const port = args.get('port').toInt();
-        const router = mockEnvironment.getRouterByIp(ipAddress);
+        const router = mockEnvironment.get().getRouterByIp(ipAddress);
 
         if (!router) {
           return Promise.resolve(Defaults.Void);
@@ -74,11 +70,13 @@ export function create(user: User, computer: Computer): BasicInterface {
 
         if (port === 0) {
           return Promise.resolve(
-            createNetSession(computer, router, Library.KERNEL_ROUTER)
+            createNetSession(computer, router, Type.Library.KERNEL_ROUTER)
           );
         }
 
-        const result = mockEnvironment.getForwardedPortOfRouter(router, port);
+        const result = mockEnvironment
+          .get()
+          .getForwardedPortOfRouter(router, port);
 
         if (!result) {
           return Promise.resolve(Defaults.Void);
@@ -109,10 +107,11 @@ export function create(user: User, computer: Computer): BasicInterface {
       ): Promise<CustomValue> => {
         const metaLib = args.get('metaLib');
         if (metaLib instanceof BasicInterface) {
-          const exploits: Vulnerability[] = metaLib.getVariable('exploits');
+          const exploits: Type.Vulnerability[] =
+            metaLib.getVariable('exploits');
 
           if (exploits) {
-            const zones = exploits.map((x: Vulnerability) => {
+            const zones = exploits.map((x: Type.Vulnerability) => {
               return x.memAddress;
             });
             const result = Array.from(new Set(zones)).map(
@@ -139,35 +138,38 @@ export function create(user: User, computer: Computer): BasicInterface {
         const metaLib = args.get('metaLib');
         const memAddress = args.get('memAddress').toString();
         if (metaLib instanceof BasicInterface) {
-          const exploits: Vulnerability[] = metaLib.getVariable('exploits');
+          const exploits: Type.Vulnerability[] =
+            metaLib.getVariable('exploits');
 
           if (exploits) {
             const result = exploits
-              .filter((x: Vulnerability) => {
+              .filter((x: Type.Vulnerability) => {
                 return x.memAddress === memAddress;
               })
-              .map((x: Vulnerability) => {
+              .map((x: Type.Vulnerability) => {
                 return [
                   `${x.details} <b>${x.sector}</b>. Buffer overflow.`,
-                  ...x.required.map((r: VulnerabilityRequirements): string => {
-                    switch (r) {
-                      case VulnerabilityRequirements.LIBRARY:
-                        return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-                      case VulnerabilityRequirements.REGISTER_AMOUNT:
-                        return '* Checking registered users equal to 2.';
-                      case VulnerabilityRequirements.ANY_ACTIVE:
-                        return '* Checking an active user.';
-                      case VulnerabilityRequirements.ROOT_ACTIVE:
-                        return '* Checking root active user.';
-                      case VulnerabilityRequirements.LOCAL:
-                        return '* Checking existing connection in the local network.';
-                      case VulnerabilityRequirements.FORWARD:
-                        return '* 1337 port forwarding configured from router to the target computer.';
-                      case VulnerabilityRequirements.GATEWAY:
-                        return '* 1337 computers using this router as gateway.';
+                  ...x.required.map(
+                    (r: Type.VulnerabilityRequirements): string => {
+                      switch (r) {
+                        case Type.VulnerabilityRequirements.LIBRARY:
+                          return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
+                        case Type.VulnerabilityRequirements.REGISTER_AMOUNT:
+                          return '* Checking registered users equal to 2.';
+                        case Type.VulnerabilityRequirements.ANY_ACTIVE:
+                          return '* Checking an active user.';
+                        case Type.VulnerabilityRequirements.ROOT_ACTIVE:
+                          return '* Checking root active user.';
+                        case Type.VulnerabilityRequirements.LOCAL:
+                          return '* Checking existing connection in the local network.';
+                        case Type.VulnerabilityRequirements.FORWARD:
+                          return '* 1337 port forwarding configured from router to the target computer.';
+                        case Type.VulnerabilityRequirements.GATEWAY:
+                          return '* 1337 computers using this router as gateway.';
+                      }
+                      return '';
                     }
-                    return '';
-                  })
+                  )
                 ].join('\n');
               })
               .join('\n');

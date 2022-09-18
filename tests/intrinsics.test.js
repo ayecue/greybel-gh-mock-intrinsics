@@ -1,4 +1,10 @@
-const { Interpreter, Debugger, CustomFunction } = require('greybel-interpreter');
+const {
+  Interpreter,
+  Debugger,
+  CustomFunction,
+  OutputHandler,
+  HandlerContainer
+} = require('greybel-interpreter');
 const defaultInit = require('greybel-intrinsics').init;
 const { init } = require('../dist');
 const fs = require('fs');
@@ -6,19 +12,35 @@ const path = require('path');
 const testFolder = path.resolve(__dirname, 'scripts');
 
 let printMock;
-const pseudoAPI = new Map();
 
 const testDate = new Date(1642924301240);
 
 Date.now = () => testDate.getTime();
 
-pseudoAPI.set(
-  'print',
-  CustomFunction.createExternal('print', (fnCtx, self, args) => {
-    // console.log(args);
-    printMock(args.get('value').toString());
-  }).addArgument('value')
-);
+class TestOutputHandler extends OutputHandler {
+  print(value) {
+    printMock(value);
+  }
+
+  progress(time) {
+    return Promise.resolve();
+  }
+
+  waitForInput() {
+    return Promise.resolve('test');
+  }
+
+  waitForKeyPress() {
+    return Promise.resolve({
+      keyCode: 13,
+      code: 'Enter'
+    });
+  }
+
+  clear() {
+    printMock('clearing screen');
+  }
+}
 
 class TestDebugger extends Debugger {
   debug() {}
@@ -36,18 +58,14 @@ describe('interpreter', function () {
       test(path.basename(filepath), async () => {
         const interpreter = new Interpreter({
           target: filepath,
+          handler: new HandlerContainer({
+            outputHandler: new TestOutputHandler()
+          }),
           debugger: new TestDebugger()
         });
         let success = false;
 
-        pseudoAPI.set(
-          'exit',
-          CustomFunction.createExternal('exit', (fnCtx, self, args) => {
-            interpreter.exit();
-          })
-        );
-
-        interpreter.setApi(defaultInit(init(pseudoAPI)));
+        interpreter.setApi(defaultInit(init()));
 
         try {
           await interpreter.run();

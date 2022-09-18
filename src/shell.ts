@@ -6,11 +6,11 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
+import { Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import { Computer, File, Folder, Port, Service, User } from './types';
 import {
   getFile,
   getHomePath,
@@ -20,21 +20,23 @@ import {
 } from './utils';
 
 export function create(
-  user: User,
-  computer: Computer,
-  options: { port?: Port; location?: string[] } = {}
+  user: Type.User,
+  computer: Type.Computer,
+  options: { port?: Type.Port; location?: string[] } = {}
 ): CustomInterface {
   const activePort = options.port
-    ? computer.ports.find((item) => item.port === options.port.port)
+    ? computer.ports.get(options.port.port)
     : null;
   const currentService =
-    activePort?.service === Service.FTP ? Service.FTP : Service.SSH;
+    activePort?.service === Type.Service.FTP
+      ? Type.Service.FTP
+      : Type.Service.SSH;
   const currentLocation = options.location || getHomePath(user, computer);
   const itrface = new BasicInterface(
-    Service.SSH === currentService ? 'shell' : 'ftpShell'
+    Type.Service.SSH === currentService ? 'shell' : 'ftpShell'
   );
 
-  if (currentService === Service.SSH) {
+  if (currentService === Type.Service.SSH) {
     itrface.addMethod(
       CustomFunction.createExternalWithSelf(
         'connect_service',
@@ -49,21 +51,21 @@ export function create(
           const password = args.get('password').toString();
           // const service = args.get('service').toString();
 
-          let resultPort: Port | null;
-          let resultUser: User | null;
-          const computers = mockEnvironment.getComputersOfRouterByIp(ip);
+          let resultPort: Type.Port | null;
+          let resultUser: Type.User | null;
+          const computers = mockEnvironment.get().getComputersOfRouterByIp(ip);
           const resultComputer = computers.find((item) => {
             if (item.router.publicIp !== ip) {
               return false;
             }
 
-            for (const portItem of item.ports) {
+            for (const [computerPortKey, computerPort] of item.ports) {
               if (
-                (portItem.service === Service.SSH ||
-                  portItem.service === Service.FTP) &&
-                portItem.port === port
+                (computerPort.service === Type.Service.SSH ||
+                  computerPort.service === Type.Service.FTP) &&
+                computerPortKey === port
               ) {
-                resultPort = portItem;
+                resultPort = computerPort;
                 break;
               }
             }
@@ -166,7 +168,7 @@ export function create(
               );
             }
 
-            putFile(remoteFile as Folder, localFile as File);
+            putFile(remoteFile as Type.Folder, localFile as Type.File);
             return Promise.resolve(Defaults.True);
           }
 
@@ -215,7 +217,7 @@ export function create(
           args: Map<string, CustomValue>
         ): Promise<CustomValue> => {
           const ip = args.get('ipAddress').toString();
-          const router = mockEnvironment.getRouterByIp(ip);
+          const router = mockEnvironment.get().getRouterByIp(ip);
 
           if (router) {
             return Promise.resolve(Defaults.True);
@@ -264,7 +266,7 @@ export function create(
         }
       )
     );
-  } else if (currentService === Service.FTP) {
+  } else if (currentService === Type.Service.FTP) {
     itrface.addMethod(
       CustomFunction.createExternalWithSelf(
         'put',
@@ -318,13 +320,13 @@ export function loginLocal(
   user: CustomValue,
   password: CustomValue
 ): CustomValue {
-  const computer = mockEnvironment.getLocal().computer;
+  const computer = mockEnvironment.get().getLocal().computer;
 
   const usr = user.toString();
   const pwd = password.toString();
 
-  if (!usr && !pwd) {
-    return create(mockEnvironment.getLocal().user, computer);
+  if (usr === '' && pwd === '') {
+    return create(mockEnvironment.get().getLocal().user, computer);
   }
 
   for (const item of computer.users) {

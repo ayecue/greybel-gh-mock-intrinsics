@@ -3,12 +3,12 @@ import { CustomFunction } from 'greybel-interpreter';
 import * as generics from './generics';
 
 export { default as mockEnvironment } from './mock/environment';
-export * from './types';
 
 export function getAPI(): Map<string, CustomFunction> {
   const apiInterface = new Map();
 
   apiInterface.set('typeof', generics.typeOf);
+  apiInterface.set('user_input', generics.userInput);
   apiInterface.set('get_shell', generics.getShell);
   apiInterface.set('mail_login', generics.mailLogin);
   apiInterface.set('get_router', generics.getRouter);
