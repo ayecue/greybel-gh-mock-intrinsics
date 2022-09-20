@@ -16,9 +16,12 @@ import {
   getFileIndex,
   getFilePath,
   getPermissions,
+  getPermissionSegmentByString,
+  getPermissionSegmentValueByString,
   getTraversalPath,
   parsePermissions,
   removeFile,
+  setPermissionSegmentValueByString,
   transformFlagsToPermissions,
   traverseChildren
 } from './utils';
@@ -62,8 +65,11 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
             .substr(2)
             .split('')
             .forEach((item: string) => {
-              if (flags?.[userType]?.[item]) {
-                flags[userType][item] = operator === '+';
+              const permSeg = getPermissionSegmentByString(flags, userType);
+              const value = getPermissionSegmentValueByString(permSeg, item);
+
+              if (value) {
+                setPermissionSegmentValueByString(permSeg, item, operator === '+');
               }
             });
 
@@ -409,7 +415,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         const permission = args.get('permission').toString().substr(0, 1);
         const permissionMap = getPermissions(user, entity);
 
-        return Promise.resolve(new CustomBoolean(permissionMap[permission]));
+        return Promise.resolve(new CustomBoolean(getPermissionSegmentValueByString(permissionMap, permission)));
       }
     ).addArgument('permission')
   );

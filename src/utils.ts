@@ -3,19 +3,70 @@ import { KeyEvent } from 'greybel-interpreter';
 import { Type } from 'greybel-mock-environment';
 
 export interface PermissionSegment {
-  [permissionType: string]: boolean;
+  x: boolean;
+  w: boolean;
+  r: boolean;
 }
 
 export interface PermissionMap {
-  [type: string]: PermissionSegment;
+  u: PermissionSegment;
+  g: PermissionSegment;
+  o: PermissionSegment;
+}
+
+export function getPermissionSegmentValueByString(flag: PermissionSegment, flagType: string): boolean {
+  switch (flagType) {
+    case 'x':
+      return flag.x;
+    case 'w':
+      return flag.w;
+    case 'r':
+      return flag.r;
+    default:
+      throw new Error('Invalid permission flag type.');
+  }
+}
+
+export function setPermissionSegmentValueByString(flag: PermissionSegment, flagType: string, value: boolean): void {
+  switch (flagType) {
+    case 'x': {
+      flag.x = value;
+      break;
+    }
+    case 'w': {
+      flag.w = value;
+      break;
+    }
+    case 'r': {
+      flag.r = value;
+      break;
+    }
+    default:
+      throw new Error('Invalid permission flag type.');
+  }
+}
+
+export function getPermissionSegmentByString(flag: PermissionMap, userType: string): PermissionSegment {
+  switch (userType) {
+    case 'u':
+      return flag.u;
+    case 'g':
+      return flag.g;
+    case 'o':
+      return flag.o;
+    default:
+      throw new Error('Invalid permission user type.');
+  }
 }
 
 export function transformFlagsToPermissions(
   permissionMap: PermissionMap
 ): string {
-  const segments = Object.keys(permissionMap).map((type: string) => {
-    const map = permissionMap[type];
-
+  const segments = [
+    permissionMap.u,
+    permissionMap.g,
+    permissionMap.o
+  ].map((map: PermissionSegment) => {
     return `${map.r ? 'r' : '-'}${map.w ? 'w' : '-'}${map.x ? 'x' : '-'}`;
   });
 
