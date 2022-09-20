@@ -7,17 +7,11 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
+import { File } from 'greybel-mock-environment/dist/types';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import {
-  getFile,
-  getHomePath,
-  getPermissions,
-  getTraversalPath,
-  putFile
-} from './utils';
 
 export function create(
   user: Type.User,
@@ -51,18 +45,19 @@ export function create(
 
         await ctx.handler.outputHandler.progress(time);
 
-        const folder = getFile(
-          computer.fileSystem,
-          getHomePath(user, computer)
+        const folder = computer.getFile(
+          computer.getHomePath(user)
         ) as Type.Folder;
 
-        putFile(folder, {
-          name: 'file.cap',
-          content: network.password,
-          owner: user.username,
-          permissions: 'drwxr--r--',
-          type: Type.FileType.Ack
-        });
+        folder.putFile(
+          new File({
+            name: 'file.cap',
+            content: network.password,
+            owner: user.username,
+            permissions: 'drwxr--r--',
+            type: Type.FileType.Ack
+          })
+        );
 
         return Defaults.Void;
       }
@@ -94,17 +89,17 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const traversalPath = getTraversalPath(
+        const traversalPath = Utils.getTraversalPath(
           path,
-          getHomePath(user, computer)
+          computer.getHomePath(user)
         );
-        const file = getFile(computer.fileSystem, traversalPath) as Type.File;
+        const file = computer.getFile(traversalPath) as Type.File;
 
         if (!file) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = getPermissions(user, file);
+        const { r } = file.getPermissions(user);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);
