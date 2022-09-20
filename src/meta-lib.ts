@@ -6,7 +6,8 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type } from 'greybel-mock-environment';
+import { Type } from 'greybel-mock-environment';
+import { Router } from 'greybel-mock-environment/dist/types';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
@@ -16,16 +17,15 @@ import { create as createShell } from './shell';
 
 export function create(
   computer: Type.Computer,
-  targetComputer: Type.Computer,
+  target: Type.Device,
   library: Type.Library
 ): BasicInterface {
   const itrface = new BasicInterface('metaLib');
-  const isRouter =
-    (targetComputer as Type.Router).publicIp && targetComputer.router == null;
+  const isRouter = target instanceof Router;
   const isLan = isRouter
-    ? computer.router.publicIp === (targetComputer as Type.Router).publicIp
-    : computer.router.publicIp === targetComputer.router.publicIp;
-  const isLocal = isLan && computer.localIp === targetComputer.localIp;
+    ? computer.router.publicIp === target.publicIp
+    : computer.router.publicIp === (target as Type.Computer).router.publicIp;
+  const isLocal = isLan && computer.localIp === target.localIp;
   const exploits = mockEnvironment
     .get()
     .vulnerabilityGenerator.vulnerabilities.filter(
@@ -82,22 +82,16 @@ export function create(
         switch (vul.action) {
           case Type.VulnerabilityAction.COMPUTER:
             return Promise.resolve(
-              createComputer(
-                FS.getUserByVulnerability(vul.user, targetComputer),
-                targetComputer
-              )
+              createComputer(target.getUserByVulnerability(vul.user), target)
             );
           case Type.VulnerabilityAction.SHELL:
             return Promise.resolve(
-              createShell(
-                FS.getUserByVulnerability(vul.user, targetComputer),
-                targetComputer
-              )
+              createShell(target.getUserByVulnerability(vul.user), target)
             );
           case Type.VulnerabilityAction.FOLDER: {
-            const file = FS.getFile(targetComputer.fileSystem, vul.folder);
+            const file = target.getFile(vul.folder);
             return Promise.resolve(
-              createFile(FS.getUserByVulnerability(vul.user, targetComputer), file)
+              createFile(target.getUserByVulnerability(vul.user), file)
             );
           }
           case Type.VulnerabilityAction.FIREWALL:
@@ -106,11 +100,9 @@ export function create(
             if (!optArgs) {
               return Promise.resolve(new CustomString('Invalid args'));
             }
-            const user = FS.getUserByVulnerability(vul.user, targetComputer);
+            const user = target.getUserByVulnerability(vul.user);
             return Promise.resolve(
-              new CustomBoolean(
-                FS.changePassword(targetComputer, user.username, optArgs)
-              )
+              new CustomBoolean(target.changePassword(user.username, optArgs))
             );
           }
         }

@@ -7,7 +7,7 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
@@ -29,12 +29,12 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const traversalPath = FS.getTraversalPath(
+        const traversalPath = Utils.getTraversalPath(
           path,
-          FS.getHomePath(user, computer)
+          computer.getHomePath(user)
         );
-        const file = FS.getFile(computer.fileSystem, traversalPath) as Type.File;
-        const library = FS.getFileLibrary(file);
+        const file = computer.getFile(traversalPath) as Type.File;
+        const library = file.getLibraryType();
 
         if (!library) {
           return Promise.resolve(Defaults.Void);
@@ -75,7 +75,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const library = FS.getServiceLibrary(result.port.service);
+        const library = Utils.getServiceLibrary(result.port.service);
 
         if (!library) {
           return Promise.resolve(Defaults.Void);

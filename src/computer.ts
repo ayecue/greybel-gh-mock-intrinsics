@@ -7,7 +7,8 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type } from 'greybel-mock-environment';
+import { FS, Type, Utils } from 'greybel-mock-environment';
+import { File, Folder } from 'greybel-mock-environment/dist/types';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
@@ -47,8 +48,8 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const target = FS.getTraversalPath(path, null);
-        const entityResult = FS.getFile(computer.fileSystem, target);
+        const target = Utils.getTraversalPath(path, null);
+        const entityResult = computer.getFile(target);
 
         if (!entityResult) {
           return Promise.resolve(Defaults.Void);
@@ -69,23 +70,26 @@ export function create(
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
         const folderName = args.get('folderName').toString();
-        const target = FS.getTraversalPath(path, options.location);
-        const entityResult = FS.getFile(computer.fileSystem, target);
+        const target = Utils.getTraversalPath(path, options.location);
+        const entityResult = computer.getFile(target);
 
         if (entityResult && entityResult.isFolder) {
-          const { w } = FS.getPermissions(user, entityResult);
+          const { w } = entityResult.getPermissions(user);
           const folder = entityResult as Type.Folder;
 
-          if (w && !FS.hasFile(folder, folderName)) {
-            folder.folders.push({
-              name: folderName,
-              owner: user.username,
-              permissions: entityResult.permissions,
-              isFolder: true,
-              parent: folder,
-              folders: [],
-              files: []
-            });
+          if (w && !folder.hasFile(folderName)) {
+            folder.folders.push(
+              new Folder(
+                {
+                  name: folderName,
+                  owner: user.username,
+                  permissions: entityResult.permissions,
+                  folders: [],
+                  files: []
+                },
+                folder
+              )
+            );
 
             return Promise.resolve(Defaults.True);
           }
@@ -120,22 +124,26 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const containingFolder = FS.getTraversalPath(path, options.location);
+        const containingFolder = Utils.getTraversalPath(path, options.location);
         const target = args.get('fileName').toString();
-        const entityResult = FS.getFile(computer.fileSystem, containingFolder);
+        const entityResult = computer.getFile(containingFolder);
 
         if (entityResult && entityResult.isFolder) {
-          const { w } = FS.getPermissions(user, entityResult);
+          const { w } = entityResult.getPermissions(user);
           const folder = entityResult as Type.Folder;
 
-          if (w && !FS.hasFile(folder, target)) {
-            folder.files.push({
-              name: target,
-              owner: user.username,
-              permissions: entityResult.permissions,
-              type: Type.FileType.Plain,
-              parent: folder
-            });
+          if (w && !folder.hasFile(target)) {
+            folder.files.push(
+              new File(
+                {
+                  name: target,
+                  owner: user.username,
+                  permissions: entityResult.permissions,
+                  type: Type.FileType.Plain
+                },
+                folder
+              )
+            );
 
             return Promise.resolve(Defaults.True);
           }
@@ -199,7 +207,7 @@ export function create(
           const password = args.get('password').toString();
 
           return Promise.resolve(
-            new CustomBoolean(FS.changePassword(computer, username, password))
+            new CustomBoolean(computer.changePassword(username, password))
           );
         }
 
@@ -227,11 +235,9 @@ export function create(
           });
 
           if (!existingUser) {
-            const homeFolder = FS.getFile(computer.fileSystem, [
-              'home'
-            ]) as Type.Folder;
+            const homeFolder = computer.getFile(['home']) as Type.Folder;
 
-            if (!FS.hasFile(homeFolder, username)) {
+            if (!homeFolder.hasFile(username)) {
               computer.users.push(
                 mockEnvironment.get().userGenerator.generate(username, password)
               );
@@ -273,12 +279,10 @@ export function create(
             computer.users.splice(userIndex, 1);
 
             if (removeHome) {
-              const homeFolder = FS.getFile(computer.fileSystem, [
-                'home'
-              ]) as Type.Folder;
+              const homeFolder = computer.getFile(['home']) as Type.Folder;
 
               if (homeFolder) {
-                FS.removeFile(homeFolder, username);
+                homeFolder.removeFile(username);
               }
             }
 
@@ -452,11 +456,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(
-          new CustomString(
-            computer.router?.publicIp || (computer as Type.Router).publicIp
-          )
-        );
+        return Promise.resolve(new CustomString(computer.router.publicIp));
       }
     )
   );

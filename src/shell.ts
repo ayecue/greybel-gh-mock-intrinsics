@@ -6,7 +6,7 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import BasicInterface from './interface';
@@ -24,7 +24,7 @@ export function create(
     activePort?.service === Type.Service.FTP
       ? Type.Service.FTP
       : Type.Service.SSH;
-  const currentLocation = options.location || FS.getHomePath(user, computer);
+  const currentLocation = options.location || computer.getHomePath(user);
   const itrface = new BasicInterface(
     Type.Service.SSH === currentService ? 'shell' : 'ftpShell'
   );
@@ -119,16 +119,18 @@ export function create(
             remoteShell.getCustomType() === 'shell'
           ) {
             const rshell = remoteShell as BasicInterface;
-            const traversalPath = FS.getTraversalPath(pathOrig, currentLocation);
-            const localFile = FS.getFile(computer.fileSystem, traversalPath);
-            const remoteTraversalPath = FS.getTraversalPath(
+            const traversalPath = Utils.getTraversalPath(
+              pathOrig,
+              currentLocation
+            );
+            const localFile = computer.getFile(traversalPath);
+            const remoteTraversalPath = Utils.getTraversalPath(
               pathDest,
               rshell.getVariable('currentLocation')
             );
-            const remoteFile = FS.getFile(
-              rshell.getVariable('computer').fileSystem,
-              remoteTraversalPath
-            );
+            const remoteFile = rshell
+              .getVariable('computer')
+              .getFile(remoteTraversalPath);
 
             if (!localFile) {
               return Promise.resolve(
@@ -142,7 +144,7 @@ export function create(
               );
             }
 
-            const { r } = FS.getPermissions(user, localFile);
+            const { r } = localFile.getPermissions(user);
 
             if (!r) {
               return Promise.resolve(
@@ -150,10 +152,7 @@ export function create(
               );
             }
 
-            const { w } = FS.getPermissions(
-              rshell.getVariable('user'),
-              remoteFile
-            );
+            const { w } = remoteFile.getPermissions(rshell.getVariable('user'));
 
             if (!w) {
               return Promise.resolve(
@@ -161,7 +160,7 @@ export function create(
               );
             }
 
-            FS.putFile(remoteFile as Type.Folder, localFile as Type.File);
+            remoteFile.putFile(localFile as Type.File);
             return Promise.resolve(Defaults.True);
           }
 
