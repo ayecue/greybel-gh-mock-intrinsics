@@ -6,14 +6,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { FS, Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createShell } from './shell';
-import { changePassword, getFile, getUserByVulnerability } from './utils';
 
 export function create(
   computer: Type.Computer,
@@ -84,21 +83,21 @@ export function create(
           case Type.VulnerabilityAction.COMPUTER:
             return Promise.resolve(
               createComputer(
-                getUserByVulnerability(vul.user, targetComputer),
+                FS.getUserByVulnerability(vul.user, targetComputer),
                 targetComputer
               )
             );
           case Type.VulnerabilityAction.SHELL:
             return Promise.resolve(
               createShell(
-                getUserByVulnerability(vul.user, targetComputer),
+                FS.getUserByVulnerability(vul.user, targetComputer),
                 targetComputer
               )
             );
           case Type.VulnerabilityAction.FOLDER: {
-            const file = getFile(targetComputer.fileSystem, vul.folder);
+            const file = FS.getFile(targetComputer.fileSystem, vul.folder);
             return Promise.resolve(
-              createFile(getUserByVulnerability(vul.user, targetComputer), file)
+              createFile(FS.getUserByVulnerability(vul.user, targetComputer), file)
             );
           }
           case Type.VulnerabilityAction.FIREWALL:
@@ -107,10 +106,10 @@ export function create(
             if (!optArgs) {
               return Promise.resolve(new CustomString('Invalid args'));
             }
-            const user = getUserByVulnerability(vul.user, targetComputer);
+            const user = FS.getUserByVulnerability(vul.user, targetComputer);
             return Promise.resolve(
               new CustomBoolean(
-                changePassword(targetComputer, user.username, optArgs)
+                FS.changePassword(targetComputer, user.username, optArgs)
               )
             );
           }

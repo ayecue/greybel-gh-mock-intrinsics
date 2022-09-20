@@ -7,17 +7,10 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { FS, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
-import {
-  getFile,
-  getHomePath,
-  getPermissions,
-  getTraversalPath,
-  putFile
-} from './utils';
 
 export function create(
   user: Type.User,
@@ -51,12 +44,12 @@ export function create(
 
         await ctx.handler.outputHandler.progress(time);
 
-        const folder = getFile(
+        const folder = FS.getFile(
           computer.fileSystem,
-          getHomePath(user, computer)
+          FS.getHomePath(user, computer)
         ) as Type.Folder;
 
-        putFile(folder, {
+        FS.putFile(folder, {
           name: 'file.cap',
           content: network.password,
           owner: user.username,
@@ -94,17 +87,17 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const traversalPath = getTraversalPath(
+        const traversalPath = FS.getTraversalPath(
           path,
-          getHomePath(user, computer)
+          FS.getHomePath(user, computer)
         );
-        const file = getFile(computer.fileSystem, traversalPath) as Type.File;
+        const file = FS.getFile(computer.fileSystem, traversalPath) as Type.File;
 
         if (!file) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = getPermissions(user, file);
+        const { r } = FS.getPermissions(user, file);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);

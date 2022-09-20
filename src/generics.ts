@@ -12,7 +12,8 @@ import {
 import {
   isLanIp as isLanIpInternal,
   isValidIp as isValidIpInternal,
-  Type
+  Type,
+  FS
 } from 'greybel-mock-environment';
 
 import { create as createAptClient } from './apt-client';
@@ -24,13 +25,7 @@ import mockEnvironment from './mock/environment';
 import { create as createRouter } from './router';
 import { create as createService } from './service';
 import { loginLocal } from './shell';
-import {
-  getFile,
-  getHomePath,
-  getPermissions,
-  getTraversalPath,
-  keyEventToString
-} from './utils';
+import { keyEventToString } from './utils';
 
 export const getShell = CustomFunction.createExternal(
   'getShell',
@@ -153,11 +148,11 @@ export const includeLib = CustomFunction.createExternal(
     }
 
     const { user, computer } = mockEnvironment.get().getLocal();
-    const target = getTraversalPath(libPath.toString(), null);
-    const entityResult = getFile(computer.fileSystem, target);
+    const target = FS.getTraversalPath(libPath.toString(), null);
+    const entityResult = FS.getFile(computer.fileSystem, target);
 
     if (entityResult && !entityResult.isFolder) {
-      const { r } = getPermissions(user, entityResult);
+      const { r } = FS.getPermissions(user, entityResult);
 
       if (r) {
         switch ((entityResult as Type.File).type) {
@@ -324,7 +319,7 @@ export const currentPath = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = getHomePath(
+    const path = FS.getHomePath(
       mockEnvironment.get().getLocal().user,
       mockEnvironment.get().getLocal().computer
     );
@@ -359,7 +354,7 @@ export const homeDir = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = getHomePath(
+    const path = FS.getHomePath(
       mockEnvironment.get().getLocal().user,
       mockEnvironment.get().getLocal().computer
     );
@@ -375,7 +370,7 @@ export const programPath = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = getHomePath(
+    const path = FS.getHomePath(
       mockEnvironment.get().getLocal().user,
       mockEnvironment.get().getLocal().computer
     );
@@ -528,7 +523,7 @@ export const launchPath = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = getHomePath(
+    const path = FS.getHomePath(
       mockEnvironment.get().getLocal().user,
       mockEnvironment.get().getLocal().computer
     );

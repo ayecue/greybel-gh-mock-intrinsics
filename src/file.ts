@@ -7,24 +7,9 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { FS, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import {
-  copyFile,
-  getFile,
-  getFileIndex,
-  getFilePath,
-  getPermissions,
-  getPermissionSegmentByString,
-  getPermissionSegmentValueByString,
-  getTraversalPath,
-  parsePermissions,
-  removeFile,
-  setPermissionSegmentValueByString,
-  transformFlagsToPermissions,
-  traverseChildren
-} from './utils';
 
 export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
   const itrface = new BasicInterface('file');
@@ -41,7 +26,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = getPermissions(user, entity);
+        const { w } = FS.getPermissions(user, entity);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
@@ -59,35 +44,35 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         const userType: string = permissions[0];
         const operator = permissions[1];
         const getNewPermissions = (itemFile: Type.FSEntity) => {
-          const flags = parsePermissions(itemFile);
+          const flags = FS.parsePermissions(itemFile);
 
           permissions
             .substr(2)
             .split('')
             .forEach((item: string) => {
-              const permSeg = getPermissionSegmentByString(flags, userType);
-              const value = getPermissionSegmentValueByString(permSeg, item);
+              const permSeg = FS.getPermissionSegmentByString(flags, userType);
+              const value = FS.getPermissionSegmentValueByString(permSeg, item);
 
               if (value) {
-                setPermissionSegmentValueByString(permSeg, item, operator === '+');
+                FS.setPermissionSegmentValueByString(permSeg, item, operator === '+');
               }
             });
 
           return flags;
         };
 
-        entity.permissions = transformFlagsToPermissions(
+        entity.permissions = FS.transformFlagsToPermissions(
           getNewPermissions(entity)
         );
 
         if (isRecursive) {
-          traverseChildren(
+          FS.traverseChildren(
             entity,
             (item: Type.FSEntity) => {
-              const { w } = getPermissions(user, item);
+              const { w } = FS.getPermissions(user, item);
 
               if (w) {
-                item.permissions = transformFlagsToPermissions(
+                item.permissions = FS.transformFlagsToPermissions(
                   getNewPermissions(item)
                 );
               }
@@ -115,7 +100,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = getPermissions(user, entity);
+        const { r } = FS.getPermissions(user, entity);
 
         if (!r) {
           return Promise.resolve(new CustomString('No read permissions'));
@@ -123,28 +108,28 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
 
         const path = args.get('path').toString();
         const newName = args.get('newName').toString();
-        const traversalPath = getTraversalPath(path, getFilePath(entity));
-        const folder = getFile(entity, traversalPath) as Type.Folder;
+        const traversalPath = FS.getTraversalPath(path, FS.getFilePath(entity));
+        const folder = FS.getFile(entity, traversalPath) as Type.Folder;
 
         if (folder && folder.isFolder) {
-          const { w } = getPermissions(user, folder);
+          const { w } = FS.getPermissions(user, folder);
 
           if (!w) {
             return Promise.resolve(new CustomString('No write permissions'));
           }
 
-          const result = getFileIndex(folder, newName);
+          const result = FS.getFileIndex(folder, newName);
 
           if (result) {
-            removeFile(folder, newName);
+            FS.removeFile(folder, newName);
           }
 
           if (entity.isFolder) {
-            const newFolder = copyFile(entity, folder) as Type.Folder;
+            const newFolder = FS.copyFile(entity, folder) as Type.Folder;
             newFolder.name = newName;
             folder.folders.push(newFolder);
           } else {
-            const newFile = copyFile(entity, folder) as Type.File;
+            const newFile = FS.copyFile(entity, folder) as Type.File;
             newFile.name = newName;
             folder.files.push(newFile);
           }
@@ -171,7 +156,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = getPermissions(user, entity);
+        const { r } = FS.getPermissions(user, entity);
 
         if (!r) {
           return Promise.resolve(new CustomString('No read permissions'));
@@ -179,33 +164,33 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
 
         const path = args.get('path').toString();
         const newName = args.get('newName').toString();
-        const traversalPath = getTraversalPath(path, getFilePath(entity));
-        const folder = getFile(entity, traversalPath) as Type.Folder;
+        const traversalPath = FS.getTraversalPath(path, FS.getFilePath(entity));
+        const folder = FS.getFile(entity, traversalPath) as Type.Folder;
 
         if (folder && folder.isFolder) {
-          const { w } = getPermissions(user, folder);
+          const { w } = FS.getPermissions(user, folder);
 
           if (!w) {
             return Promise.resolve(new CustomString('No write permissions'));
           }
 
-          const result = getFileIndex(folder, newName);
+          const result = FS.getFileIndex(folder, newName);
 
           if (result) {
-            removeFile(folder, newName);
+            FS.removeFile(folder, newName);
           }
 
           if (entity.isFolder) {
-            const newFolder = copyFile(entity, folder) as Type.Folder;
+            const newFolder = FS.copyFile(entity, folder) as Type.Folder;
             newFolder.name = newName;
             folder.folders.push(newFolder);
           } else {
-            const newFile = copyFile(entity, folder) as Type.File;
+            const newFile = FS.copyFile(entity, folder) as Type.File;
             newFile.name = newName;
             folder.files.push(newFile);
           }
 
-          removeFile(entity.parent as Type.Folder, entity.name);
+          FS.removeFile(entity.parent as Type.Folder, entity.name);
 
           return Promise.resolve(Defaults.True);
         }
@@ -229,7 +214,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = getPermissions(user, entity);
+        const { w } = FS.getPermissions(user, entity);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
@@ -257,7 +242,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         }
 
         return Promise.resolve(
-          new CustomString('/' + getFilePath(entity).join('/'))
+          new CustomString('/' + FS.getFilePath(entity).join('/'))
         );
       }
     )
@@ -322,7 +307,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = getPermissions(user, entity);
+        const { r } = FS.getPermissions(user, entity);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);
@@ -351,7 +336,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = getPermissions(user, entity);
+        const { w } = FS.getPermissions(user, entity);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
@@ -413,9 +398,9 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const permission = args.get('permission').toString().substr(0, 1);
-        const permissionMap = getPermissions(user, entity);
+        const permissionMap = FS.getPermissions(user, entity);
 
-        return Promise.resolve(new CustomBoolean(getPermissionSegmentValueByString(permissionMap, permission)));
+        return Promise.resolve(new CustomBoolean(FS.getPermissionSegmentValueByString(permissionMap, permission)));
       }
     ).addArgument('permission')
   );
@@ -432,13 +417,13 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = getPermissions(user, entity);
+        const { w } = FS.getPermissions(user, entity);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
         }
 
-        removeFile(entity.parent as Type.Folder, entity.name);
+        FS.removeFile(entity.parent as Type.Folder, entity.name);
 
         return Promise.resolve(new CustomString(''));
       }
@@ -535,7 +520,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = getPermissions(user, entity);
+        const { w } = FS.getPermissions(user, entity);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
@@ -545,10 +530,10 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         const isRecursive = args.get('isRecursive').toTruthy();
 
         if (isRecursive) {
-          traverseChildren(
+          FS.traverseChildren(
             entity,
             (item: Type.FSEntity) => {
-              const { w } = getPermissions(user, item);
+              const { w } = FS.getPermissions(user, item);
 
               if (w) {
                 item.owner = owner;

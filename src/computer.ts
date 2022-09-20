@@ -13,14 +13,6 @@ import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import {
-  changePassword,
-  getFile,
-  getPermissions,
-  getTraversalPath,
-  hasFile,
-  removeFile
-} from './utils';
 
 export function create(
   user: Type.User,
@@ -55,8 +47,8 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const target = getTraversalPath(path, null);
-        const entityResult = getFile(computer.fileSystem, target);
+        const target = FS.getTraversalPath(path, null);
+        const entityResult = FS.getFile(computer.fileSystem, target);
 
         if (!entityResult) {
           return Promise.resolve(Defaults.Void);
@@ -77,14 +69,14 @@ export function create(
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
         const folderName = args.get('folderName').toString();
-        const target = getTraversalPath(path, options.location);
-        const entityResult = getFile(computer.fileSystem, target);
+        const target = FS.getTraversalPath(path, options.location);
+        const entityResult = FS.getFile(computer.fileSystem, target);
 
         if (entityResult && entityResult.isFolder) {
-          const { w } = getPermissions(user, entityResult);
+          const { w } = FS.getPermissions(user, entityResult);
           const folder = entityResult as Type.Folder;
 
-          if (w && !hasFile(folder, folderName)) {
+          if (w && !FS.hasFile(folder, folderName)) {
             folder.folders.push({
               name: folderName,
               owner: user.username,
@@ -128,15 +120,15 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
-        const containingFolder = getTraversalPath(path, options.location);
+        const containingFolder = FS.getTraversalPath(path, options.location);
         const target = args.get('fileName').toString();
-        const entityResult = getFile(computer.fileSystem, containingFolder);
+        const entityResult = FS.getFile(computer.fileSystem, containingFolder);
 
         if (entityResult && entityResult.isFolder) {
-          const { w } = getPermissions(user, entityResult);
+          const { w } = FS.getPermissions(user, entityResult);
           const folder = entityResult as Type.Folder;
 
-          if (w && !hasFile(folder, target)) {
+          if (w && !FS.hasFile(folder, target)) {
             folder.files.push({
               name: target,
               owner: user.username,
@@ -207,7 +199,7 @@ export function create(
           const password = args.get('password').toString();
 
           return Promise.resolve(
-            new CustomBoolean(changePassword(computer, username, password))
+            new CustomBoolean(FS.changePassword(computer, username, password))
           );
         }
 
@@ -235,11 +227,11 @@ export function create(
           });
 
           if (!existingUser) {
-            const homeFolder = getFile(computer.fileSystem, [
+            const homeFolder = FS.getFile(computer.fileSystem, [
               'home'
             ]) as Type.Folder;
 
-            if (!hasFile(homeFolder, username)) {
+            if (!FS.hasFile(homeFolder, username)) {
               computer.users.push(
                 mockEnvironment.get().userGenerator.generate(username, password)
               );
@@ -281,12 +273,12 @@ export function create(
             computer.users.splice(userIndex, 1);
 
             if (removeHome) {
-              const homeFolder = getFile(computer.fileSystem, [
+              const homeFolder = FS.getFile(computer.fileSystem, [
                 'home'
               ]) as Type.Folder;
 
               if (homeFolder) {
-                removeFile(homeFolder, username);
+                FS.removeFile(homeFolder, username);
               }
             }
 
