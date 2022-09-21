@@ -308,16 +308,14 @@ export const currentDate = CustomFunction.createExternal(
 );
 
 export const currentPath = CustomFunction.createExternal(
-  'currentPath',
+  '≈',
   (
     _ctx: OperationContext,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = mockEnvironment
-      .get()
-      .getLocal()
-      .computer.getHomePath(mockEnvironment.get().getLocal().user);
+    const session = mockEnvironment.get().getLatestSession();
+    const path = session.currentPath.getPath();
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
   }
@@ -349,10 +347,8 @@ export const homeDir = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = mockEnvironment
-      .get()
-      .getLocal()
-      .computer.getHomePath(mockEnvironment.get().getLocal().user);
+    const { computer, user } = mockEnvironment.get().getLatestSession();
+    const path = computer.getHomePath(user);
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
   }
@@ -365,16 +361,10 @@ export const programPath = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = mockEnvironment
-      .get()
-      .getLocal()
-      .computer.getHomePath(mockEnvironment.get().getLocal().user);
+    const session = mockEnvironment.get().getLocal();
+    const path = session.programPath.getPath();
 
-    return Promise.resolve(
-      new CustomString(
-        path ? '/' + path.join('/') + '/myprogramm' : '/myprogramm'
-      )
-    );
+    return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
   }
 );
 
@@ -385,9 +375,9 @@ export const activeUser = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(
-      new CustomString(mockEnvironment.get().getLocal().user.username)
-    );
+    const session = mockEnvironment.get().getLatestSession();
+
+    return Promise.resolve(new CustomString(session.user.username));
   }
 );
 
@@ -398,9 +388,9 @@ export const userMailAddress = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(
-      new CustomString(mockEnvironment.get().getLocal().user.email)
-    );
+    const session = mockEnvironment.get().getLocal();
+
+    return Promise.resolve(new CustomString(session.user.email));
   }
 );
 
@@ -411,9 +401,9 @@ export const userBankNumber = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    return Promise.resolve(
-      new CustomString(mockEnvironment.get().getLocal().user.bankNumber)
-    );
+    const session = mockEnvironment.get().getLocal();
+
+    return Promise.resolve(new CustomString(session.user.bankNumber));
   }
 );
 
@@ -518,10 +508,8 @@ export const launchPath = CustomFunction.createExternal(
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
-    const path = mockEnvironment
-      .get()
-      .getLocal()
-      .computer.getHomePath(mockEnvironment.get().getLocal().user);
+    const session = mockEnvironment.get().getLatestSession();
+    const path = session.programPath.getPath();
 
     return Promise.resolve(new CustomString(path ? '/' + path.join('/') : '/'));
   }

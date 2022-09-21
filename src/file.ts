@@ -263,6 +263,9 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        if (entity instanceof Type.File) {
+          return Promise.resolve(new CustomBoolean(entity.allowImport));
+        }
         return Promise.resolve(Defaults.False);
       }
     )

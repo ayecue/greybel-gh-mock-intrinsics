@@ -43,8 +43,7 @@ function createDefaultEnvironment(): MockEnvironment {
 
   const { computer } = mockEnvironment.getLocal();
 
-  computer.ports.set(sshTestPort.port, sshTestPort);
-  computer.router.ports.set(sshTestPort.port, sshTestPort);
+  computer.addPort(sshTestPort);
 
   emailGenerator.generate({
     name: 'test',

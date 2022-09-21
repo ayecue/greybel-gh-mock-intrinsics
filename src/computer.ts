@@ -8,7 +8,6 @@ import {
   OperationContext
 } from 'greybel-interpreter';
 import { FS, Type, Utils } from 'greybel-mock-environment';
-import { File, Folder } from 'greybel-mock-environment/dist/types';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
@@ -17,7 +16,7 @@ import { create as createPort } from './port';
 
 export function create(
   user: Type.User,
-  computer: Type.Computer,
+  device: Type.Device,
   options: { location?: string[] } = {}
 ): BasicInterface {
   const itrface = new BasicInterface('computer');
@@ -31,8 +30,8 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const ports =
-          Array.from(computer.ports.values()).map((item: Type.Port) =>
-            createPort(computer, item)
+          Array.from(device.ports.values()).map((item: Type.Port) =>
+            createPort(device, item)
           ) || [];
         return Promise.resolve(new CustomList(ports));
       }
@@ -49,7 +48,7 @@ export function create(
       ): Promise<CustomValue> => {
         const path = args.get('path').toString();
         const target = Utils.getTraversalPath(path, null);
-        const entityResult = computer.getFile(target);
+        const entityResult = device.getFile(target);
 
         if (!entityResult) {
           return Promise.resolve(Defaults.Void);
@@ -71,7 +70,7 @@ export function create(
         const path = args.get('path').toString();
         const folderName = args.get('folderName').toString();
         const target = Utils.getTraversalPath(path, options.location);
-        const entityResult = computer.getFile(target);
+        const entityResult = device.getFile(target);
 
         if (entityResult && entityResult.isFolder) {
           const { w } = entityResult.getPermissions(user);
@@ -79,7 +78,7 @@ export function create(
 
           if (w && !folder.hasFile(folderName)) {
             folder.folders.push(
-              new Folder(
+              new Type.Folder(
                 {
                   name: folderName,
                   owner: user.username,
@@ -126,7 +125,7 @@ export function create(
         const path = args.get('path').toString();
         const containingFolder = Utils.getTraversalPath(path, options.location);
         const target = args.get('fileName').toString();
-        const entityResult = computer.getFile(containingFolder);
+        const entityResult = device.getFile(containingFolder);
 
         if (entityResult && entityResult.isFolder) {
           const { w } = entityResult.getPermissions(user);
@@ -134,7 +133,7 @@ export function create(
 
           if (w && !folder.hasFile(target)) {
             folder.files.push(
-              new File(
+              new Type.File(
                 {
                   name: target,
                   owner: user.username,
@@ -183,7 +182,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = computer.networkDevices
+        const result = device.networkDevices
           .map((item: Type.NetworkDevice) => {
             return `${item.type} ${item.id} ${item.active}`;
           })
@@ -207,7 +206,7 @@ export function create(
           const password = args.get('password').toString();
 
           return Promise.resolve(
-            new CustomBoolean(computer.changePassword(username, password))
+            new CustomBoolean(device.changePassword(username, password))
           );
         }
 
@@ -230,18 +229,28 @@ export function create(
           const username = args.get('username').toString();
           const password = args.get('password').toString();
 
-          const existingUser = computer.users.find((item: Type.User) => {
+          const existingUser = device.users.find((item: Type.User) => {
             return item.username === username;
           });
 
           if (!existingUser) {
-            const homeFolder = computer.getFile(['home']) as Type.Folder;
+            const homeFolder = device.getFile(['home']) as Type.Folder;
 
             if (!homeFolder.hasFile(username)) {
-              computer.users.push(
+              device.users.push(
                 mockEnvironment.get().userGenerator.generate(username, password)
               );
-              homeFolder.folders.push(FS.getUserFolder(homeFolder, username));
+              homeFolder.folders.push(
+                FS.getUserFolder(
+                  {
+                    parent: homeFolder,
+                    users: device.users,
+                    type: device.getDeviceType(),
+                    ownerType: FS.FSDeviceOwnerType.Player
+                  },
+                  username
+                )
+              );
 
               return Promise.resolve(Defaults.True);
             }
@@ -271,15 +280,15 @@ export function create(
             return Promise.resolve(Defaults.False);
           }
 
-          const userIndex = computer.users.findIndex((item: Type.User) => {
+          const userIndex = device.users.findIndex((item: Type.User) => {
             return item.username === username;
           });
 
           if (userIndex !== -1) {
-            computer.users.splice(userIndex, 1);
+            device.users.splice(userIndex, 1);
 
             if (removeHome) {
-              const homeFolder = computer.getFile(['home']) as Type.Folder;
+              const homeFolder = device.getFile(['home']) as Type.Folder;
 
               if (homeFolder) {
                 homeFolder.removeFile(username);
@@ -417,7 +426,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(computer.localIp));
+        return Promise.resolve(new CustomString(device.localIp));
       }
     )
   );
@@ -443,7 +452,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(computer.localIp));
+        return Promise.resolve(new CustomString(device.localIp));
       }
     )
   );
@@ -456,7 +465,13 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(computer.router.publicIp));
+        if (device instanceof Type.Computer || device instanceof Type.Switch) {
+          return Promise.resolve(new CustomString(device.router.publicIp));
+        } else if (device instanceof Type.Router) {
+          return Promise.resolve(new CustomString(device.publicIp));
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
     )
   );

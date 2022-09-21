@@ -1,15 +1,16 @@
 import {
   CustomFunction,
   CustomList,
+  CustomNil,
   CustomString,
   CustomValue,
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
 import { Type } from 'greybel-mock-environment';
+import { File, FileType } from 'greybel-mock-environment/dist/types';
 
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
 
 export function create(user: Type.User, router: Type.Router): BasicInterface {
@@ -69,18 +70,55 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
-      'computers_lan_ip',
+      'firewall_rules',
       (
         _ctx: OperationContext,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment
-          .get()
-          .getComputersOfRouter(router)
-          .map((item: Type.Computer) => new CustomString(item.localIp));
+        return Promise.resolve(Defaults.Void);
+      }
+    )
+  );
 
-        return Promise.resolve(new CustomList(result));
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'kernel_version',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const kernel = router.getFile(['lib', 'kernel_router.so']);
+
+        if (
+          kernel === null ||
+          !(kernel instanceof File) ||
+          !(kernel.type !== FileType.KernelRouter)
+        ) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(new CustomString(kernel.version.toString()));
+      }
+    )
+  );
+
+  itrface.addMethod(
+    CustomFunction.createExternalWithSelf(
+      'devices_lan_ip',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const lanIps: CustomString[] = [];
+
+        for (const lanIp of router.devices.keys()) {
+          lanIps.push(new CustomString(lanIp));
+        }
+
+        return Promise.resolve(new CustomList(lanIps));
       }
     )
   );
@@ -93,13 +131,15 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result =
-          mockEnvironment
-            .get()
-            .getForwardedPortsOfRouter(router)
-            .map((item: Type.Port) => createPort(router, item)) || [];
+        const ports: BasicInterface[] = [];
 
-        return Promise.resolve(new CustomList(result));
+        for (const port of router.ports.values()) {
+          if (port.forwarded && !port.isClosed) {
+            ports.push(createPort(router, port));
+          }
+        }
+
+        return Promise.resolve(new CustomList(ports));
       }
     )
   );
@@ -112,20 +152,22 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const ipAddress = args.get('ipAddress').toString();
-        const device = mockEnvironment
-          .get()
-          .getComputerInLan(ipAddress, router);
+        const ip = args.get('ipAddress');
 
-        if (!device) {
-          return Promise.resolve(new CustomList());
+        if (ip instanceof CustomNil) {
+          throw new Error('device_ports: Invalid arguments');
         }
 
-        const result = Array.from(device.ports.values()).map(
-          (item: Type.Port) => createPort(device, item)
-        );
+        const device = router.findByLanIp(ip.toString());
+        const ports: BasicInterface[] = [];
 
-        return Promise.resolve(new CustomList(result));
+        for (const port of device.ports.values()) {
+          if (port.forwarded && !port.isClosed) {
+            ports.push(createPort(device, port));
+          }
+        }
+
+        return Promise.resolve(new CustomList(ports));
       }
     ).addArgument('ipAddress')
   );
@@ -138,24 +180,19 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const port = args.get('port').toInt();
-        const computers = mockEnvironment
-          .get()
-          .getComputersOfRouterByIp(router.publicIp);
+        const port = args.get('port');
 
-        for (const item of computers) {
-          if (item.router.publicIp === router.publicIp) {
-            continue;
-          }
-
-          for (const [computerPortKey, computerPort] of item.ports) {
-            if (computerPortKey === port) {
-              return Promise.resolve(createPort(router, computerPort));
-            }
-          }
+        if (port instanceof Type.Port) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(Defaults.Void);
+        const portInstance = router.findPort(port.toInt());
+
+        if (portInstance === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(createPort(router, portInstance));
       }
     ).addArgument('port')
   );
@@ -168,24 +205,38 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const portObject = args.get('portObject');
+        const port = args.get('port');
 
-        if (portObject instanceof BasicInterface) {
-          const port = portObject as BasicInterface;
-          return Promise.resolve(
-            new CustomString(
-              `${port.getVariable('port')} ${port.getVariable(
-                'isClosed'
-              )} ${port.getVariable('forwarded')} ${port.getVariable(
-                'service'
-              )}`
-            )
-          );
+        if (
+          !(port instanceof BasicInterface) ||
+          port.getCustomType() !== 'port'
+        ) {
+          return Promise.resolve(new CustomString('port is null'));
         }
 
-        return Promise.resolve(Defaults.Void);
+        const currentPort = router.findPort(port.getVariable('port'));
+        let serviceId = 'unknown';
+        let libraryVersion = 'unknown';
+
+        if (currentPort !== null) {
+          serviceId = currentPort.service;
+
+          const device = router.findDeviceByPort(currentPort);
+
+          if (device) {
+            const file = device.findLibraryFileByPort(currentPort);
+
+            if (file) {
+              libraryVersion = file.version.toString();
+            }
+          }
+        }
+
+        return Promise.resolve(
+          new CustomString(`${serviceId} ${libraryVersion}`)
+        );
       }
-    ).addArgument('portObject')
+    ).addArgument('port')
   );
 
   return itrface;
