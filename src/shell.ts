@@ -244,7 +244,7 @@ export function createShell(
 
         const sourcePerms = source.getPermissions(user);
 
-        if (sourcePerms.r) {
+        if (!sourcePerms.r) {
           return Promise.resolve(
             new CustomString(
               `Can't access to ${pathSourceRaw}. Permission denied.`
@@ -260,7 +260,7 @@ export function createShell(
 
         const destPerms = dest.getPermissions(user);
 
-        if (destPerms.w) {
+        if (!destPerms.w) {
           return Promise.resolve(
             new CustomString(
               `Can't create binary in ${pathBinaryRaw}. Permission denied.`
@@ -290,7 +290,7 @@ export function createShell(
           const outputBin = new Type.File(
             {
               type: Type.FileType.Bin,
-              name: source.name,
+              name: source.name.replace(/\.[^.]*$/, ''),
               content: output,
               permissions: 'drwxrwxrwx',
               owner: user.username

@@ -65,9 +65,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: ambitious-barbara-20.de
-Administrative contact: Unbelievable-defarge-44
-Email address: Unbelievable-defarge-44@ambitious-barbara-20.de
+"Domain name: sincere-gregsbury-92.tv
+Administrative contact: creative-biddy-20
+Email address: creative-biddy-20@sincere-gregsbury-92.tv
 Phone: 123456891"
 `;
 
@@ -93,7 +93,7 @@ exports[`interpreter default scripts generics.src 15`] = `"clearing screen"`;
 
 exports[`interpreter default scripts generics.src 16`] = `""`;
 
-exports[`interpreter default scripts generics.src 17`] = `"/home/test"`;
+exports[`interpreter default scripts generics.src 17`] = `"/home/test/myprogramm"`;
 
 exports[`interpreter default scripts generics.src 18`] = `
 "COL1    COL2    COL3    
@@ -117,10 +117,11 @@ exports[`interpreter default scripts generics.src 24`] = `
 `;
 
 exports[`interpreter default scripts ls.src 1`] = `
-"Desktop    
-Downloads  
-Config     
-file.cap   "
+"Desktop     
+Downloads   
+Config      
+myprogramm  
+file.cap    "
 `;
 
 exports[`interpreter default scripts meta-mail.src 1`] = `"metaMail"`;
@@ -134,14 +135,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
+"[ 19f7945e-4808-4f0a-b4d5-183da7f196c4 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"19f7945e-4808-4f0a-b4d5-183da7f196c4"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
+"19f7945e-4808-4f0a-b4d5-183da7f196c4 - hello
 dude"
 `;
 
@@ -235,11 +236,11 @@ exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
 exports[`interpreter default scripts router.src 6`] = `"192.168.0.8"`;
 
-exports[`interpreter default scripts router.src 7`] = `""`;
+exports[`interpreter default scripts router.src 7`] = `"port"`;
 
-exports[`interpreter default scripts router.src 8`] = `""`;
+exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port, port, port, port, port, port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
 
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
@@ -295,17 +296,17 @@ exports[`interpreter default scripts shell.src 19`] = `""`;
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 28% Outstanding-biddy-10, 44:8E:73:9E:F2:63 31% Fortuitous-lady-55, D4:3B:19:E1:AE:8A 56% easygoing-marion-94, D6:70:65:60:43:66 56% determined-emily-19 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 62% communicative-academic-60, 44:8E:73:9E:F2:63 37% Ultimate-edmund-32, D4:3B:19:E1:AE:8A 33% Stupendous-agent-63, D6:70:65:60:43:66 70% sociable-bradley-33 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 23`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 24`] = `"192.168.96.123"`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.103.147"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.96.123"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.103.147"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 
@@ -362,6 +363,14 @@ exports[`interpreter default scripts shell.src 52`] = `"false"`;
 exports[`interpreter default scripts shell.src 53`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 54`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 55`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 56`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 57`] = `""`;
+
+exports[`interpreter default scripts shell.src 58`] = `"123"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 
