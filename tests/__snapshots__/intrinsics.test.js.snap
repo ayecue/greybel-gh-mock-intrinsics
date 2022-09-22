@@ -314,13 +314,13 @@ exports[`interpreter default scripts shell.src 28`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 29`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 30`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 30`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 31`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 32`] = `"permission denied"`;
 
-exports[`interpreter default scripts shell.src 33`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 33`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 34`] = `"/root"`;
 
@@ -389,6 +389,10 @@ exports[`interpreter default scripts shell.src 65`] = `"true"`;
 exports[`interpreter default scripts shell.src 66`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 67`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 68`] = `""`;
+
+exports[`interpreter default scripts shell.src 69`] = `"drwxr--rwx"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

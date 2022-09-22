@@ -32,61 +32,53 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
+        const permissions = args.get('permissions');
+        const isRecursive = args.get('isRecursive');
+
+        if (
+          permissions instanceof CustomNil ||
+          isRecursive instanceof CustomNil
+        ) {
+          throw new Error('chmod: Invalid arguments');
+        }
+
         const { w } = entity.getPermissions(user);
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (user.username !== 'root' && !w) {
+          return Promise.resolve(new CustomString('permission denied'));
         }
 
-        const permissions = args.get('permissions').toString();
-        const isRecursive = args.get('isRecursive').toTruthy();
+        const permissionsRaw = permissions.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
 
-        if (!/^[ugo](-|\+)[wrx]{1,3}$/i.test(permissions)) {
-          return Promise.resolve(
-            new CustomString('Invalid pattern for permissions')
-          );
+        if (!/^[ugo](-|\+)[wrx]{1,3}$/i.test(permissionsRaw)) {
+          return Promise.resolve(new CustomString('Wrong format.'));
         }
 
-        const userType: string = permissions[0];
-        const operator = permissions[1];
+        const userType: string = permissionsRaw[0];
+        const operator = permissionsRaw[1];
+        const newFlags = permissionsRaw.substr(2);
         const getNewPermissions = (itemFile: Type.FSEntity) => {
           const flags = itemFile.parsePermissions();
+          const permSeg = Utils.getPermissionSegmentByString(flags, userType);
 
-          permissions
-            .substr(2)
-            .split('')
-            .forEach((item: string) => {
-              const permSeg = Utils.getPermissionSegmentByString(
-                flags,
-                userType
-              );
-              const value = Utils.getPermissionSegmentValueByString(
-                permSeg,
-                item
-              );
-
-              if (value) {
-                Utils.setPermissionSegmentValueByString(
-                  permSeg,
-                  item,
-                  operator === '+'
-                );
-              }
-            });
+          for (const newFlag of newFlags) {
+            Utils.setFlagTypeByString(permSeg, newFlag, operator === '+');
+          }
 
           return flags;
         };
 
-        entity.permissions = Utils.transformFlagsToPermissions(
+        entity.permissions = Utils.transformFlagsToString(
           getNewPermissions(entity)
         );
 
-        if (isRecursive && entity instanceof Type.Folder) {
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
             const { w } = item.getPermissions(user);
 
             if (w) {
-              item.permissions = Utils.transformFlagsToPermissions(
+              item.permissions = Utils.transformFlagsToString(
                 getNewPermissions(item)
               );
             }
@@ -138,8 +130,6 @@ export function create(
 
         const traversalPath = Utils.getTraversalPath(pathRaw, entity.getPath());
         const folder = device.getFile(traversalPath);
-
-        console.log('x', traversalPath, folder);
 
         if (folder instanceof Type.Folder) {
           const { w } = folder.getPermissions(user);
@@ -247,17 +237,31 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
+        const newName = args.get('newName');
+
+        if (newName instanceof CustomNil) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const newNameRaw = newName.toString();
+
+        if (!isValidFileName(newNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only alphanumeric allowed as newname')
+          );
+        } else if (greaterThanFileNameLimit(newNameRaw)) {
+          throw new Error('move: name cannot exceed the 128 character limit.');
+        }
+
         const { w } = entity.getPermissions(user);
 
         if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+          return Promise.resolve(new CustomString('permission denied'));
         }
 
-        const newName = args.get('newName').toString();
+        entity.name = newNameRaw;
 
-        entity.name = newName;
-
-        return Promise.resolve(new CustomString(''));
+        return Promise.resolve(Defaults.True);
       }
     ).addArgument('newName')
   );
@@ -438,7 +442,7 @@ export function create(
 
         return Promise.resolve(
           new CustomBoolean(
-            Utils.getPermissionSegmentValueByString(permissionMap, permission)
+            Utils.getFlagTypeByString(permissionMap, permission)
           )
         );
       }
