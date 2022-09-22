@@ -338,7 +338,7 @@ exports[`interpreter default scripts shell.src 40`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 41`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 42`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 42`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 43`] = `"[ file, file, file, file ]"`;
 
@@ -348,11 +348,11 @@ exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
 exports[`interpreter default scripts shell.src 46`] = `"Permission denied"`;
 
-exports[`interpreter default scripts shell.src 47`] = `"test-group"`;
+exports[`interpreter default scripts shell.src 47`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 48`] = `"Not yet supported"`;
+exports[`interpreter default scripts shell.src 48`] = `"Permission denied"`;
 
-exports[`interpreter default scripts shell.src 49`] = `"1337"`;
+exports[`interpreter default scripts shell.src 49`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 50`] = `"false"`;
 
@@ -405,6 +405,12 @@ exports[`interpreter default scripts shell.src 73`] = `"root"`;
 exports[`interpreter default scripts shell.src 74`] = `""`;
 
 exports[`interpreter default scripts shell.src 75`] = `"test"`;
+
+exports[`interpreter default scripts shell.src 76`] = `"root"`;
+
+exports[`interpreter default scripts shell.src 77`] = `""`;
+
+exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

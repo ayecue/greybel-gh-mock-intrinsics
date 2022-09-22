@@ -508,7 +508,7 @@ export function create(
         const { w } = entity.getPermissions(user, device.groups);
 
         if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+          return Promise.resolve(new CustomString('permission denied'));
         }
 
         (entity.parent as Type.Folder).removeEntity(entity.name);
@@ -530,7 +530,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        if (!entity.isFolder) {
+        if (!(entity instanceof Type.Folder)) {
           return Promise.resolve(Defaults.Void);
         }
 
@@ -557,7 +557,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        if (!entity.isFolder) {
+        if (!(entity instanceof Type.Folder)) {
           return Promise.resolve(Defaults.Void);
         }
 
@@ -657,7 +657,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('test-group'));
+        return Promise.resolve(new CustomString(entity.group));
       }
     )
   );
@@ -668,11 +668,51 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const group = args.get('group');
+        const isRecursive = args.get('isRecursive');
+
+        if (group instanceof CustomNil || isRecursive instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const groupRaw = group.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
+
+        if (groupRaw === '' ) {
+          throw new Error('invalid groupname.');
+        } else if (greaterThanEntityNameLimit(groupRaw)) {
+          throw new Error('groupname cannot exceed the 15 character limit.');
+        }
+
+        const { w } = entity.getPermissions(user, device.groups);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('Permission denied'));
+        }
+
+        entity.group = groupRaw;
+
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
+          entity.traverseChildren((item: Type.FSEntity) => {
+            const { w } = item.getPermissions(user, device.groups);
+
+            if (w) {
+              item.group = groupRaw;
+            }
+          });
+        }
+
+        return Promise.resolve(new CustomString(''));
       }
     )
+    .addArgument('group')
+    .addArgument('isRecursive', new CustomBoolean(false))
   );
 
   itrface.addMethod(
@@ -683,7 +723,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('1337'));
+        return Promise.resolve(new CustomString(entity.getSize().toString()));
       }
     )
   );
