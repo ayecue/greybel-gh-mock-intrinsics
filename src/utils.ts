@@ -131,3 +131,7 @@ export function formatColumns(columns: string): string {
 export function isAlphaNumeric(str: string): boolean {
   return /^[a-z0-9]$/i.test(str);
 }
+
+export function greaterThanLimit(str: string): boolean {
+  return str.length > 15;
+}

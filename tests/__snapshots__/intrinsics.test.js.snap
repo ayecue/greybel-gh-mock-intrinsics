@@ -284,9 +284,9 @@ exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
 
 exports[`interpreter default scripts shell.src 14`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 15`] = `"false"`;
+exports[`interpreter default scripts shell.src 15`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 16`] = `"false"`;
+exports[`interpreter default scripts shell.src 16`] = `"Denied. Only root user can execute this command."`;
 
 exports[`interpreter default scripts shell.src 17`] = `"Denied. Only root user can execute this command."`;
 
@@ -379,6 +379,10 @@ exports[`interpreter default scripts shell.src 60`] = `"true"`;
 exports[`interpreter default scripts shell.src 61`] = `"testg"`;
 
 exports[`interpreter default scripts shell.src 62`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 63`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 64`] = `"true"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

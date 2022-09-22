@@ -128,7 +128,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           const result = folder.getEntityIndex(newName);
 
           if (result) {
-            folder.removeFile(newName);
+            folder.removeEntity(newName);
           }
 
           if (entity.isFolder) {
@@ -184,7 +184,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           const result = folder.getEntityIndex(newName);
 
           if (result) {
-            folder.removeFile(newName);
+            folder.removeEntity(newName);
           }
 
           if (entity.isFolder) {
@@ -197,7 +197,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
             folder.files.push(newFile);
           }
 
-          (entity.parent as Type.Folder).removeFile(entity.name);
+          (entity.parent as Type.Folder).removeEntity(entity.name);
 
           return Promise.resolve(Defaults.True);
         }
@@ -437,7 +437,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(new CustomString('No write permissions'));
         }
 
-        (entity.parent as Type.Folder).removeFile(entity.name);
+        (entity.parent as Type.Folder).removeEntity(entity.name);
 
         return Promise.resolve(new CustomString(''));
       }

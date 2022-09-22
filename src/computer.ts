@@ -8,13 +8,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, RouterLocation, Type, Utils } from 'greybel-mock-environment';
+import { RouterLocation, Type, Utils } from 'greybel-mock-environment';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import { formatColumns, isAlphaNumeric } from './utils';
+import { formatColumns, greaterThanLimit, isAlphaNumeric } from './utils';
 
 export function create(
   user: Type.User,
@@ -240,7 +240,7 @@ export function create(
           return Promise.resolve(
             new CustomString('Error: only alphanumeric allowed as password.')
           );
-        } else if (passwordRaw.length > 15) {
+        } else if (greaterThanLimit(passwordRaw)) {
           return Promise.resolve(
             new CustomString(
               'Error: the password cannot exceed the limit of 15 characters.'
@@ -279,39 +279,45 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (user.username === 'root') {
-          const username = args.get('username').toString();
-          const password = args.get('password').toString();
+        const username = args.get('username');
+        const password = args.get('password');
 
-          const existingUser = device.users.find((item: Type.User) => {
-            return item.username === username;
-          });
-
-          if (!existingUser) {
-            const homeFolder = device.getFile(['home']) as Type.Folder;
-
-            if (!homeFolder.hasFile(username)) {
-              device.users.push(
-                mockEnvironment.get().userGenerator.generate(username, password)
-              );
-              homeFolder.folders.push(
-                FS.getUserFolder(
-                  {
-                    parent: homeFolder,
-                    users: device.users,
-                    type: device.getDeviceType(),
-                    ownerType: FS.FSDeviceOwnerType.Player
-                  },
-                  username
-                )
-              );
-
-              return Promise.resolve(Defaults.True);
-            }
-          }
+        if (username instanceof CustomNil || password instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(Defaults.False);
+        const usernameRaw = username.toString();
+        const passwordRaw = password.toString();
+
+        if (usernameRaw === '') {
+          throw new Error('create_user: Invalid arguments');
+        } else if (greaterThanLimit(usernameRaw)) {
+          throw new Error('username cannot exceed the 15 character limit.');
+        } else if (greaterThanLimit(passwordRaw)) {
+          throw new Error('username cannot exceed the 15 character limit.');
+        } else if (isAlphaNumeric(usernameRaw) || isAlphaNumeric(passwordRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: only alphanumeric allowed as user name and password.'
+            )
+          );
+        } else if (user.username !== 'root') {
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can execute this command.')
+          );
+        } else if (device.users.length >= 16) {
+          return Promise.resolve(
+            new CustomString(
+              'Denied. Maximum number of registered users reached.'
+            )
+          );
+        }
+
+        device.addUser(usernameRaw, passwordRaw);
+        device.updatePasswd();
+        device.createUserFolder(usernameRaw);
+
+        return Promise.resolve(Defaults.True);
       }
     )
       .addArgument('username')
@@ -326,38 +332,51 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (user.username === 'root') {
-          const username = args.get('username').toString();
-          const removeHome = args.get('removeHome').toTruthy();
+        const username = args.get('username');
+        const removeHome = args.get('removeHome');
 
-          if (username === 'root' || username === 'guest') {
-            return Promise.resolve(Defaults.False);
-          }
+        if (username instanceof CustomNil || removeHome instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
 
-          const userIndex = device.users.findIndex((item: Type.User) => {
-            return item.username === username;
-          });
+        const usernameRaw = username.toString();
+        const removeHomeRaw = removeHome.toTruthy();
 
-          if (userIndex !== -1) {
-            device.users.splice(userIndex, 1);
+        if (usernameRaw === '') {
+          throw new Error('delete_user: Invalid arguments');
+        } else if (user.username !== 'root') {
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can execute this command.')
+          );
+        }
 
-            if (removeHome) {
-              const homeFolder = device.getFile(['home']) as Type.Folder;
+        const target = device.findUser(usernameRaw);
 
-              if (homeFolder) {
-                homeFolder.removeFile(username);
-              }
-            }
+        if (target === null) {
+          return Promise.resolve(
+            new CustomString(`can't delete user. ${usernameRaw} does not exist`)
+          );
+        } else if (target.username === 'root') {
+          return Promise.resolve(
+            new CustomString("the root user can't be deleted")
+          );
+        }
 
-            return Promise.resolve(Defaults.True);
+        device.removeUser(usernameRaw);
+
+        if (removeHomeRaw) {
+          const homeFolder = device.getFile(['home']);
+
+          if (homeFolder instanceof Type.Folder) {
+            homeFolder.removeEntity(usernameRaw);
           }
         }
 
-        return Promise.resolve(Defaults.False);
+        return Promise.resolve(Defaults.True);
       }
     )
       .addArgument('username')
-      .addArgument('removeHome', new CustomBoolean(true))
+      .addArgument('removeHome', new CustomBoolean(false))
   );
 
   itrface.addMethod(
@@ -380,7 +399,7 @@ export function create(
 
         if (usernameRaw === '' || groupnameRaw === '') {
           throw new Error('create_group: Invalid arguments');
-        } else if (groupnameRaw.length > 15) {
+        } else if (greaterThanLimit(groupnameRaw)) {
           throw new Error('groupname cannot exceed the 15 character limit');
         } else if (isAlphaNumeric(usernameRaw)) {
           return Promise.resolve(
