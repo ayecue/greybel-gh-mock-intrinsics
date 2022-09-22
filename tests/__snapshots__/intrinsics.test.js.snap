@@ -306,7 +306,7 @@ exports[`interpreter default scripts shell.src 24`] = `"192.168.0.8"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.47.177"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.29.22"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

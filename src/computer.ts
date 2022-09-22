@@ -195,23 +195,13 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        let wifiIndex = 0;
-        let ethIndex = 0;
-        const result = device.networkDevices
-          .map((item: Type.NetworkDevice) => {
-            let type;
+        const netDevices = [];
 
-            if (item.type === Type.NetCard.Wifi) {
-              type = `wlan${wifiIndex++}`;
-            } else {
-              type = `eth${ethIndex++}`;
-            }
+        for (const [type, item] of device.getNetworkDeviceMap()) {
+          netDevices.push(`${type} ${item.id} ${item.active}`);
+        }
 
-            return `${type} ${item.id} ${item.active}`;
-          })
-          .join('\n');
-
-        return Promise.resolve(new CustomString(result));
+        return Promise.resolve(new CustomString(netDevices.join('\n')));
       }
     )
   );
@@ -593,12 +583,60 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // connect_wifi will always default to the standart one for now
+        const netDevice = args.get('netDevice');
+        const bssid = args.get('bssid');
+        const essid = args.get('essid');
+        const password = args.get('password');
+
+        if (netDevice instanceof CustomNil || bssid instanceof CustomNil || essid instanceof CustomNil || password instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        if (user.username === 'guest') {
+          return Promise.resolve(new CustomString('connect_wifi: permission denied. Guest users can not execute this method'));
+        }
+
+        const netDeviceRaw = netDevice.toString();
+        const netDeviceMap = device.getNetworkDeviceMap();
+        
+        if (!netDeviceMap.has(netDeviceRaw)) {
+          return Promise.resolve(new CustomString('connect_wifi: Network device not found'));
+        }
+
+        const netDeviceInstance = netDeviceMap.get(netDeviceRaw);
+
+        if (netDeviceInstance.type !== Type.NetCard.Wifi) {
+          return Promise.resolve(new CustomString('connect_wifi: Only wifi cards are supported'));
+        }
+
+        const bssidRaw = bssid.toString();
+        const essidRaw = essid.toString();
+        const closeRouters: RouterLocation[] = mockEnvironment
+          .get()
+          .findRoutersCloseToLocation(device.location);
+        const routerLoc = closeRouters.find((item: RouterLocation) => {
+          const r = item.router;
+          return r.bssid === bssidRaw && r.essid === essidRaw;
+        });
+
+        if (!routerLoc) {
+          return Promise.resolve(new CustomString('Can\'t connect. Router not found.'));
+        }
+
+        const router = routerLoc.router;
+        const passwordRaw = password.toString();
+
+        if (router.wifi.credentials.password !== passwordRaw) {
+          return Promise.resolve(new CustomString('Can\'t connect. Incorrect password.'));
+        }
+
+        mockEnvironment.get().connect(router, device);
+
         return Promise.resolve(Defaults.True);
       }
-    )
+    ).addArgument('netDevice').addArgument('bssid').addArgument('essid').addArgument('password')
   );
 
   itrface.addMethod(
