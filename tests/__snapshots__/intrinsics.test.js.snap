@@ -300,7 +300,7 @@ exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100%
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 23`] = `"false"`;
+exports[`interpreter default scripts shell.src 23`] = `"Error: Invalid IP address"`;
 
 exports[`interpreter default scripts shell.src 24`] = `"192.168.0.8"`;
 

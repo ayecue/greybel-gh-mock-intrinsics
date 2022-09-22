@@ -590,25 +590,38 @@ export function create(
         const essid = args.get('essid');
         const password = args.get('password');
 
-        if (netDevice instanceof CustomNil || bssid instanceof CustomNil || essid instanceof CustomNil || password instanceof CustomNil) {
+        if (
+          netDevice instanceof CustomNil ||
+          bssid instanceof CustomNil ||
+          essid instanceof CustomNil ||
+          password instanceof CustomNil
+        ) {
           return Promise.resolve(Defaults.Void);
         }
 
         if (user.username === 'guest') {
-          return Promise.resolve(new CustomString('connect_wifi: permission denied. Guest users can not execute this method'));
+          return Promise.resolve(
+            new CustomString(
+              'connect_wifi: permission denied. Guest users can not execute this method'
+            )
+          );
         }
 
         const netDeviceRaw = netDevice.toString();
         const netDeviceMap = device.getNetworkDeviceMap();
-        
+
         if (!netDeviceMap.has(netDeviceRaw)) {
-          return Promise.resolve(new CustomString('connect_wifi: Network device not found'));
+          return Promise.resolve(
+            new CustomString('connect_wifi: Network device not found')
+          );
         }
 
         const netDeviceInstance = netDeviceMap.get(netDeviceRaw);
 
         if (netDeviceInstance.type !== Type.NetCard.Wifi) {
-          return Promise.resolve(new CustomString('connect_wifi: Only wifi cards are supported'));
+          return Promise.resolve(
+            new CustomString('connect_wifi: Only wifi cards are supported')
+          );
         }
 
         const bssidRaw = bssid.toString();
@@ -622,21 +635,29 @@ export function create(
         });
 
         if (!routerLoc) {
-          return Promise.resolve(new CustomString('Can\'t connect. Router not found.'));
+          return Promise.resolve(
+            new CustomString("Can't connect. Router not found.")
+          );
         }
 
         const router = routerLoc.router;
         const passwordRaw = password.toString();
 
         if (router.wifi.credentials.password !== passwordRaw) {
-          return Promise.resolve(new CustomString('Can\'t connect. Incorrect password.'));
+          return Promise.resolve(
+            new CustomString("Can't connect. Incorrect password.")
+          );
         }
 
         mockEnvironment.get().connect(router, device);
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('netDevice').addArgument('bssid').addArgument('essid').addArgument('password')
+    )
+      .addArgument('netDevice')
+      .addArgument('bssid')
+      .addArgument('essid')
+      .addArgument('password')
   );
 
   itrface.addMethod(
@@ -645,12 +666,81 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // connect_ethernet not yet supported
-        return Promise.resolve(Defaults.False);
+        const netDevice = args.get('netDevice');
+        const address = args.get('address');
+        const gateway = args.get('gateway');
+
+        if (
+          netDevice instanceof CustomNil ||
+          address instanceof CustomNil ||
+          gateway instanceof CustomNil
+        ) {
+          throw new Error('connect_ethernet: Invalid arguments');
+        } else if (user.username === 'guest') {
+          return Promise.resolve(
+            new CustomString(
+              'connect_ethernet: permission denied. Guest users can not execute this method'
+            )
+          );
+        }
+
+        const addressRaw = address.toString();
+
+        if (Utils.isValidIp(addressRaw)) {
+          return Promise.resolve(new CustomString('Error: Invalid IP address'));
+        } else if (Utils.isLanIp(addressRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: the IP address and the gateway must belong to the same subnet'
+            )
+          );
+        }
+
+        const gatewayRaw = gateway.toString();
+
+        if (Utils.isValidIp(gatewayRaw)) {
+          return Promise.resolve(new CustomString('Error: invalid gateway'));
+        } else if (Utils.isLanIp(gatewayRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: the IP address and the gateway must belong to the same subnet'
+            )
+          );
+        }
+
+        const netDeviceRaw = netDevice.toString();
+        const netDeviceMap = device.getNetworkDeviceMap();
+
+        if (!netDeviceMap.has(netDeviceRaw)) {
+          return Promise.resolve(
+            new CustomString('connect_ethernet: Network device not found')
+          );
+        }
+
+        const netDeviceInstance = netDeviceMap.get(netDeviceRaw);
+
+        if (netDeviceInstance.type !== Type.NetCard.Ethernet) {
+          return Promise.resolve(
+            new CustomString(
+              'connect_ethernet: Only ethernet cards are supported'
+            )
+          );
+        }
+
+        const router = device.getRouter();
+
+        if (router instanceof Type.Router) {
+          router.changeIp(addressRaw, gatewayRaw);
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
     )
+      .addArgument('netDevice')
+      .addArgument('address')
+      .addArgument('gateway')
   );
 
   itrface.addMethod(
