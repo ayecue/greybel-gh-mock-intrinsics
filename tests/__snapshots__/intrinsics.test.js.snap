@@ -65,9 +65,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: Spectacular-priscilla-71.de
-Administrative contact: Outstanding-pilot-72
-Email address: Outstanding-pilot-72@Spectacular-priscilla-71.de
+"Domain name: kind-estimator-26.de
+Administrative contact: careful-subaltern-9
+Email address: careful-subaltern-9@kind-estimator-26.de
 Phone: 123456891"
 `;
 
@@ -135,14 +135,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 36a3060d-ddd1-4714-abff-5a5fdb7fa3bc - hello
+"[ c4637e91-71d9-493b-be93-ff66f9a8b7d7 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"36a3060d-ddd1-4714-abff-5a5fdb7fa3bc"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"c4637e91-71d9-493b-be93-ff66f9a8b7d7"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"36a3060d-ddd1-4714-abff-5a5fdb7fa3bc - hello
+"c4637e91-71d9-493b-be93-ff66f9a8b7d7 - hello
 dude"
 `;
 
@@ -234,13 +234,13 @@ exports[`interpreter default scripts router.src 4`] = `"router"`;
 
 exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `"192.168.0.10"`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.0.8"`;
 
 exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
 
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
@@ -296,17 +296,17 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ B4:38:59:36:2C:4C 13% Fortuitous-scadder-58, D0:BF:F5:F2:D7:7B 100% quiet-smauker-46 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, C4:3F:87:37:EC:A0 51% warmhearted-tupman-45, 06:EA:03:01:A5:AC 74% tidy-horseman-3, B5:0E:DE:A8:34:E5 53% Great-millwright-80, 08:3B:72:87:D4:55 69% Perfect-gills-46 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 23`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.0.8"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.224.78"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.47.177"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

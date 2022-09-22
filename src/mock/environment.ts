@@ -1,4 +1,4 @@
-import { MockEnvironment, Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 function createDefaultEnvironment(): MockEnvironment {
   const mockEnvironment = new MockEnvironment('test', {
@@ -11,15 +11,21 @@ function createDefaultEnvironment(): MockEnvironment {
 
   mockEnvironment.setupLibraries();
 
-  for (let index = 0; index < 25; index++) {
-    networkGenerator.generateRouter();
-  }
-
   const localSession = mockEnvironment.localSession;
+  const localLocation = localSession.computer.location.fork();
   const localRouter = networkGenerator.generateRouter({
     publicIp: '142.32.54.56',
-    location: localSession.computer.location
+    location: localLocation
   });
+
+  for (let index = 0; index < 4; index++) {
+    const offsetX = Utils.getRandom(-5, 5);
+    const offsetY = Utils.getRandom(-5, 5);
+
+    networkGenerator.generateRouter({
+      location: localLocation.offset(offsetX, offsetY)
+    });
+  }
 
   localRouter.bssid = 'bssid-test-uuid';
   localRouter.essid = 'essid-test-uuid';
