@@ -11,7 +11,12 @@ import {
 import { Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { greaterThanFileNameLimit, isValidFileName } from './utils';
+import {
+  greaterThanContentLimit,
+  greaterThanEntityNameLimit,
+  greaterThanFileNameLimit,
+  isValidFileName
+} from './utils';
 
 export function create(
   user: Type.User,
@@ -347,19 +352,28 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(
+            new CustomString(
+              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
+            )
+          );
+        }
+
         const { r } = entity.getPermissions(user);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const file = entity as Type.File;
-
-        if (file.type !== Type.FileType.Plain) {
-          return Promise.resolve(Defaults.Void);
+        if (
+          entity instanceof Type.File &&
+          entity.type === Type.FileType.Plain
+        ) {
+          return Promise.resolve(new CustomString(entity.content || ''));
         }
 
-        return Promise.resolve(new CustomString(file.content || ''));
+        return Promise.resolve(Defaults.Void);
       }
     )
   );
@@ -376,20 +390,48 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
+        const content = args.get('content');
+
+        if (content instanceof CustomNil) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const contentRaw = content.toString();
+
+        if (greaterThanContentLimit(contentRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              "I can't save the file. The maximum of 160,000 characters has been exceeded"
+            )
+          );
+        }
+
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(
+            new CustomString(
+              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
+            )
+          );
+        } else if (
+          entity instanceof Type.File &&
+          entity.type !== Type.FileType.Plain
+        ) {
+          return Promise.resolve(
+            new CustomString(
+              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
+            )
+          );
+        }
+
         const { w } = entity.getPermissions(user);
 
         if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+          return Promise.resolve(new CustomString('permission denied'));
         }
 
         const file = entity as Type.File;
-        const content = args.get('content').toString();
 
-        if (file.type !== Type.FileType.Plain) {
-          return Promise.resolve(new CustomString('Invalid file type'));
-        }
-
-        file.content = content;
+        file.content = contentRaw;
 
         return Promise.resolve(Defaults.True);
       }
@@ -404,8 +446,8 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (entity.isFolder) {
-          return Promise.resolve(Defaults.False);
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(Defaults.True);
         }
 
         const file = entity as Type.File;
@@ -424,7 +466,9 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomBoolean(!!entity.isFolder));
+        return Promise.resolve(
+          new CustomBoolean(entity instanceof Type.Folder)
+        );
       }
     )
   );
@@ -564,23 +608,36 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const owner = args.get('owner');
+        const isRecursive = args.get('isRecursive');
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (owner instanceof CustomNil || isRecursive instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        const owner = args.get('owner').toString();
-        const isRecursive = args.get('isRecursive').toTruthy();
+        const ownerRaw = owner.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
 
-        if (isRecursive && entity instanceof Type.Folder) {
-          const folder = entity as Type.Folder;
+        if (ownerRaw === '') {
+          throw new Error('invalid owner value.');
+        } else if (greaterThanEntityNameLimit(ownerRaw)) {
+          throw new Error('owner cannot exceed the 15 character limit.');
+        }
 
-          folder.traverseChildren((item: Type.FSEntity) => {
+        const { w } = entity.getPermissions(user);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('Permission denied'));
+        }
+
+        entity.owner = ownerRaw;
+
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
+          entity.traverseChildren((item: Type.FSEntity) => {
             const { w } = item.getPermissions(user);
 
             if (w) {
-              item.owner = owner;
+              item.owner = ownerRaw;
             }
           });
         }

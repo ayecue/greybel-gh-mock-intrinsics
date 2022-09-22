@@ -132,6 +132,10 @@ export function isAlphaNumeric(str: string): boolean {
   return /^[a-z0-9]+$/i.test(str);
 }
 
+export function greaterThanContentLimit(str: string): boolean {
+  return str.length > 160000;
+}
+
 export function greaterThanEntityNameLimit(str: string): boolean {
   return str.length > 15;
 }

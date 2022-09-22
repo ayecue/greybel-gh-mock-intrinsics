@@ -328,11 +328,11 @@ exports[`interpreter default scripts shell.src 35`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 36`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 37`] = `""`;
+exports[`interpreter default scripts shell.src 37`] = `"can't open /root Binary file."`;
 
-exports[`interpreter default scripts shell.src 38`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 38`] = `"can't open /root Binary file."`;
 
-exports[`interpreter default scripts shell.src 39`] = `"false"`;
+exports[`interpreter default scripts shell.src 39`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 40`] = `"true"`;
 
@@ -346,7 +346,7 @@ exports[`interpreter default scripts shell.src 44`] = `"[  ]"`;
 
 exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 46`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 46`] = `"Permission denied"`;
 
 exports[`interpreter default scripts shell.src 47`] = `"test-group"`;
 
@@ -393,6 +393,18 @@ exports[`interpreter default scripts shell.src 67`] = `"file"`;
 exports[`interpreter default scripts shell.src 68`] = `""`;
 
 exports[`interpreter default scripts shell.src 69`] = `"drwxr--rwx"`;
+
+exports[`interpreter default scripts shell.src 70`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 71`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 72`] = `"i am admin"`;
+
+exports[`interpreter default scripts shell.src 73`] = `"root"`;
+
+exports[`interpreter default scripts shell.src 74`] = `""`;
+
+exports[`interpreter default scripts shell.src 75`] = `"test"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

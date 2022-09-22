@@ -89,3 +89,11 @@ print(adminFile.move("/home/test", "xxxxxx"))
 print(typeof(adminComputer.File("/home/test/xxxxxx")))
 print(adminFile.chmod("o+wrx", true))
 print(adminFile.permissions)
+
+print(adminComputer.touch("/root", "admin.src"))
+print(adminComputer.File("/root/admin.src").set_content("i am admin"))
+print(adminComputer.File("/root/admin.src").get_content)
+
+print(adminFile.owner)
+print(adminFile.set_owner("test"))
+print(adminFile.owner)
