@@ -298,7 +298,7 @@ export function createShell(
             dest
           );
 
-          dest.putFile(outputBin);
+          dest.putEntity(outputBin);
         } catch (err: any) {
           return Promise.resolve(new CustomString(err.message));
         }

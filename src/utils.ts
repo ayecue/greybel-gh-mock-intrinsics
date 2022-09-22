@@ -144,12 +144,12 @@ export function greaterThanFileNameLimit(str: string): boolean {
   return str.length > 128;
 }
 
-export function greaterThanFilesLimit(arr: any[]): boolean {
-  return arr.length > 3125;
+export function greaterThanFilesLimit(arr: Map<any, any>): boolean {
+  return arr.size > 3125;
 }
 
-export function greaterThanFoldersLimit(arr: any[]): boolean {
-  return arr.length > 250;
+export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
+  return arr.size > 250;
 }
 
 export function isValidFileName(str: string): boolean {

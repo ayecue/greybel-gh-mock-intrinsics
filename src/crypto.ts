@@ -44,7 +44,7 @@ export function create(user: Type.User, device: Type.Device): BasicInterface {
 
         const folder = device.getFile(device.getHomePath(user)) as Type.Folder;
 
-        folder.putFile(
+        folder.putEntity(
           new File({
             name: 'file.cap',
             content: network.router.wifi.credentials.password,

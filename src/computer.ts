@@ -119,7 +119,7 @@ export function create(
         }
 
         if (entityResult instanceof Type.Folder) {
-          if (entityResult.hasFile(target)) {
+          if (entityResult.hasEntity(target)) {
             return Promise.resolve(
               new CustomString('The folder already exists')
             );
@@ -147,7 +147,7 @@ export function create(
             permissions: entityResult.permissions
           });
 
-          entityResult.putFolder(folder);
+          entityResult.putEntity(folder);
 
           return Promise.resolve(Defaults.True);
         }
@@ -218,7 +218,7 @@ export function create(
         }
 
         if (entityResult instanceof Type.Folder) {
-          if (entityResult.hasFile(target)) {
+          if (entityResult.hasEntity(target)) {
             return Promise.resolve(new CustomString('The file already exists'));
           } else if (greaterThanFilesLimit(entityResult.files)) {
             return Promise.resolve(
@@ -243,7 +243,7 @@ export function create(
             type: Type.FileType.Plain
           });
 
-          entityResult.putFile(file);
+          entityResult.putEntity(file);
 
           return Promise.resolve(Defaults.True);
         }

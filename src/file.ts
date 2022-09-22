@@ -147,11 +147,7 @@ export function create(
 
           copy.name = newNameRaw;
 
-          if (copy instanceof Type.Folder) {
-            folder.putFolder(copy);
-          } else if (copy instanceof Type.File) {
-            folder.putFile(copy);
-          }
+          folder.putEntity(copy);
 
           return Promise.resolve(Defaults.True);
         }
@@ -214,11 +210,7 @@ export function create(
           folder.removeEntity(entity.name);
           copy.name = newNameRaw;
 
-          if (copy instanceof Type.Folder) {
-            folder.putFolder(copy);
-          } else if (copy instanceof Type.File) {
-            folder.putFile(copy);
-          }
+          folder.putEntity(copy);
 
           return Promise.resolve(Defaults.True);
         }
@@ -534,7 +526,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Type.Folder).folders.map(
+        const result = Array.from((entity as Type.Folder).folders.values()).map(
           (folder: Type.Folder) => {
             return create(user, device, folder);
           }
@@ -561,7 +553,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Type.Folder).files.map((file: Type.File) => {
+        const result = Array.from((entity as Type.Folder).files.values()).map((file: Type.File) => {
           return create(user, device, file);
         });
 
