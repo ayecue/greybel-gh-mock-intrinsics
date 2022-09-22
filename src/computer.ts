@@ -14,7 +14,15 @@ import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import { formatColumns, greaterThanLimit, isAlphaNumeric } from './utils';
+import {
+  formatColumns,
+  greaterThanEntityNameLimit,
+  greaterThanFileNameLimit,
+  greaterThanFilesLimit,
+  greaterThanFoldersLimit,
+  isAlphaNumeric,
+  isValidFileName
+} from './utils';
 
 export function create(
   user: Type.User,
@@ -75,34 +83,76 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const path = args.get('path').toString();
-        const folderName = args.get('folderName').toString();
-        const target = Utils.getTraversalPath(path, options.location);
-        const entityResult = device.getFile(target);
+        const path = args.get('path');
+        const folderName = args.get('folderName');
 
-        if (entityResult && entityResult.isFolder) {
-          const { w } = entityResult.getPermissions(user);
-          const folder = entityResult as Type.Folder;
-
-          if (w && !folder.hasFile(folderName)) {
-            folder.folders.push(
-              new Type.Folder(
-                {
-                  name: folderName,
-                  owner: user.username,
-                  permissions: entityResult.permissions,
-                  folders: [],
-                  files: []
-                },
-                folder
-              )
-            );
-
-            return Promise.resolve(Defaults.True);
-          }
+        if (path instanceof CustomNil || folderName instanceof CustomNil) {
+          return Promise.resolve(
+            new CustomString('create_folder: Invalid arguments')
+          );
         }
 
-        return Promise.resolve(Defaults.False);
+        const pathRaw = path.toString();
+        const folderNameRaw = folderName.toString();
+
+        if (!isValidFileName(folderNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only aplhanumeric allowed as folder name.')
+          );
+        } else if (greaterThanFileNameLimit(folderNameRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: name cannot exceed the limit of 128 characters.'
+            )
+          );
+        }
+
+        const containingFolder = Utils.getTraversalPath(
+          pathRaw,
+          options.location
+        );
+        const target = folderName.toString();
+        const entityResult = device.getFile(containingFolder);
+
+        if (entityResult === null) {
+          return Promise.resolve(new CustomString('Error: invalid path'));
+        }
+
+        if (entityResult instanceof Type.Folder) {
+          if (entityResult.hasFile(target)) {
+            return Promise.resolve(
+              new CustomString('The folder already exists')
+            );
+          } else if (greaterThanFoldersLimit(entityResult.folders)) {
+            return Promise.resolve(
+              new CustomString(
+                'Can\'t create folder. Reached maximum number of files in a folder"'
+              )
+            );
+          }
+
+          const { w } = entityResult.getPermissions(user);
+
+          if (!w) {
+            return Promise.resolve(
+              new CustomString(
+                `Can't create folder ${entityResult.getPath()}/${folderNameRaw}. Permission denied"`
+              )
+            );
+          }
+
+          const folder = new Type.Folder({
+            name: target,
+            owner: user.username,
+            permissions: entityResult.permissions
+          });
+
+          entityResult.putFolder(folder);
+
+          return Promise.resolve(Defaults.True);
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
     )
       .addArgument('path')
@@ -130,33 +180,75 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const path = args.get('path').toString();
-        const containingFolder = Utils.getTraversalPath(path, options.location);
-        const target = args.get('fileName').toString();
-        const entityResult = device.getFile(containingFolder);
+        const path = args.get('path');
+        const fileName = args.get('fileName');
 
-        if (entityResult && entityResult.isFolder) {
-          const { w } = entityResult.getPermissions(user);
-          const folder = entityResult as Type.Folder;
-
-          if (w && !folder.hasFile(target)) {
-            folder.files.push(
-              new Type.File(
-                {
-                  name: target,
-                  owner: user.username,
-                  permissions: entityResult.permissions,
-                  type: Type.FileType.Plain
-                },
-                folder
-              )
-            );
-
-            return Promise.resolve(Defaults.True);
-          }
+        if (path instanceof CustomNil) {
+          return Promise.resolve(new CustomString('Error: invalid path'));
+        } else if (fileName instanceof CustomNil) {
+          return Promise.resolve(
+            new CustomString('Error: nameFile must be string')
+          );
         }
 
-        return Promise.resolve(Defaults.False);
+        const pathRaw = path.toString();
+        const fileNameRaw = fileName.toString();
+
+        if (!isValidFileName(fileNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only aplhanumeric allowed as file name.')
+          );
+        } else if (greaterThanFileNameLimit(fileNameRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: name cannot exceed the limit of 128 characters.'
+            )
+          );
+        }
+
+        const containingFolder = Utils.getTraversalPath(
+          pathRaw,
+          options.location
+        );
+        const target = fileName.toString();
+        const entityResult = device.getFile(containingFolder);
+
+        if (entityResult === null) {
+          return Promise.resolve(new CustomString('Error: invalid path'));
+        }
+
+        if (entityResult instanceof Type.Folder) {
+          if (entityResult.hasFile(target)) {
+            return Promise.resolve(new CustomString('The file already exists'));
+          } else if (greaterThanFilesLimit(entityResult.files)) {
+            return Promise.resolve(
+              new CustomString('Can\'t create file. Reached maximum limit"')
+            );
+          }
+
+          const { w } = entityResult.getPermissions(user);
+
+          if (!w) {
+            return Promise.resolve(
+              new CustomString(
+                `Can't create file ${entityResult.getPath()}/${fileNameRaw}. Permission denied"`
+              )
+            );
+          }
+
+          const file = new Type.File({
+            name: target,
+            owner: user.username,
+            permissions: entityResult.permissions,
+            type: Type.FileType.Plain
+          });
+
+          entityResult.putFile(file);
+
+          return Promise.resolve(Defaults.True);
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
     )
       .addArgument('path')
@@ -230,7 +322,7 @@ export function create(
           return Promise.resolve(
             new CustomString('Error: only alphanumeric allowed as password.')
           );
-        } else if (greaterThanLimit(passwordRaw)) {
+        } else if (greaterThanEntityNameLimit(passwordRaw)) {
           return Promise.resolve(
             new CustomString(
               'Error: the password cannot exceed the limit of 15 characters.'
@@ -281,9 +373,9 @@ export function create(
 
         if (usernameRaw === '') {
           throw new Error('create_user: Invalid arguments');
-        } else if (greaterThanLimit(usernameRaw)) {
+        } else if (greaterThanEntityNameLimit(usernameRaw)) {
           throw new Error('username cannot exceed the 15 character limit.');
-        } else if (greaterThanLimit(passwordRaw)) {
+        } else if (greaterThanEntityNameLimit(passwordRaw)) {
           throw new Error('username cannot exceed the 15 character limit.');
         } else if (isAlphaNumeric(usernameRaw) || isAlphaNumeric(passwordRaw)) {
           return Promise.resolve(
@@ -389,7 +481,7 @@ export function create(
 
         if (usernameRaw === '' || groupnameRaw === '') {
           throw new Error('create_group: Invalid arguments');
-        } else if (greaterThanLimit(groupnameRaw)) {
+        } else if (greaterThanEntityNameLimit(groupnameRaw)) {
           throw new Error('groupname cannot exceed the 15 character limit');
         } else if (isAlphaNumeric(usernameRaw)) {
           return Promise.resolve(

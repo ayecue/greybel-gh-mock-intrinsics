@@ -260,7 +260,7 @@ exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
 exports[`interpreter default scripts shell.src 4`] = `"[ port ]"`;
 
-exports[`interpreter default scripts shell.src 5`] = `"false"`;
+exports[`interpreter default scripts shell.src 5`] = `"Can't create folder root/foo. Permission denied\\""`;
 
 exports[`interpreter default scripts shell.src 6`] = `"true"`;
 
@@ -268,7 +268,7 @@ exports[`interpreter default scripts shell.src 7`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 8`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 9`] = `"false"`;
+exports[`interpreter default scripts shell.src 9`] = `"Can't create file root/foo-file. Permission denied\\""`;
 
 exports[`interpreter default scripts shell.src 10`] = `"true"`;
 

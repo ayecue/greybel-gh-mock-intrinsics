@@ -132,6 +132,22 @@ export function isAlphaNumeric(str: string): boolean {
   return /^[a-z0-9]$/i.test(str);
 }
 
-export function greaterThanLimit(str: string): boolean {
+export function greaterThanEntityNameLimit(str: string): boolean {
   return str.length > 15;
+}
+
+export function greaterThanFileNameLimit(str: string): boolean {
+  return str.length > 128;
+}
+
+export function greaterThanFilesLimit(arr: any[]): boolean {
+  return arr.length > 3125;
+}
+
+export function greaterThanFoldersLimit(arr: any[]): boolean {
+  return arr.length > 250;
+}
+
+export function isValidFileName(str: string): boolean {
+  return /^[a-z0-9_.-]+$/i.test(str);
 }
