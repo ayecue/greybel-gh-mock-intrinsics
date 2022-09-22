@@ -161,13 +161,13 @@ export function createShell(
             );
           }
 
-          const { r } = localFile.getPermissions(user);
+          const { r } = localFile.getPermissions(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'));
+          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'), device.groups);
 
           if (!w) {
             return Promise.resolve(new CustomString('Permission denied'));
@@ -242,7 +242,7 @@ export function createShell(
           );
         }
 
-        const sourcePerms = source.getPermissions(user);
+        const sourcePerms = source.getPermissions(user, device.groups);
 
         if (!sourcePerms.r) {
           return Promise.resolve(
@@ -258,7 +258,7 @@ export function createShell(
           );
         }
 
-        const destPerms = dest.getPermissions(user);
+        const destPerms = dest.getPermissions(user, device.groups);
 
         if (!destPerms.w) {
           return Promise.resolve(
@@ -344,7 +344,7 @@ export function createShell(
           return Defaults.False;
         }
 
-        const perms = file.getPermissions(user);
+        const perms = file.getPermissions(user, device.groups);
 
         if (!perms.x) {
           ctx.handler.outputHandler.print(
@@ -540,13 +540,13 @@ export function createFtpShell(
             );
           }
 
-          const { r } = localFile.getPermissions(user);
+          const { r } = localFile.getPermissions(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'));
+          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'), device.groups);
 
           if (!w) {
             return Promise.resolve(new CustomString('Permission denied'));

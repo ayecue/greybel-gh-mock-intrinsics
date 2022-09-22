@@ -150,7 +150,7 @@ export const includeLib = CustomFunction.createExternal(
     const entityResult = computer.getFile(target);
 
     if (entityResult && !entityResult.isFolder) {
-      const { r } = entityResult.getPermissions(user);
+      const { r } = entityResult.getPermissions(user, computer.groups);
 
       if (r) {
         switch ((entityResult as Type.File).type) {

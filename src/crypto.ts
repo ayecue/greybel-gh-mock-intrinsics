@@ -94,7 +94,7 @@ export function create(user: Type.User, device: Type.Device): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = file.getPermissions(user);
+        const { r } = file.getPermissions(user, device.groups);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);

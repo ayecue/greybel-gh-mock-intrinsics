@@ -131,7 +131,7 @@ export function create(
             );
           }
 
-          const { w } = entityResult.getPermissions(user);
+          const { w } = entityResult.getPermissions(user, device.groups);
 
           if (!w) {
             return Promise.resolve(
@@ -226,7 +226,7 @@ export function create(
             );
           }
 
-          const { w } = entityResult.getPermissions(user);
+          const { w } = entityResult.getPermissions(user, device.groups);
 
           if (!w) {
             return Promise.resolve(

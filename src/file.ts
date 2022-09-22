@@ -47,7 +47,7 @@ export function create(
           throw new Error('chmod: Invalid arguments');
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
         if (user.username !== 'root' && !w) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -80,7 +80,7 @@ export function create(
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user);
+            const { w } = item.getPermissions(user, device.groups);
 
             if (w) {
               item.permissions = Utils.transformFlagsToString(
@@ -127,7 +127,7 @@ export function create(
           throw new Error('copy: name cannot exceed the 128 character limit.');
         }
 
-        const { r } = entity.getPermissions(user);
+        const { r } = entity.getPermissions(user, device.groups);
 
         if (!r) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -137,7 +137,7 @@ export function create(
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
-          const { w } = folder.getPermissions(user);
+          const { w } = folder.getPermissions(user, device.groups);
 
           if (!w) {
             return Promise.resolve(new CustomString('permission denied'));
@@ -193,7 +193,7 @@ export function create(
           throw new Error('move: name cannot exceed the 128 character limit.');
         }
 
-        const { r } = entity.getPermissions(user);
+        const { r } = entity.getPermissions(user, device.groups);
 
         if (!r) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -203,7 +203,7 @@ export function create(
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
-          const { w } = folder.getPermissions(user);
+          const { w } = folder.getPermissions(user, device.groups);
 
           if (!w) {
             return Promise.resolve(new CustomString('permission denied'));
@@ -258,7 +258,7 @@ export function create(
           throw new Error('move: name cannot exceed the 128 character limit.');
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
         if (!w) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -360,7 +360,7 @@ export function create(
           );
         }
 
-        const { r } = entity.getPermissions(user);
+        const { r } = entity.getPermissions(user, device.groups);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);
@@ -423,7 +423,7 @@ export function create(
           );
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
         if (!w) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -482,7 +482,7 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const permission = args.get('permission').toString().substr(0, 1);
-        const permissionMap = entity.getPermissions(user);
+        const permissionMap = entity.getPermissions(user, device.groups);
 
         return Promise.resolve(
           new CustomBoolean(
@@ -505,7 +505,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
         if (!w) {
           return Promise.resolve(new CustomString('No write permissions'));
@@ -624,7 +624,7 @@ export function create(
           throw new Error('owner cannot exceed the 15 character limit.');
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('Permission denied'));
@@ -634,7 +634,7 @@ export function create(
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user);
+            const { w } = item.getPermissions(user, device.groups);
 
             if (w) {
               item.owner = ownerRaw;
