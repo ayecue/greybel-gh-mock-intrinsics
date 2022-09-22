@@ -91,7 +91,7 @@ export function create(
           case Type.VulnerabilityAction.FOLDER: {
             const file = target.getFile(vul.folder);
             return Promise.resolve(
-              createFile(target.getUserByVulnerability(vul.user), file)
+              createFile(target.getUserByVulnerability(vul.user), target, file)
             );
           }
           case Type.VulnerabilityAction.FIREWALL:

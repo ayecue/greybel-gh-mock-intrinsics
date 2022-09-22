@@ -129,7 +129,7 @@ export function formatColumns(columns: string): string {
 }
 
 export function isAlphaNumeric(str: string): boolean {
-  return /^[a-z0-9]$/i.test(str);
+  return /^[a-z0-9]+$/i.test(str);
 }
 
 export function greaterThanEntityNameLimit(str: string): boolean {

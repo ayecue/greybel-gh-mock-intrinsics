@@ -70,7 +70,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createFile(user, entityResult));
+        return Promise.resolve(createFile(user, device, entityResult));
       }
     ).addArgument('path')
   );
@@ -318,7 +318,7 @@ export function create(
 
         if (usernameRaw === '') {
           throw new Error('change_password: Invalid arguments');
-        } else if (isAlphaNumeric(passwordRaw)) {
+        } else if (!isAlphaNumeric(passwordRaw)) {
           return Promise.resolve(
             new CustomString('Error: only alphanumeric allowed as password.')
           );
@@ -377,7 +377,10 @@ export function create(
           throw new Error('username cannot exceed the 15 character limit.');
         } else if (greaterThanEntityNameLimit(passwordRaw)) {
           throw new Error('username cannot exceed the 15 character limit.');
-        } else if (isAlphaNumeric(usernameRaw) || isAlphaNumeric(passwordRaw)) {
+        } else if (
+          !isAlphaNumeric(usernameRaw) ||
+          !isAlphaNumeric(passwordRaw)
+        ) {
           return Promise.resolve(
             new CustomString(
               'Error: only alphanumeric allowed as user name and password.'
@@ -483,7 +486,7 @@ export function create(
           throw new Error('create_group: Invalid arguments');
         } else if (greaterThanEntityNameLimit(groupnameRaw)) {
           throw new Error('groupname cannot exceed the 15 character limit');
-        } else if (isAlphaNumeric(usernameRaw)) {
+        } else if (!isAlphaNumeric(usernameRaw)) {
           return Promise.resolve(
             new CustomString(
               'Error: only alphanumeric allowed as user and group names.'

@@ -1,9 +1,10 @@
 shell = get_shell
 computer = shell.host_computer
+file = computer.File("/root")
+
 adminShell = get_shell("root", "test")
 adminComputer = adminShell.host_computer
-
-file = computer.File("/root")
+adminFile = adminComputer.File("/root")
 
 print(typeof(shell))
 
@@ -82,3 +83,7 @@ print(adminComputer.groups("test"))
 print(adminComputer.delete_group("test", "testg"))
 print(adminComputer.create_user("foo", "foo"))
 print(adminComputer.delete_user("foo", true))
+
+print(adminFile.copy("/home/test", "xxxxxx"))
+print(adminFile.move("/home/test", "xxxxxx"))
+print(typeof(adminComputer.File("/home/test/xxxxxx")))
