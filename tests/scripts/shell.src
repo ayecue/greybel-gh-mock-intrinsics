@@ -1,5 +1,7 @@
 shell = get_shell
 computer = shell.host_computer
+adminShell = get_shell("root", "test")
+adminComputer = adminShell.host_computer
 
 file = computer.File("/root")
 
@@ -31,6 +33,8 @@ print(computer.network_gateway)
 print(computer.active_net_card)
 print(computer.local_ip)
 print(computer.public_ip)
+
+print(adminComputer.change_password("test", "xxx"))
 
 print(typeof(file))
 print(file)

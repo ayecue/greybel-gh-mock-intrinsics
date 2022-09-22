@@ -48,8 +48,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const path = args.get('path').toString();
-        const target = Utils.getTraversalPath(path, null);
+        const path = args.get('path');
+
+        if (path instanceof CustomNil) {
+          throw new Error('File: Invalid arguments');
+        }
+
+        const pathRaw = path.toString();
+        const target = Utils.getTraversalPath(pathRaw);
         const entityResult = device.getFile(target);
 
         if (!entityResult) {
@@ -218,16 +224,37 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (user.username === 'root') {
-          const username = args.get('username').toString();
-          const password = args.get('password').toString();
+        const username = args.get('username');
+        const password = args.get('password');
 
-          return Promise.resolve(
-            new CustomBoolean(device.changePassword(username, password))
-          );
+        if (username instanceof CustomNil || password instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(Defaults.False);
+        const usernameRaw = username.toString();
+        const passwordRaw = password.toString();
+
+        if (usernameRaw === '') {
+          throw new Error('change_password: Invalid arguments');
+        } else if (/^[a-z0-9]$/i.test(passwordRaw)) {
+          return Promise.resolve(new CustomString('Error: only alphanumeric allowed as password.'));
+        } else if (passwordRaw.length > 15) {
+          return Promise.resolve(new CustomString('Error: the password cannot exceed the limit of 15 characters.'));
+        }
+
+        if (user.username !== 'root') {
+          return Promise.resolve(new CustomString('Denied. Only root user can execute this command.'));
+        }
+
+        const target = device.findUser(usernameRaw);
+
+        if (target === null) {
+          return Promise.resolve(new CustomString(`user ${usernameRaw} does not exist`));
+        }
+
+        device.changePassword(usernameRaw, passwordRaw);
+
+        return Promise.resolve(Defaults.True);
       }
     )
       .addArgument('username')
@@ -513,13 +540,10 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (device instanceof Type.Computer || device instanceof Type.Switch) {
-          const router = device.getRouter();
-          if (router instanceof Type.Router) {
-            return Promise.resolve(new CustomString(router.publicIp));
-          }
-        } else if (device instanceof Type.Router) {
-          return Promise.resolve(new CustomString(device.publicIp));
+        const router = device.getRouter();
+
+        if (router instanceof Type.Router) {
+          return Promise.resolve(new CustomString(router.publicIp));
         }
 
         return Promise.resolve(Defaults.Void);
