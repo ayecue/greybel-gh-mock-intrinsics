@@ -127,3 +127,7 @@ export function formatColumns(columns: string): string {
 
   return lines.join('\n');
 }
+
+export function isAlphaNumeric(str: string): boolean {
+  return /^[a-z0-9]$/i.test(str);
+}

@@ -20,7 +20,6 @@ function createDefaultEnvironment(): MockEnvironment {
     publicIp: '142.32.54.56',
     location: localSession.computer.location
   });
-  const serverMap = networkGenerator.serverMap.get('142.32.54.56');
 
   localRouter.bssid = 'bssid-test-uuid';
   localRouter.essid = 'essid-test-uuid';

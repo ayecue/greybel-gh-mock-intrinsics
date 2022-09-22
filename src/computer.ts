@@ -8,13 +8,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type, Utils, RouterLocation } from 'greybel-mock-environment';
+import { FS, RouterLocation, Type, Utils } from 'greybel-mock-environment';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
-import { formatColumns } from './utils';
+import { formatColumns, isAlphaNumeric } from './utils';
 
 export function create(
   user: Type.User,
@@ -236,20 +236,30 @@ export function create(
 
         if (usernameRaw === '') {
           throw new Error('change_password: Invalid arguments');
-        } else if (/^[a-z0-9]$/i.test(passwordRaw)) {
-          return Promise.resolve(new CustomString('Error: only alphanumeric allowed as password.'));
+        } else if (isAlphaNumeric(passwordRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only alphanumeric allowed as password.')
+          );
         } else if (passwordRaw.length > 15) {
-          return Promise.resolve(new CustomString('Error: the password cannot exceed the limit of 15 characters.'));
+          return Promise.resolve(
+            new CustomString(
+              'Error: the password cannot exceed the limit of 15 characters.'
+            )
+          );
         }
 
         if (user.username !== 'root') {
-          return Promise.resolve(new CustomString('Denied. Only root user can execute this command.'));
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can execute this command.')
+          );
         }
 
         const target = device.findUser(usernameRaw);
 
         if (target === null) {
-          return Promise.resolve(new CustomString(`user ${usernameRaw} does not exist`));
+          return Promise.resolve(
+            new CustomString(`user ${usernameRaw} does not exist`)
+          );
         }
 
         device.changePassword(usernameRaw, passwordRaw);
@@ -356,13 +366,51 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // g is ignored for now
-        // todo: add group logic
-        return Promise.resolve(Defaults.False);
+        const username = args.get('username');
+        const groupname = args.get('groupname');
+
+        if (username instanceof CustomNil || groupname instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const usernameRaw = username.toString();
+        const groupnameRaw = groupname.toString();
+
+        if (usernameRaw === '' || groupnameRaw === '') {
+          throw new Error('create_group: Invalid arguments');
+        } else if (groupnameRaw.length > 15) {
+          throw new Error('groupname cannot exceed the 15 character limit');
+        } else if (isAlphaNumeric(usernameRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              'Error: only alphanumeric allowed as user and group names.'
+            )
+          );
+        }
+
+        if (user.username !== 'root') {
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can execute this command.')
+          );
+        }
+
+        const target = device.findUser(usernameRaw);
+
+        if (target === null) {
+          return Promise.resolve(
+            new CustomString(`Error: user ${usernameRaw} does not exist`)
+          );
+        }
+
+        device.addGroup(usernameRaw, groupnameRaw);
+
+        return Promise.resolve(Defaults.True);
       }
     )
+      .addArgument('username')
+      .addArgument('groupname')
   );
 
   itrface.addMethod(
@@ -371,13 +419,47 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // g is ignored for now
-        // todo: add group logic
-        return Promise.resolve(Defaults.False);
+        const username = args.get('username');
+        const groupname = args.get('groupname');
+
+        if (username instanceof CustomNil || groupname instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const usernameRaw = username.toString();
+        const groupnameRaw = groupname.toString();
+
+        if (usernameRaw === '' || groupnameRaw === '') {
+          throw new Error('delete_group: Invalid arguments');
+        } else if (user.username !== 'root') {
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can execute this command.')
+          );
+        }
+
+        const target = device.findUser(usernameRaw);
+
+        if (target === null) {
+          return Promise.resolve(
+            new CustomString(`Error: user ${usernameRaw} does not exist`)
+          );
+        } else if (!device.groups.has(groupnameRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              `Error: group ${groupnameRaw} not found in user ${usernameRaw}`
+            )
+          );
+        }
+
+        device.removeGroup(usernameRaw, groupnameRaw);
+
+        return Promise.resolve(Defaults.True);
       }
     )
+      .addArgument('username')
+      .addArgument('groupname')
   );
 
   itrface.addMethod(
@@ -386,13 +468,34 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // g is ignored for now
-        // todo: add group logic
-        return Promise.resolve(new CustomString(''));
+        const username = args.get('username');
+
+        if (username instanceof CustomNil) {
+          throw new Error('groups: Invalid arguments');
+        }
+
+        const usernameRaw = username.toString();
+        const target = device.findUser(usernameRaw);
+
+        if (target === null) {
+          return Promise.resolve(
+            new CustomString(`Error: user ${usernameRaw} does not exist.`)
+          );
+        }
+
+        const groups = [];
+
+        for (const [name, groupUsers] of device.groups.entries()) {
+          if (groupUsers.has(usernameRaw)) {
+            groups.push(name);
+          }
+        }
+
+        return Promise.resolve(new CustomString(groups.join('\n')));
       }
-    )
+    ).addArgument('username')
   );
 
   itrface.addMethod(

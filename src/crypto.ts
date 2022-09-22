@@ -7,7 +7,7 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils, RouterLocation } from 'greybel-mock-environment';
+import { RouterLocation, Type, Utils } from 'greybel-mock-environment';
 import { File } from 'greybel-mock-environment/dist/types';
 
 import BasicInterface from './interface';

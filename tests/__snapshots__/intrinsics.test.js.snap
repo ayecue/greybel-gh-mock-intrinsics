@@ -288,11 +288,11 @@ exports[`interpreter default scripts shell.src 15`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 16`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 17`] = `"false"`;
+exports[`interpreter default scripts shell.src 17`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 18`] = `"false"`;
+exports[`interpreter default scripts shell.src 18`] = `""`;
 
-exports[`interpreter default scripts shell.src 19`] = `""`;
+exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user can execute this command."`;
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
@@ -310,69 +310,75 @@ exports[`interpreter default scripts shell.src 26`] = `"192.168.224.78"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts shell.src 28`] = `"true"`;
+exports[`interpreter default scripts shell.src 28`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 29`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 30`] = `"file"`;
+exports[`interpreter default scripts shell.src 30`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 31`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 31`] = `"No read permissions"`;
 
 exports[`interpreter default scripts shell.src 32`] = `"No read permissions"`;
 
-exports[`interpreter default scripts shell.src 33`] = `"No read permissions"`;
+exports[`interpreter default scripts shell.src 33`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 34`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 34`] = `"/root"`;
 
-exports[`interpreter default scripts shell.src 35`] = `"/root"`;
+exports[`interpreter default scripts shell.src 35`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 36`] = `"file"`;
+exports[`interpreter default scripts shell.src 36`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 37`] = `"root"`;
+exports[`interpreter default scripts shell.src 37`] = `""`;
 
-exports[`interpreter default scripts shell.src 38`] = `""`;
+exports[`interpreter default scripts shell.src 38`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 39`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 39`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 40`] = `"false"`;
+exports[`interpreter default scripts shell.src 40`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 41`] = `"true"`;
+exports[`interpreter default scripts shell.src 41`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 42`] = `"false"`;
+exports[`interpreter default scripts shell.src 42`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 43`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 43`] = `"[ file, file, file, file ]"`;
 
-exports[`interpreter default scripts shell.src 44`] = `"[ file, file, file, file ]"`;
+exports[`interpreter default scripts shell.src 44`] = `"[  ]"`;
 
-exports[`interpreter default scripts shell.src 45`] = `"[  ]"`;
+exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 46`] = `"root"`;
+exports[`interpreter default scripts shell.src 46`] = `"No write permissions"`;
 
-exports[`interpreter default scripts shell.src 47`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 47`] = `"test-group"`;
 
-exports[`interpreter default scripts shell.src 48`] = `"test-group"`;
+exports[`interpreter default scripts shell.src 48`] = `"Not yet supported"`;
 
-exports[`interpreter default scripts shell.src 49`] = `"Not yet supported"`;
+exports[`interpreter default scripts shell.src 49`] = `"1337"`;
 
-exports[`interpreter default scripts shell.src 50`] = `"1337"`;
+exports[`interpreter default scripts shell.src 50`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 51`] = `"false"`;
+exports[`interpreter default scripts shell.src 51`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 52`] = `"computer"`;
+exports[`interpreter default scripts shell.src 52`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 53`] = `"false"`;
+exports[`interpreter default scripts shell.src 53`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 54`] = `"true"`;
+exports[`interpreter default scripts shell.src 54`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 55`] = `"file"`;
+exports[`interpreter default scripts shell.src 55`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 56`] = `"true"`;
+exports[`interpreter default scripts shell.src 56`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 57`] = `"file"`;
+exports[`interpreter default scripts shell.src 57`] = `""`;
 
-exports[`interpreter default scripts shell.src 58`] = `""`;
+exports[`interpreter default scripts shell.src 58`] = `"123"`;
 
-exports[`interpreter default scripts shell.src 59`] = `"123"`;
+exports[`interpreter default scripts shell.src 59`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 60`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 61`] = `"testg"`;
+
+exports[`interpreter default scripts shell.src 62`] = `"true"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 
