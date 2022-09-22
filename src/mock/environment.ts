@@ -11,20 +11,22 @@ function createDefaultEnvironment(): MockEnvironment {
 
   mockEnvironment.setupLibraries();
 
-  const localRouters = [
-    networkGenerator.generateRouter({
-      publicIp: '142.32.54.56'
-    }),
-    networkGenerator.generateRouter(),
-    networkGenerator.generateRouter(),
-    networkGenerator.generateRouter()
-  ];
+  for (let index = 0; index < 25; index++) {
+    networkGenerator.generateRouter();
+  }
 
-  localRouters.forEach((v) => networkGenerator.generateWifiNetwork(v));
-  networkGenerator.wifiNetworks[0].router.bssid = 'bssid-test-uuid';
-  networkGenerator.wifiNetworks[0].router.essid = 'essid-test-uuid';
-  networkGenerator.wifiNetworks[0].password = 'test';
-  mockEnvironment.connectLocal(localRouters[0]);
+  const localSession = mockEnvironment.localSession;
+  const localRouter = networkGenerator.generateRouter({
+    publicIp: '142.32.54.56',
+    location: localSession.computer.location
+  });
+  const serverMap = networkGenerator.serverMap.get('142.32.54.56');
+
+  localRouter.bssid = 'bssid-test-uuid';
+  localRouter.essid = 'essid-test-uuid';
+  localRouter.wifi.credentials.password = 'test';
+
+  mockEnvironment.connectLocal(localRouter);
   networkGenerator.generateRouter({
     publicIp: '142.567.134.56',
     domain: 'www.mytest.org',
@@ -40,7 +42,6 @@ function createDefaultEnvironment(): MockEnvironment {
     isClosed: false,
     forwarded: true
   });
-
   const { computer } = mockEnvironment.getLocal();
 
   computer.addPort(sshTestPort);

@@ -87,3 +87,43 @@ export function keyEventToString(keyEvent: KeyEvent): string {
       return String.fromCharCode(keyEvent.keyCode).toLowerCase();
   }
 }
+
+export function formatColumns(columns: string): string {
+  const list = columns.replace(/\\n/g, '\n').split('\n');
+  const v: Array<Array<string>> = [];
+  const l: Array<number> = [];
+
+  for (let i = 0; i < list.length; i++) {
+    const rows = list[i].split(/\s+/);
+    v.push([]);
+
+    for (let j = 0; j < rows.length; j++) {
+      if (rows.length > l.length) {
+        l.push(j);
+      }
+      const txt = rows[j];
+
+      if (txt.length > l[j]) {
+        l[j] = txt.length;
+      }
+
+      v[i].push(txt);
+    }
+  }
+
+  const seperation = 2;
+  const lines = [];
+
+  for (let i = 0; i < v.length; i++) {
+    let output = '';
+    for (let j = 0; j < v[i].length; j++) {
+      const txt = v[i][j];
+      output += txt;
+      const len = l[j] - txt.length + seperation;
+      output += ' '.repeat(len);
+    }
+    lines.push(output);
+  }
+
+  return lines.join('\n');
+}

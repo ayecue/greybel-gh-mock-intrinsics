@@ -65,9 +65,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: sincere-gregsbury-92.tv
-Administrative contact: creative-biddy-20
-Email address: creative-biddy-20@sincere-gregsbury-92.tv
+"Domain name: Spectacular-priscilla-71.de
+Administrative contact: Outstanding-pilot-72
+Email address: Outstanding-pilot-72@Spectacular-priscilla-71.de
 Phone: 123456891"
 `;
 
@@ -135,14 +135,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 19f7945e-4808-4f0a-b4d5-183da7f196c4 - hello
+"[ 36a3060d-ddd1-4714-abff-5a5fdb7fa3bc - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"19f7945e-4808-4f0a-b4d5-183da7f196c4"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"36a3060d-ddd1-4714-abff-5a5fdb7fa3bc"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"19f7945e-4808-4f0a-b4d5-183da7f196c4 - hello
+"36a3060d-ddd1-4714-abff-5a5fdb7fa3bc - hello
 dude"
 `;
 
@@ -234,13 +234,13 @@ exports[`interpreter default scripts router.src 4`] = `"router"`;
 
 exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `"192.168.0.8"`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port ]"`;
 
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
@@ -275,9 +275,9 @@ exports[`interpreter default scripts shell.src 10`] = `"true"`;
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER PID CPU MEM COMMAND
-root 2134 0.0% 13.37% kernel_task
-root 1864 0.0% 4.20% Xorg"
+"USER  PID   CPU   MEM    COMMAND      
+root  2399  7.4   26.34  kernel_task  
+root  8518  14.3  26.49  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -296,17 +296,17 @@ exports[`interpreter default scripts shell.src 19`] = `""`;
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 62% communicative-academic-60, 44:8E:73:9E:F2:63 37% Ultimate-edmund-32, D4:3B:19:E1:AE:8A 33% Stupendous-agent-63, D6:70:65:60:43:66 70% sociable-bradley-33 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ B4:38:59:36:2C:4C 13% Fortuitous-scadder-58, D0:BF:F5:F2:D7:7B 100% quiet-smauker-46 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 23`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 24`] = `"192.168.103.147"`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.103.147"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.224.78"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

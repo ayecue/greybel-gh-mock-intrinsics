@@ -2,17 +2,19 @@ import {
   CustomBoolean,
   CustomFunction,
   CustomList,
+  CustomNil,
   CustomString,
   CustomValue,
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { FS, Type, Utils } from 'greybel-mock-environment';
+import { FS, Type, Utils, RouterLocation } from 'greybel-mock-environment';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
+import { formatColumns } from './utils';
 
 export function create(
   user: Type.User,
@@ -163,11 +165,16 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = [
-          'USER PID CPU MEM COMMAND',
-          'root 2134 0.0% 13.37% kernel_task',
-          'root 1864 0.0% 4.20% Xorg'
-        ].join('\n');
+        const result = formatColumns(
+          [
+            'USER PID CPU MEM COMMAND',
+            ...Array.from(device.processes.values()).map((p) => {
+              return `${p.owner.username} ${p.pid} ${p.cpu.toFixed(
+                1
+              )} ${p.mem.toFixed(2)} ${p.command}`;
+            })
+          ].join('\n')
+        );
 
         return Promise.resolve(new CustomString(result));
       }
@@ -182,9 +189,19 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        let wifiIndex = 0;
+        let ethIndex = 0;
         const result = device.networkDevices
           .map((item: Type.NetworkDevice) => {
-            return `${item.type} ${item.id} ${item.active}`;
+            let type;
+
+            if (item.type === Type.NetCard.Wifi) {
+              type = `wlan${wifiIndex++}`;
+            } else {
+              type = `eth${ethIndex++}`;
+            }
+
+            return `${type} ${item.id} ${item.active}`;
           })
           .join('\n');
 
@@ -357,16 +374,40 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        // programs are not supported for now
-        if (user.username !== 'root') {
+        const pid = args.get('pid');
+
+        if (pid instanceof CustomNil) {
           return Promise.resolve(Defaults.False);
         }
 
-        return Promise.resolve(new CustomBoolean(Math.random() < 0.5));
+        const pidNum = pid.toNumber();
+
+        if (device.processes.has(pidNum)) {
+          const process = device.processes.get(pidNum);
+
+          if (
+            user.username !== 'root' &&
+            process.owner.username !== user.username
+          ) {
+            return Promise.resolve(
+              new CustomString(
+                `Permission denied. PID ${pidNum} belongs to user <b>${process.owner.username}</b>`
+              )
+            );
+          } else if (process.protected) {
+            return Promise.resolve(
+              new CustomString('Permission denied. Process protected.')
+            );
+          }
+        }
+
+        device.removeProcess(pidNum);
+
+        return Promise.resolve(Defaults.True);
       }
-    )
+    ).addArgument('pid')
   );
 
   itrface.addMethod(
@@ -375,19 +416,26 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = mockEnvironment
-          .get()
-          .networkGenerator.wifiNetworks.map((item: Type.WifiNetwork) => {
-            return new CustomString(
-              `${item.mac} ${item.percentage}% ${item.name}`
-            );
-          });
+        const netDevice = args.get('netDevice').toString();
 
-        return Promise.resolve(new CustomList(result));
+        if (netDevice !== 'eth0') {
+          const result: CustomString[] = mockEnvironment
+            .get()
+            .findRoutersCloseToLocation(device.location)
+            .map((item: RouterLocation) => {
+              return new CustomString(
+                `${item.router.mac} ${item.percentage}% ${item.router.wifi.name}`
+              );
+            });
+
+          return Promise.resolve(new CustomList(result));
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
-    )
+    ).addArgument('netDevice')
   );
 
   itrface.addMethod(
@@ -426,7 +474,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(device.localIp));
+        return Promise.resolve(new CustomString(device.getRouter().localIp));
       }
     )
   );
@@ -439,7 +487,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('WIFI'));
+        return Promise.resolve(new CustomString(device.activeNetCard));
       }
     )
   );
@@ -466,7 +514,10 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         if (device instanceof Type.Computer || device instanceof Type.Switch) {
-          return Promise.resolve(new CustomString(device.router.publicIp));
+          const router = device.getRouter();
+          if (router instanceof Type.Router) {
+            return Promise.resolve(new CustomString(router.publicIp));
+          }
         } else if (device instanceof Type.Router) {
           return Promise.resolve(new CustomString(device.publicIp));
         }

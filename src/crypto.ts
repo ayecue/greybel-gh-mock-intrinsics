@@ -7,16 +7,13 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
+import { Type, Utils, RouterLocation } from 'greybel-mock-environment';
 import { File } from 'greybel-mock-environment/dist/types';
 
 import BasicInterface from './interface';
 import mockEnvironment from './mock/environment';
 
-export function create(
-  user: Type.User,
-  computer: Type.Computer
-): BasicInterface {
+export function create(user: Type.User, device: Type.Device): BasicInterface {
   const itrface = new BasicInterface('crypto');
 
   itrface.addMethod(
@@ -29,12 +26,12 @@ export function create(
       ): Promise<CustomValue> => {
         const bssid = args.get('bssid').toString();
         const essid = args.get('essid').toString();
-        // Not yet implemented
-        // const maxAcks = args.get('maxAcks').toInt();
+
         const network = mockEnvironment
           .get()
-          .networkGenerator.wifiNetworks.find((item: Type.WifiNetwork) => {
-            return item.router.bssid === bssid && item.router.essid === essid;
+          .findRoutersCloseToLocation(device.location)
+          .find(({ router }: RouterLocation) => {
+            return router.bssid === bssid && router.essid === essid;
           });
 
         if (!network) {
@@ -45,14 +42,12 @@ export function create(
 
         await ctx.handler.outputHandler.progress(time);
 
-        const folder = computer.getFile(
-          computer.getHomePath(user)
-        ) as Type.Folder;
+        const folder = device.getFile(device.getHomePath(user)) as Type.Folder;
 
         folder.putFile(
           new File({
             name: 'file.cap',
-            content: network.password,
+            content: network.router.wifi.credentials.password,
             owner: user.username,
             permissions: 'drwxr--r--',
             type: Type.FileType.Ack
@@ -91,9 +86,9 @@ export function create(
         const path = args.get('path').toString();
         const traversalPath = Utils.getTraversalPath(
           path,
-          computer.getHomePath(user)
+          device.getHomePath(user)
         );
-        const file = computer.getFile(traversalPath) as Type.File;
+        const file = device.getFile(traversalPath) as Type.File;
 
         if (!file) {
           return Promise.resolve(Defaults.Void);
