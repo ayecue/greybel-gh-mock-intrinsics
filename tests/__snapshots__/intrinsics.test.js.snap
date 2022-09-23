@@ -241,6 +241,76 @@ exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
 exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
 
+exports[`interpreter default scripts scripts.src 1`] = `
+"Desktop    
+Downloads  
+Config     "
+`;
+
+exports[`interpreter default scripts scripts.src 2`] = `
+"-r-x--x--x  root  root  345   00:00  build             
+-r-x--x--x  root  root  262   00:00  cat               
+-r-x--x--x  root  root  848   00:00  cp                
+-r-x--x--x  root  root  261   00:00  kill              
+-r-x--x--x  root  root  1014  00:00  ls                
+-r-x--x--x  root  root  505   00:00  mkdir             
+-r-x--x--x  root  root  918   00:00  mv                
+-r-x--x--x  root  root  89    00:00  ps                
+-r-x--x--x  root  root  23    00:00  pwd               
+-r-x--x--x  root  root  401   00:00  rm                
+-r-x--x--x  root  root  637   00:00  sudo              
+-r-x--x--x  root  root  373   00:00  touch             
+-r-x--x--x  root  root  24    00:00  whoami            
+-r-x--x--x  root  root  415   00:00  aircrack          
+-r-x--x--x  root  root  249   00:00  aireplay          
+-r-x--x--x  root  root  470   00:00  airmon            
+-r-x--x--x  root  root  2157  00:00  apt-get           
+-r-x--x--x  root  root  343   00:00  ftp               
+-r-x--x--x  root  root  734   00:00  ifconfig          
+-r-x--x--x  root  root  298   00:00  iwconfig          
+-r-x--x--x  root  root  388   00:00  iwlist            
+-r-x--x--x  root  root  779   00:00  nmap              
+-r-x--x--x  root  root  126   00:00  nslookup          
+-r-x--x--x  root  root  196   00:00  ping              
+-r-x--x--x  root  root  612   00:00  rshell-interface  
+-r-x--x--x  root  root  442   00:00  smtp-user-list    
+-r-x--x--x  root  root  354   00:00  sniffer           
+-r-x--x--x  root  root  394   00:00  ssh               
+-r-x--x--x  root  root  113   00:00  whois             
+-r-x--x--x  root  root  284   00:00  chgrp             
+-r-x--x--x  root  root  288   00:00  chmod             
+-r-x--x--x  root  root  284   00:00  chown             
+-r-x--x--x  root  root  233   00:00  groupadd          
+-r-x--x--x  root  root  236   00:00  groupdel          
+-r-x--x--x  root  root  159   00:00  groups            
+-r-x--x--x  root  root  266   00:00  passwd            
+-r-x--x--x  root  root  268   00:00  useradd           
+-r-x--x--x  root  root  269   00:00  userdel           
+-r-x--x--x  root  root  998   00:00  decipher          
+-r-x--x--x  root  root  693   00:00  scanlib           
+-r-x--x--x  root  root  519   00:00  scanrouter        "
+`;
+
+exports[`interpreter default scripts scripts.src 3`] = `
+"USER  PID   CPU   MEM    COMMAND             
+root  2163  11.2  12.73  kernel_task         
+root  1211  14.8  26.20  Xorg                "
+`;
+
+exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
+
+exports[`interpreter default scripts scripts.src 5`] = `
+"
+Connected to Wi-Fi:
+Essid: essid-test-uuid
+Bssid: bssid-test-uuid
+----------------
+Public IP: 142.32.54.56
+Local IP: 192.168.117.34
+Gateway: 192.168.0.10
+"
+`;
+
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
 exports[`interpreter default scripts service.src 2`] = `"service"`;

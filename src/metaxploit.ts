@@ -40,7 +40,9 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createMetaLib(mockEnvironment, computer, computer, library));
+        return Promise.resolve(
+          createMetaLib(mockEnvironment, computer, computer, library)
+        );
       }
     ).addArgument('path')
   );
@@ -63,12 +65,16 @@ export function create(
 
         if (port === 0) {
           return Promise.resolve(
-            createNetSession(mockEnvironment, computer, router, Type.Library.KERNEL_ROUTER)
+            createNetSession(
+              mockEnvironment,
+              computer,
+              router,
+              Type.Library.KERNEL_ROUTER
+            )
           );
         }
 
-        const result = mockEnvironment
-          .getForwardedPortOfRouter(router, port);
+        const result = mockEnvironment.getForwardedPortOfRouter(router, port);
 
         if (!result) {
           return Promise.resolve(Defaults.Void);

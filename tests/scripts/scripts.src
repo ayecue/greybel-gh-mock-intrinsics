@@ -1,3 +1,7 @@
 shell = get_shell("root", "test")
 
 shell.launch("/bin/ls")
+shell.launch("/bin/ls", "-la /bin")
+shell.launch("/bin/ps")
+shell.launch("/bin/pwd")
+shell.launch("/bin/ifconfig")

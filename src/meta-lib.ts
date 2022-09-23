@@ -25,8 +25,8 @@ export function create(
     ? computer.router.publicIp === target.publicIp
     : computer.router.publicIp === (target as Type.Computer).router.publicIp;
   const isLocal = isLan && computer.localIp === target.localIp;
-  const exploits = mockEnvironment
-    .vulnerabilityGenerator.vulnerabilities.filter(
+  const exploits =
+    mockEnvironment.vulnerabilityGenerator.vulnerabilities.filter(
       (item: Type.Vulnerability) => {
         return item.library === library && item.remote !== isLocal;
       }
@@ -80,16 +80,29 @@ export function create(
         switch (vul.action) {
           case Type.VulnerabilityAction.COMPUTER:
             return Promise.resolve(
-              createComputer(mockEnvironment, target.getUserByVulnerability(vul.user), target)
+              createComputer(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target
+              )
             );
           case Type.VulnerabilityAction.SHELL:
             return Promise.resolve(
-              createShell(mockEnvironment, target.getUserByVulnerability(vul.user), target)
+              createShell(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target
+              )
             );
           case Type.VulnerabilityAction.FOLDER: {
             const file = target.getFile(vul.folder);
             return Promise.resolve(
-              createFile(mockEnvironment, target.getUserByVulnerability(vul.user), target, file)
+              createFile(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target,
+                file
+              )
             );
           }
           case Type.VulnerabilityAction.FIREWALL:

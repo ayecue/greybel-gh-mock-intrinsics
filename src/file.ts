@@ -323,7 +323,9 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(create(mockEnvironment, user, device, entity.parent));
+        return Promise.resolve(
+          create(mockEnvironment, user, device, entity.parent)
+        );
       }
     )
   );

@@ -724,8 +724,8 @@ export function create(
 
         const bssidRaw = bssid.toString();
         const essidRaw = essid.toString();
-        const closeRouters: RouterLocation[] = mockEnvironment
-          .findRoutersCloseToLocation(device.location);
+        const closeRouters: RouterLocation[] =
+          mockEnvironment.findRoutersCloseToLocation(device.location);
         const routerLoc = closeRouters.find((item: RouterLocation) => {
           const r = item.router;
           return r.bssid === bssidRaw && r.essid === essidRaw;

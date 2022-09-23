@@ -103,7 +103,9 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(createSubWallet(mockEnvironment, user, computer));
+        return Promise.resolve(
+          createSubWallet(mockEnvironment, user, computer)
+        );
       }
     )
   );

@@ -127,10 +127,11 @@ export function create(
 
         await ctx.handler.outputHandler.progress(5000);
 
-        const user = mockEnvironment
-          .userGenerator.users.find((item: Type.User) => {
+        const user = mockEnvironment.userGenerator.users.find(
+          (item: Type.User) => {
             return item.passwordHashed === encryptedPass;
-          });
+          }
+        );
 
         if (!user) {
           return Defaults.Void;

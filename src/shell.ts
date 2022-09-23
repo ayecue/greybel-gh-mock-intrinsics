@@ -359,7 +359,8 @@ export function createShell(
           return Defaults.False;
         }
 
-        const matches = params.toString().match(/(\/\/|\\\\|[[\];\\{}()])/);
+        const paramsStr = params.toString();
+        const matches = paramsStr.match(/(\/\/|\\\\|[[\];\\{}()])/);
 
         if (matches) {
           ctx.handler.outputHandler.print(
@@ -379,7 +380,7 @@ export function createShell(
         const interpreter = new Interpreter({
           handler: ctx.handler,
           debugger: ctx.debugger,
-          params: path.toString().split(' '),
+          params: paramsStr ? paramsStr.split(' ') : undefined,
           api
         });
         const session = new Type.Session({
