@@ -151,7 +151,7 @@ export function create(
           const folder = new Type.Folder({
             name: target,
             owner: user.username,
-            permissions: entityResult.permissions
+            permissions: entityResult.permissions.toString()
           });
 
           entityResult.putEntity(folder);
@@ -246,7 +246,7 @@ export function create(
           const file = new Type.File({
             name: target,
             owner: user.username,
-            permissions: entityResult.permissions,
+            permissions: entityResult.permissions.toString(),
             type: Type.FileType.Plain
           });
 

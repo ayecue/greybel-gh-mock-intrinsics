@@ -65,32 +65,14 @@ export function create(
           return Promise.resolve(new CustomString('Wrong format.'));
         }
 
-        const userType: string = permissionsRaw[0];
-        const operator = permissionsRaw[1];
-        const newFlags = permissionsRaw.substr(2);
-        const getNewPermissions = (itemFile: Type.FSEntity) => {
-          const flags = itemFile.parsePermissions();
-          const permSeg = Utils.getPermissionSegmentByString(flags, userType);
-
-          for (const newFlag of newFlags) {
-            Utils.setFlagTypeByString(permSeg, newFlag, operator === '+');
-          }
-
-          return flags;
-        };
-
-        entity.permissions = Utils.transformFlagsToString(
-          getNewPermissions(entity)
-        );
+        entity.permissions.chmod(permissionsRaw);
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
             const { w } = item.getPermissions(user, device.groups);
 
             if (w) {
-              item.permissions = Utils.transformFlagsToString(
-                getNewPermissions(item)
-              );
+              item.permissions.chmod(permissionsRaw);
             }
           });
         }
@@ -489,7 +471,7 @@ export function create(
 
         return Promise.resolve(
           new CustomBoolean(
-            Utils.getFlagTypeByString(permissionMap, permission)
+            permissionMap.getFlagByString(permission)
           )
         );
       }
@@ -587,7 +569,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(entity.permissions));
+        return Promise.resolve(new CustomString(entity.permissions.toString()));
       }
     )
   );
