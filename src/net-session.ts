@@ -12,7 +12,8 @@ export function create(
   mockEnvironment: MockEnvironment,
   computer: Type.Computer,
   targetComputer: Type.Computer,
-  library: Type.Library
+  library: Type.Library,
+  file: Type.File
 ): BasicInterface {
   const itrface = new BasicInterface('netSession');
 
@@ -24,8 +25,22 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const mode = Type.VulnerabilityMode.Online;
+        const libContainer = mockEnvironment.libraryManager.get(library);
+        const libVersion = libContainer.get(file.version);
+        const vuls = libVersion.getVulnerabilitiesByMode(mode);
+
         return Promise.resolve(
-          createMetaLib(mockEnvironment, computer, targetComputer, library)
+          createMetaLib(
+            mockEnvironment,
+            computer,
+            targetComputer,
+            file,
+            mode,
+            libContainer,
+            libVersion,
+            vuls
+          )
         );
       }
     )

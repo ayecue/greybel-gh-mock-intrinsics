@@ -9,8 +9,6 @@ export default function create(): MockEnvironment {
   const emailGenerator = mockEnvironment.emailGenerator;
   const networkGenerator = mockEnvironment.networkGenerator;
 
-  mockEnvironment.setupLibraries();
-
   const localSession = mockEnvironment.localSession;
   const localLocation = localSession.computer.location.fork();
   const localRouter = networkGenerator.generateRouter({

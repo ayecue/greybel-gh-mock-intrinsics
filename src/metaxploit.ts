@@ -40,8 +40,27 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
+        const libContainer = mockEnvironment.libraryManager.get(library);
+        const libVersion = libContainer.get(file.version);
+        const vuls = libVersion.getVulnerabilitiesByMode(
+          Type.VulnerabilityMode.Local
+        );
+
+        if (vuls.length === 0) {
+          return Promise.resolve(Defaults.Void);
+        }
+
         return Promise.resolve(
-          createMetaLib(mockEnvironment, computer, computer, library)
+          createMetaLib(
+            mockEnvironment,
+            computer,
+            computer,
+            file,
+            Type.VulnerabilityMode.Local,
+            libContainer,
+            libVersion,
+            vuls
+          )
         );
       }
     ).addArgument('path')
@@ -64,12 +83,19 @@ export function create(
         }
 
         if (port === 0) {
+          const kernel = router.getKernel();
+
+          if (!kernel) {
+            return Promise.resolve(Defaults.Void);
+          }
+
           return Promise.resolve(
             createNetSession(
               mockEnvironment,
               computer,
               router,
-              Type.Library.KERNEL_ROUTER
+              Type.Library.KERNEL_ROUTER,
+              kernel
             )
           );
         }
@@ -80,14 +106,20 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const library = Utils.getServiceLibrary(result.port.service);
+        const library = result.computer.findLibraryFileByPort(result.port);
 
         if (!library) {
           return Promise.resolve(Defaults.Void);
         }
 
         return Promise.resolve(
-          createNetSession(mockEnvironment, computer, result.computer, library)
+          createNetSession(
+            mockEnvironment,
+            computer,
+            result.computer,
+            library.getLibraryType(),
+            library
+          )
         );
       }
     )
@@ -150,19 +182,19 @@ export function create(
                   ...x.required.map(
                     (r: Type.VulnerabilityRequirements): string => {
                       switch (r) {
-                        case Type.VulnerabilityRequirements.LIBRARY:
+                        case Type.VulnerabilityRequirements.Library:
                           return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-                        case Type.VulnerabilityRequirements.REGISTER_AMOUNT:
+                        case Type.VulnerabilityRequirements.RegisterAmount:
                           return '* Checking registered users equal to 2.';
-                        case Type.VulnerabilityRequirements.ANY_ACTIVE:
+                        case Type.VulnerabilityRequirements.AnyActive:
                           return '* Checking an active user.';
-                        case Type.VulnerabilityRequirements.ROOT_ACTIVE:
+                        case Type.VulnerabilityRequirements.RootActive:
                           return '* Checking root active user.';
-                        case Type.VulnerabilityRequirements.LOCAL:
+                        case Type.VulnerabilityRequirements.Local:
                           return '* Checking existing connection in the local network.';
-                        case Type.VulnerabilityRequirements.FORWARD:
+                        case Type.VulnerabilityRequirements.Forward:
                           return '* 1337 port forwarding configured from router to the target computer.';
-                        case Type.VulnerabilityRequirements.GATEWAY:
+                        case Type.VulnerabilityRequirements.Gateway:
                           return '* 1337 computers using this router as gateway.';
                       }
                       return '';
