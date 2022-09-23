@@ -5,12 +5,13 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createSubWallet } from './sub-wallet';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   computer: Type.Computer
 ): BasicInterface {
@@ -102,7 +103,9 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(createSubWallet(user, computer));
+        return Promise.resolve(
+          createSubWallet(mockEnvironment, user, computer)
+        );
       }
     )
   );
@@ -116,7 +119,7 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         return Promise.resolve(
-          new CustomList([createSubWallet(user, computer)])
+          new CustomList([createSubWallet(mockEnvironment, user, computer)])
         );
       }
     )

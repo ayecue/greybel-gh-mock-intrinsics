@@ -48,13 +48,29 @@ exports[`interpreter default scripts crypto.src 1`] = `"crypto"`;
 
 exports[`interpreter default scripts crypto.src 2`] = `"crypto"`;
 
-exports[`interpreter default scripts crypto.src 3`] = `""`;
+exports[`interpreter default scripts crypto.src 3`] = `
+"Waiting for beacon frame (BSSID: bssid-test-uuid)
+Sending Authentication Request (Open system) [ACK]
+Authentication succesful
+Sending Association Request
+Association succesful :-)"
+`;
 
-exports[`interpreter default scripts crypto.src 4`] = `"start"`;
+exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"test"`;
+exports[`interpreter default scripts crypto.src 5`] = `"402/25000"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `"shallnotpass"`;
+exports[`interpreter default scripts crypto.src 6`] = `""`;
+
+exports[`interpreter default scripts crypto.src 7`] = `"false"`;
+
+exports[`interpreter default scripts crypto.src 8`] = `"Key not found. More acks needed"`;
+
+exports[`interpreter default scripts crypto.src 9`] = `""`;
+
+exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
+
+exports[`interpreter default scripts crypto.src 11`] = `""`;
 
 exports[`interpreter default scripts generics.src 1`] = `""`;
 
@@ -65,9 +81,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: ambitious-barbara-20.de
-Administrative contact: Unbelievable-defarge-44
-Email address: Unbelievable-defarge-44@ambitious-barbara-20.de
+"Domain name: Remarkable-berry-60.org
+Administrative contact: agreeable-trustee-20
+Email address: agreeable-trustee-20@Remarkable-berry-60.org
 Phone: 123456891"
 `;
 
@@ -93,7 +109,7 @@ exports[`interpreter default scripts generics.src 15`] = `"clearing screen"`;
 
 exports[`interpreter default scripts generics.src 16`] = `""`;
 
-exports[`interpreter default scripts generics.src 17`] = `"/home/test"`;
+exports[`interpreter default scripts generics.src 17`] = `"/home/test/myprogramm"`;
 
 exports[`interpreter default scripts generics.src 18`] = `
 "COL1    COL2    COL3    
@@ -117,10 +133,10 @@ exports[`interpreter default scripts generics.src 24`] = `
 `;
 
 exports[`interpreter default scripts ls.src 1`] = `
-"Desktop    
-Downloads  
-Config     
-file.cap   "
+"Desktop     
+Downloads   
+Config      
+myprogramm  "
 `;
 
 exports[`interpreter default scripts meta-mail.src 1`] = `"metaMail"`;
@@ -134,14 +150,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
+"[ ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"ce46d711-15d4-4dce-bb7c-3f00245e1583"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
+"ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
 dude"
 `;
 
@@ -233,13 +249,83 @@ exports[`interpreter default scripts router.src 4`] = `"router"`;
 
 exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `"192.168.0.8"`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.0.10"`;
 
-exports[`interpreter default scripts router.src 7`] = `""`;
+exports[`interpreter default scripts router.src 7`] = `"port"`;
 
-exports[`interpreter default scripts router.src 8`] = `""`;
+exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port, port, port, port, port, port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
+
+exports[`interpreter default scripts scripts.src 1`] = `
+"Desktop    
+Downloads  
+Config     "
+`;
+
+exports[`interpreter default scripts scripts.src 2`] = `
+"-r-x--x--x  root  root  345   00:00  build             
+-r-x--x--x  root  root  262   00:00  cat               
+-r-x--x--x  root  root  848   00:00  cp                
+-r-x--x--x  root  root  261   00:00  kill              
+-r-x--x--x  root  root  1014  00:00  ls                
+-r-x--x--x  root  root  505   00:00  mkdir             
+-r-x--x--x  root  root  918   00:00  mv                
+-r-x--x--x  root  root  89    00:00  ps                
+-r-x--x--x  root  root  23    00:00  pwd               
+-r-x--x--x  root  root  401   00:00  rm                
+-r-x--x--x  root  root  637   00:00  sudo              
+-r-x--x--x  root  root  373   00:00  touch             
+-r-x--x--x  root  root  24    00:00  whoami            
+-r-x--x--x  root  root  415   00:00  aircrack          
+-r-x--x--x  root  root  249   00:00  aireplay          
+-r-x--x--x  root  root  470   00:00  airmon            
+-r-x--x--x  root  root  2157  00:00  apt-get           
+-r-x--x--x  root  root  343   00:00  ftp               
+-r-x--x--x  root  root  734   00:00  ifconfig          
+-r-x--x--x  root  root  298   00:00  iwconfig          
+-r-x--x--x  root  root  388   00:00  iwlist            
+-r-x--x--x  root  root  779   00:00  nmap              
+-r-x--x--x  root  root  126   00:00  nslookup          
+-r-x--x--x  root  root  196   00:00  ping              
+-r-x--x--x  root  root  612   00:00  rshell-interface  
+-r-x--x--x  root  root  442   00:00  smtp-user-list    
+-r-x--x--x  root  root  354   00:00  sniffer           
+-r-x--x--x  root  root  394   00:00  ssh               
+-r-x--x--x  root  root  113   00:00  whois             
+-r-x--x--x  root  root  284   00:00  chgrp             
+-r-x--x--x  root  root  288   00:00  chmod             
+-r-x--x--x  root  root  284   00:00  chown             
+-r-x--x--x  root  root  233   00:00  groupadd          
+-r-x--x--x  root  root  236   00:00  groupdel          
+-r-x--x--x  root  root  159   00:00  groups            
+-r-x--x--x  root  root  266   00:00  passwd            
+-r-x--x--x  root  root  268   00:00  useradd           
+-r-x--x--x  root  root  269   00:00  userdel           
+-r-x--x--x  root  root  998   00:00  decipher          
+-r-x--x--x  root  root  693   00:00  scanlib           
+-r-x--x--x  root  root  519   00:00  scanrouter        "
+`;
+
+exports[`interpreter default scripts scripts.src 3`] = `
+"USER  PID   CPU   MEM   COMMAND             
+root  6380  5.6   8.74  kernel_task         
+root  8841  11.8  7.56  Xorg                "
+`;
+
+exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
+
+exports[`interpreter default scripts scripts.src 5`] = `
+"
+Connected to Wi-Fi:
+Essid: essid-test-uuid
+Bssid: bssid-test-uuid
+----------------
+Public IP: 142.32.54.56
+Local IP: 192.168.117.34
+Gateway: 192.168.0.10
+"
+`;
 
 exports[`interpreter default scripts service.src 1`] = `"service"`;
 
@@ -259,7 +345,7 @@ exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
 exports[`interpreter default scripts shell.src 4`] = `"[ port ]"`;
 
-exports[`interpreter default scripts shell.src 5`] = `"false"`;
+exports[`interpreter default scripts shell.src 5`] = `"Can't create folder /root/foo. Permission denied"`;
 
 exports[`interpreter default scripts shell.src 6`] = `"true"`;
 
@@ -267,45 +353,45 @@ exports[`interpreter default scripts shell.src 7`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 8`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 9`] = `"false"`;
+exports[`interpreter default scripts shell.src 9`] = `"Can't create file /root/foo-file. Permission denied"`;
 
 exports[`interpreter default scripts shell.src 10`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER PID CPU MEM COMMAND
-root 2134 0.0% 13.37% kernel_task
-root 1864 0.0% 4.20% Xorg"
+"USER  PID   CPU   MEM    COMMAND      
+root  4516  5.1   30.91  kernel_task  
+root  8612  11.6  25.32  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
 
-exports[`interpreter default scripts shell.src 14`] = `"false"`;
+exports[`interpreter default scripts shell.src 14`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 15`] = `"false"`;
+exports[`interpreter default scripts shell.src 15`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 16`] = `"false"`;
+exports[`interpreter default scripts shell.src 16`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 17`] = `"false"`;
+exports[`interpreter default scripts shell.src 17`] = `"Denied. Only root user can execute this command."`;
 
-exports[`interpreter default scripts shell.src 18`] = `"false"`;
+exports[`interpreter default scripts shell.src 18`] = `""`;
 
-exports[`interpreter default scripts shell.src 19`] = `""`;
+exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user can execute this command."`;
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 0B:E4:A7:98:32:AA 28% Outstanding-biddy-10, 44:8E:73:9E:F2:63 31% Fortuitous-lady-55, D4:3B:19:E1:AE:8A 56% easygoing-marion-94, D6:70:65:60:43:66 56% determined-emily-19 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 53% diligent-soldier-65, B3:A1:55:6C:FF:79 73% Spectacular-horatio-26, EE:89:54:50:D8:D7 71% dynamic-trustee-7, 61:42:95:99:DB:74 41% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 23`] = `"false"`;
+exports[`interpreter default scripts shell.src 23`] = `"Error: Invalid IP address"`;
 
-exports[`interpreter default scripts shell.src 24`] = `"192.168.96.123"`;
+exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.96.123"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.93.234"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 
@@ -313,13 +399,13 @@ exports[`interpreter default scripts shell.src 28`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 29`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 30`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 30`] = `"permission denied"`;
 
-exports[`interpreter default scripts shell.src 31`] = `"No read permissions"`;
+exports[`interpreter default scripts shell.src 31`] = `"permission denied"`;
 
-exports[`interpreter default scripts shell.src 32`] = `"No read permissions"`;
+exports[`interpreter default scripts shell.src 32`] = `"permission denied"`;
 
-exports[`interpreter default scripts shell.src 33`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 33`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 34`] = `"/root"`;
 
@@ -327,17 +413,17 @@ exports[`interpreter default scripts shell.src 35`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 36`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 37`] = `""`;
+exports[`interpreter default scripts shell.src 37`] = `"can't open /root Binary file."`;
 
-exports[`interpreter default scripts shell.src 38`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 38`] = `"can't open /root Binary file."`;
 
-exports[`interpreter default scripts shell.src 39`] = `"false"`;
+exports[`interpreter default scripts shell.src 39`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 40`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 41`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 42`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 42`] = `"permission denied"`;
 
 exports[`interpreter default scripts shell.src 43`] = `"[ file, file, file, file ]"`;
 
@@ -345,13 +431,13 @@ exports[`interpreter default scripts shell.src 44`] = `"[  ]"`;
 
 exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 46`] = `"No write permissions"`;
+exports[`interpreter default scripts shell.src 46`] = `"Permission denied"`;
 
-exports[`interpreter default scripts shell.src 47`] = `"test-group"`;
+exports[`interpreter default scripts shell.src 47`] = `"root"`;
 
-exports[`interpreter default scripts shell.src 48`] = `"Not yet supported"`;
+exports[`interpreter default scripts shell.src 48`] = `"Permission denied"`;
 
-exports[`interpreter default scripts shell.src 49`] = `"1337"`;
+exports[`interpreter default scripts shell.src 49`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 50`] = `"false"`;
 
@@ -362,6 +448,54 @@ exports[`interpreter default scripts shell.src 52`] = `"false"`;
 exports[`interpreter default scripts shell.src 53`] = `"true"`;
 
 exports[`interpreter default scripts shell.src 54`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 55`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 56`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 57`] = `""`;
+
+exports[`interpreter default scripts shell.src 58`] = `"123"`;
+
+exports[`interpreter default scripts shell.src 59`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 60`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 61`] = `"testg"`;
+
+exports[`interpreter default scripts shell.src 62`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 63`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 64`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 65`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 66`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 67`] = `"file"`;
+
+exports[`interpreter default scripts shell.src 68`] = `""`;
+
+exports[`interpreter default scripts shell.src 69`] = `"drwxr--rwx"`;
+
+exports[`interpreter default scripts shell.src 70`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 71`] = `"true"`;
+
+exports[`interpreter default scripts shell.src 72`] = `"i am admin"`;
+
+exports[`interpreter default scripts shell.src 73`] = `"root"`;
+
+exports[`interpreter default scripts shell.src 74`] = `""`;
+
+exports[`interpreter default scripts shell.src 75`] = `"test"`;
+
+exports[`interpreter default scripts shell.src 76`] = `"root"`;
+
+exports[`interpreter default scripts shell.src 77`] = `""`;
+
+exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

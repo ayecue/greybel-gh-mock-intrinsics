@@ -2,17 +2,28 @@ import {
   CustomBoolean,
   CustomFunction,
   CustomList,
+  CustomNil,
   CustomString,
   CustomValue,
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
-import { Folder } from 'greybel-mock-environment/dist/types';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
+import {
+  greaterThanContentLimit,
+  greaterThanEntityNameLimit,
+  greaterThanFileNameLimit,
+  isValidFileName
+} from './utils';
 
-export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device,
+  entity: Type.FSEntity
+): BasicInterface {
   const itrface = new BasicInterface('file');
 
   itrface.addMethod(
@@ -27,65 +38,43 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const permissions = args.get('permissions');
+        const isRecursive = args.get('isRecursive');
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (
+          permissions instanceof CustomNil ||
+          isRecursive instanceof CustomNil
+        ) {
+          throw new Error('chmod: Invalid arguments');
         }
 
-        const permissions = args.get('permissions').toString();
-        const isRecursive = args.get('isRecursive').toTruthy();
+        const { w } = entity.getPermissions(user, device.groups);
 
-        if (!/^[ugo](-|\+)[wrx]{1,3}$/i.test(permissions)) {
+        if (user.username !== 'root' && !w) {
+          return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
           return Promise.resolve(
-            new CustomString('Invalid pattern for permissions')
+            new CustomString('permission denied. File protected.')
           );
         }
 
-        const userType: string = permissions[0];
-        const operator = permissions[1];
-        const getNewPermissions = (itemFile: Type.FSEntity) => {
-          const flags = itemFile.parsePermissions();
+        const permissionsRaw = permissions.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
 
-          permissions
-            .substr(2)
-            .split('')
-            .forEach((item: string) => {
-              const permSeg = Utils.getPermissionSegmentByString(
-                flags,
-                userType
-              );
-              const value = Utils.getPermissionSegmentValueByString(
-                permSeg,
-                item
-              );
+        if (!/^[ugo](-|\+)[wrx]{1,3}$/i.test(permissionsRaw)) {
+          return Promise.resolve(new CustomString('Wrong format.'));
+        }
 
-              if (value) {
-                Utils.setPermissionSegmentValueByString(
-                  permSeg,
-                  item,
-                  operator === '+'
-                );
-              }
-            });
+        entity.permissions.chmod(permissionsRaw);
 
-          return flags;
-        };
-
-        entity.permissions = Utils.transformFlagsToPermissions(
-          getNewPermissions(entity)
-        );
-
-        if (isRecursive && entity instanceof Folder) {
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user);
+            const { w } = item.getPermissions(user, device.groups);
 
             if (w) {
-              item.permissions = Utils.transformFlagsToPermissions(
-                getNewPermissions(item)
-              );
+              item.permissions.chmod(permissionsRaw);
             }
-          }, true);
+          });
         }
 
         return Promise.resolve(new CustomString(''));
@@ -107,44 +96,53 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user);
+        const path = args.get('path');
+        const newName = args.get('newName');
 
-        if (!r) {
-          return Promise.resolve(new CustomString('No read permissions'));
+        if (path instanceof CustomNil || newName instanceof CustomNil) {
+          throw new Error('copy: Invalid arguments');
         }
 
-        const path = args.get('path').toString();
-        const newName = args.get('newName').toString();
-        const traversalPath = Utils.getTraversalPath(path, entity.getPath());
-        const folder = entity.getEntity(traversalPath) as Type.Folder;
+        const pathRaw = path.toString();
+        const newNameRaw = newName.toString();
 
-        if (folder && folder.isFolder) {
-          const { w } = folder.getPermissions(user);
+        if (!isValidFileName(newNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only alphanumeric allowed as newname')
+          );
+        } else if (greaterThanFileNameLimit(newNameRaw)) {
+          throw new Error('copy: name cannot exceed the 128 character limit.');
+        }
 
-          if (!w) {
-            return Promise.resolve(new CustomString('No write permissions'));
+        const { r } = entity.getPermissions(user, device.groups);
+
+        if (!r && user.username !== 'root') {
+          return Promise.resolve(new CustomString('permission denied'));
+        }
+
+        const traversalPath = Utils.getTraversalPath(
+          pathRaw,
+          entity.getTraversalPath()
+        );
+        const folder = device.getFile(traversalPath);
+
+        if (folder instanceof Type.Folder) {
+          const { w } = folder.getPermissions(user, device.groups);
+
+          if (!w && user.username !== 'root') {
+            return Promise.resolve(new CustomString('permission denied'));
           }
 
-          const result = folder.getEntityIndex(newName);
+          const copy = entity.copy();
 
-          if (result) {
-            folder.removeFile(newName);
-          }
+          copy.name = newNameRaw;
 
-          if (entity.isFolder) {
-            const newFolder = entity.copyEntity(folder) as Type.Folder;
-            newFolder.name = newName;
-            folder.folders.push(newFolder);
-          } else {
-            const newFile = entity.copyEntity(folder) as Type.File;
-            newFile.name = newName;
-            folder.files.push(newFile);
-          }
+          folder.putEntity(copy);
 
           return Promise.resolve(Defaults.True);
         }
 
-        return Promise.resolve(new CustomString('Invalid path'));
+        return Promise.resolve(Defaults.Void);
       }
     )
       .addArgument('path')
@@ -163,46 +161,54 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user);
+        const path = args.get('path');
+        const newName = args.get('newName');
 
-        if (!r) {
-          return Promise.resolve(new CustomString('No read permissions'));
+        if (path instanceof CustomNil || newName instanceof CustomNil) {
+          throw new Error('move: Invalid arguments');
         }
 
-        const path = args.get('path').toString();
-        const newName = args.get('newName').toString();
-        const traversalPath = Utils.getTraversalPath(path, entity.getPath());
-        const folder = entity.getEntity(traversalPath) as Type.Folder;
+        const pathRaw = path.toString();
+        const newNameRaw = newName.toString();
 
-        if (folder && folder.isFolder) {
-          const { w } = folder.getPermissions(user);
+        if (!isValidFileName(newNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only alphanumeric allowed as newname')
+          );
+        } else if (greaterThanFileNameLimit(newNameRaw)) {
+          throw new Error('move: name cannot exceed the 128 character limit.');
+        }
 
-          if (!w) {
-            return Promise.resolve(new CustomString('No write permissions'));
+        const { r } = entity.getPermissions(user, device.groups);
+
+        if (!r && user.username !== 'root') {
+          return Promise.resolve(new CustomString('permission denied'));
+        }
+
+        const traversalPath = Utils.getTraversalPath(
+          pathRaw,
+          entity.getTraversalPath()
+        );
+        const folder = device.getFile(traversalPath);
+
+        if (folder instanceof Type.Folder) {
+          const { w } = folder.getPermissions(user, device.groups);
+
+          if (!w && user.username !== 'root') {
+            return Promise.resolve(new CustomString('permission denied'));
           }
 
-          const result = folder.getEntityIndex(newName);
+          const copy = entity.copy();
 
-          if (result) {
-            folder.removeFile(newName);
-          }
+          folder.removeEntity(entity.name);
+          copy.name = newNameRaw;
 
-          if (entity.isFolder) {
-            const newFolder = entity.copyEntity(folder) as Type.Folder;
-            newFolder.name = newName;
-            folder.folders.push(newFolder);
-          } else {
-            const newFile = entity.copyEntity(folder) as Type.File;
-            newFile.name = newName;
-            folder.files.push(newFile);
-          }
-
-          (entity.parent as Type.Folder).removeFile(entity.name);
+          folder.putEntity(copy);
 
           return Promise.resolve(Defaults.True);
         }
 
-        return Promise.resolve(new CustomString('Invalid path'));
+        return Promise.resolve(Defaults.Void);
       }
     )
       .addArgument('path')
@@ -221,17 +227,35 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const newName = args.get('newName');
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (newName instanceof CustomNil) {
+          return Promise.resolve(Defaults.False);
         }
 
-        const newName = args.get('newName').toString();
+        const newNameRaw = newName.toString();
 
-        entity.name = newName;
+        if (!isValidFileName(newNameRaw)) {
+          return Promise.resolve(
+            new CustomString('Error: only alphanumeric allowed as newname')
+          );
+        } else if (greaterThanFileNameLimit(newNameRaw)) {
+          throw new Error('move: name cannot exceed the 128 character limit.');
+        }
 
-        return Promise.resolve(new CustomString(''));
+        const { w } = entity.getPermissions(user, device.groups);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
+          return Promise.resolve(
+            new CustomString('permission denied. File protected.')
+          );
+        }
+
+        entity.name = newNameRaw;
+
+        return Promise.resolve(Defaults.True);
       }
     ).addArgument('newName')
   );
@@ -248,9 +272,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(
-          new CustomString('/' + entity.getPath().join('/'))
-        );
+        return Promise.resolve(new CustomString(entity.getPath()));
       }
     )
   );
@@ -263,6 +285,9 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        if (entity instanceof Type.File) {
+          return Promise.resolve(new CustomBoolean(entity.allowImport));
+        }
         return Promise.resolve(Defaults.False);
       }
     )
@@ -284,7 +309,9 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(create(user, entity.parent));
+        return Promise.resolve(
+          create(mockEnvironment, user, device, entity.parent)
+        );
       }
     )
   );
@@ -314,19 +341,26 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user);
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
+          );
+        }
+
+        const { r } = entity.getPermissions(user, device.groups);
 
         if (!r) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const file = entity as Type.File;
-
-        if (file.type !== Type.FileType.Plain) {
-          return Promise.resolve(Defaults.Void);
+        if (
+          entity instanceof Type.File &&
+          entity.type === Type.FileType.Plain
+        ) {
+          return Promise.resolve(new CustomString(entity.content || ''));
         }
 
-        return Promise.resolve(new CustomString(file.content || ''));
+        return Promise.resolve(Defaults.Void);
       }
     )
   );
@@ -343,20 +377,44 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const content = args.get('content');
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (content instanceof CustomNil) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const contentRaw = content.toString();
+
+        if (greaterThanContentLimit(contentRaw)) {
+          return Promise.resolve(
+            new CustomString(
+              "I can't save the file. The maximum of 160,000 characters has been exceeded"
+            )
+          );
+        }
+
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
+          );
+        } else if (
+          entity instanceof Type.File &&
+          entity.type !== Type.FileType.Plain
+        ) {
+          return Promise.resolve(
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
+          );
+        }
+
+        const { w } = entity.getPermissions(user, device.groups);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('permission denied'));
         }
 
         const file = entity as Type.File;
-        const content = args.get('content').toString();
 
-        if (file.type !== Type.FileType.Plain) {
-          return Promise.resolve(new CustomString('Invalid file type'));
-        }
-
-        file.content = content;
+        file.content = contentRaw;
 
         return Promise.resolve(Defaults.True);
       }
@@ -371,8 +429,8 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        if (entity.isFolder) {
-          return Promise.resolve(Defaults.False);
+        if (entity instanceof Type.Folder) {
+          return Promise.resolve(Defaults.True);
         }
 
         const file = entity as Type.File;
@@ -391,7 +449,9 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomBoolean(!!entity.isFolder));
+        return Promise.resolve(
+          new CustomBoolean(entity instanceof Type.Folder)
+        );
       }
     )
   );
@@ -405,12 +465,10 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const permission = args.get('permission').toString().substr(0, 1);
-        const permissionMap = entity.getPermissions(user);
+        const permissionMap = entity.getPermissions(user, device.groups);
 
         return Promise.resolve(
-          new CustomBoolean(
-            Utils.getPermissionSegmentValueByString(permissionMap, permission)
-          )
+          new CustomBoolean(permissionMap.getFlagByString(permission))
         );
       }
     ).addArgument('permission')
@@ -428,13 +486,17 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const { w } = entity.getPermissions(user, device.groups);
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
+          return Promise.resolve(
+            new CustomString('permission denied. File protected.')
+          );
         }
 
-        (entity.parent as Type.Folder).removeFile(entity.name);
+        (entity.parent as Type.Folder).removeEntity(entity.name);
 
         return Promise.resolve(new CustomString(''));
       }
@@ -453,13 +515,13 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        if (!entity.isFolder) {
+        if (!(entity instanceof Type.Folder)) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Type.Folder).folders.map(
+        const result = Array.from((entity as Type.Folder).folders.values()).map(
           (folder: Type.Folder) => {
-            return create(user, folder);
+            return create(mockEnvironment, user, device, folder);
           }
         );
 
@@ -480,13 +542,15 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        if (!entity.isFolder) {
+        if (!(entity instanceof Type.Folder)) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = (entity as Type.Folder).files.map((file: Type.File) => {
-          return create(user, file);
-        });
+        const result = Array.from((entity as Type.Folder).files.values()).map(
+          (file: Type.File) => {
+            return create(mockEnvironment, user, device, file);
+          }
+        );
 
         return Promise.resolve(new CustomList(result));
       }
@@ -501,7 +565,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(entity.permissions));
+        return Promise.resolve(new CustomString(entity.permissions.toString()));
       }
     )
   );
@@ -531,23 +595,38 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user);
+        const owner = args.get('owner');
+        const isRecursive = args.get('isRecursive');
 
-        if (!w) {
-          return Promise.resolve(new CustomString('No write permissions'));
+        if (owner instanceof CustomNil || isRecursive instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        const owner = args.get('owner').toString();
-        const isRecursive = args.get('isRecursive').toTruthy();
+        const ownerRaw = owner.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
 
-        if (isRecursive && entity instanceof Folder) {
+        if (ownerRaw === '') {
+          throw new Error('invalid owner value.');
+        } else if (greaterThanEntityNameLimit(ownerRaw)) {
+          throw new Error('owner cannot exceed the 15 character limit.');
+        }
+
+        const { w } = entity.getPermissions(user, device.groups);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('Permission denied'));
+        }
+
+        entity.owner = ownerRaw;
+
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user);
+            const { w } = item.getPermissions(user, device.groups);
 
             if (w) {
-              item.owner = owner;
+              item.owner = ownerRaw;
             }
-          }, true);
+          });
         }
 
         return Promise.resolve(new CustomString(''));
@@ -565,7 +644,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('test-group'));
+        return Promise.resolve(new CustomString(entity.group));
       }
     )
   );
@@ -576,11 +655,51 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
+        if (entity.deleted) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const group = args.get('group');
+        const isRecursive = args.get('isRecursive');
+
+        if (group instanceof CustomNil || isRecursive instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const groupRaw = group.toString();
+        const isRecursiveRaw = isRecursive.toTruthy();
+
+        if (groupRaw === '') {
+          throw new Error('invalid groupname.');
+        } else if (greaterThanEntityNameLimit(groupRaw)) {
+          throw new Error('groupname cannot exceed the 15 character limit.');
+        }
+
+        const { w } = entity.getPermissions(user, device.groups);
+
+        if (!w && user.username !== 'root') {
+          return Promise.resolve(new CustomString('Permission denied'));
+        }
+
+        entity.group = groupRaw;
+
+        if (isRecursiveRaw && entity instanceof Type.Folder) {
+          entity.traverseChildren((item: Type.FSEntity) => {
+            const { w } = item.getPermissions(user, device.groups);
+
+            if (w) {
+              item.group = groupRaw;
+            }
+          });
+        }
+
+        return Promise.resolve(new CustomString(''));
       }
     )
+      .addArgument('group')
+      .addArgument('isRecursive', new CustomBoolean(false))
   );
 
   itrface.addMethod(
@@ -591,7 +710,7 @@ export function create(user: Type.User, entity: Type.FSEntity): BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('1337'));
+        return Promise.resolve(new CustomString(entity.getSize().toString()));
       }
     )
   );

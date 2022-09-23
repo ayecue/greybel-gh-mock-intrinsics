@@ -1,21 +1,27 @@
 import {
   CustomFunction,
   CustomList,
+  CustomNil,
   CustomNumber,
   CustomString,
   CustomValue,
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
-import { File } from 'greybel-mock-environment/dist/types';
+import {
+  MockEnvironment,
+  RouterLocation,
+  Type,
+  Utils
+} from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
+import { delay } from './utils';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
-  computer: Type.Computer
+  device: Type.Device
 ): BasicInterface {
   const itrface = new BasicInterface('crypto');
 
@@ -27,37 +33,88 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const bssid = args.get('bssid').toString();
-        const essid = args.get('essid').toString();
-        // Not yet implemented
-        // const maxAcks = args.get('maxAcks').toInt();
+        const bssid = args.get('bssid');
+        const essid = args.get('essid');
+        const maxAcks = args.get('maxAcks');
+
+        if (
+          bssid instanceof CustomNil ||
+          essid instanceof CustomNil ||
+          maxAcks instanceof CustomNil
+        ) {
+          throw new Error('aireplay: Invalid arguments');
+        }
+
+        const bssidRaw = bssid.toString();
+        const essidRaw = essid.toString();
+        const maxAcksRaw = maxAcks.toInt();
+
         const network = mockEnvironment
-          .get()
-          .networkGenerator.wifiNetworks.find((item: Type.WifiNetwork) => {
-            return item.router.bssid === bssid && item.router.essid === essid;
+          .findRoutersCloseToLocation(device.location)
+          .find(({ router }: RouterLocation) => {
+            return router.bssid === bssidRaw && router.essid === essidRaw;
           });
 
         if (!network) {
-          return new CustomString('No network found');
+          return new CustomString("Can't connect. Target is out of reach.");
         }
 
-        const time = 300000 / (network.percentage + 15);
+        const activeWifiDevices = device
+          .findNetworkDevicesByNetCard(Type.NetCard.Wifi)
+          .filter((n) => n.active && n.mode === Type.NetworkDeviceMode.Montior);
 
-        await ctx.handler.outputHandler.progress(time);
+        if (activeWifiDevices.length === 0) {
+          return new CustomString(
+            'aireplay: no wifi card found with monitor mode enabled'
+          );
+        }
 
-        const folder = computer.getFile(
-          computer.getHomePath(user)
-        ) as Type.Folder;
+        const output = [
+          `Waiting for beacon frame (BSSID: ${bssidRaw})`,
+          'Sending Authentication Request (Open system) [ACK]',
+          'Authentication succesful',
+          'Sending Association Request\nAssociation succesful :-)'
+        ].join('\n');
 
-        folder.putFile(
-          new File({
-            name: 'file.cap',
-            content: network.password,
-            owner: user.username,
-            permissions: 'drwxr--r--',
-            type: Type.FileType.Ack
-          })
-        );
+        ctx.handler.outputHandler.print(output);
+        let acks = 0;
+        let cancel = false;
+
+        ctx.handler.outputHandler
+          .waitForKeyPress()
+          .then(() => (cancel = true))
+          .catch(() => {});
+
+        /* eslint-disable-next-line no-unmodified-loop-condition */
+        while (acks < maxAcksRaw && !cancel) {
+          ctx.handler.outputHandler.print(`${acks}/${maxAcksRaw}`);
+          acks += Utils.getRandomInt(250, 750);
+          await delay(500);
+        }
+
+        ctx.handler.outputHandler.print(`${acks}/${maxAcksRaw}`);
+
+        const n = 300000 / (network.percentage + 15);
+
+        if (acks < n) {
+          const folder = device.getFile(
+            device.getHomePath(user)
+          ) as Type.Folder;
+
+          folder.putEntity(
+            new Type.File({
+              name: 'file.cap',
+              content: [
+                acks,
+                network.percentage,
+                network.router.wifi.credentials.password
+              ].join(','),
+              owner: user.username,
+              permissions: 'drwxr--r--',
+              type: Type.FileType.Ack
+            })
+          );
+        }
 
         return Defaults.Void;
       }
@@ -73,43 +130,119 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('start'));
+        const option = args.get('option');
+        const deviceName = args.get('device');
+
+        if (option instanceof CustomNil || device instanceof CustomNil) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const optionRaw = option.toString();
+        const deviceNameRaw = deviceName.toString();
+
+        if (
+          optionRaw === '' ||
+          deviceNameRaw === '' ||
+          deviceNameRaw.length > 5
+        ) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const activeWifiDevices = device
+          .findNetworkDevicesByNetCard(Type.NetCard.Wifi)
+          .filter((n) => n.active);
+
+        if (activeWifiDevices.length === 0) {
+          return Promise.resolve(
+            new CustomString('Error: wifi card is disabled')
+          );
+        }
+
+        const map = device.getNetworkDeviceMap();
+
+        if (!map.has(deviceNameRaw)) {
+          return Promise.resolve(Defaults.False);
+        }
+
+        const netDevice = map.get(deviceNameRaw);
+
+        if (netDevice.type !== Type.NetCard.Wifi) {
+          return Promise.resolve(
+            new CustomString(
+              'airmon: monitor mode can only be activated on wifi cards'
+            )
+          );
+        }
+
+        netDevice.mode = Type.NetworkDeviceMode.Montior;
+
+        return Promise.resolve(Defaults.True);
       }
     )
+      .addArgument('option')
+      .addArgument('device')
   );
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'aircrack',
       (
-        _ctx: OperationContext,
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const path = args.get('path').toString();
-        const traversalPath = Utils.getTraversalPath(
-          path,
-          computer.getHomePath(user)
-        );
-        const file = computer.getFile(traversalPath) as Type.File;
+        const path = args.get('path');
 
-        if (!file) {
+        if (path instanceof CustomNil) {
+          throw new Error('aircrack: Invalid arguments');
+        }
+
+        const pathRaw = path.toString();
+
+        if (pathRaw === '') {
+          throw new Error('aircrack: Invalid arguments');
+        }
+
+        const traversalPath = Utils.getTraversalPath(
+          pathRaw,
+          mockEnvironment.getLatestSession().currentPath.getTraversalPath()
+        );
+        const entity = device.getFile(traversalPath);
+
+        if (entity === null) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = file.getPermissions(user);
+        const { r } = entity.getPermissions(user, device.groups);
 
         if (!r) {
+          ctx.handler.outputHandler.print("Can't open file. Permission denied");
           return Promise.resolve(Defaults.Void);
         }
 
-        if (file.type !== Type.FileType.Ack) {
+        if (
+          !(entity instanceof Type.File) ||
+          entity.type !== Type.FileType.Ack
+        ) {
+          ctx.handler.outputHandler.print(
+            "Can't process file. Not valid filecap."
+          );
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(new CustomString(file.content));
+        const [acks, power, password] = entity.content.split(',');
+        const numAcks = Number(acks);
+        const numPower = Number(power);
+        const n = 300000 / (numPower + 15);
+
+        if (numAcks < n) {
+          ctx.handler.outputHandler.print('Key not found. More acks needed');
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(new CustomString(password));
       }
     ).addArgument('path')
   );
@@ -126,11 +259,11 @@ export function create(
 
         await ctx.handler.outputHandler.progress(5000);
 
-        const user = mockEnvironment
-          .get()
-          .userGenerator.users.find((item: Type.User) => {
+        const user = mockEnvironment.userGenerator.users.find(
+          (item: Type.User) => {
             return item.passwordHashed === encryptedPass;
-          });
+          }
+        );
 
         if (!user) {
           return Defaults.Void;
@@ -147,11 +280,29 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const ipAddress = args.get('ipAddress');
+        const port = args.get('port');
+
+        if (ipAddress instanceof CustomNil || port instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const ipAddressRaw = ipAddress.toString();
+
+        if (ipAddressRaw === '' || !Utils.isValidIp(ipAddressRaw)) {
+          return Promise.resolve(new CustomString('Error: Invalid ip address'));
+        }
+
+        // const portRaw = port.toInt();
+        // TODO implement smtp user list
+
         return Promise.resolve(new CustomList());
       }
     )
+      .addArgument('ipAddress')
+      .addArgument('port')
   );
 
   return itrface;

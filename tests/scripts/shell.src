@@ -1,7 +1,10 @@
 shell = get_shell
 computer = shell.host_computer
-
 file = computer.File("/root")
+
+adminShell = get_shell("root", "test")
+adminComputer = adminShell.host_computer
+adminFile = adminComputer.File("/root")
 
 print(typeof(shell))
 
@@ -20,13 +23,13 @@ print(computer.network_devices)
 print(computer.change_password("test", "xxx"))
 print(computer.create_user("foo", "foo"))
 print(computer.delete_user("foo", true))
-print(computer.create_group)
-print(computer.delete_group)
-print(computer.groups)
+print(computer.create_group("test", "testg"))
+print(computer.groups("test"))
+print(computer.delete_group("test", "testg"))
 print(computer.close_program)
-print(computer.wifi_networks)
-print(computer.connect_wifi)
-print(computer.connect_ethernet)
+print(computer.wifi_networks("wlan0"))
+print(computer.connect_wifi("wlan0", "bssid-test-uuid", "essid-test-uuid", "test"))
+print(computer.connect_ethernet("eth0", "192.168.0.1", "192.168.0.5"))
 print(computer.network_gateway)
 print(computer.active_net_card)
 print(computer.local_ip)
@@ -52,13 +55,49 @@ print(file.get_files)
 print(file.owner)
 print(file.set_owner("test", true))
 print(file.group)
-print(file.set_group)
+print(file.set_group("foo"))
 print(file.size)
 print(file.allow_import)
-
 
 print(globals.get_shell.host_computer)
 
 print(get_shell("test", "test").host_computer.File("/root").has_permission("w"))
 print(get_shell("root", "test").host_computer.File("/root").has_permission("w"))
 print(get_shell.host_computer.File("/"))
+
+shell = get_shell("root", "test")
+print(shell.host_computer.touch("/home/test", "hello.src"))
+f = shell.host_computer.File("/home/test/hello.src")
+print(f)
+
+if (f) then
+    f.set_content("print(123)")
+    result = shell.build("/home/test/hello.src", "/home/test")
+    print(result)
+    shell.launch("/home/test/hello")
+end if
+
+print(adminComputer.change_password("test", "xxx"))
+print(adminComputer.create_group("test", "testg"))
+print(adminComputer.groups("test"))
+print(adminComputer.delete_group("test", "testg"))
+print(adminComputer.create_user("foo", "foo"))
+print(adminComputer.delete_user("foo", true))
+
+print(adminFile.copy("/home/test", "xxxxxx"))
+print(adminFile.move("/home/test", "xxxxxx"))
+print(typeof(adminComputer.File("/home/test/xxxxxx")))
+print(adminFile.chmod("o+wrx", true))
+print(adminFile.permissions)
+
+print(adminComputer.touch("/root", "admin.src"))
+print(adminComputer.File("/root/admin.src").set_content("i am admin"))
+print(adminComputer.File("/root/admin.src").get_content)
+
+print(adminFile.owner)
+print(adminFile.set_owner("test"))
+print(adminFile.owner)
+
+print(adminFile.group)
+print(adminFile.set_group("test-here"))
+print(adminFile.group)

@@ -87,3 +87,77 @@ export function keyEventToString(keyEvent: KeyEvent): string {
       return String.fromCharCode(keyEvent.keyCode).toLowerCase();
   }
 }
+
+export function formatColumns(columns: string): string {
+  const list = columns.replace(/\\n/g, '\n').split('\n');
+  const v: Array<Array<string>> = [];
+  const l: Array<number> = [];
+
+  for (let i = 0; i < list.length; i++) {
+    const rows = list[i].split(/\s+/);
+    v.push([]);
+
+    for (let j = 0; j < rows.length; j++) {
+      if (rows.length > l.length) {
+        l.push(j);
+      }
+      const txt = rows[j];
+
+      if (txt.length > l[j]) {
+        l[j] = txt.length;
+      }
+
+      v[i].push(txt);
+    }
+  }
+
+  const seperation = 2;
+  const lines = [];
+
+  for (let i = 0; i < v.length; i++) {
+    let output = '';
+    for (let j = 0; j < v[i].length; j++) {
+      const txt = v[i][j];
+      output += txt;
+      const len = l[j] - txt.length + seperation;
+      output += ' '.repeat(len);
+    }
+    lines.push(output);
+  }
+
+  return lines.join('\n');
+}
+
+export function isAlphaNumeric(str: string): boolean {
+  return /^[a-z0-9]+$/i.test(str);
+}
+
+export function greaterThanContentLimit(str: string): boolean {
+  return str.length > 160000;
+}
+
+export function greaterThanEntityNameLimit(str: string): boolean {
+  return str.length > 15;
+}
+
+export function greaterThanFileNameLimit(str: string): boolean {
+  return str.length > 128;
+}
+
+export function greaterThanFilesLimit(arr: Map<any, any>): boolean {
+  return arr.size > 3125;
+}
+
+export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
+  return arr.size > 250;
+}
+
+export function isValidFileName(str: string): boolean {
+  return /^[a-z0-9_.-]+$/i.test(str);
+}
+
+export function delay(time: number = 1000): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}

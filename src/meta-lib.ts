@@ -6,33 +6,24 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
-import { Router } from 'greybel-mock-environment/dist/types';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
 import { create as createShell } from './shell';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   computer: Type.Computer,
   target: Type.Device,
-  library: Type.Library
+  file: Type.File,
+  mode: Type.VulnerabilityMode,
+  libContainer: Type.LibraryContainer,
+  libVersion: Type.LibraryVersion,
+  vulnerabilities: Type.Vulnerability[]
 ): BasicInterface {
   const itrface = new BasicInterface('metaLib');
-  const isRouter = target instanceof Router;
-  const isLan = isRouter
-    ? computer.router.publicIp === target.publicIp
-    : computer.router.publicIp === (target as Type.Computer).router.publicIp;
-  const isLocal = isLan && computer.localIp === target.localIp;
-  const exploits = mockEnvironment
-    .get()
-    .vulnerabilityGenerator.vulnerabilities.filter(
-      (item: Type.Vulnerability) => {
-        return item.library === library && item.remote !== isLocal;
-      }
-    );
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
@@ -42,7 +33,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(library));
+        return Promise.resolve(new CustomString(file.getLibraryType()));
       }
     )
   );
@@ -55,7 +46,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('1.0.0.0'));
+        return Promise.resolve(new CustomString(file.version.toString()));
       }
     )
   );
@@ -71,7 +62,7 @@ export function create(
         const memAddress = args.get('memAddress').toString();
         const sector = args.get('sector').toString();
         const optArgs = args.get('optArgs').toString();
-        const vul = exploits.find((item: Type.Vulnerability) => {
+        const vul = vulnerabilities.find((item: Type.Vulnerability) => {
           return item.memAddress === memAddress && item.sector === sector;
         });
 
@@ -80,23 +71,36 @@ export function create(
         }
 
         switch (vul.action) {
-          case Type.VulnerabilityAction.COMPUTER:
+          case Type.VulnerabilityAction.Computer:
             return Promise.resolve(
-              createComputer(target.getUserByVulnerability(vul.user), target)
+              createComputer(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target
+              )
             );
-          case Type.VulnerabilityAction.SHELL:
+          case Type.VulnerabilityAction.Shell:
             return Promise.resolve(
-              createShell(target.getUserByVulnerability(vul.user), target)
+              createShell(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target
+              )
             );
-          case Type.VulnerabilityAction.FOLDER: {
+          case Type.VulnerabilityAction.Folder: {
             const file = target.getFile(vul.folder);
             return Promise.resolve(
-              createFile(target.getUserByVulnerability(vul.user), file)
+              createFile(
+                mockEnvironment,
+                target.getUserByVulnerability(vul.user),
+                target,
+                file
+              )
             );
           }
-          case Type.VulnerabilityAction.FIREWALL:
+          case Type.VulnerabilityAction.Firewall:
             return Promise.resolve(new CustomString('Firewall test'));
-          case Type.VulnerabilityAction.PASSWORD: {
+          case Type.VulnerabilityAction.Password: {
             if (!optArgs) {
               return Promise.resolve(new CustomString('Invalid args'));
             }
@@ -115,7 +119,7 @@ export function create(
       .addArgument('optArgs')
   );
 
-  itrface.setVariable('exploits', exploits);
+  itrface.setVariable('exploits', vulnerabilities);
 
   return itrface;
 }

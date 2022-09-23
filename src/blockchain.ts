@@ -4,13 +4,14 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import { create as createCoin } from './coin';
 import BasicInterface from './interface';
 import { create as createWallet } from './wallet';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   computer: Type.Computer
 ): BasicInterface {
@@ -63,7 +64,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(createCoin(user, computer));
+        return Promise.resolve(createCoin(mockEnvironment, user, computer));
       }
     )
   );
@@ -76,7 +77,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(createWallet(user, computer));
+        return Promise.resolve(createWallet(mockEnvironment, user, computer));
       }
     )
   );
@@ -102,7 +103,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(createWallet(user, computer));
+        return Promise.resolve(createWallet(mockEnvironment, user, computer));
       }
     )
   );

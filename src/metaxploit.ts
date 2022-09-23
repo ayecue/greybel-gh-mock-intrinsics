@@ -7,14 +7,14 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
-import mockEnvironment from './mock/environment';
 import { create as createNetSession } from './net-session';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   computer: Type.Computer
 ): BasicInterface {
@@ -40,7 +40,28 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createMetaLib(computer, computer, library));
+        const libContainer = mockEnvironment.libraryManager.get(library);
+        const libVersion = libContainer.get(file.version);
+        const vuls = libVersion.getVulnerabilitiesByMode(
+          Type.VulnerabilityMode.Local
+        );
+
+        if (vuls.length === 0) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        return Promise.resolve(
+          createMetaLib(
+            mockEnvironment,
+            computer,
+            computer,
+            file,
+            Type.VulnerabilityMode.Local,
+            libContainer,
+            libVersion,
+            vuls
+          )
+        );
       }
     ).addArgument('path')
   );
@@ -55,34 +76,50 @@ export function create(
       ): Promise<CustomValue> => {
         const ipAddress = args.get('ipAddress').toString();
         const port = args.get('port').toInt();
-        const router = mockEnvironment.get().getRouterByIp(ipAddress);
+        const router = mockEnvironment.getRouterByIp(ipAddress);
 
         if (!router) {
           return Promise.resolve(Defaults.Void);
         }
 
         if (port === 0) {
+          const kernel = router.getKernel();
+
+          if (!kernel) {
+            return Promise.resolve(Defaults.Void);
+          }
+
           return Promise.resolve(
-            createNetSession(computer, router, Type.Library.KERNEL_ROUTER)
+            createNetSession(
+              mockEnvironment,
+              computer,
+              router,
+              Type.Library.KERNEL_ROUTER,
+              kernel
+            )
           );
         }
 
-        const result = mockEnvironment
-          .get()
-          .getForwardedPortOfRouter(router, port);
+        const result = mockEnvironment.getForwardedPortOfRouter(router, port);
 
         if (!result) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const library = Utils.getServiceLibrary(result.port.service);
+        const library = result.computer.findLibraryFileByPort(result.port);
 
         if (!library) {
           return Promise.resolve(Defaults.Void);
         }
 
         return Promise.resolve(
-          createNetSession(computer, result.computer, library)
+          createNetSession(
+            mockEnvironment,
+            computer,
+            result.computer,
+            library.getLibraryType(),
+            library
+          )
         );
       }
     )
@@ -145,19 +182,19 @@ export function create(
                   ...x.required.map(
                     (r: Type.VulnerabilityRequirements): string => {
                       switch (r) {
-                        case Type.VulnerabilityRequirements.LIBRARY:
+                        case Type.VulnerabilityRequirements.Library:
                           return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-                        case Type.VulnerabilityRequirements.REGISTER_AMOUNT:
+                        case Type.VulnerabilityRequirements.RegisterAmount:
                           return '* Checking registered users equal to 2.';
-                        case Type.VulnerabilityRequirements.ANY_ACTIVE:
+                        case Type.VulnerabilityRequirements.AnyActive:
                           return '* Checking an active user.';
-                        case Type.VulnerabilityRequirements.ROOT_ACTIVE:
+                        case Type.VulnerabilityRequirements.RootActive:
                           return '* Checking root active user.';
-                        case Type.VulnerabilityRequirements.LOCAL:
+                        case Type.VulnerabilityRequirements.Local:
                           return '* Checking existing connection in the local network.';
-                        case Type.VulnerabilityRequirements.FORWARD:
+                        case Type.VulnerabilityRequirements.Forward:
                           return '* 1337 port forwarding configured from router to the target computer.';
-                        case Type.VulnerabilityRequirements.GATEWAY:
+                        case Type.VulnerabilityRequirements.Gateway:
                           return '* 1337 computers using this router as gateway.';
                       }
                       return '';

@@ -1,6 +1,6 @@
-import { MockEnvironment, Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
-function createDefaultEnvironment(): MockEnvironment {
+export default function create(): MockEnvironment {
   const mockEnvironment = new MockEnvironment('test', {
     username: 'test',
     password: 'test'
@@ -9,22 +9,27 @@ function createDefaultEnvironment(): MockEnvironment {
   const emailGenerator = mockEnvironment.emailGenerator;
   const networkGenerator = mockEnvironment.networkGenerator;
 
-  mockEnvironment.setupLibraries();
+  const localSession = mockEnvironment.localSession;
+  const localLocation = localSession.computer.location.fork();
+  const localRouter = networkGenerator.generateRouter({
+    publicIp: '142.32.54.56',
+    location: localLocation
+  });
 
-  const localRouters = [
+  for (let index = 0; index < 4; index++) {
+    const offsetX = Utils.getRandom(-5, 5);
+    const offsetY = Utils.getRandom(-5, 5);
+
     networkGenerator.generateRouter({
-      publicIp: '142.32.54.56'
-    }),
-    networkGenerator.generateRouter(),
-    networkGenerator.generateRouter(),
-    networkGenerator.generateRouter()
-  ];
+      location: localLocation.offset(offsetX, offsetY)
+    });
+  }
 
-  localRouters.forEach((v) => networkGenerator.generateWifiNetwork(v));
-  networkGenerator.wifiNetworks[0].router.bssid = 'bssid-test-uuid';
-  networkGenerator.wifiNetworks[0].router.essid = 'essid-test-uuid';
-  networkGenerator.wifiNetworks[0].password = 'test';
-  mockEnvironment.connectLocal(localRouters[0]);
+  localRouter.bssid = 'bssid-test-uuid';
+  localRouter.essid = 'essid-test-uuid';
+  localRouter.wifi.credentials.password = 'test';
+
+  mockEnvironment.connectLocal(localRouter);
   networkGenerator.generateRouter({
     publicIp: '142.567.134.56',
     domain: 'www.mytest.org',
@@ -40,11 +45,9 @@ function createDefaultEnvironment(): MockEnvironment {
     isClosed: false,
     forwarded: true
   });
-
   const { computer } = mockEnvironment.getLocal();
 
-  computer.ports.set(sshTestPort.port, sshTestPort);
-  computer.router.ports.set(sshTestPort.port, sshTestPort);
+  computer.addPort(sshTestPort);
 
   emailGenerator.generate({
     name: 'test',
@@ -54,22 +57,3 @@ function createDefaultEnvironment(): MockEnvironment {
 
   return mockEnvironment;
 }
-
-export class Env {
-  private instance: MockEnvironment;
-
-  constructor() {
-    this.instance = createDefaultEnvironment();
-  }
-
-  get(): MockEnvironment {
-    return this.instance;
-  }
-
-  set(instance: MockEnvironment): Env {
-    this.instance = instance;
-    return this;
-  }
-}
-
-export default new Env();
