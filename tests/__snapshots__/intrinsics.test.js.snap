@@ -48,13 +48,29 @@ exports[`interpreter default scripts crypto.src 1`] = `"crypto"`;
 
 exports[`interpreter default scripts crypto.src 2`] = `"crypto"`;
 
-exports[`interpreter default scripts crypto.src 3`] = `""`;
+exports[`interpreter default scripts crypto.src 3`] = `
+"Waiting for beacon frame (BSSID: bssid-test-uuid)
+Sending Authentication Request (Open system) [ACK]
+Authentication succesful
+Sending Association Request
+Association succesful :-)"
+`;
 
-exports[`interpreter default scripts crypto.src 4`] = `"start"`;
+exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"test"`;
+exports[`interpreter default scripts crypto.src 5`] = `"402/25000"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `"shallnotpass"`;
+exports[`interpreter default scripts crypto.src 6`] = `""`;
+
+exports[`interpreter default scripts crypto.src 7`] = `"false"`;
+
+exports[`interpreter default scripts crypto.src 8`] = `"Key not found. More acks needed"`;
+
+exports[`interpreter default scripts crypto.src 9`] = `""`;
+
+exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
+
+exports[`interpreter default scripts crypto.src 11`] = `""`;
 
 exports[`interpreter default scripts generics.src 1`] = `""`;
 
@@ -292,9 +308,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU   MEM    COMMAND             
-root  2163  11.2  12.73  kernel_task         
-root  1211  14.8  26.20  Xorg                "
+"USER  PID   CPU   MEM   COMMAND             
+root  6380  5.6   8.74  kernel_task         
+root  8841  11.8  7.56  Xorg                "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -329,7 +345,7 @@ exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
 exports[`interpreter default scripts shell.src 4`] = `"[ port ]"`;
 
-exports[`interpreter default scripts shell.src 5`] = `"Can't create folder root/foo. Permission denied\\""`;
+exports[`interpreter default scripts shell.src 5`] = `"Can't create folder /root/foo. Permission denied"`;
 
 exports[`interpreter default scripts shell.src 6`] = `"true"`;
 
@@ -337,7 +353,7 @@ exports[`interpreter default scripts shell.src 7`] = `"file"`;
 
 exports[`interpreter default scripts shell.src 8`] = `"true"`;
 
-exports[`interpreter default scripts shell.src 9`] = `"Can't create file root/foo-file. Permission denied\\""`;
+exports[`interpreter default scripts shell.src 9`] = `"Can't create file /root/foo-file. Permission denied"`;
 
 exports[`interpreter default scripts shell.src 10`] = `"true"`;
 
@@ -345,8 +361,8 @@ exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  905   8.5   11.70  kernel_task  
-root  8330  14.4  25.61  Xorg         "
+root  4516  5.1   30.91  kernel_task  
+root  8612  11.6  25.32  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -365,7 +381,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 51% diligent-soldier-65, B3:A1:55:6C:FF:79 53% Spectacular-horatio-26, EE:89:54:50:D8:D7 60% dynamic-trustee-7, 61:42:95:99:DB:74 44% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 53% diligent-soldier-65, B3:A1:55:6C:FF:79 73% Spectacular-horatio-26, EE:89:54:50:D8:D7 71% dynamic-trustee-7, 61:42:95:99:DB:74 41% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 

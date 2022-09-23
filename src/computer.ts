@@ -133,7 +133,7 @@ export function create(
           } else if (greaterThanFoldersLimit(entityResult.folders)) {
             return Promise.resolve(
               new CustomString(
-                'Can\'t create folder. Reached maximum number of files in a folder"'
+                "Can't create folder. Reached maximum number of files in a folder"
               )
             );
           }
@@ -143,7 +143,7 @@ export function create(
           if (!w && user.username !== 'root') {
             return Promise.resolve(
               new CustomString(
-                `Can't create folder ${entityResult.getPath()}/${folderNameRaw}. Permission denied"`
+                `Can't create folder ${entityResult.getPath()}/${folderNameRaw}. Permission denied`
               )
             );
           }
@@ -229,7 +229,7 @@ export function create(
             return Promise.resolve(new CustomString('The file already exists'));
           } else if (greaterThanFilesLimit(entityResult.files)) {
             return Promise.resolve(
-              new CustomString('Can\'t create file. Reached maximum limit"')
+              new CustomString("Can't create file. Reached maximum limit")
             );
           }
 
@@ -238,7 +238,7 @@ export function create(
           if (!w && user.username !== 'root') {
             return Promise.resolve(
               new CustomString(
-                `Can't create file ${entityResult.getPath()}/${fileNameRaw}. Permission denied"`
+                `Can't create file ${entityResult.getPath()}/${fileNameRaw}. Permission denied`
               )
             );
           }
@@ -861,7 +861,9 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(device.activeNetCard));
+        const [networkDevice] = device.networkDevices.filter((n) => n.active);
+
+        return Promise.resolve(new CustomString(networkDevice.type));
       }
     )
   );

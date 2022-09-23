@@ -155,3 +155,9 @@ export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
 export function isValidFileName(str: string): boolean {
   return /^[a-z0-9_.-]+$/i.test(str);
 }
+
+export function delay(time: number = 1000): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}

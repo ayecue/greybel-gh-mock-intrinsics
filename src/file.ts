@@ -120,7 +120,10 @@ export function create(
           return Promise.resolve(new CustomString('permission denied'));
         }
 
-        const traversalPath = Utils.getTraversalPath(pathRaw, entity.getPath());
+        const traversalPath = Utils.getTraversalPath(
+          pathRaw,
+          entity.getTraversalPath()
+        );
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
@@ -182,7 +185,10 @@ export function create(
           return Promise.resolve(new CustomString('permission denied'));
         }
 
-        const traversalPath = Utils.getTraversalPath(pathRaw, entity.getPath());
+        const traversalPath = Utils.getTraversalPath(
+          pathRaw,
+          entity.getTraversalPath()
+        );
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
@@ -266,9 +272,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(
-          new CustomString('/' + entity.getPath().join('/'))
-        );
+        return Promise.resolve(new CustomString(entity.getPath()));
       }
     )
   );
@@ -339,9 +343,7 @@ export function create(
 
         if (entity instanceof Type.Folder) {
           return Promise.resolve(
-            new CustomString(
-              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
-            )
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
           );
         }
 
@@ -393,18 +395,14 @@ export function create(
 
         if (entity instanceof Type.Folder) {
           return Promise.resolve(
-            new CustomString(
-              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
-            )
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
           );
         } else if (
           entity instanceof Type.File &&
           entity.type !== Type.FileType.Plain
         ) {
           return Promise.resolve(
-            new CustomString(
-              `can't open ${'/' + entity.getPath().join('/')} Binary file.`
-            )
+            new CustomString(`can't open ${entity.getPath()} Binary file.`)
           );
         }
 
@@ -470,9 +468,7 @@ export function create(
         const permissionMap = entity.getPermissions(user, device.groups);
 
         return Promise.resolve(
-          new CustomBoolean(
-            permissionMap.getFlagByString(permission)
-          )
+          new CustomBoolean(permissionMap.getFlagByString(permission))
         );
       }
     ).addArgument('permission')

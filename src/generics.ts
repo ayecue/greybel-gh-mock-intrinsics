@@ -364,9 +364,7 @@ export default function generics(
         const session = mockEnvironment.getLatestSession();
         const path = session.currentPath.getPath();
 
-        return Promise.resolve(
-          new CustomString(path ? '/' + path.join('/') : '/')
-        );
+        return Promise.resolve(new CustomString(path));
       }
     ),
 
@@ -415,9 +413,7 @@ export default function generics(
         const session = mockEnvironment.getLocal();
         const path = session.programPath.getPath();
 
-        return Promise.resolve(
-          new CustomString(path ? '/' + path.join('/') : '/')
-        );
+        return Promise.resolve(new CustomString(path));
       }
     ),
 
@@ -530,9 +526,7 @@ export default function generics(
         const session = mockEnvironment.getLatestSession();
         const path = session.programPath.getPath();
 
-        return Promise.resolve(
-          new CustomString(path ? '/' + path.join('/') : '/')
-        );
+        return Promise.resolve(new CustomString(path));
       }
     ),
 
