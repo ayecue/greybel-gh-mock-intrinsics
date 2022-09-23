@@ -1,6 +1,6 @@
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
-function createDefaultEnvironment(): MockEnvironment {
+export default function create(): MockEnvironment {
   const mockEnvironment = new MockEnvironment('test', {
     username: 'test',
     password: 'test'
@@ -59,22 +59,3 @@ function createDefaultEnvironment(): MockEnvironment {
 
   return mockEnvironment;
 }
-
-export class Env {
-  private instance: MockEnvironment;
-
-  constructor() {
-    this.instance = createDefaultEnvironment();
-  }
-
-  get(): MockEnvironment {
-    return this.instance;
-  }
-
-  set(instance: MockEnvironment): Env {
-    this.instance = instance;
-    return this;
-  }
-}
-
-export default new Env();

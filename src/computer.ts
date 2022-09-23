@@ -8,11 +8,15 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { RouterLocation, Type, Utils } from 'greybel-mock-environment';
+import {
+  MockEnvironment,
+  RouterLocation,
+  Type,
+  Utils
+} from 'greybel-mock-environment';
 
 import { create as createFile } from './file';
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
 import { create as createPort } from './port';
 import {
   formatColumns,
@@ -25,6 +29,7 @@ import {
 } from './utils';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   device: Type.Device,
   options: { location?: string[] } = {}
@@ -41,7 +46,7 @@ export function create(
       ): Promise<CustomValue> => {
         const ports =
           Array.from(device.ports.values()).map((item: Type.Port) =>
-            createPort(device, item)
+            createPort(mockEnvironment, device, item)
           ) || [];
         return Promise.resolve(new CustomList(ports));
       }
@@ -70,7 +75,9 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createFile(user, device, entityResult));
+        return Promise.resolve(
+          createFile(mockEnvironment, user, device, entityResult)
+        );
       }
     ).addArgument('path')
   );
@@ -133,7 +140,7 @@ export function create(
 
           const { w } = entityResult.getPermissions(user, device.groups);
 
-          if (!w) {
+          if (!w && user.username !== 'root') {
             return Promise.resolve(
               new CustomString(
                 `Can't create folder ${entityResult.getPath()}/${folderNameRaw}. Permission denied"`
@@ -228,7 +235,7 @@ export function create(
 
           const { w } = entityResult.getPermissions(user, device.groups);
 
-          if (!w) {
+          if (!w && user.username !== 'root') {
             return Promise.resolve(
               new CustomString(
                 `Can't create file ${entityResult.getPath()}/${fileNameRaw}. Permission denied"`
@@ -336,9 +343,7 @@ export function create(
           );
         }
 
-        const target = device.findUser(usernameRaw);
-
-        if (target === null) {
+        if (!device.users.has(usernameRaw)) {
           return Promise.resolve(
             new CustomString(`user ${usernameRaw} does not exist`)
           );
@@ -390,7 +395,7 @@ export function create(
           return Promise.resolve(
             new CustomString('Denied. Only root user can execute this command.')
           );
-        } else if (device.users.length >= 16) {
+        } else if (device.users.size >= 16) {
           return Promise.resolve(
             new CustomString(
               'Denied. Maximum number of registered users reached.'
@@ -435,13 +440,15 @@ export function create(
           );
         }
 
-        const target = device.findUser(usernameRaw);
-
-        if (target === null) {
+        if (!device.users.has(usernameRaw)) {
           return Promise.resolve(
             new CustomString(`can't delete user. ${usernameRaw} does not exist`)
           );
-        } else if (target.username === 'root') {
+        }
+
+        const target = device.users.get(usernameRaw);
+
+        if (target.username === 'root') {
           return Promise.resolve(
             new CustomString("the root user can't be deleted")
           );
@@ -500,9 +507,7 @@ export function create(
           );
         }
 
-        const target = device.findUser(usernameRaw);
-
-        if (target === null) {
+        if (!device.users.has(usernameRaw)) {
           return Promise.resolve(
             new CustomString(`Error: user ${usernameRaw} does not exist`)
           );
@@ -543,13 +548,13 @@ export function create(
           );
         }
 
-        const target = device.findUser(usernameRaw);
-
-        if (target === null) {
+        if (!device.users.has(usernameRaw)) {
           return Promise.resolve(
             new CustomString(`Error: user ${usernameRaw} does not exist`)
           );
-        } else if (!device.groups.has(groupnameRaw)) {
+        }
+
+        if (!device.groups.has(groupnameRaw)) {
           return Promise.resolve(
             new CustomString(
               `Error: group ${groupnameRaw} not found in user ${usernameRaw}`
@@ -581,9 +586,8 @@ export function create(
         }
 
         const usernameRaw = username.toString();
-        const target = device.findUser(usernameRaw);
 
-        if (target === null) {
+        if (!device.users.has(usernameRaw)) {
           return Promise.resolve(
             new CustomString(`Error: user ${usernameRaw} does not exist.`)
           );
@@ -656,7 +660,6 @@ export function create(
 
         if (netDevice !== 'eth0') {
           const result: CustomString[] = mockEnvironment
-            .get()
             .findRoutersCloseToLocation(device.location)
             .map((item: RouterLocation) => {
               return new CustomString(
@@ -722,7 +725,6 @@ export function create(
         const bssidRaw = bssid.toString();
         const essidRaw = essid.toString();
         const closeRouters: RouterLocation[] = mockEnvironment
-          .get()
           .findRoutersCloseToLocation(device.location);
         const routerLoc = closeRouters.find((item: RouterLocation) => {
           const r = item.router;
@@ -744,7 +746,7 @@ export function create(
           );
         }
 
-        mockEnvironment.get().connect(router, device);
+        mockEnvironment.connect(router, device);
 
         return Promise.resolve(Defaults.True);
       }

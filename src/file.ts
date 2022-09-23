@@ -8,7 +8,7 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import {
@@ -19,6 +19,7 @@ import {
 } from './utils';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   device: Type.Device,
   entity: Type.FSEntity
@@ -51,6 +52,10 @@ export function create(
 
         if (user.username !== 'root' && !w) {
           return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
+          return Promise.resolve(
+            new CustomString('permission denied. File protected.')
+          );
         }
 
         const permissionsRaw = permissions.toString();
@@ -129,7 +134,7 @@ export function create(
 
         const { r } = entity.getPermissions(user, device.groups);
 
-        if (!r) {
+        if (!r && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
         }
 
@@ -139,7 +144,7 @@ export function create(
         if (folder instanceof Type.Folder) {
           const { w } = folder.getPermissions(user, device.groups);
 
-          if (!w) {
+          if (!w && user.username !== 'root') {
             return Promise.resolve(new CustomString('permission denied'));
           }
 
@@ -191,7 +196,7 @@ export function create(
 
         const { r } = entity.getPermissions(user, device.groups);
 
-        if (!r) {
+        if (!r && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
         }
 
@@ -201,7 +206,7 @@ export function create(
         if (folder instanceof Type.Folder) {
           const { w } = folder.getPermissions(user, device.groups);
 
-          if (!w) {
+          if (!w && user.username !== 'root') {
             return Promise.resolve(new CustomString('permission denied'));
           }
 
@@ -252,8 +257,12 @@ export function create(
 
         const { w } = entity.getPermissions(user, device.groups);
 
-        if (!w) {
+        if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
+          return Promise.resolve(
+            new CustomString('permission denied. File protected.')
+          );
         }
 
         entity.name = newNameRaw;
@@ -314,7 +323,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(create(user, device, entity.parent));
+        return Promise.resolve(create(mockEnvironment, user, device, entity.parent));
       }
     )
   );
@@ -417,7 +426,7 @@ export function create(
 
         const { w } = entity.getPermissions(user, device.groups);
 
-        if (!w) {
+        if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
         }
 
@@ -499,8 +508,12 @@ export function create(
 
         const { w } = entity.getPermissions(user, device.groups);
 
-        if (!w) {
+        if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
+        } else if (entity.isProtected) {
+          return Promise.resolve(
+            new CustomString('permission denied. File protected.')
+          );
         }
 
         (entity.parent as Type.Folder).removeEntity(entity.name);
@@ -528,7 +541,7 @@ export function create(
 
         const result = Array.from((entity as Type.Folder).folders.values()).map(
           (folder: Type.Folder) => {
-            return create(user, device, folder);
+            return create(mockEnvironment, user, device, folder);
           }
         );
 
@@ -553,9 +566,11 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const result = Array.from((entity as Type.Folder).files.values()).map((file: Type.File) => {
-          return create(user, device, file);
-        });
+        const result = Array.from((entity as Type.Folder).files.values()).map(
+          (file: Type.File) => {
+            return create(mockEnvironment, user, device, file);
+          }
+        );
 
         return Promise.resolve(new CustomList(result));
       }
@@ -676,7 +691,7 @@ export function create(
         const groupRaw = group.toString();
         const isRecursiveRaw = isRecursive.toTruthy();
 
-        if (groupRaw === '' ) {
+        if (groupRaw === '') {
           throw new Error('invalid groupname.');
         } else if (greaterThanEntityNameLimit(groupRaw)) {
           throw new Error('groupname cannot exceed the 15 character limit.');
@@ -703,8 +718,8 @@ export function create(
         return Promise.resolve(new CustomString(''));
       }
     )
-    .addArgument('group')
-    .addArgument('isRecursive', new CustomBoolean(false))
+      .addArgument('group')
+      .addArgument('isRecursive', new CustomBoolean(false))
   );
 
   itrface.addMethod(

@@ -7,14 +7,14 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type, Utils } from 'greybel-mock-environment';
+import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
-import mockEnvironment from './mock/environment';
 import { create as createNetSession } from './net-session';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   computer: Type.Computer
 ): BasicInterface {
@@ -40,7 +40,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createMetaLib(computer, computer, library));
+        return Promise.resolve(createMetaLib(mockEnvironment, computer, computer, library));
       }
     ).addArgument('path')
   );
@@ -55,7 +55,7 @@ export function create(
       ): Promise<CustomValue> => {
         const ipAddress = args.get('ipAddress').toString();
         const port = args.get('port').toInt();
-        const router = mockEnvironment.get().getRouterByIp(ipAddress);
+        const router = mockEnvironment.getRouterByIp(ipAddress);
 
         if (!router) {
           return Promise.resolve(Defaults.Void);
@@ -63,12 +63,11 @@ export function create(
 
         if (port === 0) {
           return Promise.resolve(
-            createNetSession(computer, router, Type.Library.KERNEL_ROUTER)
+            createNetSession(mockEnvironment, computer, router, Type.Library.KERNEL_ROUTER)
           );
         }
 
         const result = mockEnvironment
-          .get()
           .getForwardedPortOfRouter(router, port);
 
         if (!result) {
@@ -82,7 +81,7 @@ export function create(
         }
 
         return Promise.resolve(
-          createNetSession(computer, result.computer, library)
+          createNetSession(mockEnvironment, computer, result.computer, library)
         );
       }
     )

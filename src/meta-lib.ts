@@ -6,28 +6,26 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
-import { Router } from 'greybel-mock-environment/dist/types';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
 import { create as createShell } from './shell';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   computer: Type.Computer,
   target: Type.Device,
   library: Type.Library
 ): BasicInterface {
   const itrface = new BasicInterface('metaLib');
-  const isRouter = target instanceof Router;
+  const isRouter = target instanceof Type.Router;
   const isLan = isRouter
     ? computer.router.publicIp === target.publicIp
     : computer.router.publicIp === (target as Type.Computer).router.publicIp;
   const isLocal = isLan && computer.localIp === target.localIp;
   const exploits = mockEnvironment
-    .get()
     .vulnerabilityGenerator.vulnerabilities.filter(
       (item: Type.Vulnerability) => {
         return item.library === library && item.remote !== isLocal;
@@ -82,16 +80,16 @@ export function create(
         switch (vul.action) {
           case Type.VulnerabilityAction.COMPUTER:
             return Promise.resolve(
-              createComputer(target.getUserByVulnerability(vul.user), target)
+              createComputer(mockEnvironment, target.getUserByVulnerability(vul.user), target)
             );
           case Type.VulnerabilityAction.SHELL:
             return Promise.resolve(
-              createShell(target.getUserByVulnerability(vul.user), target)
+              createShell(mockEnvironment, target.getUserByVulnerability(vul.user), target)
             );
           case Type.VulnerabilityAction.FOLDER: {
             const file = target.getFile(vul.folder);
             return Promise.resolve(
-              createFile(target.getUserByVulnerability(vul.user), target, file)
+              createFile(mockEnvironment, target.getUserByVulnerability(vul.user), target, file)
             );
           }
           case Type.VulnerabilityAction.FIREWALL:

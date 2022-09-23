@@ -6,11 +6,12 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   computer: Type.Computer,
   port: Type.Port
 ): BasicInterface {

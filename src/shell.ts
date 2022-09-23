@@ -8,11 +8,15 @@ import {
   Interpreter,
   OperationContext
 } from 'greybel-interpreter';
-import { MockTranspiler, Type, Utils } from 'greybel-mock-environment';
+import {
+  MockEnvironment,
+  MockTranspiler,
+  Type,
+  Utils
+} from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import BasicInterface from './interface';
-import environment from './mock/environment';
 
 export interface ShellOptions {
   port?: Type.Port;
@@ -20,6 +24,7 @@ export interface ShellOptions {
 }
 
 export function createShell(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions
@@ -61,7 +66,7 @@ export function createShell(
         if (Utils.isLanIp(ipAddress)) {
           remoteDevice = device.findByLanIp(ipAddress);
         } else {
-          remoteDevice = environment.get().getRouterByIp(ipAddress);
+          remoteDevice = mockEnvironment.getRouterByIp(ipAddress);
         }
 
         if (remoteDevice === null) {
@@ -84,16 +89,14 @@ export function createShell(
 
         const cUser = user.toString();
         const cPass = password.toString();
-        const remoteUser = remoteDevice.users.find(
-          (u) => u.username === cUser && u.password === cPass
-        );
+        const remoteUser = remoteDevice.users.get(cUser);
 
-        if (remoteUser === null) {
+        if (!remoteUser || remoteUser.password !== cPass) {
           return Promise.resolve(new CustomString('invalid credentials'));
         }
 
         return Promise.resolve(
-          create(remoteUser, remoteDevice, {
+          create(mockEnvironment, remoteUser, remoteDevice, {
             port: remotePort
           })
         );
@@ -167,7 +170,10 @@ export function createShell(
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'), device.groups);
+          const { w } = remoteFolder.getPermissions(
+            rshell.getVariable('user'),
+            device.groups
+          );
 
           if (!w) {
             return Promise.resolve(new CustomString('Permission denied'));
@@ -383,11 +389,11 @@ export function createShell(
           programPath: file
         });
 
-        environment.get().sessions.push(session);
+        mockEnvironment.sessions.push(session);
 
         await interpreter.run(file.content);
 
-        environment.get().sessions.pop();
+        mockEnvironment.sessions.pop();
 
         return Defaults.True;
       }
@@ -424,7 +430,7 @@ export function createShell(
           }
         }
 
-        const router = environment.get().getRouterByIp(ipRaw);
+        const router = mockEnvironment.getRouterByIp(ipRaw);
 
         if (router === null) {
           return Promise.resolve(Defaults.False);
@@ -478,6 +484,7 @@ export function createShell(
 }
 
 export function createFtpShell(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions
@@ -546,7 +553,10 @@ export function createFtpShell(
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(rshell.getVariable('user'), device.groups);
+          const { w } = remoteFolder.getPermissions(
+            rshell.getVariable('user'),
+            device.groups
+          );
 
           if (!w) {
             return Promise.resolve(new CustomString('Permission denied'));
@@ -570,6 +580,7 @@ export function createFtpShell(
 }
 
 export function create(
+  mockEnvironment: MockEnvironment,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions = {}
@@ -578,8 +589,14 @@ export function create(
   const activePort = options.port ? device.ports.get(options.port.port) : null;
   const itrface =
     activePort?.service === Type.Service.FTP
-      ? createFtpShell(user, device, { ...options, location: currentLocation })
-      : createShell(user, device, { ...options, location: currentLocation });
+      ? createFtpShell(mockEnvironment, user, device, {
+          ...options,
+          location: currentLocation
+        })
+      : createShell(mockEnvironment, user, device, {
+          ...options,
+          location: currentLocation
+        });
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
@@ -603,7 +620,9 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         return Promise.resolve(
-          createComputer(user, device, { location: currentLocation })
+          createComputer(mockEnvironment, user, device, {
+            location: currentLocation
+          })
         );
       }
     )
@@ -618,20 +637,23 @@ export function create(
 
 export function loginLocal(
   user: CustomValue,
-  password: CustomValue
+  password: CustomValue,
+  mockEnvironment: MockEnvironment
 ): CustomValue {
-  const computer = environment.get().getLatestSession().computer;
+  const session = mockEnvironment.getLatestSession();
 
   const usr = user.toString();
   const pwd = password.toString();
 
   if (usr === '' && pwd === '') {
-    return create(environment.get().getLatestSession().user, computer);
+    return create(mockEnvironment, session.user, session.computer);
   }
 
-  for (const item of computer.users) {
-    if (item.username === usr && item.password === pwd) {
-      return create(item, computer);
+  if (session.computer.users.has(usr)) {
+    const item = session.computer.users.get(usr);
+
+    if (item.password === pwd) {
+      return create(mockEnvironment, item, session.computer);
     }
   }
 

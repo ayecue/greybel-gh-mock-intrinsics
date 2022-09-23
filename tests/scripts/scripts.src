@@ -1,0 +1,3 @@
+shell = get_shell("root", "test")
+
+shell.launch("/bin/ls")

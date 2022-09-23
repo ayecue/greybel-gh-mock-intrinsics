@@ -7,13 +7,20 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { RouterLocation, Type, Utils } from 'greybel-mock-environment';
-import { File } from 'greybel-mock-environment/dist/types';
+import {
+  MockEnvironment,
+  RouterLocation,
+  Type,
+  Utils
+} from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import mockEnvironment from './mock/environment';
 
-export function create(user: Type.User, device: Type.Device): BasicInterface {
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device
+): BasicInterface {
   const itrface = new BasicInterface('crypto');
 
   itrface.addMethod(
@@ -28,7 +35,6 @@ export function create(user: Type.User, device: Type.Device): BasicInterface {
         const essid = args.get('essid').toString();
 
         const network = mockEnvironment
-          .get()
           .findRoutersCloseToLocation(device.location)
           .find(({ router }: RouterLocation) => {
             return router.bssid === bssid && router.essid === essid;
@@ -45,7 +51,7 @@ export function create(user: Type.User, device: Type.Device): BasicInterface {
         const folder = device.getFile(device.getHomePath(user)) as Type.Folder;
 
         folder.putEntity(
-          new File({
+          new Type.File({
             name: 'file.cap',
             content: network.router.wifi.credentials.password,
             owner: user.username,
@@ -122,7 +128,6 @@ export function create(user: Type.User, device: Type.Device): BasicInterface {
         await ctx.handler.outputHandler.progress(5000);
 
         const user = mockEnvironment
-          .get()
           .userGenerator.users.find((item: Type.User) => {
             return item.passwordHashed === encryptedPass;
           });

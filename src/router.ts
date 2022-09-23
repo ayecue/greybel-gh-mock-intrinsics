@@ -7,13 +7,16 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
-import { File, FileType } from 'greybel-mock-environment/dist/types';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createPort } from './port';
 
-export function create(user: Type.User, router: Type.Router): BasicInterface {
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  router: Type.Router
+): BasicInterface {
   const itrface = new BasicInterface('router');
 
   itrface.addMethod(
@@ -93,8 +96,8 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
 
         if (
           kernel === null ||
-          !(kernel instanceof File) ||
-          !(kernel.type !== FileType.KernelRouter)
+          !(kernel instanceof Type.File) ||
+          !(kernel.type !== Type.FileType.KernelRouter)
         ) {
           return Promise.resolve(Defaults.Void);
         }
@@ -135,7 +138,7 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
 
         for (const port of router.ports.values()) {
           if (port.forwarded && !port.isClosed) {
-            ports.push(createPort(router, port));
+            ports.push(createPort(mockEnvironment, router, port));
           }
         }
 
@@ -163,7 +166,7 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
 
         for (const port of device.ports.values()) {
           if (port.forwarded && !port.isClosed) {
-            ports.push(createPort(device, port));
+            ports.push(createPort(mockEnvironment, device, port));
           }
         }
 
@@ -192,7 +195,9 @@ export function create(user: Type.User, router: Type.Router): BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(createPort(router, portInstance));
+        return Promise.resolve(
+          createPort(mockEnvironment, router, portInstance)
+        );
       }
     ).addArgument('port')
   );

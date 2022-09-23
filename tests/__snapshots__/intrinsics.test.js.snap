@@ -120,8 +120,7 @@ exports[`interpreter default scripts ls.src 1`] = `
 "Desktop     
 Downloads   
 Config      
-myprogramm  
-file.cap    "
+myprogramm  "
 `;
 
 exports[`interpreter default scripts meta-mail.src 1`] = `"metaMail"`;
@@ -135,14 +134,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 5065dbd3-87b0-4370-be1c-5b20123709ce - hello
+"[ ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"5065dbd3-87b0-4370-be1c-5b20123709ce"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"ce46d711-15d4-4dce-bb7c-3f00245e1583"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"5065dbd3-87b0-4370-be1c-5b20123709ce - hello
+"ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
 dude"
 `;
 
@@ -276,8 +275,8 @@ exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  2399  7.4   26.34  kernel_task  
-root  8518  14.3  26.49  Xorg         "
+root  905   8.5   11.70  kernel_task  
+root  8330  14.4  25.61  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -296,7 +295,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 80% diligent-soldier-65, B3:A1:55:6C:FF:79 52% Spectacular-horatio-26, EE:89:54:50:D8:D7 52% dynamic-trustee-7, 61:42:95:99:DB:74 67% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 51% diligent-soldier-65, B3:A1:55:6C:FF:79 53% Spectacular-horatio-26, EE:89:54:50:D8:D7 60% dynamic-trustee-7, 61:42:95:99:DB:74 44% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -306,7 +305,7 @@ exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.253.239"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.93.234"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

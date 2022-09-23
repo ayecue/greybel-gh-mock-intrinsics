@@ -3,12 +3,13 @@ import {
   CustomValue,
   OperationContext
 } from 'greybel-interpreter';
-import { Type } from 'greybel-mock-environment';
+import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 
 export function create(
+  mockEnvironment: MockEnvironment,
   computer: Type.Computer,
   targetComputer: Type.Computer,
   library: Type.Library
@@ -24,7 +25,7 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         return Promise.resolve(
-          createMetaLib(computer, targetComputer, library)
+          createMetaLib(mockEnvironment, computer, targetComputer, library)
         );
       }
     )
