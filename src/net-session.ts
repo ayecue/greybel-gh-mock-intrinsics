@@ -10,8 +10,8 @@ import { create as createMetaLib } from './meta-lib';
 
 export function create(
   mockEnvironment: MockEnvironment,
-  computer: Type.Computer,
-  targetComputer: Type.Computer,
+  computer: Type.Device,
+  targetComputer: Type.Device,
   library: Type.Library,
   file: Type.File
 ): BasicInterface {

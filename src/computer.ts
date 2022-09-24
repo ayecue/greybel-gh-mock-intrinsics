@@ -247,7 +247,7 @@ export function create(
             name: target,
             owner: user.username,
             permissions: entityResult.permissions.toString(),
-            type: Type.FileType.Plain
+            type: Type.FileType.Source
           });
 
           entityResult.putEntity(file);
@@ -457,11 +457,8 @@ export function create(
         device.removeUser(usernameRaw);
 
         if (removeHomeRaw) {
-          const homeFolder = device.getFile(['home']);
-
-          if (homeFolder instanceof Type.Folder) {
-            homeFolder.removeEntity(usernameRaw);
-          }
+          const folder = device.getFile(['home', usernameRaw]);
+          folder?.delete();
         }
 
         return Promise.resolve(Defaults.True);

@@ -75,7 +75,7 @@ export function createShell(
 
         const remotePort = remoteDevice.findPort(port.toInt());
 
-        if (remotePort === null || remotePort.service !== Type.Service.SSH) {
+        if (remotePort === null || remotePort.service !== Type.ServiceType.SSH) {
           return Promise.resolve(
             new CustomString(`can't connect: port ${port.toInt()} not found`)
           );
@@ -258,7 +258,7 @@ export function createShell(
           );
         }
 
-        if (source.type !== Type.FileType.Plain) {
+        if (source.type !== Type.FileType.Source) {
           return Promise.resolve(
             new CustomString(`Can't build ${source.name}. Binary file`)
           );
@@ -295,7 +295,7 @@ export function createShell(
           const output = transpiler.parse();
           const outputBin = new Type.File(
             {
-              type: Type.FileType.Bin,
+              type: Type.FileType.Binary,
               name: source.name.replace(/\.[^.]*$/, ''),
               content: output,
               permissions: 'drwxrwxrwx',
@@ -343,7 +343,7 @@ export function createShell(
           return Defaults.False;
         }
 
-        if (!(file instanceof Type.File) || file.type !== Type.FileType.Bin) {
+        if (!(file instanceof Type.File) || file.type !== Type.FileType.Binary) {
           ctx.handler.outputHandler.print(
             `${file.name} is not an executable file.`
           );
@@ -385,7 +385,7 @@ export function createShell(
         });
         const session = new Type.Session({
           user,
-          computer: device,
+          device,
           currentPath: device.getFile(currentLocation) as Type.Folder,
           programPath: file
         });
@@ -589,7 +589,7 @@ export function create(
   const currentLocation = options.location || device.getHomePath(user);
   const activePort = options.port ? device.ports.get(options.port.port) : null;
   const itrface =
-    activePort?.service === Type.Service.FTP
+    activePort?.service === Type.ServiceType.FTP
       ? createFtpShell(mockEnvironment, user, device, {
           ...options,
           location: currentLocation
@@ -647,14 +647,14 @@ export function loginLocal(
   const pwd = password.toString();
 
   if (usr === '' && pwd === '') {
-    return create(mockEnvironment, session.user, session.computer);
+    return create(mockEnvironment, session.user, session.device);
   }
 
-  if (session.computer.users.has(usr)) {
-    const item = session.computer.users.get(usr);
+  if (session.device.users.has(usr)) {
+    const item = session.device.users.get(usr);
 
     if (item.password === pwd) {
-      return create(mockEnvironment, item, session.computer);
+      return create(mockEnvironment, item, session.device);
     }
   }
 

@@ -13,7 +13,7 @@ import { create as createWallet } from './wallet';
 export function create(
   mockEnvironment: MockEnvironment,
   user: Type.User,
-  computer: Type.Computer
+  computer: Type.Device
 ): BasicInterface {
   const itrface = new BasicInterface('blockchain');
 

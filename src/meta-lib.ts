@@ -15,7 +15,7 @@ import { create as createShell } from './shell';
 
 export function create(
   mockEnvironment: MockEnvironment,
-  computer: Type.Computer,
+  computer: Type.Device,
   target: Type.Device,
   file: Type.File,
   mode: Type.VulnerabilityMode,

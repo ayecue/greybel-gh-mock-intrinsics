@@ -11,7 +11,7 @@ import BasicInterface from './interface';
 export function create(
   _mockEnvironment: MockEnvironment,
   _user: Type.User,
-  _computer: Type.Computer
+  _computer: Type.Device
 ): BasicInterface {
   const itrface = new BasicInterface('subWallet');
 

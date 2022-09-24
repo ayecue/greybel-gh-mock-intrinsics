@@ -137,7 +137,7 @@ export function create(
         const ports: BasicInterface[] = [];
 
         for (const port of router.ports.values()) {
-          if (port.forwarded && !port.isClosed) {
+          if (router.isForwarded(port.port) && !port.isClosed) {
             ports.push(createPort(mockEnvironment, router, port));
           }
         }
@@ -165,7 +165,7 @@ export function create(
         const ports: BasicInterface[] = [];
 
         for (const port of device.ports.values()) {
-          if (port.forwarded && !port.isClosed) {
+          if (device.isForwarded(port.port) && !port.isClosed) {
             ports.push(createPort(mockEnvironment, device, port));
           }
         }

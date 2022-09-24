@@ -16,7 +16,7 @@ import { create as createNetSession } from './net-session';
 export function create(
   mockEnvironment: MockEnvironment,
   user: Type.User,
-  computer: Type.Computer
+  computer: Type.Device
 ): BasicInterface {
   const itrface = new BasicInterface('metaxploit');
 
@@ -100,13 +100,14 @@ export function create(
           );
         }
 
-        const result = mockEnvironment.getForwardedPortOfRouter(router, port);
+        const forwardedComputer = router.getForwarded(port);
 
-        if (!result) {
+        if (forwardedComputer === null) {
           return Promise.resolve(Defaults.Void);
         }
 
-        const library = result.computer.findLibraryFileByPort(result.port);
+        const forwardedComputerPort = forwardedComputer.ports.get(port);
+        const library = forwardedComputer.findLibraryFileByPort(forwardedComputerPort);
 
         if (!library) {
           return Promise.resolve(Defaults.Void);
@@ -116,7 +117,7 @@ export function create(
           createNetSession(
             mockEnvironment,
             computer,
-            result.computer,
+            forwardedComputer,
             library.getLibraryType(),
             library
           )

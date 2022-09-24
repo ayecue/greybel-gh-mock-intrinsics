@@ -58,7 +58,7 @@ Association succesful :-)"
 
 exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"402/25000"`;
+exports[`interpreter default scripts crypto.src 5`] = `"728/25000"`;
 
 exports[`interpreter default scripts crypto.src 6`] = `""`;
 
@@ -81,9 +81,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: Remarkable-berry-60.org
-Administrative contact: agreeable-trustee-20
-Email address: agreeable-trustee-20@Remarkable-berry-60.org
+"Domain name: Blithesome-fielding-2.de
+Administrative contact: Spectacular-simmonds-65
+Email address: Spectacular-simmonds-65@Blithesome-fielding-2.de
 Phone: 123456891"
 `;
 
@@ -150,14 +150,14 @@ exports[`interpreter default scripts meta-mail.src 4`] = `""`;
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
+"[ 5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"ce46d711-15d4-4dce-bb7c-3f00245e1583"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
+"5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
 dude"
 `;
 
@@ -255,7 +255,7 @@ exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[  ]"`;
 
 exports[`interpreter default scripts scripts.src 1`] = `
 "Desktop    
@@ -308,9 +308,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU   MEM   COMMAND             
-root  6380  5.6   8.74  kernel_task         
-root  8841  11.8  7.56  Xorg                "
+"USER  PID   CPU   MEM    COMMAND             
+root  8855  13.9  13.39  kernel_task         
+root  4535  11.3  28.32  Xorg                "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -322,7 +322,7 @@ Essid: essid-test-uuid
 Bssid: bssid-test-uuid
 ----------------
 Public IP: 142.32.54.56
-Local IP: 192.168.117.34
+Local IP: 192.168.253.21
 Gateway: 192.168.0.10
 "
 `;
@@ -361,8 +361,8 @@ exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  4516  5.1   30.91  kernel_task  
-root  8612  11.6  25.32  Xorg         "
+root  7286  12.0  22.22  kernel_task  
+root  3979  8.0   6.15   Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -381,7 +381,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 53% diligent-soldier-65, B3:A1:55:6C:FF:79 73% Spectacular-horatio-26, EE:89:54:50:D8:D7 71% dynamic-trustee-7, 61:42:95:99:DB:74 41% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, 23:B9:F1:05:1C:D9 97% tough-mortician-49, 76:FF:BA:97:28:4C 82% Spectacular-barley-65, 6D:63:9B:5D:1A:61 69% conscientious-geologist-84, F2:8C:C2:3E:E6:6F 54% versatile-copperfield-14 ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -391,7 +391,7 @@ exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.93.234"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.189.79"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 
