@@ -1,6 +1,8 @@
 import {
   CustomFunction,
+  CustomInterface,
   CustomList,
+  CustomNil,
   CustomNumber,
   CustomString,
   CustomValue,
@@ -10,8 +12,10 @@ import {
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
+import { create as createShell } from './shell';
 import { create as createMetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
+import { greaterThanProcNameLimit, isValidFileName, isValidProcName } from './utils';
 
 export function create(
   mockEnvironment: MockEnvironment,
@@ -28,9 +32,20 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const path = args.get('path').toString();
+        const path = args.get('path');
+
+        if (path instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+        
+        const pathRaw = path.toString();
+        
+        if (pathRaw === '') {
+          throw new Error('load: Invalid arguments');
+        }
+
         const traversalPath = Utils.getTraversalPath(
-          path,
+          pathRaw,
           computer.getHomePath(user)
         );
         const file = computer.getFile(traversalPath) as Type.File;
@@ -70,19 +85,42 @@ export function create(
     CustomFunction.createExternalWithSelf(
       'net_use',
       (
-        _ctx: OperationContext,
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const ipAddress = args.get('ipAddress').toString();
-        const port = args.get('port').toInt();
-        const router = mockEnvironment.getRouterByIp(ipAddress);
+        const ipAddress = args.get('ipAddress');
+        const port = args.get('port');
 
-        if (!router) {
+        if (ipAddress instanceof CustomNil || port instanceof CustomNil) {
           return Promise.resolve(Defaults.Void);
         }
 
-        if (port === 0) {
+        const ipAddressRaw = ipAddress.toString();
+
+        if (ipAddressRaw === '' || !Utils.isValidIp(ipAddressRaw)) {
+          ctx.handler.outputHandler.print(`Invalid ip address:${ipAddressRaw}`);
+          return Promise.resolve(Defaults.Void);
+        }
+
+        let router: Type.Router = null;
+        let isLan = false;
+
+        if (Utils.isLanIp(ipAddressRaw)) {
+          router = computer.getRouter() as Type.Router;
+          isLan = true;
+        } else {
+          router = mockEnvironment.getRouterByIp(ipAddressRaw);
+        }
+
+        if (router == null) {
+          ctx.handler.outputHandler.print('Ip address not found.');
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const portRaw = port.toInt();
+
+        if (portRaw === 0) {
           const kernel = router.getKernel();
 
           if (!kernel) {
@@ -100,13 +138,52 @@ export function create(
           );
         }
 
-        const forwardedComputer = router.getForwarded(port);
+        if (isLan) {
+          const targetDevice = router.findByLanIp(ipAddressRaw);
+          
+          if (targetDevice == null) {
+            ctx.handler.outputHandler.print('Error: LAN computer not found.');
+            return Promise.resolve(Defaults.Void);
+          }
+
+          const targetPort = targetDevice.findPort(portRaw);
+
+          if (targetPort == null) {
+            ctx.handler.outputHandler.print('Port not found.');
+            return Promise.resolve(Defaults.Void);
+          }
+
+          const library = targetDevice.findLibraryFileByPort(targetPort);
+
+          if (!library) {
+            return Promise.resolve(Defaults.Void);
+          }
+
+          return Promise.resolve(
+            createNetSession(
+              mockEnvironment,
+              computer,
+              targetDevice,
+              library.getLibraryType(),
+              library
+            )
+          );
+        }
+
+        const forwardedComputer = router.getForwarded(portRaw);
 
         if (forwardedComputer === null) {
+          ctx.handler.outputHandler.print('Port not found.');
           return Promise.resolve(Defaults.Void);
         }
 
-        const forwardedComputerPort = forwardedComputer.ports.get(port);
+        const forwardedComputerPort = forwardedComputer.ports.get(portRaw);
+
+        if (forwardedComputerPort.isClosed) {
+          ctx.handler.outputHandler.print('can\'t connect: port closed.');
+          return Promise.resolve(Defaults.Void);
+        }
+
         const library = forwardedComputer.findLibraryFileByPort(forwardedComputerPort);
 
         if (!library) {
@@ -224,7 +301,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('No yet supported'));
+        return Promise.resolve(Defaults.Void);
       }
     )
   );
@@ -235,11 +312,81 @@ export function create(
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.False);
+        const address = args.get('address');
+        const port = args.get('port');
+        const procName = args.get('procName');
+
+        if (address instanceof CustomNil || port instanceof CustomNil || procName instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const addressRaw = address.toString();
+
+        if (!Utils.isValidIp(addressRaw)) {
+          return Promise.resolve(new CustomString('rshell_client: Invalid IP address'));
+        }
+
+        const procNameRaw = procName.toString();
+
+        if (!isValidFileName(procNameRaw)) {
+          return Promise.resolve(new CustomString('Error: only alphanumeric allowed as proccess name.'));
+        } else if (greaterThanProcNameLimit(procNameRaw)) {
+          return Promise.resolve(new CustomString('Error: proccess name cannot exceed the limit of 28 characters.'));
+        } else if (isValidProcName(procNameRaw)) {
+          return Promise.resolve(new CustomString(`Error: ${procNameRaw} is a reserved process name`));
+        }
+
+        const router = mockEnvironment.getRouterByIp(addressRaw);
+
+        if (router === null) {
+          return Promise.resolve(new CustomString(`rshell_client: IP address not found: ${addressRaw}`));
+        }
+
+        const portRaw = port.toInt();
+        let target: Type.Device = router;
+
+        if (router.isForwarded(portRaw)) {
+          target = router.getForwarded(portRaw);
+        }
+
+        const targetPort = target.findPort(portRaw);
+
+        if (targetPort === null) {
+          return Promise.resolve(new CustomString(`rshell_client: unable to find remote server at port ${portRaw}`));
+        } else if (!target.services.has(Type.ServiceType.RSHELL)) {
+          return Promise.resolve(new CustomString(`Unable to find service ${Type.ServiceType.RSHELL}`));
+        } else if (targetPort.service !== Type.ServiceType.RSHELL) {
+          return Promise.resolve(new CustomString('Invalid target service port configuration.'));
+        }
+
+        const targetService = target.services.get(targetPort.service);
+
+        if (targetService.libraryFile.deleted) {
+          return Promise.resolve(new CustomString(`Unable to connect: missing ${Utils.getServiceLibrary(targetPort.service)}`)); 
+        } else if (targetService.libraryFile.type !== Type.FileType.RShell) {
+          return Promise.resolve(new CustomString(`Unable to connect: invalid ${Utils.getServiceLibrary(targetPort.service)}`)); 
+        }
+
+        const rshellDevices = targetService.data.get('computers') as Map<string, {
+          user: Type.User,
+          device: Type.Device
+        }>;
+        const targetRouter = target.getRouter() as Type.Router;
+
+        rshellDevices.set(targetRouter.publicIp, {
+          user,
+          device: computer
+        });
+        computer.addProcess({
+          owner: user,
+          command: procNameRaw
+        });
+
+        return Promise.resolve(Defaults.True);
       }
-    )
+    ).addArgument('address').addArgument('port', new CustomNumber(1222)).addArgument('procName', new CustomString('rshell_client'))
   );
 
   itrface.addMethod(
@@ -250,7 +397,28 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomList());
+        if (!computer.services.has(Type.ServiceType.RSHELL)) {
+          return Promise.resolve(new CustomString('error: service rshelld is not running'));
+        }
+
+        const port = computer.findPortByService(Type.ServiceType.RSHELL);
+        
+        if (!computer.isForwarded(port.port)) {
+          return Promise.resolve(new CustomString('error: rshell portforward is not configured correctly'));
+        }
+
+        const rshellServer = computer.services.get(Type.ServiceType.RSHELL);
+        const rshellResults = rshellServer.data.get('computers') as Map<string, {
+          user: Type.User,
+          device: Type.Device
+        }>;
+        const shells: CustomInterface[] = [];
+
+        for (const rshellResult of rshellResults.values()) {
+          shells.push(createShell(mockEnvironment, rshellResult.user, rshellResult.device));
+        }
+
+        return Promise.resolve(new CustomList(shells));
       }
     )
   );

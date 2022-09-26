@@ -140,6 +140,10 @@ export function greaterThanEntityNameLimit(str: string): boolean {
   return str.length > 15;
 }
 
+export function greaterThanProcNameLimit(str: string): boolean {
+  return str.length > 24;
+}
+
 export function greaterThanFileNameLimit(str: string): boolean {
   return str.length > 128;
 }
@@ -154,6 +158,10 @@ export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
 
 export function isValidFileName(str: string): boolean {
   return /^[a-z0-9_.-]+$/i.test(str);
+}
+
+export function isValidProcName(str: string): boolean {
+  return ['dsession', 'kernel_task', 'xorg', 'ssh_enc'].includes(str);
 }
 
 export function delay(time: number = 1000): Promise<void> {

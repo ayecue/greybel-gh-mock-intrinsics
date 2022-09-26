@@ -181,15 +181,15 @@ exports[`interpreter default scripts metaxploit.src 7`] = `"metaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 8`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 9`] = `"[ 0xC8CE05AB ]"`;
+exports[`interpreter default scripts metaxploit.src 9`] = `"[ 0xC8CE05AB, 0x6D72D61A ]"`;
 
 exports[`interpreter default scripts metaxploit.src 10`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 11`] = `"No yet supported"`;
+exports[`interpreter default scripts metaxploit.src 11`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 12`] = `"false"`;
+exports[`interpreter default scripts metaxploit.src 12`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 13`] = `"[  ]"`;
+exports[`interpreter default scripts metaxploit.src 13`] = `"error: service rshelld is not running"`;
 
 exports[`interpreter default scripts metaxploit.src 14`] = `"crypto"`;
 
@@ -201,40 +201,14 @@ exports[`interpreter default scripts metaxploit.src 17`] = `""`;
 
 exports[`interpreter default scripts metaxploit.src 18`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 19`] = `"[ 0xC8CE05AB ]"`;
+exports[`interpreter default scripts metaxploit.src 19`] = `"[ 0xC8CE05AB, 0x6D72D61A ]"`;
 
 exports[`interpreter default scripts metaxploit.src 20`] = `
-"loop in array <b>borg8kwtzu</b>. Buffer overflow.
+"string copy in <b>functionparametersAdd</b>. Buffer overflow.
 * Checking an active user.
-loop in array <b>6iogj1qr7h</b>. Buffer overflow.
-* Checking an active user.
+loop in array <b>_codecflush_pending</b>. Buffer overflow.
 * Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-loop in array <b>4w2so9dmgw</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>ueqg4x1o0v</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-* Checking existing connection in the local network.
-* Checking registered users equal to 2.
-loop in array <b>y0arblna9a</b>. Buffer overflow.
-* Checking registered users equal to 2.
-* Checking an active user.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>i5cxta6sop</b>. Buffer overflow.
-* Checking an active user.
-* 1337 computers using this router as gateway.
-loop in array <b>q37eqpjlzy</b>. Buffer overflow.
-loop in array <b>1f7paxxf7e</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>7knf7ejdni</b>. Buffer overflow.
-loop in array <b>at0h9o477l</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-* Checking registered users equal to 2.
-* Checking root active user.
-loop in array <b>mwha9je4hh</b>. Buffer overflow.
-* Checking root active user.
-loop in array <b>2mxjo6mo50</b>. Buffer overflow.
-* 1337 computers using this router as gateway.
-* Checking an active user."
+* 1337 port forwarding configured from router to the target computer."
 `;
 
 exports[`interpreter default scripts mkdir.src 1`] = `"false"`;
