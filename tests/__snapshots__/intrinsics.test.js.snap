@@ -237,7 +237,7 @@ exports[`interpreter default scripts metaxploit.src 20`] = `"metaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 21`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 22`] = `"ssh"`;
+exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
 
 exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0.0"`;
 
