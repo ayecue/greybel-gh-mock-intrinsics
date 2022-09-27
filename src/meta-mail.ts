@@ -8,7 +8,6 @@ import {
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
-import { EmailGenerator } from 'greybel-mock-environment/dist/generators';
 
 import BasicInterface from './interface';
 
@@ -41,7 +40,10 @@ export function create(
                 '\nSubject: ',
                 item.subject,
                 '\n',
-                (firstMessage.length > 125 ? firstMessage.substr(0, 125) + '...' : firstMessage).replace('\n\n', '\n')
+                (firstMessage.length > 125
+                  ? firstMessage.substr(0, 125) + '...'
+                  : firstMessage
+                ).replace('\n\n', '\n')
               ].join('')
             )
           );
@@ -86,11 +88,7 @@ export function create(
           output.push(`${message}\n\n`);
         }
 
-        return Promise.resolve(
-          new CustomString(
-            output.join('')
-          )
-        );
+        return Promise.resolve(new CustomString(output.join('')));
       }
     ).addArgument('id')
   );
@@ -107,14 +105,22 @@ export function create(
         const subject = args.get('subject');
         const message = args.get('message');
 
-        if (address instanceof CustomNil || subject instanceof CustomNil || message instanceof CustomNil) {
+        if (
+          address instanceof CustomNil ||
+          subject instanceof CustomNil ||
+          message instanceof CustomNil
+        ) {
           return Promise.resolve(Defaults.Void);
         }
 
         const addressRaw = address.toString();
         const addressSegments = addressRaw.split('@');
 
-        if (addressSegments.length === 1 || addressSegments[0].length === 0 || addressRaw.length > 64) {
+        if (
+          addressSegments.length === 1 ||
+          addressSegments[0].length === 0 ||
+          addressRaw.length > 64
+        ) {
           return Promise.resolve(new CustomString('Invalid email address'));
         }
 
@@ -131,11 +137,9 @@ export function create(
         }
 
         const targetEmail = mockEnvironment.getEmail(addressRaw);
-        const newEmail = new Type.EMailMessage(
-          email.email,
-          subjectRaw,
-          [messageRaw]
-        );
+        const newEmail = new Type.EMailMessage(email.email, subjectRaw, [
+          messageRaw
+        ]);
 
         targetEmail.messages.set(
           mockEnvironment.basicGenerator.generateUUID(),

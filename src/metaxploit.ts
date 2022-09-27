@@ -12,10 +12,14 @@ import {
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { create as createShell } from './shell';
 import { create as createMetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
-import { greaterThanProcNameLimit, isValidFileName, isValidProcName } from './utils';
+import { create as createShell } from './shell';
+import {
+  greaterThanProcNameLimit,
+  isValidFileName,
+  isValidProcName
+} from './utils';
 
 export function create(
   mockEnvironment: MockEnvironment,
@@ -38,9 +42,9 @@ export function create(
         if (path instanceof CustomNil) {
           return Promise.resolve(Defaults.Void);
         }
-        
+
         const pathRaw = path.toString();
-        
+
         if (pathRaw === '') {
           throw new Error('load: Invalid arguments');
         }
@@ -143,7 +147,7 @@ export function create(
 
         if (isLan) {
           const targetDevice = router.findByLanIp(ipAddressRaw);
-          
+
           if (targetDevice == null) {
             ctx.handler.outputHandler.print('Error: LAN computer not found.');
             return Promise.resolve(Defaults.Void);
@@ -184,11 +188,13 @@ export function create(
         const forwardedComputerPort = forwardedComputer.ports.get(portRaw);
 
         if (forwardedComputerPort.isClosed) {
-          ctx.handler.outputHandler.print('can\'t connect: port closed.');
+          ctx.handler.outputHandler.print("can't connect: port closed.");
           return Promise.resolve(Defaults.Void);
         }
 
-        const targetFile = forwardedComputer.findLibraryFileByPort(forwardedComputerPort);
+        const targetFile = forwardedComputer.findLibraryFileByPort(
+          forwardedComputerPort
+        );
 
         if (!targetFile) {
           return Promise.resolve(Defaults.Void);
@@ -224,7 +230,10 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        if (metaLib instanceof BasicInterface && metaLib.getCustomType() === 'metaLib') {
+        if (
+          metaLib instanceof BasicInterface &&
+          metaLib.getCustomType() === 'metaLib'
+        ) {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
           if (!metaFile || metaFile.deleted) {
@@ -238,7 +247,9 @@ export function create(
             return Promise.resolve(Defaults.Void);
           }
 
-          const vuls = metaLib.getVariable('vulnerabilities') as Type.Vulnerability[];
+          const vuls = metaLib.getVariable(
+            'vulnerabilities'
+          ) as Type.Vulnerability[];
           const zones = vuls.map((x: Type.Vulnerability) => {
             return x.memAddress;
           });
@@ -264,12 +275,15 @@ export function create(
       ): Promise<CustomValue> => {
         const metaLib = args.get('metaLib');
         const memAddress = args.get('memAddress');
-        
+
         if (metaLib instanceof CustomNil || memAddress instanceof CustomNil) {
           return Promise.resolve(Defaults.Void);
         }
-        
-        if (metaLib instanceof BasicInterface && metaLib.getCustomType() === 'metaLib') {
+
+        if (
+          metaLib instanceof BasicInterface &&
+          metaLib.getCustomType() === 'metaLib'
+        ) {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
           if (!metaFile || metaFile.deleted) {
@@ -284,8 +298,13 @@ export function create(
           }
 
           const memAddressRaw = memAddress.toString();
-          const output = ['decompiling source...', 'searching unsecure values...'];
-          const vuls = metaLib.getVariable('vulnerabilities') as Type.Vulnerability[];
+          const output = [
+            'decompiling source...',
+            'searching unsecure values...'
+          ];
+          const vuls = metaLib.getVariable(
+            'vulnerabilities'
+          ) as Type.Vulnerability[];
           const vulsOfAddress = vuls.filter((x: Type.Vulnerability) => {
             return x.memAddress === memAddressRaw;
           });
@@ -334,30 +353,50 @@ export function create(
         const port = args.get('port');
         const procName = args.get('procName');
 
-        if (address instanceof CustomNil || port instanceof CustomNil || procName instanceof CustomNil) {
+        if (
+          address instanceof CustomNil ||
+          port instanceof CustomNil ||
+          procName instanceof CustomNil
+        ) {
           return Promise.resolve(Defaults.Void);
         }
 
         const addressRaw = address.toString();
 
         if (!Utils.isValidIp(addressRaw)) {
-          return Promise.resolve(new CustomString('rshell_client: Invalid IP address'));
+          return Promise.resolve(
+            new CustomString('rshell_client: Invalid IP address')
+          );
         }
 
         const procNameRaw = procName.toString();
 
         if (!isValidFileName(procNameRaw)) {
-          return Promise.resolve(new CustomString('Error: only alphanumeric allowed as proccess name.'));
+          return Promise.resolve(
+            new CustomString(
+              'Error: only alphanumeric allowed as proccess name.'
+            )
+          );
         } else if (greaterThanProcNameLimit(procNameRaw)) {
-          return Promise.resolve(new CustomString('Error: proccess name cannot exceed the limit of 28 characters.'));
+          return Promise.resolve(
+            new CustomString(
+              'Error: proccess name cannot exceed the limit of 28 characters.'
+            )
+          );
         } else if (isValidProcName(procNameRaw)) {
-          return Promise.resolve(new CustomString(`Error: ${procNameRaw} is a reserved process name`));
+          return Promise.resolve(
+            new CustomString(`Error: ${procNameRaw} is a reserved process name`)
+          );
         }
 
         const router = mockEnvironment.getRouterByIp(addressRaw);
 
         if (router === null) {
-          return Promise.resolve(new CustomString(`rshell_client: IP address not found: ${addressRaw}`));
+          return Promise.resolve(
+            new CustomString(
+              `rshell_client: IP address not found: ${addressRaw}`
+            )
+          );
         }
 
         const portRaw = port.toInt();
@@ -370,25 +409,50 @@ export function create(
         const targetPort = target.findPort(portRaw);
 
         if (targetPort === null) {
-          return Promise.resolve(new CustomString(`rshell_client: unable to find remote server at port ${portRaw}`));
+          return Promise.resolve(
+            new CustomString(
+              `rshell_client: unable to find remote server at port ${portRaw}`
+            )
+          );
         } else if (!target.services.has(Type.ServiceType.RSHELL)) {
-          return Promise.resolve(new CustomString(`Unable to find service ${Type.ServiceType.RSHELL}`));
+          return Promise.resolve(
+            new CustomString(
+              `Unable to find service ${Type.ServiceType.RSHELL}`
+            )
+          );
         } else if (targetPort.service !== Type.ServiceType.RSHELL) {
-          return Promise.resolve(new CustomString('Invalid target service port configuration.'));
+          return Promise.resolve(
+            new CustomString('Invalid target service port configuration.')
+          );
         }
 
         const targetService = target.services.get(targetPort.service);
 
         if (targetService.libraryFile.deleted) {
-          return Promise.resolve(new CustomString(`Unable to connect: missing ${Utils.getServiceLibrary(targetPort.service)}`)); 
+          return Promise.resolve(
+            new CustomString(
+              `Unable to connect: missing ${Utils.getServiceLibrary(
+                targetPort.service
+              )}`
+            )
+          );
         } else if (targetService.libraryFile.type !== Type.FileType.RShell) {
-          return Promise.resolve(new CustomString(`Unable to connect: invalid ${Utils.getServiceLibrary(targetPort.service)}`)); 
+          return Promise.resolve(
+            new CustomString(
+              `Unable to connect: invalid ${Utils.getServiceLibrary(
+                targetPort.service
+              )}`
+            )
+          );
         }
 
-        const rshellDevices = targetService.data.get('computers') as Map<string, {
-          user: Type.User,
-          device: Type.Device
-        }>;
+        const rshellDevices = targetService.data.get('computers') as Map<
+          string,
+          {
+            user: Type.User;
+            device: Type.Device;
+          }
+        >;
         const targetRouter = target.getRouter() as Type.Router;
 
         rshellDevices.set(targetRouter.publicIp, {
@@ -402,7 +466,10 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('address').addArgument('port', new CustomNumber(1222)).addArgument('procName', new CustomString('rshell_client'))
+    )
+      .addArgument('address')
+      .addArgument('port', new CustomNumber(1222))
+      .addArgument('procName', new CustomString('rshell_client'))
   );
 
   itrface.addMethod(
@@ -414,24 +481,35 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         if (!computer.services.has(Type.ServiceType.RSHELL)) {
-          return Promise.resolve(new CustomString('error: service rshelld is not running'));
+          return Promise.resolve(
+            new CustomString('error: service rshelld is not running')
+          );
         }
 
         const port = computer.findPortByService(Type.ServiceType.RSHELL);
-        
+
         if (!computer.isForwarded(port.port)) {
-          return Promise.resolve(new CustomString('error: rshell portforward is not configured correctly'));
+          return Promise.resolve(
+            new CustomString(
+              'error: rshell portforward is not configured correctly'
+            )
+          );
         }
 
         const rshellServer = computer.services.get(Type.ServiceType.RSHELL);
-        const rshellResults = rshellServer.data.get('computers') as Map<string, {
-          user: Type.User,
-          device: Type.Device
-        }>;
+        const rshellResults = rshellServer.data.get('computers') as Map<
+          string,
+          {
+            user: Type.User;
+            device: Type.Device;
+          }
+        >;
         const shells: CustomInterface[] = [];
 
         for (const rshellResult of rshellResults.values()) {
-          shells.push(createShell(mockEnvironment, rshellResult.user, rshellResult.device));
+          shells.push(
+            createShell(mockEnvironment, rshellResult.user, rshellResult.device)
+          );
         }
 
         return Promise.resolve(new CustomList(shells));

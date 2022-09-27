@@ -10,8 +10,8 @@
         "watch": "tsc -w -p .",
         "clean": "rm -rf dist",
         "test": "jest ./tests",
-        "lint": "eslint 'src/**/*.ts'",
-        "lint:fix": "eslint --fix 'src/**/*.ts'"
+        "lint": "eslint ./src/**/*.ts",
+        "lint:fix": "eslint --fix ./src/**/*.ts"
     },
     "repository": {
         "type": "git",

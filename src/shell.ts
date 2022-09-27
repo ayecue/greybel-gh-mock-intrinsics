@@ -75,7 +75,10 @@ export function createShell(
 
         const remotePort = remoteDevice.findPort(port.toInt());
 
-        if (remotePort === null || remotePort.service !== Type.ServiceType.SSH) {
+        if (
+          remotePort === null ||
+          remotePort.service !== Type.ServiceType.SSH
+        ) {
           return Promise.resolve(
             new CustomString(`can't connect: port ${port.toInt()} not found`)
           );
@@ -343,7 +346,10 @@ export function createShell(
           return Defaults.False;
         }
 
-        if (!(file instanceof Type.File) || file.type !== Type.FileType.Binary) {
+        if (
+          !(file instanceof Type.File) ||
+          file.type !== Type.FileType.Binary
+        ) {
           ctx.handler.outputHandler.print(
             `${file.name} is not an executable file.`
           );

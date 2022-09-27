@@ -1,5 +1,4 @@
 import {
-  CustomBoolean,
   CustomFunction,
   CustomNil,
   CustomString,
@@ -71,7 +70,9 @@ export function create(
         }
 
         if (!targetFile.getPath().startsWith('/lib')) {
-          ctx.handler.outputHandler.print('Exploit failed. The library must be found on the /lib path');
+          ctx.handler.outputHandler.print(
+            'Exploit failed. The library must be found on the /lib path'
+          );
           return Promise.resolve(Defaults.Void);
         }
 
@@ -83,22 +84,27 @@ export function create(
         });
 
         if (!targetVul) {
-          ctx.handler.outputHandler.print('Exploit failed. Vulnerability not found.');
+          ctx.handler.outputHandler.print(
+            'Exploit failed. Vulnerability not found.'
+          );
           return Promise.resolve(Defaults.Void);
         }
 
         let output = '';
 
         for (const item of targetVul.required) {
-          switch(item) {
+          switch (item) {
             case Type.VulnerabilityRequirements.Library: {
-              const requiredLib = this.data.get('library') as Type.VulnerabilityLibraryRequirement;
+              const requiredLib = this.data.get(
+                'library'
+              ) as Type.VulnerabilityLibraryRequirement;
               const libFile = target.findLibraryFile(requiredLib.library);
-              
+
               output += `Searching required library ${requiredLib.library}.so`;
 
               if (libFile === null) {
-                output += ' => failed. Required lib not found. Program aborted.';
+                output +=
+                  ' => failed. Required lib not found. Program aborted.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -118,11 +124,14 @@ export function create(
               break;
             }
             case Type.VulnerabilityRequirements.RegisterAmount: {
-              const registeredUsers = this.data.get('registeredUsers') as number;
+              const registeredUsers = this.data.get(
+                'registeredUsers'
+              ) as number;
               const targetUsers = target.users.size;
 
               if (targetUsers < registeredUsers) {
-                output += 'Starting attack... failed!\nMin users registered failed.';
+                output +=
+                  'Starting attack... failed!\nMin users registered failed.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -138,7 +147,8 @@ export function create(
             }
             case Type.VulnerabilityRequirements.RootActive: {
               if (!target.isRootProcessActive()) {
-                output += 'Starting attack... failed!\nNo active root user found.';
+                output +=
+                  'Starting attack... failed!\nNo active root user found.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -146,12 +156,14 @@ export function create(
             }
             case Type.VulnerabilityRequirements.Local: {
               if (!(target instanceof Type.Router)) {
-                output += 'Starting attack... failed!\nTarget must be a router.';
+                output +=
+                  'Starting attack... failed!\nTarget must be a router.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
               if (!target.isDeviceInNetwork(source)) {
-                output += 'Starting attack... failed!\nHost computer not in the same network.';
+                output +=
+                  'Starting attack... failed!\nHost computer not in the same network.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -162,7 +174,8 @@ export function create(
               const router = target.getRouter() as Type.Router;
 
               if (router.forwarded.size > portsForwarded) {
-                output += 'Starting attack... failed!\nInsufficient amount of port forward towards the target.';
+                output +=
+                  'Starting attack... failed!\nInsufficient amount of port forward towards the target.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -173,7 +186,8 @@ export function create(
               const router = target.getRouter() as Type.Router;
 
               if (router.devices.size > connGateway) {
-                output += 'Starting attack... failed!\nInsufficient amount of computers connected to this gateway.';
+                output +=
+                  'Starting attack... failed!\nInsufficient amount of computers connected to this gateway.';
                 ctx.handler.outputHandler.print(output);
                 return Promise.resolve(Defaults.Void);
               }
@@ -187,7 +201,9 @@ export function create(
         let vulTargetUser;
 
         if (targetVul.action !== Type.VulnerabilityAction.Computer) {
-          const vulUser = targetVul.data.get('user') as Type.VulnerabilityActionUser;
+          const vulUser = targetVul.data.get(
+            'user'
+          ) as Type.VulnerabilityActionUser;
           vulTargetUser = target.getUserByVulnerability(vulUser);
 
           if (vulTargetUser === null) {
@@ -203,15 +219,13 @@ export function create(
             ctx.handler.outputHandler.print(output);
 
             return Promise.resolve(
-              createShell(
-                mockEnvironment,
-                vulTargetUser,
-                target
-              )
+              createShell(mockEnvironment, vulTargetUser, target)
             );
           }
           case Type.VulnerabilityAction.Folder: {
-            const vulRandomFolderPath = targetVul.data.get('folder') as string[];
+            const vulRandomFolderPath = targetVul.data.get(
+              'folder'
+            ) as string[];
             const vulRandomFolder = target.getFile(vulRandomFolderPath);
 
             if (vulRandomFolder === null) {
@@ -250,7 +264,7 @@ export function create(
             return Promise.resolve(Defaults.True);
           }
           case Type.VulnerabilityAction.Computer: {
-            let computerTarget = target;
+            const computerTarget = target;
 
             if (target instanceof Type.Router) {
               if (optArgsRaw === '' || !Utils.isValidIp(optArgsRaw)) {
@@ -268,7 +282,9 @@ export function create(
               }
             }
 
-            const vulUser = targetVul.data.get('user') as Type.VulnerabilityActionUser;
+            const vulUser = targetVul.data.get(
+              'user'
+            ) as Type.VulnerabilityActionUser;
             vulTargetUser = computerTarget.getUserByVulnerability(vulUser);
 
             if (vulTargetUser === null) {
@@ -281,11 +297,7 @@ export function create(
             ctx.handler.outputHandler.print(output);
 
             return Promise.resolve(
-              createComputer(
-                mockEnvironment,
-                vulTargetUser,
-                computerTarget
-              )
+              createComputer(mockEnvironment, vulTargetUser, computerTarget)
             );
           }
           case Type.VulnerabilityAction.Firewall: {
@@ -295,7 +307,8 @@ export function create(
               return Promise.resolve(Defaults.False);
             }
 
-            output += 'success!\nAccessing firewall config...\nFirewall disabled. (Firewalls are not yet supported in greybel!)';
+            output +=
+              'success!\nAccessing firewall config...\nFirewall disabled. (Firewalls are not yet supported in greybel!)';
             ctx.handler.outputHandler.print(output);
             return Promise.resolve(Defaults.True);
           }
