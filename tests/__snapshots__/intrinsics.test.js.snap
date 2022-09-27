@@ -391,11 +391,11 @@ exports[`interpreter default scripts service.src 1`] = `"service"`;
 
 exports[`interpreter default scripts service.src 2`] = `"service"`;
 
-exports[`interpreter default scripts service.src 3`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 3`] = `"Denied. Only root user can install this service."`;
 
-exports[`interpreter default scripts service.src 4`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 4`] = `""`;
 
-exports[`interpreter default scripts service.src 5`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 5`] = `"Denied. Only root user can install this service."`;
 
 exports[`interpreter default scripts shell.src 1`] = `"shell"`;
 
