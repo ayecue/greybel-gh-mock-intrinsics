@@ -10,6 +10,7 @@ import BasicInterface from './interface';
 
 export function create(
   _mockEnvironment: MockEnvironment,
+  _library: Type.File,
   _user: Type.User,
   _computer: Type.Device
 ): BasicInterface {

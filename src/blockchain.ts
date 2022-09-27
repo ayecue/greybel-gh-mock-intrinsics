@@ -12,6 +12,7 @@ import { create as createWallet } from './wallet';
 
 export function create(
   mockEnvironment: MockEnvironment,
+  library: Type.File,
   user: Type.User,
   computer: Type.Device
 ): BasicInterface {

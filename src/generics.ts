@@ -181,7 +181,7 @@ export default function generics(
         const target = Utils.getTraversalPath(libPath.toString(), null);
         const entityResult = device.getFile(target);
 
-        if (entityResult && !entityResult.isFolder) {
+        if (entityResult && entityResult instanceof Type.File) {
           const { r } = entityResult.getPermissions(user, device.groups);
 
           if (r) {
@@ -193,23 +193,23 @@ export default function generics(
               case Type.FileType.RShell:
               case Type.FileType.Repository:
                 return Promise.resolve(
-                  createService(mockEnvironment, user, device)
+                  createService(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.AptClient:
                 return Promise.resolve(
-                  createAptClient(mockEnvironment, user, device)
+                  createAptClient(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Crypto:
                 return Promise.resolve(
-                  createCrypto(mockEnvironment, user, device)
+                  createCrypto(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Metaxploit:
                 return Promise.resolve(
-                  createMetaxploit(mockEnvironment, user, device)
+                  createMetaxploit(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Blockchain:
                 return Promise.resolve(
-                  createBlockchain(mockEnvironment, user, device)
+                  createBlockchain(mockEnvironment, entityResult, user, device)
                 );
               default:
             }

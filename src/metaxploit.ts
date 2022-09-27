@@ -19,6 +19,7 @@ import { greaterThanProcNameLimit, isValidFileName, isValidProcName } from './ut
 
 export function create(
   mockEnvironment: MockEnvironment,
+  metaFile: Type.File,
   user: Type.User,
   computer: Type.Device
 ): BasicInterface {
@@ -48,15 +49,15 @@ export function create(
           pathRaw,
           computer.getHomePath(user)
         );
-        const file = computer.getFile(traversalPath) as Type.File;
-        const library = file.getLibraryType();
+        const targetFile = computer.getFile(traversalPath) as Type.File;
+        const library = targetFile.getLibraryType();
 
         if (!library) {
           return Promise.resolve(Defaults.Void);
         }
 
         const libContainer = mockEnvironment.libraryManager.get(library);
-        const libVersion = libContainer.get(file.version);
+        const libVersion = libContainer.get(targetFile.version);
         const vuls = libVersion.getVulnerabilitiesByMode(
           Type.VulnerabilityMode.Local
         );
@@ -69,8 +70,9 @@ export function create(
           createMetaLib(
             mockEnvironment,
             computer,
+            metaFile,
             computer,
-            file,
+            targetFile,
             Type.VulnerabilityMode.Local,
             libContainer,
             libVersion,
@@ -131,9 +133,10 @@ export function create(
             createNetSession(
               mockEnvironment,
               computer,
+              metaFile,
               router,
-              Type.Library.KERNEL_ROUTER,
-              kernel
+              kernel,
+              Type.Library.KERNEL_ROUTER
             )
           );
         }
@@ -153,9 +156,9 @@ export function create(
             return Promise.resolve(Defaults.Void);
           }
 
-          const library = targetDevice.findLibraryFileByPort(targetPort);
+          const targetFile = targetDevice.findLibraryFileByPort(targetPort);
 
-          if (!library) {
+          if (!targetFile) {
             return Promise.resolve(Defaults.Void);
           }
 
@@ -163,9 +166,10 @@ export function create(
             createNetSession(
               mockEnvironment,
               computer,
+              metaFile,
               targetDevice,
-              library.getLibraryType(),
-              library
+              targetFile,
+              targetFile.getLibraryType()
             )
           );
         }
@@ -184,9 +188,9 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const library = forwardedComputer.findLibraryFileByPort(forwardedComputerPort);
+        const targetFile = forwardedComputer.findLibraryFileByPort(forwardedComputerPort);
 
-        if (!library) {
+        if (!targetFile) {
           return Promise.resolve(Defaults.Void);
         }
 
@@ -194,9 +198,10 @@ export function create(
           createNetSession(
             mockEnvironment,
             computer,
+            metaFile,
             forwardedComputer,
-            library.getLibraryType(),
-            library
+            targetFile,
+            targetFile.getLibraryType()
           )
         );
       }
@@ -209,28 +214,42 @@ export function create(
     CustomFunction.createExternalWithSelf(
       'scan',
       (
-        _ctx: OperationContext,
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const metaLib = args.get('metaLib');
-        if (metaLib instanceof BasicInterface) {
-          const exploits: Type.Vulnerability[] =
-            metaLib.getVariable('exploits');
 
-          if (exploits) {
-            const zones = exploits.map((x: Type.Vulnerability) => {
-              return x.memAddress;
-            });
-            const result = Array.from(new Set(zones)).map(
-              (item) => new CustomString(item)
-            );
-
-            return Promise.resolve(new CustomList(result));
-          }
+        if (metaLib instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(new CustomList());
+        if (metaLib instanceof BasicInterface && metaLib.getCustomType() === 'metaLib') {
+          const metaFile = metaLib.getVariable('metaFile') as Type.File;
+
+          if (!metaFile || metaFile.deleted) {
+            ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
+            return Promise.resolve(Defaults.Void);
+          }
+
+          const targetFile = metaLib.getVariable('targetFile') as Type.File;
+
+          if (!targetFile || targetFile.deleted) {
+            return Promise.resolve(Defaults.Void);
+          }
+
+          const vuls = metaLib.getVariable('vulnerabilities') as Type.Vulnerability[];
+          const zones = vuls.map((x: Type.Vulnerability) => {
+            return x.memAddress;
+          });
+          const result = Array.from(new Set(zones)).map(
+            (item) => new CustomString(item)
+          );
+
+          return Promise.resolve(new CustomList(result));
+        }
+
+        return Promise.resolve(Defaults.Void);
       }
     ).addArgument('metaLib')
   );
@@ -239,51 +258,48 @@ export function create(
     CustomFunction.createExternalWithSelf(
       'scan_address',
       (
-        _ctx: OperationContext,
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const metaLib = args.get('metaLib');
-        const memAddress = args.get('memAddress').toString();
-        if (metaLib instanceof BasicInterface) {
-          const exploits: Type.Vulnerability[] =
-            metaLib.getVariable('exploits');
+        const memAddress = args.get('memAddress');
+        
+        if (metaLib instanceof CustomNil || memAddress instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+        
+        if (metaLib instanceof BasicInterface && metaLib.getCustomType() === 'metaLib') {
+          const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
-          if (exploits) {
-            const result = exploits
-              .filter((x: Type.Vulnerability) => {
-                return x.memAddress === memAddress;
-              })
-              .map((x: Type.Vulnerability) => {
-                return [
-                  `${x.details} <b>${x.sector}</b>. Buffer overflow.`,
-                  ...x.required.map(
-                    (r: Type.VulnerabilityRequirements): string => {
-                      switch (r) {
-                        case Type.VulnerabilityRequirements.Library:
-                          return '* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>';
-                        case Type.VulnerabilityRequirements.RegisterAmount:
-                          return '* Checking registered users equal to 2.';
-                        case Type.VulnerabilityRequirements.AnyActive:
-                          return '* Checking an active user.';
-                        case Type.VulnerabilityRequirements.RootActive:
-                          return '* Checking root active user.';
-                        case Type.VulnerabilityRequirements.Local:
-                          return '* Checking existing connection in the local network.';
-                        case Type.VulnerabilityRequirements.Forward:
-                          return '* 1337 port forwarding configured from router to the target computer.';
-                        case Type.VulnerabilityRequirements.Gateway:
-                          return '* 1337 computers using this router as gateway.';
-                      }
-                      return '';
-                    }
-                  )
-                ].join('\n');
-              })
-              .join('\n');
-
-            return Promise.resolve(new CustomString(result));
+          if (!metaFile || metaFile.deleted) {
+            ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
+            return Promise.resolve(Defaults.Void);
           }
+
+          const targetFile = metaLib.getVariable('targetFile') as Type.File;
+
+          if (!targetFile || targetFile.deleted) {
+            return Promise.resolve(Defaults.Void);
+          }
+
+          const memAddressRaw = memAddress.toString();
+          const output = ['decompiling source...', 'searching unsecure values...'];
+          const vuls = metaLib.getVariable('vulnerabilities') as Type.Vulnerability[];
+          const vulsOfAddress = vuls.filter((x: Type.Vulnerability) => {
+            return x.memAddress === memAddressRaw;
+          });
+
+          if (vulsOfAddress.length === 0) {
+            output.push('No vulnerabilities were found.');
+            return Promise.resolve(new CustomString(output.join('\n')));
+          }
+
+          for (const item of vulsOfAddress) {
+            output.push(`Unsafe check: ${item.getInfo()}`);
+          }
+
+          return Promise.resolve(new CustomString(output.join('\n')));
         }
 
         return Promise.resolve(Defaults.Void);

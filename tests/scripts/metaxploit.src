@@ -3,11 +3,32 @@ meta = include_lib("/lib/metaxploit.so")
 print(typeof(meta))
 print(meta)
 
+print(meta.sniffer)
+print(meta.rshell_client)
+print(meta.rshell_server)
+
+//local meta lib
 metaLib = meta.load("/lib/crypto.so")
 
 print(typeof(metaLib))
 print(metaLib)
 
+print(meta.scan(metaLib))
+print(meta.scan_address(metaLib, "0xC8CE05AB"))
+
+print(metaLib.lib_name)
+print(metaLib.version)
+
+scanResult = meta.scan(metaLib)
+scanAddressResult = meta.scan_address(metaLib, scanResult[0])
+
+print(scanResult)
+print(scanAddressResult)
+
+print(metaLib.overflow("0xC8CE05AB", "_tr_flush_blockblock_start"))
+print(metaLib.overflow("0xC8CE05AB", "_tr_flush_blockblock_start", "change"))
+
+//net session with port
 netSession = meta.net_use("142.32.54.56", 22)
 
 print(typeof(netSession))
@@ -18,25 +39,29 @@ netSessionMeta = netSession.dump_lib
 print(typeof(netSessionMeta))
 print(netSessionMeta)
 
-print(meta.scan(metaLib))
-print(meta.scan_address(metaLib, "0x33BC9555"))
+print(netSessionMeta.lib_name)
+print(netSessionMeta.version)
 
-print(meta.sniffer)
-print(meta.rshell_client)
-print(meta.rshell_server)
-
-print(metaLib.lib_name)
-print(metaLib.version)
-print(metaLib.overflow("0x33BC9555", "fw5ynq2637"))
-print(metaLib.overflow("0x33BC9555", "fw5ynq2637", "change"))
-
-print(netSessionMeta.overflow("0x33BC9555", "d64lu1atp5"))
-
-netSession = meta.net_use("142.32.54.56")
-
-routerNetSessionMeta = netSession.dump_lib
-scanResult = meta.scan(metaLib)
-scanAddressResult = meta.scan_address(metaLib, scanResult[0])
+scanResult = meta.scan(netSessionMeta)
+scanAddressResult = meta.scan_address(netSessionMeta, scanResult[0])
 
 print(scanResult)
 print(scanAddressResult)
+
+print(netSessionMeta.overflow("0xA12E2B71", "match_length"))
+
+//net session without port
+netSession = meta.net_use("142.32.54.56")
+
+routerNetSessionMeta = netSession.dump_lib
+
+print(routerNetSessionMeta.lib_name)
+print(routerNetSessionMeta.version)
+
+scanResult = meta.scan(routerNetSessionMeta)
+scanAddressResult = meta.scan_address(routerNetSessionMeta, scanResult[0])
+
+print(scanResult)
+print(scanAddressResult)
+
+print(routerNetSessionMeta.overflow("0xB1AFF995", "QueueToken"))
