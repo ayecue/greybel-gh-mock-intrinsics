@@ -119,8 +119,8 @@ export default function generics(
           return Promise.resolve(Defaults.Void);
         }
 
-        const { user, computer } = mockEnvironment.getLocal();
-        let router = computer.router;
+        const { user, device } = mockEnvironment.getLocal();
+        let router = device.getRouter() as Type.Router;
 
         if (target !== '') {
           router = mockEnvironment.getRouterByIp(target);
@@ -177,12 +177,12 @@ export default function generics(
           throw new Error('include_lib: Invalid arguments');
         }
 
-        const { user, computer } = mockEnvironment.getLocal();
+        const { user, device } = mockEnvironment.getLocal();
         const target = Utils.getTraversalPath(libPath.toString(), null);
-        const entityResult = computer.getFile(target);
+        const entityResult = device.getFile(target);
 
-        if (entityResult && !entityResult.isFolder) {
-          const { r } = entityResult.getPermissions(user, computer.groups);
+        if (entityResult && entityResult instanceof Type.File) {
+          const { r } = entityResult.getPermissions(user, device.groups);
 
           if (r) {
             switch ((entityResult as Type.File).type) {
@@ -193,23 +193,23 @@ export default function generics(
               case Type.FileType.RShell:
               case Type.FileType.Repository:
                 return Promise.resolve(
-                  createService(mockEnvironment, user, computer)
+                  createService(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.AptClient:
                 return Promise.resolve(
-                  createAptClient(mockEnvironment, user, computer)
+                  createAptClient(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Crypto:
                 return Promise.resolve(
-                  createCrypto(mockEnvironment, user, computer)
+                  createCrypto(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Metaxploit:
                 return Promise.resolve(
-                  createMetaxploit(mockEnvironment, user, computer)
+                  createMetaxploit(mockEnvironment, entityResult, user, device)
                 );
               case Type.FileType.Blockchain:
                 return Promise.resolve(
-                  createBlockchain(mockEnvironment, user, computer)
+                  createBlockchain(mockEnvironment, entityResult, user, device)
                 );
               default:
             }
@@ -394,8 +394,8 @@ export default function generics(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const { computer, user } = mockEnvironment.getLatestSession();
-        const path = computer.getHomePath(user);
+        const { device, user } = mockEnvironment.getLatestSession();
+        const path = device.getHomePath(user);
 
         return Promise.resolve(
           new CustomString(path ? '/' + path.join('/') : '/')
@@ -439,7 +439,7 @@ export default function generics(
       ): Promise<CustomValue> => {
         const session = mockEnvironment.getLocal();
 
-        return Promise.resolve(new CustomString(session.user.email));
+        return Promise.resolve(new CustomString(session.user.email.email));
       }
     ),
 
@@ -452,7 +452,7 @@ export default function generics(
       ): Promise<CustomValue> => {
         const session = mockEnvironment.getLocal();
 
-        return Promise.resolve(new CustomString(session.user.bankNumber));
+        return Promise.resolve(new CustomString(session.user.bankAccount.id));
       }
     ),
 

@@ -1,6 +1,7 @@
 import {
   CustomFunction,
   CustomList,
+  CustomNil,
   CustomString,
   CustomValue,
   Defaults,
@@ -27,9 +28,23 @@ export function create(
         const result: Array<CustomValue> = [];
 
         email.messages.forEach((item, id) => {
+          const firstMessage = item.messages[0];
+
           result.push(
             new CustomString(
-              [`${id} - ${item.subject}`, item.message].join('\n')
+              [
+                '\n\nMailID: ',
+                id,
+                '\nFrom: ',
+                item.from,
+                '\nSubject: ',
+                item.subject,
+                '\n',
+                (firstMessage.length > 125
+                  ? firstMessage.substr(0, 125) + '...'
+                  : firstMessage
+                ).replace('\n\n', '\n')
+              ].join('')
             )
           );
         });
@@ -47,18 +62,33 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const mailId = args.get('id').toString();
-        const item = email.messages.get(mailId);
+        const mailId = args.get('id');
 
-        if (!item) {
-          return;
+        if (mailId instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
         }
 
-        return Promise.resolve(
-          new CustomString(
-            [`${mailId} - ${item.subject}`, item.message].join('\n')
-          )
-        );
+        const mailIdRaw = mailId.toString();
+
+        if (!email.messages.has(mailIdRaw)) {
+          return Promise.resolve(new CustomString('Mail not found'));
+        }
+
+        const item = email.messages.get(mailIdRaw);
+
+        const output = [
+          '\nFrom: ',
+          item.from,
+          '\nSubject: ',
+          item.subject,
+          '\n'
+        ];
+
+        for (const message of item.messages) {
+          output.push(`${message}\n\n`);
+        }
+
+        return Promise.resolve(new CustomString(output.join('')));
       }
     ).addArgument('id')
   );
@@ -72,20 +102,48 @@ export function create(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const address = args.get('address');
-        const subject = args.get('subject').toString();
-        const message = args.get('message').toString();
-        const targetEmail = mockEnvironment.getEmail(address.toString());
+        const subject = args.get('subject');
+        const message = args.get('message');
 
-        if (!targetEmail) {
-          return Promise.resolve(new CustomString('No email found'));
+        if (
+          address instanceof CustomNil ||
+          subject instanceof CustomNil ||
+          message instanceof CustomNil
+        ) {
+          return Promise.resolve(Defaults.Void);
         }
+
+        const addressRaw = address.toString();
+        const addressSegments = addressRaw.split('@');
+
+        if (
+          addressSegments.length === 1 ||
+          addressSegments[0].length === 0 ||
+          addressRaw.length > 64
+        ) {
+          return Promise.resolve(new CustomString('Invalid email address'));
+        }
+
+        const subjectRaw = subject.toString();
+
+        if (subjectRaw.length > 128) {
+          return Promise.resolve(new CustomString('Mail subject too large'));
+        }
+
+        const messageRaw = message.toString();
+
+        if (messageRaw.length > 160000) {
+          return Promise.resolve(new CustomString('Mail message too large'));
+        }
+
+        const targetEmail = mockEnvironment.getEmail(addressRaw);
+        const newEmail = new Type.EMailMessage(email.email, subjectRaw, [
+          messageRaw
+        ]);
 
         targetEmail.messages.set(
           mockEnvironment.basicGenerator.generateUUID(),
-          {
-            subject,
-            message
-          }
+          newEmail
         );
 
         return Promise.resolve(Defaults.True);
@@ -104,13 +162,19 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const mailId = args.get('id').toString();
+        const mailId = args.get('id');
 
-        if (email.messages.delete(mailId)) {
+        if (mailId instanceof CustomNil) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const mailIdRaw = mailId.toString();
+
+        if (email.messages.delete(mailIdRaw)) {
           return Promise.resolve(Defaults.True);
         }
 
-        return Promise.resolve(new CustomString('No email with that id.'));
+        return Promise.resolve(Defaults.Void);
       }
     ).addArgument('id')
   );

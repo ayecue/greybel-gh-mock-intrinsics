@@ -200,9 +200,7 @@ export function create(
 
           const copy = entity.copy();
 
-          folder.removeEntity(entity.name);
           copy.name = newNameRaw;
-
           folder.putEntity(copy);
 
           return Promise.resolve(Defaults.True);
@@ -355,7 +353,7 @@ export function create(
 
         if (
           entity instanceof Type.File &&
-          entity.type === Type.FileType.Plain
+          entity.type === Type.FileType.Source
         ) {
           return Promise.resolve(new CustomString(entity.content || ''));
         }
@@ -399,7 +397,7 @@ export function create(
           );
         } else if (
           entity instanceof Type.File &&
-          entity.type !== Type.FileType.Plain
+          entity.type !== Type.FileType.Source
         ) {
           return Promise.resolve(
             new CustomString(`can't open ${entity.getPath()} Binary file.`)
@@ -435,7 +433,7 @@ export function create(
 
         const file = entity as Type.File;
         return Promise.resolve(
-          new CustomBoolean(file.type !== Type.FileType.Plain)
+          new CustomBoolean(file.type !== Type.FileType.Source)
         );
       }
     )
@@ -496,7 +494,7 @@ export function create(
           );
         }
 
-        (entity.parent as Type.Folder).removeEntity(entity.name);
+        entity.delete();
 
         return Promise.resolve(new CustomString(''));
       }

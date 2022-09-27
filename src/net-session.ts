@@ -10,10 +10,11 @@ import { create as createMetaLib } from './meta-lib';
 
 export function create(
   mockEnvironment: MockEnvironment,
-  computer: Type.Computer,
-  targetComputer: Type.Computer,
-  library: Type.Library,
-  file: Type.File
+  source: Type.Device,
+  metaFile: Type.File,
+  target: Type.Device,
+  targetFile: Type.File,
+  targetLibrary: Type.Library
 ): BasicInterface {
   const itrface = new BasicInterface('netSession');
 
@@ -26,16 +27,17 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const mode = Type.VulnerabilityMode.Online;
-        const libContainer = mockEnvironment.libraryManager.get(library);
-        const libVersion = libContainer.get(file.version);
+        const libContainer = mockEnvironment.libraryManager.get(targetLibrary);
+        const libVersion = libContainer.get(targetFile.version);
         const vuls = libVersion.getVulnerabilitiesByMode(mode);
 
         return Promise.resolve(
           createMetaLib(
             mockEnvironment,
-            computer,
-            targetComputer,
-            file,
+            source,
+            metaFile,
+            target,
+            targetFile,
             mode,
             libContainer,
             libVersion,

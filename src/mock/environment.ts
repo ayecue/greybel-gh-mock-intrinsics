@@ -10,7 +10,7 @@ export default function create(): MockEnvironment {
   const networkGenerator = mockEnvironment.networkGenerator;
 
   const localSession = mockEnvironment.localSession;
-  const localLocation = localSession.computer.location.fork();
+  const localLocation = localSession.device.location.fork();
   const localRouter = networkGenerator.generateRouter({
     publicIp: '142.32.54.56',
     location: localLocation
@@ -41,13 +41,12 @@ export default function create(): MockEnvironment {
 
   const sshTestPort = new Type.Port({
     port: 22,
-    service: Type.Service.SSH,
-    isClosed: false,
-    forwarded: true
+    service: Type.ServiceType.SSH,
+    isClosed: false
   });
-  const { computer } = mockEnvironment.getLocal();
+  const { device } = mockEnvironment.getLocal();
 
-  computer.addPort(sshTestPort);
+  device.addPort(sshTestPort);
 
   emailGenerator.generate({
     name: 'test',

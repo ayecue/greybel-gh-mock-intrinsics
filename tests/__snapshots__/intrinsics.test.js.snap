@@ -58,7 +58,7 @@ Association succesful :-)"
 
 exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"402/25000"`;
+exports[`interpreter default scripts crypto.src 5`] = `"728/25000"`;
 
 exports[`interpreter default scripts crypto.src 6`] = `""`;
 
@@ -81,9 +81,9 @@ exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: Remarkable-berry-60.org
-Administrative contact: agreeable-trustee-20
-Email address: agreeable-trustee-20@Remarkable-berry-60.org
+"Domain name: metaldyne.org
+Administrative contact: Hercule Beane
+Email address: mrpacker2003@metaldyne.org
 Phone: 123456891"
 `;
 
@@ -101,7 +101,7 @@ exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogramm
 
 exports[`interpreter default scripts generics.src 12`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 13`] = `"test@Unbelievable-player-76.org"`;
+exports[`interpreter default scripts generics.src 13`] = `"test@briggs.de"`;
 
 exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
@@ -145,20 +145,28 @@ exports[`interpreter default scripts meta-mail.src 2`] = `"metaMail"`;
 
 exports[`interpreter default scripts meta-mail.src 3`] = `"[  ]"`;
 
-exports[`interpreter default scripts meta-mail.src 4`] = `""`;
+exports[`interpreter default scripts meta-mail.src 4`] = `"Mail not found"`;
 
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
+"[ 
+
+MailID: 5171bca0-1b95-4188-8453-46a19c6bb2d2
+From: test@test.org
+Subject: hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"ce46d711-15d4-4dce-bb7c-3f00245e1583"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"ce46d711-15d4-4dce-bb7c-3f00245e1583 - hello
-dude"
+"
+From: test@test.org
+Subject: hello
+dude
+
+"
 `;
 
 exports[`interpreter default scripts meta-mail.src 9`] = `"true"`;
@@ -169,73 +177,125 @@ exports[`interpreter default scripts metaxploit.src 1`] = `"metaxploit"`;
 
 exports[`interpreter default scripts metaxploit.src 2`] = `"metaxploit"`;
 
-exports[`interpreter default scripts metaxploit.src 3`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 3`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 4`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 4`] = `""`;
 
-exports[`interpreter default scripts metaxploit.src 5`] = `"netSession"`;
+exports[`interpreter default scripts metaxploit.src 5`] = `"error: service rshelld is not running"`;
 
-exports[`interpreter default scripts metaxploit.src 6`] = `"netSession"`;
+exports[`interpreter default scripts metaxploit.src 6`] = `"metaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 7`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 8`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 8`] = `"[ 0xC8CE05AB, 0xFDC63532, 0xDC4BD50C ]"`;
 
-exports[`interpreter default scripts metaxploit.src 9`] = `"[ 0xC8CE05AB ]"`;
-
-exports[`interpreter default scripts metaxploit.src 10`] = `""`;
-
-exports[`interpreter default scripts metaxploit.src 11`] = `"No yet supported"`;
-
-exports[`interpreter default scripts metaxploit.src 12`] = `"false"`;
-
-exports[`interpreter default scripts metaxploit.src 13`] = `"[  ]"`;
-
-exports[`interpreter default scripts metaxploit.src 14`] = `"crypto"`;
-
-exports[`interpreter default scripts metaxploit.src 15`] = `"1.0.0.0"`;
-
-exports[`interpreter default scripts metaxploit.src 16`] = `""`;
-
-exports[`interpreter default scripts metaxploit.src 17`] = `""`;
-
-exports[`interpreter default scripts metaxploit.src 18`] = `""`;
-
-exports[`interpreter default scripts metaxploit.src 19`] = `"[ 0xC8CE05AB ]"`;
-
-exports[`interpreter default scripts metaxploit.src 20`] = `
-"loop in array <b>borg8kwtzu</b>. Buffer overflow.
-* Checking an active user.
-loop in array <b>6iogj1qr7h</b>. Buffer overflow.
-* Checking an active user.
-* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-loop in array <b>4w2so9dmgw</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>ueqg4x1o0v</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version <b>1.0.0.0</b>
-* Checking existing connection in the local network.
-* Checking registered users equal to 2.
-loop in array <b>y0arblna9a</b>. Buffer overflow.
-* Checking registered users equal to 2.
-* Checking an active user.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>i5cxta6sop</b>. Buffer overflow.
-* Checking an active user.
-* 1337 computers using this router as gateway.
-loop in array <b>q37eqpjlzy</b>. Buffer overflow.
-loop in array <b>1f7paxxf7e</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-loop in array <b>7knf7ejdni</b>. Buffer overflow.
-loop in array <b>at0h9o477l</b>. Buffer overflow.
-* 1337 port forwarding configured from router to the target computer.
-* Checking registered users equal to 2.
-* Checking root active user.
-loop in array <b>mwha9je4hh</b>. Buffer overflow.
-* Checking root active user.
-loop in array <b>2mxjo6mo50</b>. Buffer overflow.
-* 1337 computers using this router as gateway.
+exports[`interpreter default scripts metaxploit.src 9`] = `
+"decompiling source...
+searching unsecure values...
+Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking an active user."
 `;
+
+exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
+
+exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0.0"`;
+
+exports[`interpreter default scripts metaxploit.src 12`] = `"[ 0xC8CE05AB, 0xFDC63532, 0xDC4BD50C ]"`;
+
+exports[`interpreter default scripts metaxploit.src 13`] = `
+"decompiling source...
+searching unsecure values...
+Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking an active user."
+`;
+
+exports[`interpreter default scripts metaxploit.src 14`] = `
+"
+Starting attack...success!
+Privileges obtained from user: test"
+`;
+
+exports[`interpreter default scripts metaxploit.src 15`] = `"shell"`;
+
+exports[`interpreter default scripts metaxploit.src 16`] = `
+"
+Starting attack...success!
+Privileges obtained from user: test"
+`;
+
+exports[`interpreter default scripts metaxploit.src 17`] = `"shell"`;
+
+exports[`interpreter default scripts metaxploit.src 18`] = `"netSession"`;
+
+exports[`interpreter default scripts metaxploit.src 19`] = `"netSession"`;
+
+exports[`interpreter default scripts metaxploit.src 20`] = `"metaLib"`;
+
+exports[`interpreter default scripts metaxploit.src 21`] = `"metaLib"`;
+
+exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
+
+exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0.0"`;
+
+exports[`interpreter default scripts metaxploit.src 24`] = `"[ 0xA12E2B71, 0xE2D91188, 0x3089D743 ]"`;
+
+exports[`interpreter default scripts metaxploit.src 25`] = `
+"decompiling source...
+searching unsecure values...
+Unsafe check: string copy in <b>void</b>. Buffer overflow.
+* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 2.
+Unsafe check: loop in array <b>DeleteLinei</b>. Buffer overflow.
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 4.
+* Checking an active user.
+* Checking root active user.
+* 4 port forwarding configured from router to the target computer.
+Unsafe check: string copy in <b>treeDistancesdyn_tree</b>. Buffer overflow.
+* 3 port forwarding configured from router to the target computer.
+Unsafe check: loop in array <b>match_length</b>. Buffer overflow.
+Unsafe check: string copy in <b>ifrestoreWindow</b>. Buffer overflow.
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking an active user.
+* 3 port forwarding configured from router to the target computer."
+`;
+
+exports[`interpreter default scripts metaxploit.src 26`] = `
+"
+Starting attack...success!
+Privileges obtained from user: guest"
+`;
+
+exports[`interpreter default scripts metaxploit.src 27`] = `"file"`;
+
+exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router"`;
+
+exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0.0"`;
+
+exports[`interpreter default scripts metaxploit.src 30`] = `"[ 0xB1AFF995, 0x2795D2B7, 0x95903F51, 0xC829866A ]"`;
+
+exports[`interpreter default scripts metaxploit.src 31`] = `
+"decompiling source...
+searching unsecure values...
+Unsafe check: loop in array <b>linesInsertedOrRemoved</b>. Buffer overflow.
+Unsafe check: string copy in <b>distance</b>. Buffer overflow.
+Unsafe check: loop in array <b>QueueToken</b>. Buffer overflow.
+Unsafe check: string copy in <b>Title</b>. Buffer overflow.
+Unsafe check: string copy in <b>ALessThanB</b>. Buffer overflow."
+`;
+
+exports[`interpreter default scripts metaxploit.src 32`] = `
+"
+Starting attack...success!
+Accessing firewall config...
+Firewall disabled. (Firewalls are not yet supported in greybel!)"
+`;
+
+exports[`interpreter default scripts metaxploit.src 33`] = `"true"`;
 
 exports[`interpreter default scripts mkdir.src 1`] = `"false"`;
 
@@ -255,7 +315,7 @@ exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[  ]"`;
 
 exports[`interpreter default scripts scripts.src 1`] = `
 "Desktop    
@@ -308,9 +368,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU   MEM   COMMAND             
-root  6380  5.6   8.74  kernel_task         
-root  8841  11.8  7.56  Xorg                "
+"USER  PID   CPU  MEM    COMMAND             
+root  2705  8.5  25.02  kernel_task         
+root  7499  9.2  23.05  Xorg                "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -322,7 +382,7 @@ Essid: essid-test-uuid
 Bssid: bssid-test-uuid
 ----------------
 Public IP: 142.32.54.56
-Local IP: 192.168.117.34
+Local IP: 192.168.253.21
 Gateway: 192.168.0.10
 "
 `;
@@ -331,11 +391,11 @@ exports[`interpreter default scripts service.src 1`] = `"service"`;
 
 exports[`interpreter default scripts service.src 2`] = `"service"`;
 
-exports[`interpreter default scripts service.src 3`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 3`] = `"Denied. Only root user can install this service."`;
 
-exports[`interpreter default scripts service.src 4`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 4`] = `""`;
 
-exports[`interpreter default scripts service.src 5`] = `"Not yet supported"`;
+exports[`interpreter default scripts service.src 5`] = `"Denied. Only root user can install this service."`;
 
 exports[`interpreter default scripts shell.src 1`] = `"shell"`;
 
@@ -360,9 +420,9 @@ exports[`interpreter default scripts shell.src 10`] = `"true"`;
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER  PID   CPU   MEM    COMMAND      
-root  4516  5.1   30.91  kernel_task  
-root  8612  11.6  25.32  Xorg         "
+"USER  PID   CPU  MEM    COMMAND      
+root  5539  7.7  17.86  kernel_task  
+root  379   8.2  23.74  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -381,7 +441,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% communicative-dot-47, A6:25:3F:FE:B2:A8 53% diligent-soldier-65, B3:A1:55:6C:FF:79 73% Spectacular-horatio-26, EE:89:54:50:D8:D7 71% dynamic-trustee-7, 61:42:95:99:DB:74 41% dynamic-caroline-25, 23:64:BC:66:46:3B 51% Mirthful-gills-17 ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% circinus, 23:B9:F1:05:1C:D9 57% apricot_rain, 76:FF:BA:97:28:4C 62% nisse, 6D:63:9B:5D:1A:61 68% driest, F2:8C:C2:3E:E6:6F 51% mynameisskiller ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -391,7 +451,7 @@ exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.93.234"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.189.79"`;
 
 exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
 

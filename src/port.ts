@@ -12,7 +12,7 @@ import BasicInterface from './interface';
 
 export function create(
   mockEnvironment: MockEnvironment,
-  computer: Type.Computer,
+  device: Type.Device,
   port: Type.Port
 ): BasicInterface {
   const itrface = new BasicInterface('port');
@@ -25,7 +25,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(computer.localIp));
+        return Promise.resolve(new CustomString(device.localIp));
       }
     )
   );
@@ -59,7 +59,6 @@ export function create(
   itrface.setVariable('port', port.port);
   itrface.setVariable('isClosed', port.isClosed);
   itrface.setVariable('service', port.service);
-  itrface.setVariable('forwarded', port.forwarded);
 
   return itrface;
 }

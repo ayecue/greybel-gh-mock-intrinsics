@@ -20,6 +20,7 @@ import { delay } from './utils';
 
 export function create(
   mockEnvironment: MockEnvironment,
+  library: Type.File,
   user: Type.User,
   device: Type.Device
 ): BasicInterface {

@@ -1,4 +1,4 @@
-ssh = include_lib("/lib/ssh.so")
+ssh = include_lib("/lib/libssh.so")
 
 print(typeof(ssh))
 print(ssh)

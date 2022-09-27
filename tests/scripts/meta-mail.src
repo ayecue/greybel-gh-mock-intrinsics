@@ -10,8 +10,9 @@ print(mail.send("test@test.org", "hello", "dude"))
 print(mail.fetch())
 
 messages = mail.fetch()
-segments = messages[0].split(" ")
-mailId = segments[0]
+segments = messages[0].split(char(10))
+mailIdLine = segments[2].split(" ")
+mailId = mailIdLine[1]
 
 print(mailId)
 print(mail.read(mailId))

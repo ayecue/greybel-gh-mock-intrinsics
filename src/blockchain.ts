@@ -12,8 +12,9 @@ import { create as createWallet } from './wallet';
 
 export function create(
   mockEnvironment: MockEnvironment,
+  library: Type.File,
   user: Type.User,
-  computer: Type.Computer
+  computer: Type.Device
 ): BasicInterface {
   const itrface = new BasicInterface('blockchain');
 
