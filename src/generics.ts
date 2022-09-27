@@ -381,7 +381,11 @@ export default function generics(
           throw new Error('parent_path: Invalid arguments');
         }
 
-        const result = path.toString().replace(/\/[^/]+\/?$/i, '');
+        const result = path.toString().replace(/\/?[^/]+\/?$/i, '');
+
+        if (result.length === 0) {
+          return Promise.resolve(new CustomString('/'));
+        }
 
         return Promise.resolve(new CustomString(result));
       }
