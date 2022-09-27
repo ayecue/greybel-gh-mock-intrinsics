@@ -439,7 +439,7 @@ export default function generics(
       ): Promise<CustomValue> => {
         const session = mockEnvironment.getLocal();
 
-        return Promise.resolve(new CustomString(session.user.email));
+        return Promise.resolve(new CustomString(session.user.email.email));
       }
     ),
 
@@ -452,7 +452,7 @@ export default function generics(
       ): Promise<CustomValue> => {
         const session = mockEnvironment.getLocal();
 
-        return Promise.resolve(new CustomString(session.user.bankNumber));
+        return Promise.resolve(new CustomString(session.user.bankAccount.id));
       }
     ),
 

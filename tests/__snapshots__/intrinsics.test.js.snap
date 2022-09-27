@@ -145,20 +145,28 @@ exports[`interpreter default scripts meta-mail.src 2`] = `"metaMail"`;
 
 exports[`interpreter default scripts meta-mail.src 3`] = `"[  ]"`;
 
-exports[`interpreter default scripts meta-mail.src 4`] = `""`;
+exports[`interpreter default scripts meta-mail.src 4`] = `"Mail not found"`;
 
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
+"[ 
+
+MailID: 5171bca0-1b95-4188-8453-46a19c6bb2d2
+From: test@test.org
+Subject: hello
 dude ]"
 `;
 
 exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
-"5171bca0-1b95-4188-8453-46a19c6bb2d2 - hello
-dude"
+"
+From: test@test.org
+Subject: hello
+dude
+
+"
 `;
 
 exports[`interpreter default scripts meta-mail.src 9`] = `"true"`;
