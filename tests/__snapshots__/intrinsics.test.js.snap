@@ -60,19 +60,19 @@ exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
 exports[`interpreter default scripts crypto.src 5`] = `"728/25000"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `""`;
+exports[`interpreter default scripts crypto.src 6`] = `"null"`;
 
 exports[`interpreter default scripts crypto.src 7`] = `"false"`;
 
 exports[`interpreter default scripts crypto.src 8`] = `"Key not found. More acks needed"`;
 
-exports[`interpreter default scripts crypto.src 9`] = `""`;
+exports[`interpreter default scripts crypto.src 9`] = `"null"`;
 
 exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
 
-exports[`interpreter default scripts crypto.src 11`] = `""`;
+exports[`interpreter default scripts crypto.src 11`] = `"null"`;
 
-exports[`interpreter default scripts generics.src 1`] = `""`;
+exports[`interpreter default scripts generics.src 1`] = `"null"`;
 
 exports[`interpreter default scripts generics.src 2`] = `"098f6bcd4621d373cade4e832627b4f6"`;
 
@@ -107,7 +107,7 @@ exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
 exports[`interpreter default scripts generics.src 15`] = `"clearing screen"`;
 
-exports[`interpreter default scripts generics.src 16`] = `""`;
+exports[`interpreter default scripts generics.src 16`] = `"null"`;
 
 exports[`interpreter default scripts generics.src 17`] = `"/home/test/myprogramm"`;
 
@@ -177,9 +177,9 @@ exports[`interpreter default scripts metaxploit.src 1`] = `"metaxploit"`;
 
 exports[`interpreter default scripts metaxploit.src 2`] = `"metaxploit"`;
 
-exports[`interpreter default scripts metaxploit.src 3`] = `""`;
+exports[`interpreter default scripts metaxploit.src 3`] = `"null"`;
 
-exports[`interpreter default scripts metaxploit.src 4`] = `""`;
+exports[`interpreter default scripts metaxploit.src 4`] = `"null"`;
 
 exports[`interpreter default scripts metaxploit.src 5`] = `"error: service rshelld is not running"`;
 
@@ -393,7 +393,7 @@ exports[`interpreter default scripts service.src 2`] = `"service"`;
 
 exports[`interpreter default scripts service.src 3`] = `"Denied. Only root user can install this service."`;
 
-exports[`interpreter default scripts service.src 4`] = `""`;
+exports[`interpreter default scripts service.src 4`] = `"null"`;
 
 exports[`interpreter default scripts service.src 5`] = `"Denied. Only root user can install this service."`;
 
