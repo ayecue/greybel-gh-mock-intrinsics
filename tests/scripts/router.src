@@ -13,3 +13,4 @@ print(router.ping_port(22))
 print(router.port_info(router.ping_port(22)))
 
 print(router.used_ports)
+print(router.kernel_version)
