@@ -97,7 +97,7 @@ export function create(
         if (
           kernel === null ||
           !(kernel instanceof Type.File) ||
-          !(kernel.type !== Type.FileType.KernelRouter)
+          kernel.type !== Type.FileType.KernelRouter
         ) {
           return Promise.resolve(Defaults.Void);
         }
