@@ -317,6 +317,8 @@ exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
 exports[`interpreter default scripts router.src 9`] = `"[  ]"`;
 
+exports[`interpreter default scripts router.src 10`] = `"1.0.0.0"`;
+
 exports[`interpreter default scripts scripts.src 1`] = `
 "Desktop    
 Downloads  
