@@ -43,7 +43,7 @@ export function getAPI(
 }
 
 export function init(
-  customAPI:ObjectValue = new ObjectValue(),
+  customAPI: ObjectValue = new ObjectValue(),
   mockEnvironment?: GHMockIntrinsicEnv
 ) {
   const apiInterface = getAPI(mockEnvironment);
