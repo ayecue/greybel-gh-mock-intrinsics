@@ -376,18 +376,11 @@ export function createShell(
         }
 
         const apiContext = ctx.api;
-        const api = Array.from(apiContext.scope.value.entries()).reduce(
-          (result, [key, value]) => {
-            result.set(key.toString(), value);
-            return result;
-          },
-          new Map<string, CustomValue>()
-        );
         const interpreter = new Interpreter({
           handler: ctx.handler,
           debugger: ctx.debugger,
           params: paramsStr ? paramsStr.split(' ') : undefined,
-          api
+          api: apiContext.scope.value
         });
         const session = new Type.Session({
           user,
