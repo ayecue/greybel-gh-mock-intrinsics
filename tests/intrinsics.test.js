@@ -1,7 +1,6 @@
 const {
   Interpreter,
   Debugger,
-  CustomFunction,
   OutputHandler,
   HandlerContainer
 } = require('greybel-interpreter');

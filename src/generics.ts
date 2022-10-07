@@ -9,13 +9,14 @@ import {
   Defaults,
   OperationContext
 } from 'greybel-interpreter';
-import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
 
 import { create as createAptClient } from './apt-client';
 import { create as createBlockchain } from './blockchain';
 import { create as createCrypto } from './crypto';
 import { create as createMetaMail } from './meta-mail';
 import { create as createMetaxploit } from './metaxploit';
+import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createRouter } from './router';
 import { create as createService } from './service';
 import { loginLocal } from './shell';
@@ -50,10 +51,11 @@ export interface GenericIntrinsics {
   clearScreen: CustomFunction;
   launchPath: CustomFunction;
   typeOf: CustomFunction;
+  getCustomObject: CustomFunction;
 }
 
 export default function generics(
-  mockEnvironment: MockEnvironment
+  mockEnvironment: GHMockIntrinsicEnv
 ): GenericIntrinsics {
   const intrinsics: GenericIntrinsics = {
     getShell: CustomFunction.createExternal(
@@ -545,7 +547,18 @@ export default function generics(
 
         return Promise.resolve(new CustomString(type));
       }
-    ).addArgument('value')
+    ).addArgument('value'),
+
+    getCustomObject: CustomFunction.createExternal(
+      'getCustomObject',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(mockEnvironment.getSharedCustomObject());
+      }
+    )
   };
 
   return intrinsics;

@@ -132,6 +132,14 @@ exports[`interpreter default scripts generics.src 24`] = `
 "
 `;
 
+exports[`interpreter default scripts get-custom-object.src 1`] = `"true"`;
+
+exports[`interpreter default scripts get-custom-object.src 2`] = `"file"`;
+
+exports[`interpreter default scripts get-custom-object.src 3`] = `""`;
+
+exports[`interpreter default scripts get-custom-object.src 4`] = `"hello world"`;
+
 exports[`interpreter default scripts ls.src 1`] = `
 "Desktop     
 Downloads   
@@ -371,8 +379,8 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU  MEM    COMMAND             
-root  2705  8.5  25.02  kernel_task         
-root  7499  9.2  23.05  Xorg                "
+root  2111  2.7  10.83  kernel_task         
+root  832   2.7  32.79  Xorg                "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -422,9 +430,9 @@ exports[`interpreter default scripts shell.src 10`] = `"true"`;
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER  PID   CPU  MEM    COMMAND      
-root  5539  7.7  17.86  kernel_task  
-root  379   8.2  23.74  Xorg         "
+"USER  PID   CPU   MEM    COMMAND      
+root  781   11.9  32.85  kernel_task  
+root  5502  5.1   14.94  Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -443,7 +451,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% circinus, 23:B9:F1:05:1C:D9 57% apricot_rain, 76:FF:BA:97:28:4C 62% nisse, 6D:63:9B:5D:1A:61 68% driest, F2:8C:C2:3E:E6:6F 51% mynameisskiller ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% circinus, 23:B9:F1:05:1C:D9 64% apricot_rain, 76:FF:BA:97:28:4C 39% nisse, 6D:63:9B:5D:1A:61 84% driest, F2:8C:C2:3E:E6:6F 51% mynameisskiller ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
