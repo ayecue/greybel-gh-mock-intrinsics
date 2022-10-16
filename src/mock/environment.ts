@@ -22,25 +22,28 @@ export default function create(): GHMockIntrinsicEnv {
   const localLocation = localSession.device.location.fork();
   const localRouter = networkGenerator.generateRouter({
     publicIp: '142.32.54.56',
+    localIp: '192.168.0.1',
     location: localLocation
   });
+  const closeRouters = [];
 
   for (let index = 0; index < 4; index++) {
     const offsetX = Utils.getRandom(-5, 5);
     const offsetY = Utils.getRandom(-5, 5);
-
-    networkGenerator.generateRouter({
+    const router = networkGenerator.generateRouter({
       location: localLocation.offset(offsetX, offsetY)
     });
+
+    closeRouters.push(router);
   }
 
-  localRouter.bssid = 'bssid-test-uuid';
-  localRouter.essid = 'essid-test-uuid';
-  localRouter.wifi.credentials.password = 'test';
+  closeRouters[0].bssid = 'bssid-test-uuid';
+  closeRouters[0].essid = 'essid-test-uuid';
+  closeRouters[0].wifi.credentials.password = 'test';
 
   mockEnvironment.connectLocal(localRouter);
   networkGenerator.generateRouter({
-    publicIp: '142.567.134.56',
+    publicIp: '172.57.134.56',
     domain: 'www.mytest.org',
     users: [
       userGenerator.generate('root', 'test'),
