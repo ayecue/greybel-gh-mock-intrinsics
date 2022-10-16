@@ -58,7 +58,7 @@ Association succesful :-)"
 
 exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"728/25000"`;
+exports[`interpreter default scripts crypto.src 5`] = `"667/25000"`;
 
 exports[`interpreter default scripts crypto.src 6`] = `"null"`;
 
@@ -78,12 +78,12 @@ exports[`interpreter default scripts generics.src 2`] = `"098f6bcd4621d373cade4e
 
 exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
 
-exports[`interpreter default scripts generics.src 4`] = `"142.567.134.56"`;
+exports[`interpreter default scripts generics.src 4`] = `"172.57.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: metaldyne.org
+"Domain name: imperial.com
 Administrative contact: Hercule Beane
-Email address: mrpacker2003@metaldyne.org
+Email address: dan2731@imperial.com
 Phone: 123456891"
 `;
 
@@ -160,13 +160,13 @@ exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 exports[`interpreter default scripts meta-mail.src 6`] = `
 "[ 
 
-MailID: 5171bca0-1b95-4188-8453-46a19c6bb2d2
+MailID: c18554cf-1c6d-4ee4-ba86-7e6e78016002
 From: test@test.org
 Subject: hello
 dude ]"
 `;
 
-exports[`interpreter default scripts meta-mail.src 7`] = `"5171bca0-1b95-4188-8453-46a19c6bb2d2"`;
+exports[`interpreter default scripts meta-mail.src 7`] = `"c18554cf-1c6d-4ee4-ba86-7e6e78016002"`;
 
 exports[`interpreter default scripts meta-mail.src 8`] = `
 "
@@ -317,13 +317,13 @@ exports[`interpreter default scripts router.src 4`] = `"router"`;
 
 exports[`interpreter default scripts router.src 5`] = `"142.32.54.56"`;
 
-exports[`interpreter default scripts router.src 6`] = `"192.168.0.10"`;
+exports[`interpreter default scripts router.src 6`] = `"192.168.0.1"`;
 
 exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[  ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port ]"`;
 
 exports[`interpreter default scripts router.src 10`] = `"1.0.0.0"`;
 
@@ -379,8 +379,8 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU  MEM    COMMAND             
-root  2111  2.7  10.83  kernel_task         
-root  832   2.7  32.79  Xorg                "
+root  1621  5.8  25.17  kernel_task         
+root  1737  4.8  27.54  Xorg                "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -388,12 +388,12 @@ exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
 exports[`interpreter default scripts scripts.src 5`] = `
 "
 Connected to Wi-Fi:
-Essid: essid-test-uuid
-Bssid: bssid-test-uuid
+Essid: e8d5f463-ce04-4fc3-aaca-d8c0481a1d6b
+Bssid: ad8d31ee-bd2e-4b58-8eea-d137789e94ff
 ----------------
 Public IP: 142.32.54.56
-Local IP: 192.168.253.21
-Gateway: 192.168.0.10
+Local IP: 192.168.195.13
+Gateway: 192.168.0.1
 "
 `;
 
@@ -430,9 +430,9 @@ exports[`interpreter default scripts shell.src 10`] = `"true"`;
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER  PID   CPU   MEM    COMMAND      
-root  781   11.9  32.85  kernel_task  
-root  5502  5.1   14.94  Xorg         "
+"USER  PID   CPU  MEM    COMMAND      
+root  4850  2.0  21.70  kernel_task  
+root  1821  9.0  8.02   Xorg         "
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -451,7 +451,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ 44:8E:73:9E:F2:63 100% circinus, 23:B9:F1:05:1C:D9 64% apricot_rain, 76:FF:BA:97:28:4C 39% nisse, 6D:63:9B:5D:1A:61 84% driest, F2:8C:C2:3E:E6:6F 51% mynameisskiller ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[ A6:25:3F:FE:B2:A8 55% sweet_danish, CE:A4:DD:DF:73:29 65% bushed, 42:D6:90:7C:BF:71 64% footbal, 09:2F:46:FB:32:E9 91% emalia ]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -461,9 +461,9 @@ exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
 exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
 
-exports[`interpreter default scripts shell.src 26`] = `"192.168.189.79"`;
+exports[`interpreter default scripts shell.src 26`] = `"192.168.93.53"`;
 
-exports[`interpreter default scripts shell.src 27`] = `"142.32.54.56"`;
+exports[`interpreter default scripts shell.src 27`] = `"20.118.3.131"`;
 
 exports[`interpreter default scripts shell.src 28`] = `"file"`;
 

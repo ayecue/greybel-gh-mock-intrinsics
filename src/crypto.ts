@@ -62,7 +62,7 @@ export function create(
 
         const activeWifiDevices = device
           .findNetworkDevicesByNetCard(Type.NetCard.Wifi)
-          .filter((n) => n.active && n.mode === Type.NetworkDeviceMode.Montior);
+          .filter((n) => n.active && n.mode === Type.NetworkDeviceMode.Monitor);
 
         if (activeWifiDevices.length === 0) {
           return new CustomString(
@@ -177,7 +177,7 @@ export function create(
           );
         }
 
-        netDevice.mode = Type.NetworkDeviceMode.Montior;
+        netDevice.mode = Type.NetworkDeviceMode.Monitor;
 
         return Promise.resolve(Defaults.True);
       }
