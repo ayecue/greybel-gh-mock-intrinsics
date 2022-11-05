@@ -1,6 +1,5 @@
 import {
   CustomFunction,
-  CustomInterface,
   CustomList,
   CustomNil,
   CustomNumber,
@@ -504,7 +503,7 @@ export function create(
             device: Type.Device;
           }
         >;
-        const shells: CustomInterface[] = [];
+        const shells: BasicInterface[] = [];
 
         for (const rshellResult of rshellResults.values()) {
           shells.push(

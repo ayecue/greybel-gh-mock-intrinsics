@@ -1,6 +1,5 @@
 import {
   CustomFunction,
-  CustomInterface,
   CustomNil,
   CustomString,
   CustomValue,
@@ -584,7 +583,7 @@ export function create(
   user: Type.User,
   device: Type.Device,
   options: ShellOptions = {}
-): CustomInterface {
+): BasicInterface {
   const currentLocation = options.location || device.getHomePath(user);
   const activePort = options.port ? device.ports.get(options.port.port) : null;
   const itrface =

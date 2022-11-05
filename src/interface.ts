@@ -1,24 +1,35 @@
-import { CustomFunction, CustomInterface } from 'greybel-interpreter';
+import { CustomFunction, CustomMap, CustomString, CustomValue, Path } from 'greybel-interpreter';
 
-export default class BasicInterface extends CustomInterface {
-  values: Map<string, any>;
+export const CLASS_ID_PROPERTY = new CustomString('classID');
+
+export default class BasicInterface extends CustomMap {
+  variables: Map<string, any>;
 
   constructor(type: string, values?: Map<string, any>) {
-    super(type);
-    this.values = new Map<string, any>(values);
+    super(null, new CustomMap());
+    this.variables = new Map<string, any>(values);
+    this.value.set(CLASS_ID_PROPERTY, new CustomString(type));
+  }
+
+  set(_path: Path<CustomValue> | CustomValue, _newValue: CustomValue) {
+    throw new Error('Cannot set property on an interface.');
   }
 
   addMethod(fn: CustomFunction): BasicInterface {
-    this.addFunction(fn.name, fn);
+    this.isa.set(new CustomString(fn.name), fn);
     return this;
   }
 
   setVariable(key: string, value: any): BasicInterface {
-    this.values.set(key, value);
+    this.variables.set(key, value);
     return this;
   }
 
   getVariable(key: string): any {
-    return this.values.get(key);
+    return this.variables.get(key);
+  }
+
+  toString(): string {
+    return this.getCustomType();
   }
 }
