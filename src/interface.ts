@@ -1,4 +1,10 @@
-import { CustomFunction, CustomMap, CustomString, CustomValue, Path } from 'greybel-interpreter';
+import {
+  CustomFunction,
+  CustomMap,
+  CustomString,
+  CustomValue,
+  Path
+} from 'greybel-interpreter';
 
 export const CLASS_ID_PROPERTY = new CustomString('classID');
 

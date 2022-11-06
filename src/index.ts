@@ -5,9 +5,7 @@ import create, { GHMockIntrinsicEnv } from './mock/environment';
 
 const s = (v: string) => new CustomString(v);
 
-export function getAPI(
-  mockEnvironment?: GHMockIntrinsicEnv
-): ObjectValue {
+export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   const apiInterface = new ObjectValue();
   const intrinsics = generics(mockEnvironment || create());
 

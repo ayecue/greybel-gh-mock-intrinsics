@@ -323,7 +323,7 @@ exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port, port, port, port ]"`;
 
 exports[`interpreter default scripts router.src 10`] = `"1.0.0.0"`;
 

@@ -142,6 +142,20 @@ export function create(
           }
         }
 
+        for (const forwardedPort of router.forwarded.values()) {
+          const device = router.getForwarded(forwardedPort.port);
+
+          if (device && device.ports.has(forwardedPort.port)) {
+            ports.push(
+              createPort(
+                mockEnvironment,
+                router,
+                device.ports.get(forwardedPort.port)
+              )
+            );
+          }
+        }
+
         return Promise.resolve(new CustomList(ports));
       }
     )

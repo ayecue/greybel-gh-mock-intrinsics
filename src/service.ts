@@ -2,8 +2,8 @@ import {
   CustomFunction,
   CustomString,
   CustomValue,
-  OperationContext,
-  Defaults
+  Defaults,
+  OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -26,7 +26,9 @@ export function create(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         if (user.username !== 'root') {
-          return Promise.resolve(new CustomString('Denied. Only root user can install this service.'));
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can install this service.')
+          );
         }
 
         computer.installServiceByFiletype(library.type);
@@ -51,7 +53,9 @@ export function create(
         }
 
         if (user.username !== 'root') {
-          return Promise.resolve(new CustomString('Denied. Only root user can install this service.'));
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can install this service.')
+          );
         }
 
         computer.addServiceByFiletype(library.type);
@@ -76,7 +80,9 @@ export function create(
         }
 
         if (user.username !== 'root') {
-          return Promise.resolve(new CustomString('Denied. Only root user can install this service.'));
+          return Promise.resolve(
+            new CustomString('Denied. Only root user can install this service.')
+          );
         }
 
         exisitingService.delete();
