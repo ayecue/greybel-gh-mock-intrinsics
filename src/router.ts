@@ -150,7 +150,7 @@ export function create(
             ports.push(
               createPort(
                 mockEnvironment,
-                router,
+                device,
                 port
               )
             );
@@ -214,7 +214,7 @@ export function create(
 
           if (device && devicePort) {
             return Promise.resolve(
-              createPort(mockEnvironment, router, devicePort)
+              createPort(mockEnvironment, device, devicePort)
             );
           }
         }
