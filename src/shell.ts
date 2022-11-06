@@ -427,6 +427,8 @@ export function createShell(
           if (lanDevice === null) {
             return Promise.resolve(Defaults.False);
           }
+
+          return Promise.resolve(Defaults.True);
         }
 
         const router = mockEnvironment.getRouterByIp(ipRaw);
