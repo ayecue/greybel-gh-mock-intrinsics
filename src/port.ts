@@ -45,7 +45,7 @@ export function create(
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(
-      'is_closed',
+      'port_number',
       (
         _ctx: OperationContext,
         _self: CustomValue,
