@@ -144,13 +144,14 @@ export function create(
 
         for (const forwardedPort of router.forwarded.values()) {
           const device = router.getForwarded(forwardedPort.port);
+          const port = device.findPort(forwardedPort.port);
 
-          if (device && device.ports.has(forwardedPort.port)) {
+          if (device && port) {
             ports.push(
               createPort(
                 mockEnvironment,
                 router,
-                device.ports.get(forwardedPort.port)
+                port
               )
             );
           }
@@ -205,13 +206,22 @@ export function create(
 
         const portInstance = router.findPort(port.toInt());
 
-        if (portInstance === null) {
-          return Promise.resolve(Defaults.Void);
+        if (portInstance !== null) {
+          return Promise.resolve(
+            createPort(mockEnvironment, router, portInstance)
+          );
+        } else if (router.isForwarded(port.toInt())) {
+          const device = router.getForwarded(port.toInt());
+          const devicePort = device.findPort(port.toInt());
+
+          if (device && devicePort) {
+            return Promise.resolve(
+              createPort(mockEnvironment, router, devicePort)
+            );
+          }
         }
 
-        return Promise.resolve(
-          createPort(mockEnvironment, router, portInstance)
-        );
+        return Promise.resolve(Defaults.Void);
       }
     ).addArgument('port')
   );
@@ -243,6 +253,18 @@ export function create(
           const device = router.findDeviceByPort(currentPort);
 
           if (device) {
+            const file = device.findLibraryFileByPort(currentPort);
+
+            if (file) {
+              libraryVersion = file.version.toString();
+            }
+          }
+        } else if (router.isForwarded(port.getVariable('port'))) {
+          const device = router.getForwarded(port.getVariable('port'));
+          const devicePort = device.findPort(port.getVariable('port'));
+
+          if (device && devicePort) {
+            serviceId = devicePort.service;
             const file = device.findLibraryFileByPort(currentPort);
 
             if (file) {
