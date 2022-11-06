@@ -95,7 +95,7 @@ export function create(
         for (const item of targetVul.required) {
           switch (item) {
             case Type.VulnerabilityRequirements.Library: {
-              const requiredLib = this.data.get(
+              const requiredLib = targetVul.data.get(
                 'library'
               ) as Type.VulnerabilityLibraryRequirement;
               const libFile = target.findLibraryFile(requiredLib.library);
@@ -124,7 +124,7 @@ export function create(
               break;
             }
             case Type.VulnerabilityRequirements.RegisterAmount: {
-              const registeredUsers = this.data.get(
+              const registeredUsers = targetVul.data.get(
                 'registeredUsers'
               ) as number;
               const targetUsers = target.users.size;
@@ -170,7 +170,7 @@ export function create(
               break;
             }
             case Type.VulnerabilityRequirements.Forward: {
-              const portsForwarded = this.data.get('portsForwarded') as number;
+              const portsForwarded = targetVul.data.get('portsForwarded') as number;
               const router = target.getRouter() as Type.Router;
 
               if (router.forwarded.size > portsForwarded) {
@@ -182,7 +182,7 @@ export function create(
               break;
             }
             case Type.VulnerabilityRequirements.Gateway: {
-              const connGateway = this.data.get('connGateway') as number;
+              const connGateway = targetVul.data.get('connGateway') as number;
               const router = target.getRouter() as Type.Router;
 
               if (router.devices.size > connGateway) {
