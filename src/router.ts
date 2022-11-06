@@ -265,7 +265,7 @@ export function create(
 
           if (device && devicePort) {
             serviceId = devicePort.service;
-            const file = device.findLibraryFileByPort(currentPort);
+            const file = device.findLibraryFileByPort(devicePort);
 
             if (file) {
               libraryVersion = file.version.toString();
