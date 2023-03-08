@@ -53,6 +53,11 @@ export function create(
           computer.getHomePath(user)
         );
         const targetFile = computer.getFile(traversalPath) as Type.File;
+
+        if (!targetFile) {
+          return Promise.resolve(Defaults.Void);
+        }
+
         const library = targetFile.getLibraryType();
 
         if (!library) {
