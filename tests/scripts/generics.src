@@ -23,3 +23,13 @@ print(format_columns(data))
 print(user_input("test"))
 print(user_input("test", true))
 print(user_input("test", false, true))
+
+testFn = function
+end function
+
+print(typeof)
+print(typeof(5))
+print(typeof("test"))
+print(typeof(false))
+print(typeof(@testFn))
+print(typeof(null))

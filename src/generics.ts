@@ -543,7 +543,11 @@ export default function generics(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const type = args.get('value')?.getCustomType() || 'undefined';
+        const type = args.get('value')?.getCustomType() || Defaults.Void.toString();
+
+        if (type === CustomBoolean.prototype.getCustomType()) {
+          return Promise.resolve(new CustomString(CustomNumber.prototype.getCustomType()));
+        }
 
         return Promise.resolve(new CustomString(type));
       }
