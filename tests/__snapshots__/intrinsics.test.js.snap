@@ -132,6 +132,18 @@ exports[`interpreter default scripts generics.src 24`] = `
 "
 `;
 
+exports[`interpreter default scripts generics.src 25`] = `"null"`;
+
+exports[`interpreter default scripts generics.src 26`] = `"number"`;
+
+exports[`interpreter default scripts generics.src 27`] = `"string"`;
+
+exports[`interpreter default scripts generics.src 28`] = `"number"`;
+
+exports[`interpreter default scripts generics.src 29`] = `"function"`;
+
+exports[`interpreter default scripts generics.src 30`] = `"null"`;
+
 exports[`interpreter default scripts get-custom-object.src 1`] = `"true"`;
 
 exports[`interpreter default scripts get-custom-object.src 2`] = `"file"`;
