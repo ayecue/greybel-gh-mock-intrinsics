@@ -36,7 +36,7 @@ exports[`interpreter default scripts coin.src 8`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts coin.src 9`] = `"subWallet"`;
 
-exports[`interpreter default scripts coin.src 10`] = `"[ subWallet ]"`;
+exports[`interpreter default scripts coin.src 10`] = `"[subWallet]"`;
 
 exports[`interpreter default scripts coin.src 11`] = `"Not yet supported"`;
 
@@ -163,19 +163,19 @@ exports[`interpreter default scripts meta-mail.src 1`] = `"metaMail"`;
 
 exports[`interpreter default scripts meta-mail.src 2`] = `"metaMail"`;
 
-exports[`interpreter default scripts meta-mail.src 3`] = `"[  ]"`;
+exports[`interpreter default scripts meta-mail.src 3`] = `"[]"`;
 
 exports[`interpreter default scripts meta-mail.src 4`] = `"Mail not found"`;
 
 exports[`interpreter default scripts meta-mail.src 5`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 6`] = `
-"[ 
+"[\\"
 
 MailID: c18554cf-1c6d-4ee4-ba86-7e6e78016002
 From: test@test.org
 Subject: hello
-dude ]"
+dude\\"]"
 `;
 
 exports[`interpreter default scripts meta-mail.src 7`] = `"c18554cf-1c6d-4ee4-ba86-7e6e78016002"`;
@@ -191,7 +191,7 @@ dude
 
 exports[`interpreter default scripts meta-mail.src 9`] = `"true"`;
 
-exports[`interpreter default scripts meta-mail.src 10`] = `"[  ]"`;
+exports[`interpreter default scripts meta-mail.src 10`] = `"[]"`;
 
 exports[`interpreter default scripts metaxploit.src 1`] = `"metaxploit"`;
 
@@ -207,7 +207,7 @@ exports[`interpreter default scripts metaxploit.src 6`] = `"metaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 7`] = `"metaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 8`] = `"[ 0xC8CE05AB, 0xFDC63532, 0xDC4BD50C ]"`;
+exports[`interpreter default scripts metaxploit.src 8`] = `"[\\"0xC8CE05AB\\", \\"0xFDC63532\\", \\"0xDC4BD50C\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 9`] = `
 "decompiling source...
@@ -222,7 +222,7 @@ exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
 
 exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 12`] = `"[ 0xC8CE05AB, 0xFDC63532, 0xDC4BD50C ]"`;
+exports[`interpreter default scripts metaxploit.src 12`] = `"[\\"0xC8CE05AB\\", \\"0xFDC63532\\", \\"0xDC4BD50C\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 13`] = `
 "decompiling source...
@@ -261,7 +261,7 @@ exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
 
 exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 24`] = `"[ 0xA12E2B71, 0xE2D91188, 0x3089D743 ]"`;
+exports[`interpreter default scripts metaxploit.src 24`] = `"[\\"0xA12E2B71\\", \\"0xE2D91188\\", \\"0x3089D743\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 25`] = `
 "decompiling source...
@@ -296,7 +296,7 @@ exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router"`;
 
 exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 30`] = `"[ 0xB1AFF995, 0x2795D2B7, 0x95903F51, 0xC829866A ]"`;
+exports[`interpreter default scripts metaxploit.src 30`] = `"[\\"0xB1AFF995\\", \\"0x2795D2B7\\", \\"0x95903F51\\", \\"0xC829866A\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 31`] = `
 "decompiling source...
@@ -335,7 +335,7 @@ exports[`interpreter default scripts router.src 7`] = `"port"`;
 
 exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
 
-exports[`interpreter default scripts router.src 9`] = `"[ port, port, port, port, port, port, port ]"`;
+exports[`interpreter default scripts router.src 9`] = `"[port, port, port, port, port, port, port]"`;
 
 exports[`interpreter default scripts router.src 10`] = `"1.0.0.0"`;
 
@@ -425,7 +425,7 @@ exports[`interpreter default scripts shell.src 2`] = `"computer"`;
 
 exports[`interpreter default scripts shell.src 3`] = `"computer"`;
 
-exports[`interpreter default scripts shell.src 4`] = `"[ port ]"`;
+exports[`interpreter default scripts shell.src 4`] = `"[port]"`;
 
 exports[`interpreter default scripts shell.src 5`] = `"Can't create folder /root/foo. Permission denied"`;
 
@@ -463,7 +463,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[ A6:25:3F:FE:B2:A8 55% sweet_danish, CE:A4:DD:DF:73:29 65% bushed, 42:D6:90:7C:BF:71 64% footbal, 09:2F:46:FB:32:E9 91% emalia ]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"A6:25:3F:FE:B2:A8 55% sweet_danish\\", \\"CE:A4:DD:DF:73:29 65% bushed\\", \\"42:D6:90:7C:BF:71 64% footbal\\", \\"09:2F:46:FB:32:E9 91% emalia\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -507,9 +507,9 @@ exports[`interpreter default scripts shell.src 41`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 42`] = `"permission denied"`;
 
-exports[`interpreter default scripts shell.src 43`] = `"[ file, file, file, file ]"`;
+exports[`interpreter default scripts shell.src 43`] = `"[file, file, file, file]"`;
 
-exports[`interpreter default scripts shell.src 44`] = `"[  ]"`;
+exports[`interpreter default scripts shell.src 44`] = `"[]"`;
 
 exports[`interpreter default scripts shell.src 45`] = `"root"`;
 
