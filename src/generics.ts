@@ -545,10 +545,6 @@ export default function generics(
       ): Promise<CustomValue> => {
         const type = args.get('value')?.getCustomType() || Defaults.Void.toString();
 
-        if (type === CustomBoolean.prototype.getCustomType()) {
-          return Promise.resolve(new CustomString(CustomNumber.prototype.getCustomType()));
-        }
-
         return Promise.resolve(new CustomString(type));
       }
     ).addArgument('value'),
