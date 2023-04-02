@@ -22,7 +22,8 @@ import { create as createService } from './service';
 import { loginLocal } from './shell';
 import {
   formatColumns as formatColumnsInternal,
-  keyEventToString
+  keyEventToString,
+  Month
 } from './utils';
 
 export interface GenericIntrinsics {
@@ -257,7 +258,12 @@ export default function generics(
       ): Promise<CustomValue> => {
         const target = args.get('hostname').toString();
         const router = mockEnvironment.findRouterViaNS(target);
-        return Promise.resolve(new CustomString(router?.publicIp));
+
+        if (router instanceof Type.Router) {
+          return Promise.resolve(new CustomString(router.publicIp));
+        }
+
+        return Promise.resolve(new CustomString('Not found'));
       }
     ).addArgument('hostname'),
 
@@ -349,9 +355,9 @@ export default function generics(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const date = new Date(Date.now());
-        const result = `${date.getDate()}-${
-          date.getMonth() + 1
-        }-${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+        const result = `${date.getDate()}/${
+          Month[date.getMonth() + 1]
+        }/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`;
         return Promise.resolve(new CustomString(result));
       }
     ),
