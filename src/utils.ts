@@ -164,7 +164,7 @@ export function greaterThanFileNameLimit(str: string): boolean {
 }
 
 export function greaterThanFilesLimit(arr: Map<any, any>): boolean {
-  return arr.size > 3125;
+  return arr.size > 250;
 }
 
 export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
