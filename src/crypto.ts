@@ -97,7 +97,7 @@ export function create(
 
         const n = 300000 / (network.percentage + 15);
 
-        if (acks < n) {
+        if (acks >= n) {
           const folder = device.getFile(
             device.getHomePath(user)
           ) as Type.Folder;
