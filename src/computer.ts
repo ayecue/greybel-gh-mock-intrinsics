@@ -246,7 +246,7 @@ export function create(
           const file = new Type.File({
             name: target,
             owner: user.username,
-            permissions: entityResult.permissions.toString(),
+            permissions: `-${entityResult.permissions.toString().slice(1)}`,
             type: Type.FileType.Source
           });
 
