@@ -79,15 +79,9 @@ export function create(
 
         ctx.handler.outputHandler.print(output);
         let acks = 0;
-        let cancel = false;
-
-        ctx.handler.outputHandler
-          .waitForKeyPress()
-          .then(() => (cancel = true))
-          .catch(() => {});
 
         /* eslint-disable-next-line no-unmodified-loop-condition */
-        while (acks < maxAcksRaw && !cancel) {
+        while (acks < maxAcksRaw) {
           ctx.handler.outputHandler.print(`${acks}/${maxAcksRaw}`);
           acks += Utils.getRandomInt(250, 750);
           await delay(500);

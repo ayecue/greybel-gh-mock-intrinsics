@@ -56,9 +56,9 @@ Sending Association Request
 Association succesful :-)"
 `;
 
-exports[`interpreter default scripts crypto.src 4`] = `"0/25000"`;
+exports[`interpreter default scripts crypto.src 4`] = `"0/200"`;
 
-exports[`interpreter default scripts crypto.src 5`] = `"667/25000"`;
+exports[`interpreter default scripts crypto.src 5`] = `"667/200"`;
 
 exports[`interpreter default scripts crypto.src 6`] = `"null"`;
 
