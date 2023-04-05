@@ -660,7 +660,7 @@ export function create(
             .findRoutersCloseToLocation(device.location)
             .map((item: RouterLocation) => {
               return new CustomString(
-                `${item.router.mac} ${item.percentage}% ${item.router.wifi.name}`
+                `${item.router.bssid} ${item.percentage}% ${item.router.essid}`
               );
             });
 
