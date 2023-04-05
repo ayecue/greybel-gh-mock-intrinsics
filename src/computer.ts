@@ -246,7 +246,7 @@ export function create(
           const file = new Type.File({
             name: target,
             owner: user.username,
-            permissions: entityResult.permissions.toString(),
+            permissions: `-${entityResult.permissions.toString().slice(1)}`,
             type: Type.FileType.Source
           });
 
@@ -381,7 +381,7 @@ export function create(
         } else if (greaterThanEntityNameLimit(usernameRaw)) {
           throw new Error('username cannot exceed the 15 character limit.');
         } else if (greaterThanEntityNameLimit(passwordRaw)) {
-          throw new Error('username cannot exceed the 15 character limit.');
+          throw new Error('password cannot exceed the 15 character limit.');
         } else if (
           !isAlphaNumeric(usernameRaw) ||
           !isAlphaNumeric(passwordRaw)

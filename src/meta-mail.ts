@@ -15,7 +15,7 @@ export function create(
   mockEnvironment: MockEnvironment,
   email: Type.EMail
 ): BasicInterface {
-  const itrface = new BasicInterface('metaMail');
+  const itrface = new BasicInterface('MetaMail');
 
   itrface.addMethod(
     CustomFunction.createExternalWithSelf(

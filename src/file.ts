@@ -341,13 +341,13 @@ export function create(
 
         if (entity instanceof Type.Folder) {
           return Promise.resolve(
-            new CustomString(`can't open ${entity.getPath()} Binary file.`)
+            Defaults.Void
           );
         }
 
         const { r } = entity.getPermissions(user, device.groups);
 
-        if (!r) {
+        if (!r && user.username !== 'root') {
           return Promise.resolve(Defaults.Void);
         }
 

@@ -33,6 +33,21 @@ export enum KeyCode {
   Alt = 18
 }
 
+export enum Month {
+  Jan = 1,
+  Feb = 2,
+  Mar = 3,
+  Apr = 4,
+  May = 5,
+  Jun = 6,
+  Jul = 7,
+  Aug = 8,
+  Sep = 9,
+  Oct = 10,
+  Nov = 11,
+  Dec = 12
+}
+
 export function keyEventToString(keyEvent: KeyEvent): string {
   switch (keyEvent.keyCode) {
     case KeyCode.LeftArrow:
@@ -149,7 +164,7 @@ export function greaterThanFileNameLimit(str: string): boolean {
 }
 
 export function greaterThanFilesLimit(arr: Map<any, any>): boolean {
-  return arr.size > 3125;
+  return arr.size > 250;
 }
 
 export function greaterThanFoldersLimit(arr: Map<any, any>): boolean {
