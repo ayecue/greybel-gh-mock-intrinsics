@@ -461,7 +461,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"A6:25:3F:FE:B2:A8 55% sweet_danish\\", \\"CE:A4:DD:DF:73:29 65% bushed\\", \\"42:D6:90:7C:BF:71 64% footbal\\", \\"09:2F:46:FB:32:E9 91% emalia\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 55% essid-test-uuid\\", \\"37a79b7c-540b-43cd-977b-b705f2b9a86e 65% 19ee7d4a-1fb1-4d56-a556-9012ee60660a\\", \\"85ac351d-7d7f-426d-9433-d68ea3ad18c9 64% baafe5f3-bbd7-453e-a855-fb435fdf8e73\\", \\"ed39b0ce-4c6f-40b3-abb6-bafccbf5b5e9 91% b5a79b73-245a-4426-9e79-04d119048778\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
