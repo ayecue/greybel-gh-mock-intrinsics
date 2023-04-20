@@ -1,4 +1,5 @@
 import { KeyEvent } from 'greybel-interpreter';
+import { EOL } from 'os';
 
 export enum KeyCode {
   Enter = 13,
@@ -140,7 +141,7 @@ export function formatColumns(columns: string): string {
     lines.push(output);
   }
 
-  return lines.join('\r\n');
+  return lines.join(EOL);
 }
 
 export function isAlphaNumeric(str: string): boolean {
