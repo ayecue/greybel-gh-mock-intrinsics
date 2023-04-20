@@ -270,16 +270,14 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const result = formatColumns(
-          [
-            'USER PID CPU MEM COMMAND',
-            ...Array.from(device.processes.values()).map((p) => {
-              return `${p.owner.username} ${p.pid} ${p.cpu.toFixed(
-                1
-              )} ${p.mem.toFixed(2)} ${p.command}`;
-            })
-          ].join('\n')
-        );
+        const result = [
+          'USER PID CPU MEM COMMAND',
+          ...Array.from(device.processes.values()).map((p) => {
+            return `${p.owner.username} ${p.pid} ${p.cpu.toFixed(
+              1
+            )} ${p.mem.toFixed(2)} ${p.command}`;
+          })
+        ].join('\n')
 
         return Promise.resolve(new CustomString(result));
       }

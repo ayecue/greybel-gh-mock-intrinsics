@@ -388,9 +388,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU  MEM    COMMAND             
-root  1621  5.8  25.17  kernel_task         
-root  1737  4.8  27.54  Xorg                "
+"USER  PID   CPU  MEM    COMMAND      
+root  1621  5.8  25.17  kernel_task  
+root  1737  4.8  27.54  Xorg         "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -440,9 +440,9 @@ exports[`interpreter default scripts shell.src 10`] = `"true"`;
 exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
-"USER  PID   CPU  MEM    COMMAND      
-root  4850  2.0  21.70  kernel_task  
-root  1821  9.0  8.02   Xorg         "
+"USER PID CPU MEM COMMAND
+root 4850 2.0 21.70 kernel_task
+root 1821 9.0 8.02 Xorg"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
