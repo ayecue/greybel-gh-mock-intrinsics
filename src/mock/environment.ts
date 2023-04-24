@@ -9,11 +9,17 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
   }
 }
 
-export default function create(): GHMockIntrinsicEnv {
-  const mockEnvironment = new GHMockIntrinsicEnv('test', {
+export default function create(
+  seed: string = 'test',
+  initalUser: {
+    username: string;
+    password: string;
+  } = {
     username: 'test',
     password: 'test'
-  });
+  }
+): GHMockIntrinsicEnv {
+  const mockEnvironment = new GHMockIntrinsicEnv(seed, initalUser);
   const userGenerator = mockEnvironment.userGenerator;
   const emailGenerator = mockEnvironment.emailGenerator;
   const networkGenerator = mockEnvironment.networkGenerator;
