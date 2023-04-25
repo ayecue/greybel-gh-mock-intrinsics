@@ -53,7 +53,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(router.bssid));
+        return Promise.resolve(new CustomString(router.mac));
       }
     )
   );
@@ -66,7 +66,7 @@ export function create(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString(router.essid));
+        return Promise.resolve(new CustomString(router.wifi.name));
       }
     )
   );
