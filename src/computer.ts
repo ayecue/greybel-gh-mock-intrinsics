@@ -658,7 +658,7 @@ export function create(
             .findRoutersCloseToLocation(device.location)
             .map((item: RouterLocation) => {
               return new CustomString(
-                `${item.router.bssid} ${item.percentage}% ${item.router.essid}`
+                `${item.router.mac} ${item.percentage}% ${item.router.wifi.name}`
               );
             });
 
@@ -723,7 +723,7 @@ export function create(
           mockEnvironment.findRoutersCloseToLocation(device.location);
         const routerLoc = closeRouters.find((item: RouterLocation) => {
           const r = item.router;
-          return r.bssid === bssidRaw && r.essid === essidRaw;
+          return r.mac === bssidRaw && r.wifi.name === essidRaw;
         });
 
         if (!routerLoc) {

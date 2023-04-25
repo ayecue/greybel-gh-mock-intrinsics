@@ -53,7 +53,7 @@ export function create(
         const network = mockEnvironment
           .findRoutersCloseToLocation(device.location)
           .find(({ router }: RouterLocation) => {
-            return router.bssid === bssidRaw && router.essid === essidRaw;
+            return router.mac === bssidRaw && router.wifi.name === essidRaw;
           });
 
         if (!network) {

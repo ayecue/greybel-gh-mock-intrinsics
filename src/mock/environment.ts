@@ -43,8 +43,8 @@ export default function create(
     closeRouters.push(router);
   }
 
-  closeRouters[0].bssid = 'bssid-test-uuid';
-  closeRouters[0].essid = 'essid-test-uuid';
+  closeRouters[0].mac = 'bssid-test-uuid';
+  closeRouters[0].wifi.name = 'essid-test-uuid';
   closeRouters[0].wifi.credentials.password = 'test';
 
   mockEnvironment.connectLocal(localRouter);
