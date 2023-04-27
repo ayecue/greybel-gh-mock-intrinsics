@@ -9,22 +9,31 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-export function create(
-  _mockEnvironment: MockEnvironment,
-  library: Type.File,
-  user: Type.User,
-  computer: Type.Device
-): BasicInterface {
-  const itrface = new BasicInterface('service');
+interface ServiceVariables {
+  mockEnvironment: MockEnvironment;
+  library: Type.File;
+  user: Type.User;
+  computer: Type.Device;
+}
 
-  itrface.addMethod(
+class Service extends BasicInterface {
+  static readonly type: string = 'service';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'install_service',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Service.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { user, computer, library } = self.variables;
+
         if (user.username !== 'root') {
           return Promise.resolve(
             new CustomString('Denied. Only root user can install this service.')
@@ -35,17 +44,21 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'start_service',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Service.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { user, computer, library } = self.variables;
         const exisitingService = computer.findServiceByFiletype(library.type);
 
         if (exisitingService) {
@@ -62,17 +75,21 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'stop_service',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Service.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { user, computer, library } = self.variables;
         const exisitingService = computer.findServiceByFiletype(library.type);
 
         if (!exisitingService) {
@@ -90,7 +107,37 @@ export function create(
         return Promise.resolve(Defaults.True);
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Service | null {
+    const intf = args.get('self');
+    if (intf instanceof Service) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: ServiceVariables;
+
+  constructor(variables: ServiceVariables) {
+    super(Service.type);
+    this.variables = variables;
+    Service.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  library: Type.File,
+  user: Type.User,
+  computer: Type.Device
+): BasicInterface {
+  const itrface = new Service({
+    mockEnvironment,
+    library,
+    user,
+    computer
+  });
 
   return itrface;
 }

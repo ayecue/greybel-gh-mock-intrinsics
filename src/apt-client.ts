@@ -8,15 +8,16 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-export function create(
-  _mockEnvironment: MockEnvironment,
-  _library: Type.File,
-  _user: Type.User,
-  _computer: Type.Device
-): BasicInterface {
-  const itrface = new BasicInterface('aptClient');
+interface AptClientVariables {
+  mockEnvironment: MockEnvironment;
+  user: Type.User;
+  computer: Type.Device;
+  library: Type.File;
+}
 
-  itrface.addMethod(
+class AptClient extends BasicInterface {
+  static readonly type: string = 'aptClient';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'show',
       (
@@ -26,10 +27,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'search',
       (
@@ -39,10 +37,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'update',
       (
@@ -52,10 +47,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'add_repo',
       (
@@ -65,10 +57,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'del_repo',
       (
@@ -78,10 +67,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'install',
       (
@@ -91,10 +77,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'check_upgrade',
       (
@@ -105,7 +88,37 @@ export function create(
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): AptClient | null {
+    const intf = args.get('self');
+    if (intf instanceof AptClient) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: AptClientVariables;
+
+  constructor(variables: AptClientVariables) {
+    super(AptClient.type);
+    this.variables = variables;
+    AptClient.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  library: Type.File,
+  user: Type.User,
+  computer: Type.Device
+): BasicInterface {
+  const itrface = new AptClient({
+    mockEnvironment,
+    user,
+    computer,
+    library
+  });
 
   return itrface;
 }

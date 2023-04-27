@@ -8,14 +8,15 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-export function create(
-  _mockEnvironment: MockEnvironment,
-  _user: Type.User,
-  _computer: Type.Device
-): BasicInterface {
-  const itrface = new BasicInterface('subWallet');
+interface SubWalletVariables {
+  mockEnvironment: MockEnvironment;
+  user: Type.User;
+  computer: Type.Device;
+}
 
-  itrface.addMethod(
+class SubWallet extends BasicInterface {
+  static readonly type: string = 'subWallet';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'get_balance',
       (
@@ -25,10 +26,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'set_info',
       (
@@ -38,10 +36,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'get_info',
       (
@@ -51,10 +46,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'delete',
       (
@@ -64,10 +56,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'get_user',
       (
@@ -77,10 +66,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'last_transaction',
       (
@@ -90,10 +76,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'mining',
       (
@@ -103,10 +86,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'check_password',
       (
@@ -116,10 +96,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'wallet_username',
       (
@@ -130,7 +107,34 @@ export function create(
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): SubWallet | null {
+    const intf = args.get('self');
+    if (intf instanceof SubWallet) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: SubWalletVariables;
+
+  constructor(variables: SubWalletVariables) {
+    super(SubWallet.type);
+    this.variables = variables;
+    SubWallet.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  computer: Type.Device
+): BasicInterface {
+  const itrface = new SubWallet({
+    mockEnvironment,
+    user,
+    computer
+  });
 
   return itrface;
 }

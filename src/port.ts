@@ -4,61 +4,104 @@ import {
   CustomNumber,
   CustomString,
   CustomValue,
+  Defaults,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  device: Type.Device,
-  port: Type.Port
-): BasicInterface {
-  const itrface = new BasicInterface('port');
+interface PortVariables {
+  mockEnvironment: MockEnvironment;
+  device: Type.Device;
+  port: Type.Port;
+}
 
-  itrface.addMethod(
+class Port extends BasicInterface {
+  static readonly type: string = 'port';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'get_lan_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Port.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         return Promise.resolve(new CustomString(device.localIp));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'is_closed',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Port.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { port } = self.variables;
         return Promise.resolve(new CustomBoolean(port.isClosed));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'port_number',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Port.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { port } = self.variables;
         return Promise.resolve(new CustomNumber(port.port));
       }
     )
-  );
+  ];
 
-  itrface.setVariable('port', port.port);
-  itrface.setVariable('isClosed', port.isClosed);
-  itrface.setVariable('service', port.service);
+  static retreive(args: Map<string, CustomValue>): Port | null {
+    const intf = args.get('self');
+    if (intf instanceof Port) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: PortVariables;
+
+  constructor(variables: PortVariables) {
+    super(Port.type);
+    this.variables = variables;
+    Port.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  device: Type.Device,
+  port: Type.Port
+): BasicInterface {
+  const itrface = new Port({
+    mockEnvironment,
+    device,
+    port
+  });
 
   return itrface;
 }

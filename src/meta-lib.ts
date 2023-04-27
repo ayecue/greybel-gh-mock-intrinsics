@@ -14,46 +14,57 @@ import BasicInterface from './interface';
 import { create as createShell } from './shell';
 import { greaterThanEntityNameLimit, isAlphaNumeric } from './utils';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  source: Type.Device,
-  metaFile: Type.File,
-  target: Type.Device,
-  targetFile: Type.File,
-  targetMode: Type.VulnerabilityMode,
-  targetLibContainer: Type.LibraryContainer,
-  targetLibVersion: Type.LibraryVersion,
-  vulnerabilities: Type.Vulnerability[]
-): BasicInterface {
-  const itrface = new BasicInterface('metaLib');
+interface MetaLibVariables {
+  mockEnvironment: MockEnvironment;
+  source: Type.Device;
+  metaFile: Type.File;
+  target: Type.Device;
+  targetFile: Type.File;
+  targetMode: Type.VulnerabilityMode;
+  targetLibContainer: Type.LibraryContainer;
+  targetLibVersion: Type.LibraryVersion;
+  vulnerabilities: Type.Vulnerability[];
+}
 
-  itrface.addMethod(
+class MetaLib extends BasicInterface {
+  static readonly type: string = 'metaLib';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'lib_name',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaLib.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { targetFile } = self.variables;
         return Promise.resolve(new CustomString(targetFile.getLibraryType()));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'version',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaLib.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { targetFile } = self.variables;
         return Promise.resolve(new CustomString(targetFile.version.toString()));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'overflow',
       (
@@ -61,6 +72,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaLib.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { targetFile, vulnerabilities, target, source, mockEnvironment } =
+          self.variables;
         const memAddress = args.get('memAddress');
         const sector = args.get('sector');
         const optArgs = args.get('optArgs');
@@ -170,7 +189,9 @@ export function create(
               break;
             }
             case Type.VulnerabilityRequirements.Forward: {
-              const portsForwarded = targetVul.data.get('portsForwarded') as number;
+              const portsForwarded = targetVul.data.get(
+                'portsForwarded'
+              ) as number;
               const router = target.getRouter() as Type.Router;
 
               if (router.forwarded.size > portsForwarded) {
@@ -320,16 +341,47 @@ export function create(
       .addArgument('memAddress')
       .addArgument('sector')
       .addArgument('optArgs')
-  );
+  ];
 
-  itrface.setVariable('source', source);
-  itrface.setVariable('metaFile', metaFile);
-  itrface.setVariable('target', target);
-  itrface.setVariable('targetFile', targetFile);
-  itrface.setVariable('targetMode', targetMode);
-  itrface.setVariable('targetLibContainer', targetLibContainer);
-  itrface.setVariable('targetLibVersion', targetLibVersion);
-  itrface.setVariable('vulnerabilities', vulnerabilities);
+  static retreive(args: Map<string, CustomValue>): MetaLib | null {
+    const intf = args.get('self');
+    if (intf instanceof MetaLib) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: MetaLibVariables;
+
+  constructor(variables: MetaLibVariables) {
+    super(MetaLib.type);
+    this.variables = variables;
+    MetaLib.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  source: Type.Device,
+  metaFile: Type.File,
+  target: Type.Device,
+  targetFile: Type.File,
+  targetMode: Type.VulnerabilityMode,
+  targetLibContainer: Type.LibraryContainer,
+  targetLibVersion: Type.LibraryVersion,
+  vulnerabilities: Type.Vulnerability[]
+): BasicInterface {
+  const itrface = new MetaLib({
+    mockEnvironment,
+    source,
+    metaFile,
+    target,
+    targetFile,
+    targetMode,
+    targetLibContainer,
+    targetLibVersion,
+    vulnerabilities
+  });
 
   return itrface;
 }

@@ -18,15 +18,16 @@ import {
   isValidFileName
 } from './utils';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  user: Type.User,
-  device: Type.Device,
-  entity: Type.FSEntity
-): BasicInterface {
-  const itrface = new BasicInterface('file');
+interface FileVariables {
+  mockEnvironment: MockEnvironment;
+  device: Type.Device;
+  user: Type.User;
+  entity: Type.FSEntity;
+}
 
-  itrface.addMethod(
+class File extends BasicInterface {
+  static readonly type: string = 'file';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'chmod',
       (
@@ -34,6 +35,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -81,10 +90,8 @@ export function create(
       }
     )
       .addArgument('permissions')
-      .addArgument('isRecursive', new CustomBoolean(false))
-  );
+      .addArgument('isRecursive', new CustomBoolean(false)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'copy',
       (
@@ -92,6 +99,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -146,10 +161,8 @@ export function create(
       }
     )
       .addArgument('path')
-      .addArgument('newName')
-  );
+      .addArgument('newName'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'move',
       (
@@ -157,6 +170,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -210,10 +231,8 @@ export function create(
       }
     )
       .addArgument('path')
-      .addArgument('newName')
-  );
+      .addArgument('newName'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'rename',
       (
@@ -221,6 +240,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -255,50 +282,68 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('newName')
-  );
+    ).addArgument('newName'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'path',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
 
         return Promise.resolve(new CustomString(entity.getPath()));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'allow_import',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
+
         if (entity instanceof Type.File) {
           return Promise.resolve(new CustomBoolean(entity.allowImport));
         }
         return Promise.resolve(Defaults.False);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'parent',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device, mockEnvironment } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -311,38 +356,47 @@ export function create(
           create(mockEnvironment, user, device, entity.parent)
         );
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'name',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(new CustomString(entity.name));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'get_content',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
 
         if (entity instanceof Type.Folder) {
-          return Promise.resolve(
-            Defaults.Void
-          );
+          return Promise.resolve(Defaults.Void);
         }
 
         const { r } = entity.getPermissions(user, device.groups);
@@ -360,10 +414,8 @@ export function create(
 
         return Promise.resolve(Defaults.Void);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'set_content',
       (
@@ -371,6 +423,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -416,17 +476,23 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('content')
-  );
+    ).addArgument('content'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'is_binary',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
+
         if (entity instanceof Type.Folder) {
           return Promise.resolve(Defaults.True);
         }
@@ -436,25 +502,28 @@ export function create(
           new CustomBoolean(file.type !== Type.FileType.Source)
         );
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'is_folder',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(
           new CustomBoolean(entity instanceof Type.Folder)
         );
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'has_permission',
       (
@@ -462,6 +531,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
         const permission = args.get('permission').toString().substr(0, 1);
         const permissionMap = entity.getPermissions(user, device.groups);
 
@@ -469,17 +545,23 @@ export function create(
           new CustomBoolean(permissionMap.getFlagByString(permission))
         );
       }
-    ).addArgument('permission')
-  );
+    ).addArgument('permission'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'delete',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -498,17 +580,23 @@ export function create(
 
         return Promise.resolve(new CustomString(''));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'get_folders',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device, mockEnvironment } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -525,17 +613,23 @@ export function create(
 
         return Promise.resolve(new CustomList(result));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'get_files',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device, mockEnvironment } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -552,36 +646,44 @@ export function create(
 
         return Promise.resolve(new CustomList(result));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'permissions',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(new CustomString(entity.permissions.toString()));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'owner',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(new CustomString(entity.owner));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'set_owner',
       (
@@ -589,6 +691,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -631,23 +741,26 @@ export function create(
       }
     )
       .addArgument('owner')
-      .addArgument('isRecursive', new CustomBoolean(false))
-  );
+      .addArgument('isRecursive', new CustomBoolean(false)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'group',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(new CustomString(entity.group));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'set_group',
       (
@@ -655,6 +768,14 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity, user, device } = self.variables;
+
         if (entity.deleted) {
           return Promise.resolve(Defaults.Void);
         }
@@ -697,21 +818,56 @@ export function create(
       }
     )
       .addArgument('group')
-      .addArgument('isRecursive', new CustomBoolean(false))
-  );
+      .addArgument('isRecursive', new CustomBoolean(false)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'size',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = File.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { entity } = self.variables;
         return Promise.resolve(new CustomString(entity.getSize().toString()));
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): File | null {
+    const intf = args.get('self');
+    if (intf instanceof File) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: FileVariables;
+
+  constructor(variables: FileVariables) {
+    super(File.type);
+    this.variables = variables;
+    File.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device,
+  entity: Type.FSEntity
+): BasicInterface {
+  const itrface = new File({
+    mockEnvironment,
+    user,
+    device,
+    entity
+  });
 
   return itrface;
 }

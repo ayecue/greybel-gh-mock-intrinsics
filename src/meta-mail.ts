@@ -11,20 +11,28 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  email: Type.EMail
-): BasicInterface {
-  const itrface = new BasicInterface('MetaMail');
+interface MetaMailVariables {
+  mockEnvironment: MockEnvironment;
+  email: Type.EMail;
+}
 
-  itrface.addMethod(
+class MetaMail extends BasicInterface {
+  static readonly type: string = 'MetaMail';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'fetch',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaMail.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { email } = self.variables;
         const result: Array<CustomValue> = [];
 
         email.messages.forEach((item, id) => {
@@ -51,10 +59,8 @@ export function create(
 
         return Promise.resolve(new CustomList(result));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'read',
       (
@@ -62,6 +68,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaMail.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { email } = self.variables;
         const mailId = args.get('id');
 
         if (mailId instanceof CustomNil) {
@@ -90,10 +103,8 @@ export function create(
 
         return Promise.resolve(new CustomString(output.join('')));
       }
-    ).addArgument('id')
-  );
+    ).addArgument('id'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'send',
       (
@@ -101,6 +112,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaMail.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { email, mockEnvironment } = self.variables;
         const address = args.get('address');
         const subject = args.get('subject');
         const message = args.get('message');
@@ -151,10 +169,8 @@ export function create(
     )
       .addArgument('address')
       .addArgument('subject')
-      .addArgument('message')
-  );
+      .addArgument('message'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'delete',
       (
@@ -162,6 +178,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = MetaMail.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { email } = self.variables;
         const mailId = args.get('id');
 
         if (mailId instanceof CustomNil) {
@@ -177,7 +200,33 @@ export function create(
         return Promise.resolve(Defaults.Void);
       }
     ).addArgument('id')
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): MetaMail | null {
+    const intf = args.get('self');
+    if (intf instanceof MetaMail) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: MetaMailVariables;
+
+  constructor(variables: MetaMailVariables) {
+    super(MetaMail.type);
+    this.variables = variables;
+    MetaMail.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  email: Type.EMail
+): BasicInterface {
+  const itrface = new MetaMail({
+    mockEnvironment,
+    email
+  });
 
   return itrface;
 }

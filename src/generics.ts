@@ -549,7 +549,8 @@ export default function generics(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const type = args.get('value')?.getCustomType() || Defaults.Void.toString();
+        const type =
+          args.get('value')?.getCustomType() || Defaults.Void.toString();
 
         return Promise.resolve(new CustomString(type));
       }

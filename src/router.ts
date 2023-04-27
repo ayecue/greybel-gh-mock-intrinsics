@@ -12,66 +12,86 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 import BasicInterface from './interface';
 import { create as createPort } from './port';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  user: Type.User,
-  router: Type.Router
-): BasicInterface {
-  const itrface = new BasicInterface('router');
+interface RouterVariables {
+  mockEnvironment: MockEnvironment;
+  user: Type.User;
+  router: Type.Router;
+}
 
-  itrface.addMethod(
+class Router extends BasicInterface {
+  static readonly type: string = 'router';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'public_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         return Promise.resolve(new CustomString(router.publicIp));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'local_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         return Promise.resolve(new CustomString(router.localIp));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'bssid_name',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         return Promise.resolve(new CustomString(router.mac));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'essid_name',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         return Promise.resolve(new CustomString(router.wifi.name));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'firewall_rules',
       (
@@ -81,17 +101,22 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(Defaults.Void);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'kernel_version',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         const kernel = router.getFile(['lib', 'kernel_router.so']);
 
         if (
@@ -104,17 +129,22 @@ export function create(
 
         return Promise.resolve(new CustomString(kernel.version.toString()));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'devices_lan_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         const lanIps: CustomString[] = [];
 
         for (const lanIp of router.devices.keys()) {
@@ -123,17 +153,22 @@ export function create(
 
         return Promise.resolve(new CustomList(lanIps));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'used_ports',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router, mockEnvironment } = self.variables;
         const ports: BasicInterface[] = [];
 
         for (const port of router.ports.values()) {
@@ -147,22 +182,14 @@ export function create(
           const port = device.findPort(forwardedPort.port);
 
           if (device && port) {
-            ports.push(
-              createPort(
-                mockEnvironment,
-                device,
-                port
-              )
-            );
+            ports.push(createPort(mockEnvironment, device, port));
           }
         }
 
         return Promise.resolve(new CustomList(ports));
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'device_ports',
       (
@@ -170,6 +197,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router, mockEnvironment } = self.variables;
         const ip = args.get('ipAddress');
 
         if (ip instanceof CustomNil) {
@@ -185,10 +219,8 @@ export function create(
 
         return Promise.resolve(new CustomList(ports));
       }
-    ).addArgument('ipAddress')
-  );
+    ).addArgument('ipAddress'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'ping_port',
       (
@@ -196,6 +228,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router, mockEnvironment } = self.variables;
         const port = args.get('port');
 
         if (port instanceof Type.Port) {
@@ -221,10 +260,8 @@ export function create(
 
         return Promise.resolve(Defaults.Void);
       }
-    ).addArgument('port')
-  );
+    ).addArgument('port'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'port_info',
       (
@@ -232,6 +269,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { router } = self.variables;
         const port = args.get('port');
 
         if (
@@ -241,7 +285,8 @@ export function create(
           return Promise.resolve(new CustomString('port is null'));
         }
 
-        const currentPort = router.findPort(port.getVariable('port'));
+        const portNumber = port.getVariable<Type.Port>('port').port;
+        const currentPort = router.findPort(portNumber);
         let serviceId = 'unknown';
         let libraryVersion = 'unknown';
 
@@ -257,9 +302,9 @@ export function create(
               libraryVersion = file.version.toString();
             }
           }
-        } else if (router.isForwarded(port.getVariable('port'))) {
-          const device = router.getForwarded(port.getVariable('port'));
-          const devicePort = device.findPort(port.getVariable('port'));
+        } else if (router.isForwarded(portNumber)) {
+          const device = router.getForwarded(portNumber);
+          const devicePort = device.findPort(portNumber);
 
           if (device && devicePort) {
             serviceId = devicePort.service;
@@ -276,7 +321,35 @@ export function create(
         );
       }
     ).addArgument('port')
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Router | null {
+    const intf = args.get('self');
+    if (intf instanceof Router) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: RouterVariables;
+
+  constructor(variables: RouterVariables) {
+    super(Router.type);
+    this.variables = variables;
+    Router.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  router: Type.Router
+): BasicInterface {
+  const itrface = new Router({
+    mockEnvironment,
+    user,
+    router
+  });
 
   return itrface;
 }
