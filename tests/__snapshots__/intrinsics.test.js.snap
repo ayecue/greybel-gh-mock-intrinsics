@@ -95,7 +95,7 @@ exports[`interpreter default scripts generics.src 9`] = `"/home"`;
 
 exports[`interpreter default scripts generics.src 10`] = `"/home/test"`;
 
-exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogramm"`;
+exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogram"`;
 
 exports[`interpreter default scripts generics.src 12`] = `"test"`;
 
@@ -107,7 +107,7 @@ exports[`interpreter default scripts generics.src 15`] = `"clearing screen"`;
 
 exports[`interpreter default scripts generics.src 16`] = `"null"`;
 
-exports[`interpreter default scripts generics.src 17`] = `"/home/test/myprogramm"`;
+exports[`interpreter default scripts generics.src 17`] = `"/home/test/myprogram"`;
 
 exports[`interpreter default scripts generics.src 18`] = `
 "COL1    COL2    COL3    
@@ -151,10 +151,10 @@ exports[`interpreter default scripts get-custom-object.src 3`] = `""`;
 exports[`interpreter default scripts get-custom-object.src 4`] = `"hello world"`;
 
 exports[`interpreter default scripts ls.src 1`] = `
-"Desktop     
-Downloads   
-Config      
-myprogramm  "
+"Desktop    
+Downloads  
+Config     
+myprogram  "
 `;
 
 exports[`interpreter default scripts meta-mail.src 1`] = `"MetaMail"`;
@@ -441,8 +441,8 @@ exports[`interpreter default scripts shell.src 11`] = `"false"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER PID CPU MEM COMMAND
-root 4850 2.0 21.70 kernel_task
-root 1821 9.0 8.02 Xorg"
+root 4516 5.1 30.91 kernel_task
+root 8612 11.6 25.32 Xorg"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -461,7 +461,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"false"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 55% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 65% bushed\\", \\"42:D6:90:7C:BF:71 64% footbal\\", \\"09:2F:46:FB:32:E9 91% emalia\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 53% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 51% bushed\\", \\"42:D6:90:7C:BF:71 51% footbal\\", \\"09:2F:46:FB:32:E9 34% emalia\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"true"`;
 
@@ -576,6 +576,20 @@ exports[`interpreter default scripts shell.src 76`] = `"root"`;
 exports[`interpreter default scripts shell.src 77`] = `""`;
 
 exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
+
+exports[`interpreter default scripts shell-self-launch.src 1`] = `"launch number 0"`;
+
+exports[`interpreter default scripts shell-self-launch.src 2`] = `"launch number 1"`;
+
+exports[`interpreter default scripts shell-self-launch.src 3`] = `"launch number 2"`;
+
+exports[`interpreter default scripts shell-self-launch.src 4`] = `"launch number 3"`;
+
+exports[`interpreter default scripts shell-self-launch.src 5`] = `"launch number 4"`;
+
+exports[`interpreter default scripts shell-self-launch.src 6`] = `"launch number 5"`;
+
+exports[`interpreter default scripts shell-self-launch.src 7`] = `"finished self launch"`;
 
 exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
 

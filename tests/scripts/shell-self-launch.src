@@ -1,0 +1,12 @@
+num = 0
+
+if (params.len > 0) then
+    num = params[0].to_int + 1
+end if
+
+if (num > 5) then
+    exit("finished self launch")
+end if
+
+print("launch number " + num)
+get_shell("root", "test").launch("/home/test/myprogram", num)
