@@ -113,7 +113,7 @@ class Crypto extends BasicInterface {
                 network.router.wifi.credentials.password
               ].join(','),
               owner: user.username,
-              permissions: 'drwxr--r--',
+              permissions: 'rwxr--r--',
               type: Type.FileType.Ack
             })
           );
@@ -228,7 +228,7 @@ class Crypto extends BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user, device.groups);
+        const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r) {
           ctx.handler.outputHandler.print("Can't open file. Permission denied");

@@ -57,7 +57,7 @@ class File extends BasicInterface {
           throw new Error('chmod: Invalid arguments');
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (user.username !== 'root' && !w) {
           return Promise.resolve(new CustomString('permission denied'));
@@ -78,7 +78,7 @@ class File extends BasicInterface {
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user, device.groups);
+            const { w } = item.getPermissionsForUser(user, device.groups);
 
             if (w) {
               item.permissions.chmod(permissionsRaw);
@@ -129,7 +129,7 @@ class File extends BasicInterface {
           throw new Error('copy: name cannot exceed the 128 character limit.');
         }
 
-        const { r } = entity.getPermissions(user, device.groups);
+        const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
@@ -142,7 +142,7 @@ class File extends BasicInterface {
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
-          const { w } = folder.getPermissions(user, device.groups);
+          const { w } = folder.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(new CustomString('permission denied'));
@@ -200,7 +200,7 @@ class File extends BasicInterface {
           throw new Error('move: name cannot exceed the 128 character limit.');
         }
 
-        const { r } = entity.getPermissions(user, device.groups);
+        const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
@@ -213,7 +213,7 @@ class File extends BasicInterface {
         const folder = device.getFile(traversalPath);
 
         if (folder instanceof Type.Folder) {
-          const { w } = folder.getPermissions(user, device.groups);
+          const { w } = folder.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(new CustomString('permission denied'));
@@ -268,7 +268,7 @@ class File extends BasicInterface {
           throw new Error('move: name cannot exceed the 128 character limit.');
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
@@ -399,7 +399,7 @@ class File extends BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user, device.groups);
+        const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r && user.username !== 'root') {
           return Promise.resolve(Defaults.Void);
@@ -464,7 +464,7 @@ class File extends BasicInterface {
           );
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
@@ -539,7 +539,7 @@ class File extends BasicInterface {
 
         const { entity, user, device } = self.variables;
         const permission = args.get('permission').toString().substr(0, 1);
-        const permissionMap = entity.getPermissions(user, device.groups);
+        const permissionMap = entity.getPermissionsForUser(user, device.groups);
 
         return Promise.resolve(
           new CustomBoolean(permissionMap.getFlagByString(permission))
@@ -566,7 +566,7 @@ class File extends BasicInterface {
           return Promise.resolve(Defaults.Void);
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('permission denied'));
@@ -662,7 +662,7 @@ class File extends BasicInterface {
         }
 
         const { entity } = self.variables;
-        return Promise.resolve(new CustomString(entity.permissions.toString()));
+        return Promise.resolve(new CustomString(entity.getPermissions()));
       }
     ),
 
@@ -719,7 +719,7 @@ class File extends BasicInterface {
           throw new Error('owner cannot exceed the 15 character limit.');
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('Permission denied'));
@@ -729,7 +729,7 @@ class File extends BasicInterface {
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user, device.groups);
+            const { w } = item.getPermissionsForUser(user, device.groups);
 
             if (w) {
               item.owner = ownerRaw;
@@ -796,7 +796,7 @@ class File extends BasicInterface {
           throw new Error('groupname cannot exceed the 15 character limit.');
         }
 
-        const { w } = entity.getPermissions(user, device.groups);
+        const { w } = entity.getPermissionsForUser(user, device.groups);
 
         if (!w && user.username !== 'root') {
           return Promise.resolve(new CustomString('Permission denied'));
@@ -806,7 +806,7 @@ class File extends BasicInterface {
 
         if (isRecursiveRaw && entity instanceof Type.Folder) {
           entity.traverseChildren((item: Type.FSEntity) => {
-            const { w } = item.getPermissions(user, device.groups);
+            const { w } = item.getPermissionsForUser(user, device.groups);
 
             if (w) {
               item.group = groupRaw;

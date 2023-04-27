@@ -158,7 +158,7 @@ class Computer extends BasicInterface {
             );
           }
 
-          const { w } = entityResult.getPermissions(user, device.groups);
+          const { w } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(
@@ -255,7 +255,7 @@ class Computer extends BasicInterface {
             );
           }
 
-          const { w } = entityResult.getPermissions(user, device.groups);
+          const { w } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(
@@ -268,7 +268,7 @@ class Computer extends BasicInterface {
           const file = new Type.File({
             name: target,
             owner: user.username,
-            permissions: `-${entityResult.permissions.toString().slice(1)}`,
+            permissions: entityResult.permissions.toString(),
             type: Type.FileType.Source
           });
 

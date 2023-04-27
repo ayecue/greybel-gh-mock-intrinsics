@@ -233,13 +233,13 @@ class Shell extends BasicShell {
             );
           }
 
-          const { r } = localFile.getPermissions(user, device.groups);
+          const { r } = localFile.getPermissionsForUser(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(
+          const { w } = remoteFolder.getPermissionsForUser(
             rshell.getVariable<Type.User>('user'),
             device.groups
           );
@@ -322,7 +322,7 @@ class Shell extends BasicShell {
           );
         }
 
-        const sourcePerms = source.getPermissions(user, device.groups);
+        const sourcePerms = source.getPermissionsForUser(user, device.groups);
 
         if (!sourcePerms.r) {
           return Promise.resolve(
@@ -338,7 +338,7 @@ class Shell extends BasicShell {
           );
         }
 
-        const destPerms = dest.getPermissions(user, device.groups);
+        const destPerms = dest.getPermissionsForUser(user, device.groups);
 
         if (!destPerms.w) {
           return Promise.resolve(
@@ -372,7 +372,7 @@ class Shell extends BasicShell {
               type: Type.FileType.Binary,
               name: source.name.replace(/\.[^.]*$/, ''),
               content: output,
-              permissions: 'drwxrwxrwx',
+              permissions: 'rwxrwxrwx',
               owner: user.username
             },
             dest
@@ -433,7 +433,7 @@ class Shell extends BasicShell {
           return Defaults.False;
         }
 
-        const perms = file.getPermissions(user, device.groups);
+        const perms = file.getPermissionsForUser(user, device.groups);
 
         if (!perms.x) {
           ctx.handler.outputHandler.print(
@@ -634,13 +634,13 @@ class FtpShell extends BasicShell {
             );
           }
 
-          const { r } = localFile.getPermissions(user, device.groups);
+          const { r } = localFile.getPermissionsForUser(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(
+          const { w } = remoteFolder.getPermissionsForUser(
             rshell.getVariable<Type.User>('user'),
             device.groups
           );

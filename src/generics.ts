@@ -185,7 +185,7 @@ export default function generics(
         const entityResult = device.getFile(target);
 
         if (entityResult && entityResult instanceof Type.File) {
-          const { r } = entityResult.getPermissions(user, device.groups);
+          const { r } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (r) {
             switch ((entityResult as Type.File).type) {
