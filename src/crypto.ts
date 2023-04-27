@@ -18,15 +18,16 @@ import {
 import BasicInterface from './interface';
 import { delay } from './utils';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  library: Type.File,
-  user: Type.User,
-  device: Type.Device
-): BasicInterface {
-  const itrface = new BasicInterface('crypto');
+interface CryptoVariables {
+  mockEnvironment: MockEnvironment;
+  library: Type.File;
+  user: Type.User;
+  device: Type.Device;
+}
 
-  itrface.addMethod(
+class Crypto extends BasicInterface {
+  static readonly type: string = 'crypto';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'aireplay',
       async (
@@ -34,6 +35,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Crypto.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, user, device } = self.variables;
         const bssid = args.get('bssid');
         const essid = args.get('essid');
         const maxAcks = args.get('maxAcks');
@@ -105,7 +113,7 @@ export function create(
                 network.router.wifi.credentials.password
               ].join(','),
               owner: user.username,
-              permissions: 'drwxr--r--',
+              permissions: 'rwxr--r--',
               type: Type.FileType.Ack
             })
           );
@@ -116,10 +124,8 @@ export function create(
     )
       .addArgument('bssid')
       .addArgument('essid')
-      .addArgument('maxAcks', new CustomNumber(25000))
-  );
+      .addArgument('maxAcks', new CustomNumber(25000)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'airmon',
       (
@@ -127,6 +133,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Crypto.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const option = args.get('option');
         const deviceName = args.get('device');
 
@@ -177,10 +190,8 @@ export function create(
       }
     )
       .addArgument('option')
-      .addArgument('device')
-  );
+      .addArgument('device'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'aircrack',
       (
@@ -188,6 +199,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Crypto.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, user, device } = self.variables;
         const path = args.get('path');
 
         if (path instanceof CustomNil) {
@@ -210,7 +228,7 @@ export function create(
           return Promise.resolve(Defaults.Void);
         }
 
-        const { r } = entity.getPermissions(user, device.groups);
+        const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r) {
           ctx.handler.outputHandler.print("Can't open file. Permission denied");
@@ -239,10 +257,8 @@ export function create(
 
         return Promise.resolve(new CustomString(password));
       }
-    ).addArgument('path')
-  );
+    ).addArgument('path'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'decipher',
       async (
@@ -250,6 +266,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Crypto.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment } = self.variables;
         const encryptedPass = args.get('encryptedPass').toString();
 
         await ctx.handler.outputHandler.progress(5000);
@@ -266,10 +289,8 @@ export function create(
 
         return new CustomString(user.password);
       }
-    ).addArgument('encryptedPass')
-  );
+    ).addArgument('encryptedPass'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'smtp_user_list',
       (
@@ -298,7 +319,37 @@ export function create(
     )
       .addArgument('ipAddress')
       .addArgument('port')
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Crypto | null {
+    const intf = args.get('self');
+    if (intf instanceof Crypto) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: CryptoVariables;
+
+  constructor(variables: CryptoVariables) {
+    super(Crypto.type);
+    this.variables = variables;
+    Crypto.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  library: Type.File,
+  user: Type.User,
+  device: Type.Device
+): BasicInterface {
+  const itrface = new Crypto({
+    mockEnvironment,
+    library,
+    user,
+    device
+  });
 
   return itrface;
 }

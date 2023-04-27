@@ -52,4 +52,7 @@ export function init(
   return api;
 }
 
-export { GHMockIntrinsicEnv } from './mock/environment';
+export {
+  default as createGHMockEnv,
+  GHMockIntrinsicEnv
+} from './mock/environment';

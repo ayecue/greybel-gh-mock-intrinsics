@@ -2,10 +2,11 @@ const {
   Interpreter,
   Debugger,
   OutputHandler,
-  HandlerContainer
+  HandlerContainer,
+  ObjectValue
 } = require('greybel-interpreter');
 const defaultInit = require('greybel-intrinsics').init;
-const { init } = require('../dist');
+const { init, createGHMockEnv } = require('../dist');
 const fs = require('fs');
 const path = require('path');
 const testFolder = path.resolve(__dirname, 'scripts');
@@ -64,7 +65,11 @@ describe('interpreter', function () {
         });
         let success = false;
 
-        interpreter.setApi(defaultInit(init()));
+        interpreter.setApi(defaultInit(init(new ObjectValue(), createGHMockEnv({
+          myProgramContent: fs.readFileSync(filepath, {
+            encoding: 'utf-8'
+          })
+        }))));
 
         try {
           await interpreter.run();

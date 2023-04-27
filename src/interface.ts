@@ -8,12 +8,14 @@ import {
 
 export const CLASS_ID_PROPERTY = new CustomString('classID');
 
-export default class BasicInterface extends CustomMap {
-  variables: Map<string, any>;
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-  constructor(type: string, values?: Map<string, any>) {
+export default class BasicInterface extends CustomMap {
+  variables: Record<string, any>;
+
+  constructor(type: string) {
     super(null, new CustomMap());
-    this.variables = new Map<string, any>(values);
+    this.variables = {};
     this.value.set(CLASS_ID_PROPERTY, new CustomString(type));
   }
 
@@ -26,13 +28,16 @@ export default class BasicInterface extends CustomMap {
     return this;
   }
 
-  setVariable(key: string, value: any): BasicInterface {
-    this.variables.set(key, value);
+  setVariable<T extends any>(key: string, value: T): BasicInterface {
+    this.variables[key] = value;
     return this;
   }
 
-  getVariable(key: string): any {
-    return this.variables.get(key);
+  getVariable<T extends any>(key: string): T {
+    if (hasOwnProperty.call(this.variables, key)) {
+      return this.variables[key];
+    }
+    return null;
   }
 
   toString(): string {

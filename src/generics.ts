@@ -185,7 +185,7 @@ export default function generics(
         const entityResult = device.getFile(target);
 
         if (entityResult && entityResult instanceof Type.File) {
-          const { r } = entityResult.getPermissions(user, device.groups);
+          const { r } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (r) {
             switch ((entityResult as Type.File).type) {
@@ -549,7 +549,8 @@ export default function generics(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const type = args.get('value')?.getCustomType() || Defaults.Void.toString();
+        const type =
+          args.get('value')?.getCustomType() || Defaults.Void.toString();
 
         return Promise.resolve(new CustomString(type));
       }

@@ -20,15 +20,16 @@ import {
   isValidProcName
 } from './utils';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  metaFile: Type.File,
-  user: Type.User,
-  computer: Type.Device
-): BasicInterface {
-  const itrface = new BasicInterface('metaxploit');
+interface MetaxploitVariables {
+  mockEnvironment: MockEnvironment;
+  metaFile: Type.File;
+  user: Type.User;
+  computer: Type.Device;
+}
 
-  itrface.addMethod(
+class Metaxploit extends BasicInterface {
+  static readonly type: string = 'metaxploit';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'load',
       (
@@ -36,6 +37,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Metaxploit.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, computer, user, metaFile } = self.variables;
         const path = args.get('path');
 
         if (path instanceof CustomNil) {
@@ -88,10 +96,8 @@ export function create(
           )
         );
       }
-    ).addArgument('path')
-  );
+    ).addArgument('path'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'net_use',
       (
@@ -99,6 +105,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Metaxploit.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, computer, metaFile } = self.variables;
         const ipAddress = args.get('ipAddress');
         const port = args.get('port');
 
@@ -217,10 +230,8 @@ export function create(
       }
     )
       .addArgument('ipAddress')
-      .addArgument('port', new CustomNumber(0))
-  );
+      .addArgument('port', new CustomNumber(0)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'scan',
       (
@@ -266,10 +277,8 @@ export function create(
 
         return Promise.resolve(Defaults.Void);
       }
-    ).addArgument('metaLib')
-  );
+    ).addArgument('metaLib'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'scan_address',
       (
@@ -329,10 +338,8 @@ export function create(
       }
     )
       .addArgument('metaLib')
-      .addArgument('memAddress')
-  );
+      .addArgument('memAddress'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'sniffer',
       (
@@ -342,10 +349,8 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(Defaults.Void);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'rshell_client',
       (
@@ -353,6 +358,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Metaxploit.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, computer, user } = self.variables;
         const address = args.get('address');
         const port = args.get('port');
         const procName = args.get('procName');
@@ -473,17 +485,23 @@ export function create(
     )
       .addArgument('address')
       .addArgument('port', new CustomNumber(1222))
-      .addArgument('procName', new CustomString('rshell_client'))
-  );
+      .addArgument('procName', new CustomString('rshell_client')),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'rshell_server',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Metaxploit.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, computer } = self.variables;
+
         if (!computer.services.has(Type.ServiceType.RSHELL)) {
           return Promise.resolve(
             new CustomString('error: service rshelld is not running')
@@ -519,7 +537,37 @@ export function create(
         return Promise.resolve(new CustomList(shells));
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Metaxploit | null {
+    const intf = args.get('self');
+    if (intf instanceof Metaxploit) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: MetaxploitVariables;
+
+  constructor(variables: MetaxploitVariables) {
+    super(Metaxploit.type);
+    this.variables = variables;
+    Metaxploit.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  metaFile: Type.File,
+  user: Type.User,
+  computer: Type.Device
+): BasicInterface {
+  const itrface = new Metaxploit({
+    mockEnvironment,
+    metaFile,
+    user,
+    computer
+  });
 
   return itrface;
 }

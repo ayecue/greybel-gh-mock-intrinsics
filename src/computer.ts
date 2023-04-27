@@ -19,7 +19,6 @@ import { create as createFile } from './file';
 import BasicInterface from './interface';
 import { create as createPort } from './port';
 import {
-  formatColumns,
   greaterThanEntityNameLimit,
   greaterThanFileNameLimit,
   greaterThanFilesLimit,
@@ -28,32 +27,41 @@ import {
   isValidFileName
 } from './utils';
 
-export function create(
-  mockEnvironment: MockEnvironment,
-  user: Type.User,
-  device: Type.Device,
-  options: { location?: string[] } = {}
-): BasicInterface {
-  const itrface = new BasicInterface('computer');
+export interface ComputerOptions {
+  location?: string[];
+}
 
-  itrface.addMethod(
+interface ComputerVariables {
+  mockEnvironment: MockEnvironment;
+  user: Type.User;
+  device: Type.Device;
+  options: ComputerOptions;
+}
+
+class Computer extends BasicInterface {
+  static readonly type: string = 'computer';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'get_ports',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, mockEnvironment } = self.variables;
         const ports =
           Array.from(device.ports.values()).map((item: Type.Port) =>
             createPort(mockEnvironment, device, item)
           ) || [];
         return Promise.resolve(new CustomList(ports));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'File',
       (
@@ -61,6 +69,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user, mockEnvironment } = self.variables;
         const path = args.get('path');
 
         if (path instanceof CustomNil) {
@@ -79,10 +94,8 @@ export function create(
           createFile(mockEnvironment, user, device, entityResult)
         );
       }
-    ).addArgument('path')
-  );
+    ).addArgument('path'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'create_folder',
       (
@@ -90,6 +103,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, options, user } = self.variables;
         const path = args.get('path');
         const folderName = args.get('folderName');
 
@@ -138,7 +158,7 @@ export function create(
             );
           }
 
-          const { w } = entityResult.getPermissions(user, device.groups);
+          const { w } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(
@@ -163,10 +183,8 @@ export function create(
       }
     )
       .addArgument('path')
-      .addArgument('folderName')
-  );
+      .addArgument('folderName'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'is_network_active',
       (
@@ -176,10 +194,7 @@ export function create(
       ): Promise<CustomValue> => {
         return Promise.resolve(Defaults.True);
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'touch',
       (
@@ -187,6 +202,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, options, user } = self.variables;
         const path = args.get('path');
         const fileName = args.get('fileName');
 
@@ -233,7 +255,7 @@ export function create(
             );
           }
 
-          const { w } = entityResult.getPermissions(user, device.groups);
+          const { w } = entityResult.getPermissionsForUser(user, device.groups);
 
           if (!w && user.username !== 'root') {
             return Promise.resolve(
@@ -246,7 +268,7 @@ export function create(
           const file = new Type.File({
             name: target,
             owner: user.username,
-            permissions: `-${entityResult.permissions.toString().slice(1)}`,
+            permissions: entityResult.permissions.toString(),
             type: Type.FileType.Source
           });
 
@@ -259,17 +281,22 @@ export function create(
       }
     )
       .addArgument('path')
-      .addArgument('fileName')
-  );
+      .addArgument('fileName'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'show_procs',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const result = [
           'USER PID CPU MEM COMMAND',
           ...Array.from(device.processes.values()).map((p) => {
@@ -277,21 +304,25 @@ export function create(
               1
             )} ${p.mem.toFixed(2)} ${p.command}`;
           })
-        ].join('\n')
+        ].join('\n');
 
         return Promise.resolve(new CustomString(result));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'network_devices',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const netDevices = [];
 
         for (const [type, item] of device.getNetworkDeviceMap()) {
@@ -300,10 +331,7 @@ export function create(
 
         return Promise.resolve(new CustomString(netDevices.join('\n')));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'change_password',
       (
@@ -311,6 +339,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const username = args.get('username');
         const password = args.get('password');
 
@@ -353,10 +388,8 @@ export function create(
       }
     )
       .addArgument('username')
-      .addArgument('password')
-  );
+      .addArgument('password'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'create_user',
       (
@@ -364,6 +397,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const username = args.get('username');
         const password = args.get('password');
 
@@ -409,10 +449,8 @@ export function create(
       }
     )
       .addArgument('username')
-      .addArgument('password')
-  );
+      .addArgument('password'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'delete_user',
       (
@@ -420,6 +458,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const username = args.get('username');
         const removeHome = args.get('removeHome');
 
@@ -463,10 +508,8 @@ export function create(
       }
     )
       .addArgument('username')
-      .addArgument('removeHome', new CustomBoolean(false))
-  );
+      .addArgument('removeHome', new CustomBoolean(false)),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'create_group',
       (
@@ -474,6 +517,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const username = args.get('username');
         const groupname = args.get('groupname');
 
@@ -514,10 +564,8 @@ export function create(
       }
     )
       .addArgument('username')
-      .addArgument('groupname')
-  );
+      .addArgument('groupname'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'delete_group',
       (
@@ -525,6 +573,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const username = args.get('username');
         const groupname = args.get('groupname');
 
@@ -563,10 +618,8 @@ export function create(
       }
     )
       .addArgument('username')
-      .addArgument('groupname')
-  );
+      .addArgument('groupname'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'groups',
       (
@@ -574,6 +627,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const username = args.get('username');
 
         if (username instanceof CustomNil) {
@@ -598,10 +658,8 @@ export function create(
 
         return Promise.resolve(new CustomString(groups.join('\n')));
       }
-    ).addArgument('username')
-  );
+    ).addArgument('username'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'close_program',
       (
@@ -609,6 +667,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const pid = args.get('pid');
 
         if (pid instanceof CustomNil) {
@@ -640,10 +705,8 @@ export function create(
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('pid')
-  );
+    ).addArgument('pid'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'wifi_networks',
       (
@@ -651,6 +714,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, mockEnvironment } = self.variables;
         const netDevice = args.get('netDevice').toString();
 
         if (netDevice !== 'eth0') {
@@ -667,10 +737,8 @@ export function create(
 
         return Promise.resolve(Defaults.Void);
       }
-    ).addArgument('netDevice')
-  );
+    ).addArgument('netDevice'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'connect_wifi',
       (
@@ -678,6 +746,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, mockEnvironment, user } = self.variables;
         const netDevice = args.get('netDevice');
         const bssid = args.get('bssid');
         const essid = args.get('essid');
@@ -749,10 +824,8 @@ export function create(
       .addArgument('netDevice')
       .addArgument('bssid')
       .addArgument('essid')
-      .addArgument('password')
-  );
+      .addArgument('password'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'connect_ethernet',
       (
@@ -760,6 +833,13 @@ export function create(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device, user } = self.variables;
         const netDevice = args.get('netDevice');
         const address = args.get('address');
         const gateway = args.get('gateway');
@@ -832,58 +912,75 @@ export function create(
     )
       .addArgument('netDevice')
       .addArgument('address')
-      .addArgument('gateway')
-  );
+      .addArgument('gateway'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'network_gateway',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         return Promise.resolve(new CustomString(device.getRouter().localIp));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'active_net_card',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const [networkDevice] = device.networkDevices.filter((n) => n.active);
 
         return Promise.resolve(new CustomString(networkDevice.type));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'local_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         return Promise.resolve(new CustomString(device.localIp));
       }
-    )
-  );
-
-  itrface.addMethod(
+    ),
     CustomFunction.createExternalWithSelf(
       'public_ip',
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { device } = self.variables;
         const router = device.getRouter();
 
         if (router instanceof Type.Router) {
@@ -893,7 +990,37 @@ export function create(
         return Promise.resolve(Defaults.Void);
       }
     )
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Computer | null {
+    const intf = args.get('self');
+    if (intf instanceof Computer) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: ComputerVariables;
+
+  constructor(variables: ComputerVariables) {
+    super(Computer.type);
+    this.variables = variables;
+    Computer.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function create(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device,
+  options: ComputerOptions = {}
+): BasicInterface {
+  const itrface = new Computer({
+    mockEnvironment,
+    user,
+    device,
+    options
+  });
 
   return itrface;
 }

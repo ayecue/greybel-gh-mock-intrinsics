@@ -1,5 +1,10 @@
 import { CustomMap } from 'greybel-interpreter';
-import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
+import {
+  MockEnvironment,
+  MockEnvironmentOptions,
+  Type,
+  Utils
+} from 'greybel-mock-environment';
 
 export const sharedCustomObject = new CustomMap();
 
@@ -10,16 +15,9 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
 }
 
 export default function create(
-  seed: string = 'test',
-  initalUser: {
-    username: string;
-    password: string;
-  } = {
-    username: 'test',
-    password: 'test'
-  }
+  options: MockEnvironmentOptions = {}
 ): GHMockIntrinsicEnv {
-  const mockEnvironment = new GHMockIntrinsicEnv(seed, initalUser);
+  const mockEnvironment = new GHMockIntrinsicEnv(options);
   const userGenerator = mockEnvironment.userGenerator;
   const emailGenerator = mockEnvironment.emailGenerator;
   const networkGenerator = mockEnvironment.networkGenerator;

@@ -22,16 +22,69 @@ export interface ShellOptions {
   location?: string[];
 }
 
-export function createShell(
-  mockEnvironment: MockEnvironment,
-  user: Type.User,
-  device: Type.Device,
-  options: ShellOptions
-) {
-  const currentLocation = options.location;
-  const itrface = new BasicInterface('shell');
+interface ShellVariables {
+  mockEnvironment: MockEnvironment;
+  user: Type.User;
+  device: Type.Device;
+  options: ShellOptions;
+}
 
-  itrface.addMethod(
+class BasicShell extends BasicInterface {
+  static readonly customIntrinsics: CustomFunction[] = [
+    CustomFunction.createExternalWithSelf(
+      'start_terminal',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(Defaults.Void);
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'host_computer',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = BasicShell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, user, device, options } = self.variables;
+        const currentLocation = options.location;
+        return Promise.resolve(
+          createComputer(mockEnvironment, user, device, {
+            location: currentLocation
+          })
+        );
+      }
+    )
+  ];
+
+  static retreive(args: Map<string, CustomValue>): BasicShell | null {
+    const intf = args.get('self');
+    if (intf instanceof BasicShell) {
+      return intf;
+    }
+    return null;
+  }
+
+  variables: ShellVariables;
+
+  constructor(variables: ShellVariables, type: string) {
+    super(type);
+    this.variables = variables;
+    BasicShell.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+class Shell extends BasicShell {
+  static readonly type: string = 'shell';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'connect_service',
       (
@@ -39,6 +92,13 @@ export function createShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Shell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, device } = self.variables;
         const ip = args.get('ip');
         const port = args.get('port');
         const user = args.get('user');
@@ -108,10 +168,8 @@ export function createShell(
       .addArgument('port')
       .addArgument('user')
       .addArgument('password')
-      .addArgument('service', new CustomString('ssh'))
-  );
+      .addArgument('service', new CustomString('ssh')),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'scp',
       (
@@ -119,6 +177,14 @@ export function createShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Shell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { options, device, user } = self.variables;
+        const currentLocation = options.location;
         const pathOrig = args.get('pathOrig');
         const pathDest = args.get('pathDest');
         const remoteShell = args.get('remoteShell');
@@ -140,12 +206,13 @@ export function createShell(
             currentLocation
           );
           const localFile = device.getFile(traversalPath);
+          const remoteOptions = rshell.getVariable<ShellOptions>('options');
           const remoteTraversalPath = Utils.getTraversalPath(
             pathDest.toString(),
-            rshell.getVariable('currentLocation')
+            remoteOptions.location
           );
           const remoteFolder = rshell
-            .getVariable('device')
+            .getVariable<Type.Device>('device')
             .getFile(remoteTraversalPath);
 
           if (localFile === null) {
@@ -160,20 +227,20 @@ export function createShell(
             );
           }
 
-          if (remoteFolder instanceof Type.Folder) {
+          if (!(remoteFolder instanceof Type.Folder)) {
             return Promise.resolve(
               new CustomString(`${pathDest.toString()} it's not a folder`)
             );
           }
 
-          const { r } = localFile.getPermissions(user, device.groups);
+          const { r } = localFile.getPermissionsForUser(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(
-            rshell.getVariable('user'),
+          const { w } = remoteFolder.getPermissionsForUser(
+            rshell.getVariable<Type.User>('user'),
             device.groups
           );
 
@@ -183,7 +250,7 @@ export function createShell(
 
           ctx.handler.outputHandler.progress(2000);
 
-          remoteFolder.putFile(localFile as Type.File);
+          remoteFolder.putEntity(localFile as Type.File);
           return Promise.resolve(Defaults.True);
         }
 
@@ -192,10 +259,8 @@ export function createShell(
     )
       .addArgument('pathOrig')
       .addArgument('pathDest')
-      .addArgument('remoteShell')
-  );
+      .addArgument('remoteShell'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'build',
       (
@@ -203,6 +268,13 @@ export function createShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Shell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { user, device } = self.variables;
         const pathSource = args.get('pathSource');
         const pathBinary = args.get('pathBinary');
         const allowImport = args.get('allowImport');
@@ -250,7 +322,7 @@ export function createShell(
           );
         }
 
-        const sourcePerms = source.getPermissions(user, device.groups);
+        const sourcePerms = source.getPermissionsForUser(user, device.groups);
 
         if (!sourcePerms.r) {
           return Promise.resolve(
@@ -266,7 +338,7 @@ export function createShell(
           );
         }
 
-        const destPerms = dest.getPermissions(user, device.groups);
+        const destPerms = dest.getPermissionsForUser(user, device.groups);
 
         if (!destPerms.w) {
           return Promise.resolve(
@@ -300,7 +372,7 @@ export function createShell(
               type: Type.FileType.Binary,
               name: source.name.replace(/\.[^.]*$/, ''),
               content: output,
-              permissions: 'drwxrwxrwx',
+              permissions: 'rwxrwxrwx',
               owner: user.username
             },
             dest
@@ -316,10 +388,8 @@ export function createShell(
     )
       .addArgument('pathSource')
       .addArgument('pathBinary')
-      .addArgument('allowImport', Defaults.False)
-  );
+      .addArgument('allowImport', Defaults.False),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'launch',
       async (
@@ -327,6 +397,14 @@ export function createShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Shell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, device, user, options } = self.variables;
+        const currentLocation = options.location;
         const path = args.get('path');
         const params = args.get('params');
 
@@ -355,7 +433,7 @@ export function createShell(
           return Defaults.False;
         }
 
-        const perms = file.getPermissions(user, device.groups);
+        const perms = file.getPermissionsForUser(user, device.groups);
 
         if (!perms.x) {
           ctx.handler.outputHandler.print(
@@ -398,10 +476,8 @@ export function createShell(
       }
     )
       .addArgument('path')
-      .addArgument('params', new CustomString(''))
-  );
+      .addArgument('params', new CustomString('')),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'ping',
       (
@@ -409,6 +485,13 @@ export function createShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = Shell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { mockEnvironment, device } = self.variables;
         const ip = args.get('ipAddress');
 
         if (ip instanceof CustomNil) {
@@ -439,10 +522,8 @@ export function createShell(
 
         return Promise.resolve(Defaults.True);
       }
-    ).addArgument('ipAddress')
-  );
+    ).addArgument('ipAddress'),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'masterkey',
       (
@@ -452,10 +533,8 @@ export function createShell(
       ): Promise<CustomValue> => {
         return Promise.resolve(Defaults.Void);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'masterkey_direct',
       (
@@ -465,10 +544,8 @@ export function createShell(
       ): Promise<CustomValue> => {
         return Promise.resolve(Defaults.Void);
       }
-    )
-  );
+    ),
 
-  itrface.addMethod(
     CustomFunction.createExternalWithSelf(
       'restore_network',
       (
@@ -479,21 +556,21 @@ export function createShell(
         return Promise.resolve(Defaults.Void);
       }
     )
-  );
+  ];
 
-  return itrface;
+  static retreive(args: Map<string, CustomValue>): Shell | null {
+    return BasicShell.retreive(args);
+  }
+
+  constructor(variables: ShellVariables) {
+    super(variables, Shell.type);
+    Shell.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
 }
 
-export function createFtpShell(
-  mockEnvironment: MockEnvironment,
-  user: Type.User,
-  device: Type.Device,
-  options: ShellOptions
-) {
-  const currentLocation = options.location;
-  const itrface = new BasicInterface('ftpShell');
-
-  itrface.addMethod(
+class FtpShell extends BasicShell {
+  static readonly type: string = 'ftpShell';
+  static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'put',
       (
@@ -501,6 +578,14 @@ export function createFtpShell(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const self = FtpShell.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(Defaults.Void);
+        }
+
+        const { user, device, options } = self.variables;
+        const currentLocation = options.location;
         const pathOrig = args.get('pathOrig');
         const pathDest = args.get('pathDest');
         const remoteShell = args.get('remoteShell');
@@ -522,12 +607,13 @@ export function createFtpShell(
             currentLocation
           );
           const localFile = device.getFile(traversalPath);
+          const remoteOptions = rshell.getVariable<ShellOptions>('options');
           const remoteTraversalPath = Utils.getTraversalPath(
             pathDest.toString(),
-            rshell.getVariable('currentLocation')
+            remoteOptions.location
           );
           const remoteFolder = rshell
-            .getVariable('device')
+            .getVariable<Type.Device>('device')
             .getFile(remoteTraversalPath);
 
           if (localFile === null) {
@@ -542,20 +628,20 @@ export function createFtpShell(
             );
           }
 
-          if (remoteFolder instanceof Type.Folder) {
+          if (!(remoteFolder instanceof Type.Folder)) {
             return Promise.resolve(
               new CustomString(`${pathDest.toString()} it's not a folder`)
             );
           }
 
-          const { r } = localFile.getPermissions(user, device.groups);
+          const { r } = localFile.getPermissionsForUser(user, device.groups);
 
           if (!r) {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          const { w } = remoteFolder.getPermissions(
-            rshell.getVariable('user'),
+          const { w } = remoteFolder.getPermissionsForUser(
+            rshell.getVariable<Type.User>('user'),
             device.groups
           );
 
@@ -565,7 +651,7 @@ export function createFtpShell(
 
           ctx.handler.outputHandler.progress(2000);
 
-          remoteFolder.putFile(localFile as Type.File);
+          remoteFolder.putEntity(localFile as Type.File);
           return Promise.resolve(Defaults.True);
         }
 
@@ -575,7 +661,46 @@ export function createFtpShell(
       .addArgument('pathOrig')
       .addArgument('pathDest')
       .addArgument('remoteShell')
-  );
+  ];
+
+  static retreive(args: Map<string, CustomValue>): Shell | null {
+    return BasicShell.retreive(args);
+  }
+
+  constructor(variables: ShellVariables) {
+    super(variables, FtpShell.type);
+    FtpShell.customIntrinsics.forEach(this.addMethod.bind(this));
+  }
+}
+
+export function createShell(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device,
+  options: ShellOptions
+) {
+  const itrface = new Shell({
+    mockEnvironment,
+    user,
+    device,
+    options
+  });
+
+  return itrface;
+}
+
+export function createFtpShell(
+  mockEnvironment: MockEnvironment,
+  user: Type.User,
+  device: Type.Device,
+  options: ShellOptions
+) {
+  const itrface = new FtpShell({
+    mockEnvironment,
+    user,
+    device,
+    options
+  });
 
   return itrface;
 }
@@ -598,40 +723,6 @@ export function create(
           ...options,
           location: currentLocation
         });
-
-  itrface.addMethod(
-    CustomFunction.createExternalWithSelf(
-      'start_terminal',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
-      }
-    )
-  );
-
-  itrface.addMethod(
-    CustomFunction.createExternalWithSelf(
-      'host_computer',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(
-          createComputer(mockEnvironment, user, device, {
-            location: currentLocation
-          })
-        );
-      }
-    )
-  );
-
-  itrface.setVariable('user', user);
-  itrface.setVariable('device', device);
-  itrface.setVariable('currentLocation', currentLocation);
 
   return itrface;
 }
