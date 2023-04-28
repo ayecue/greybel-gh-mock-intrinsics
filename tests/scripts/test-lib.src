@@ -22,3 +22,10 @@ print(shell)
 computer = testLib.get_computer_for_file(computer.File("/lib"))
 
 print(computer)
+
+testLib.try_to_execute(function
+  get_shell(null, null)
+end function, function(errMessage, trace)
+  print("An error appeared " + errMessage)
+  print(trace)
+end function)

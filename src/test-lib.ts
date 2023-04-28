@@ -227,7 +227,60 @@ export class TestLib extends BasicInterface {
 
         return Promise.resolve(shell);
       }
-    ).addArgument('file')
+    ).addArgument('file'),
+    CustomFunction.createExternalWithSelf(
+      'try_to_execute',
+      async (
+        ctx: OperationContext,
+        self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const callback = args.get('callback');
+        const onError = args.get('onError');
+        const callbackArgs = args.get('args');
+
+        if (!(callback instanceof CustomFunction)) {
+          return Promise.resolve(
+            new CustomString('callback argument has to be provided.')
+          );
+        }
+
+        if (!(onError instanceof CustomFunction)) {
+          return Promise.resolve(
+            new CustomString('onError argument has to be provided.')
+          );
+        }
+
+        if (!(callbackArgs instanceof CustomList)) {
+          return Promise.resolve(
+            new CustomString('args argument has to be a list.')
+          );
+        }
+
+        try {
+          const result = await callback.run(self, callbackArgs.value, ctx);
+          return result;
+        } catch (err) {
+          const lastActive = ctx.getLastActive();
+
+          await onError.run(
+            self,
+            [
+              new CustomString(err.message),
+              new CustomString(
+                `At line ${lastActive.stackItem.start.line} in ${lastActive.target}`
+              )
+            ],
+            ctx
+          );
+        }
+
+        return Defaults.Void;
+      }
+    )
+      .addArgument('callback')
+      .addArgument('onError')
+      .addArgument('args', new CustomList())
   ];
 
   static retreive(args: Map<string, CustomValue>): TestLib | null {
