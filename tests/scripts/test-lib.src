@@ -1,0 +1,24 @@
+testLib = include_lib("/lib/testlib.so")
+
+print(testLib.sessions)
+
+router = testLib.get_or_create_router("12.12.12.12")
+
+print(router)
+
+computers = testLib.get_computers_connected_to_router(router)
+computer = computers.values[0]
+
+print(computers)
+
+shell = testLib.get_shell_for_computer(computer)
+
+print(shell)
+
+shell = testLib.get_shell_for_file(computer.File("/lib"))
+
+print(shell)
+
+computer = testLib.get_computer_for_file(computer.File("/lib"))
+
+print(computer)

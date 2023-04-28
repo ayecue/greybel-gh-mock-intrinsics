@@ -18,14 +18,14 @@ import {
   isValidFileName
 } from './utils';
 
-interface FileVariables {
+export interface FileVariables {
   mockEnvironment: MockEnvironment;
   device: Type.Device;
   user: Type.User;
   entity: Type.FSEntity;
 }
 
-class File extends BasicInterface {
+export class File extends BasicInterface {
   static readonly type: string = 'file';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

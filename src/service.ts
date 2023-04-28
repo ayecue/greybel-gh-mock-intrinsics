@@ -9,14 +9,14 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-interface ServiceVariables {
+export interface ServiceVariables {
   mockEnvironment: MockEnvironment;
   library: Type.File;
   user: Type.User;
   computer: Type.Device;
 }
 
-class Service extends BasicInterface {
+export class Service extends BasicInterface {
   static readonly type: string = 'service';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

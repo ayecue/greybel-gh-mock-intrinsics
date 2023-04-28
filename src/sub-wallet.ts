@@ -8,13 +8,13 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-interface SubWalletVariables {
+export interface SubWalletVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   computer: Type.Device;
 }
 
-class SubWallet extends BasicInterface {
+export class SubWallet extends BasicInterface {
   static readonly type: string = 'subWallet';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

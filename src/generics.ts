@@ -20,6 +20,7 @@ import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createRouter } from './router';
 import { create as createService } from './service';
 import { loginLocal } from './shell';
+import { create as createTestLib } from './test-lib';
 import {
   formatColumns as formatColumnsInternal,
   keyEventToString,
@@ -214,6 +215,8 @@ export default function generics(
                 return Promise.resolve(
                   createBlockchain(mockEnvironment, entityResult, user, device)
                 );
+              case Type.FileType.TestLib:
+                return Promise.resolve(createTestLib(mockEnvironment));
               default:
             }
           }

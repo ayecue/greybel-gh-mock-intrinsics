@@ -11,14 +11,14 @@ import { create as createCoin } from './coin';
 import BasicInterface from './interface';
 import { create as createWallet } from './wallet';
 
-interface BlockchainVariables {
+export interface BlockchainVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   computer: Type.Device;
   library: Type.File;
 }
 
-class Blockchain extends BasicInterface {
+export class Blockchain extends BasicInterface {
   static readonly type: string = 'blockchain';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

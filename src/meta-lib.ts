@@ -14,7 +14,7 @@ import BasicInterface from './interface';
 import { create as createShell } from './shell';
 import { greaterThanEntityNameLimit, isAlphaNumeric } from './utils';
 
-interface MetaLibVariables {
+export interface MetaLibVariables {
   mockEnvironment: MockEnvironment;
   source: Type.Device;
   metaFile: Type.File;
@@ -26,7 +26,7 @@ interface MetaLibVariables {
   vulnerabilities: Type.Vulnerability[];
 }
 
-class MetaLib extends BasicInterface {
+export class MetaLib extends BasicInterface {
   static readonly type: string = 'metaLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

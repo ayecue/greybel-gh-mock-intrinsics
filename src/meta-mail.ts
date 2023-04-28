@@ -11,12 +11,12 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-interface MetaMailVariables {
+export interface MetaMailVariables {
   mockEnvironment: MockEnvironment;
   email: Type.EMail;
 }
 
-class MetaMail extends BasicInterface {
+export class MetaMail extends BasicInterface {
   static readonly type: string = 'MetaMail';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

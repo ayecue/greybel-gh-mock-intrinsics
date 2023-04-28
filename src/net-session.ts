@@ -9,7 +9,7 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 
-interface NetSessionVariables {
+export interface NetSessionVariables {
   mockEnvironment: MockEnvironment;
   source: Type.Device;
   metaFile: Type.File;
@@ -18,7 +18,7 @@ interface NetSessionVariables {
   targetLibrary: Type.Library;
 }
 
-class NetSession extends BasicInterface {
+export class NetSession extends BasicInterface {
   static readonly type: string = 'netSession';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

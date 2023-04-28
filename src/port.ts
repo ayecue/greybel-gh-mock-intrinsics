@@ -11,13 +11,13 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-interface PortVariables {
+export interface PortVariables {
   mockEnvironment: MockEnvironment;
   device: Type.Device;
   port: Type.Port;
 }
 
-class Port extends BasicInterface {
+export class Port extends BasicInterface {
   static readonly type: string = 'port';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

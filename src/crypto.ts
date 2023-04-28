@@ -18,14 +18,14 @@ import {
 import BasicInterface from './interface';
 import { delay } from './utils';
 
-interface CryptoVariables {
+export interface CryptoVariables {
   mockEnvironment: MockEnvironment;
   library: Type.File;
   user: Type.User;
   device: Type.Device;
 }
 
-class Crypto extends BasicInterface {
+export class Crypto extends BasicInterface {
   static readonly type: string = 'crypto';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

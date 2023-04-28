@@ -20,14 +20,14 @@ import {
   isValidProcName
 } from './utils';
 
-interface MetaxploitVariables {
+export interface MetaxploitVariables {
   mockEnvironment: MockEnvironment;
   metaFile: Type.File;
   user: Type.User;
   computer: Type.Device;
 }
 
-class Metaxploit extends BasicInterface {
+export class Metaxploit extends BasicInterface {
   static readonly type: string = 'metaxploit';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

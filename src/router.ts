@@ -12,13 +12,13 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 import BasicInterface from './interface';
 import { create as createPort } from './port';
 
-interface RouterVariables {
+export interface RouterVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   router: Type.Router;
 }
 
-class Router extends BasicInterface {
+export class Router extends BasicInterface {
   static readonly type: string = 'router';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
