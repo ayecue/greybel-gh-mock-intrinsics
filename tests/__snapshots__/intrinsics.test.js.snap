@@ -627,7 +627,7 @@ exports[`interpreter default scripts test-lib.src 6`] = `"computer"`;
 
 exports[`interpreter default scripts test-lib.src 7`] = `"An error appeared get_shell: Invalid arguments"`;
 
-exports[`interpreter default scripts test-lib.src 8`] = `"At line 27 in /Users/_ac/workspace/greybel-gh-mock-intrinsics/tests/scripts/test-lib.src"`;
+exports[`interpreter default scripts test-lib.src 8`] = `"At line 27"`;
 
 exports[`interpreter default scripts wallet.src 1`] = `"wallet"`;
 
