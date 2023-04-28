@@ -1,4 +1,4 @@
-import { CustomMap } from 'greybel-interpreter';
+import { CustomMap, CustomString, ObjectValue } from 'greybel-interpreter';
 import {
   MockEnvironment,
   MockEnvironmentOptions,
@@ -6,7 +6,11 @@ import {
   Utils
 } from 'greybel-mock-environment';
 
-export const sharedCustomObject = new CustomMap();
+export const sharedCustomObject = new CustomMap(
+  new ObjectValue(
+    new Map([[new CustomString('classID'), new CustomString('custom_object')]])
+  )
+);
 
 export class GHMockIntrinsicEnv extends MockEnvironment {
   getSharedCustomObject(): CustomMap {

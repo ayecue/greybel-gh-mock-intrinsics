@@ -19,7 +19,7 @@ export interface BlockchainVariables {
 }
 
 export class Blockchain extends BasicInterface {
-  static readonly type: string = 'blockchain';
+  static readonly type: string = 'blockchainLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'coin_price',

@@ -199,7 +199,7 @@ export class Shell extends BasicShell {
 
         const remoteType = remoteShell.getCustomType();
 
-        if (remoteType === 'shell' || remoteType === 'ftpShell') {
+        if (remoteType === Shell.type || remoteType === FtpShell.type) {
           const rshell = remoteShell as BasicInterface;
           const traversalPath = Utils.getTraversalPath(
             pathOrig.toString(),
@@ -569,7 +569,7 @@ export class Shell extends BasicShell {
 }
 
 export class FtpShell extends BasicShell {
-  static readonly type: string = 'ftpShell';
+  static readonly type: string = 'ftpshell';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'put',
@@ -600,7 +600,7 @@ export class FtpShell extends BasicShell {
 
         const remoteType = remoteShell.getCustomType();
 
-        if (remoteType === 'shell' || remoteType === 'ftpShell') {
+        if (remoteType === 'shell' || remoteType === 'ftpshell') {
           const rshell = remoteShell as BasicInterface;
           const traversalPath = Utils.getTraversalPath(
             pathOrig.toString(),

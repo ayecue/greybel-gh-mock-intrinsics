@@ -10,7 +10,7 @@ import {
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { create as createPort } from './port';
+import { Port, create as createPort } from './port';
 
 export interface RouterVariables {
   mockEnvironment: MockEnvironment;
@@ -280,7 +280,7 @@ export class Router extends BasicInterface {
 
         if (
           !(port instanceof BasicInterface) ||
-          port.getCustomType() !== 'port'
+          port.getCustomType() !== Port.type
         ) {
           return Promise.resolve(new CustomString('port is null'));
         }

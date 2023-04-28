@@ -27,7 +27,7 @@ export interface MetaLibVariables {
 }
 
 export class MetaLib extends BasicInterface {
-  static readonly type: string = 'metaLib';
+  static readonly type: string = 'MetaLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'lib_name',

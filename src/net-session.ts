@@ -19,7 +19,7 @@ export interface NetSessionVariables {
 }
 
 export class NetSession extends BasicInterface {
-  static readonly type: string = 'netSession';
+  static readonly type: string = 'NetSession';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'dump_lib',

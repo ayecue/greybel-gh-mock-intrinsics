@@ -15,7 +15,7 @@ export interface SubWalletVariables {
 }
 
 export class SubWallet extends BasicInterface {
-  static readonly type: string = 'subWallet';
+  static readonly type: string = 'subwallet';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'get_balance',

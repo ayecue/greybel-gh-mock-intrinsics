@@ -16,7 +16,7 @@ export interface AptClientVariables {
 }
 
 export class AptClient extends BasicInterface {
-  static readonly type: string = 'aptClient';
+  static readonly type: string = 'aptclientLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'show',

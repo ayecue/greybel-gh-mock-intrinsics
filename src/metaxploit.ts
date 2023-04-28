@@ -11,7 +11,7 @@ import {
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { create as createMetaLib } from './meta-lib';
+import { MetaLib, create as createMetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
 import { create as createShell } from './shell';
 import {
@@ -28,7 +28,7 @@ export interface MetaxploitVariables {
 }
 
 export class Metaxploit extends BasicInterface {
-  static readonly type: string = 'metaxploit';
+  static readonly type: string = 'MetaxploitLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'load',
@@ -247,7 +247,7 @@ export class Metaxploit extends BasicInterface {
 
         if (
           metaLib instanceof BasicInterface &&
-          metaLib.getCustomType() === 'metaLib'
+          metaLib.getCustomType() === MetaLib.type
         ) {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
@@ -295,7 +295,7 @@ export class Metaxploit extends BasicInterface {
 
         if (
           metaLib instanceof BasicInterface &&
-          metaLib.getCustomType() === 'metaLib'
+          metaLib.getCustomType() === MetaLib.type
         ) {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 

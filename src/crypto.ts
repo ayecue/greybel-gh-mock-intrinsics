@@ -26,7 +26,7 @@ export interface CryptoVariables {
 }
 
 export class Crypto extends BasicInterface {
-  static readonly type: string = 'crypto';
+  static readonly type: string = 'cryptoLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'aireplay',

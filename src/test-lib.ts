@@ -21,7 +21,7 @@ export interface TestVariables {
 }
 
 export class TestLib extends BasicInterface {
-  static readonly type: string = 'testLib';
+  static readonly type: string = 'TestLib';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'sessions',
