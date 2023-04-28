@@ -629,7 +629,7 @@ exports[`interpreter default scripts test-lib.src 7`] = `"An error appeared get_
 
 exports[`interpreter default scripts test-lib.src 8`] = `"At line 27"`;
 
-exports[`interpreter default scripts test-lib.src 9`] = `"interact"`;
+exports[`interpreter default scripts test-lib.src 9`] = `"interact at 34"`;
 
 exports[`interpreter default scripts test-lib.src 10`] = `"resume"`;
 
