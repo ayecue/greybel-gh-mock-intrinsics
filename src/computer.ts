@@ -31,14 +31,14 @@ export interface ComputerOptions {
   location?: string[];
 }
 
-interface ComputerVariables {
+export interface ComputerVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   device: Type.Device;
   options: ComputerOptions;
 }
 
-class Computer extends BasicInterface {
+export class Computer extends BasicInterface {
   static readonly type: string = 'computer';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

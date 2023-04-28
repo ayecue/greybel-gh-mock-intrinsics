@@ -613,6 +613,22 @@ exports[`interpreter default scripts sub-wallet.src 10`] = `"Not yet supported"`
 
 exports[`interpreter default scripts sub-wallet.src 11`] = `"Not yet supported"`;
 
+exports[`interpreter default scripts test-lib.src 1`] = `"[{\\"device\\":computer,\\"program\\":file,\\"currentPath\\":file}]"`;
+
+exports[`interpreter default scripts test-lib.src 2`] = `"router"`;
+
+exports[`interpreter default scripts test-lib.src 3`] = `"{\\"192.168.33.152\\":computer,\\"192.168.42.250\\":computer,\\"192.168.64.69\\":computer,\\"192.168.70.249\\":computer,\\"192.168.207.138\\":computer,\\"192.168.70.55\\":computer,\\"192.168.28.205\\":computer,\\"192.168.231.43\\":computer}"`;
+
+exports[`interpreter default scripts test-lib.src 4`] = `"shell"`;
+
+exports[`interpreter default scripts test-lib.src 5`] = `"shell"`;
+
+exports[`interpreter default scripts test-lib.src 6`] = `"computer"`;
+
+exports[`interpreter default scripts test-lib.src 7`] = `"An error appeared get_shell: Invalid arguments"`;
+
+exports[`interpreter default scripts test-lib.src 8`] = `"At line 27"`;
+
 exports[`interpreter default scripts wallet.src 1`] = `"wallet"`;
 
 exports[`interpreter default scripts wallet.src 2`] = `"wallet"`;

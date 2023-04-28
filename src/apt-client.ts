@@ -8,14 +8,14 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 
-interface AptClientVariables {
+export interface AptClientVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   computer: Type.Device;
   library: Type.File;
 }
 
-class AptClient extends BasicInterface {
+export class AptClient extends BasicInterface {
   static readonly type: string = 'aptClient';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(

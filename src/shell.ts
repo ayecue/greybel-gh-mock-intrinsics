@@ -22,14 +22,14 @@ export interface ShellOptions {
   location?: string[];
 }
 
-interface ShellVariables {
+export interface ShellVariables {
   mockEnvironment: MockEnvironment;
   user: Type.User;
   device: Type.Device;
   options: ShellOptions;
 }
 
-class BasicShell extends BasicInterface {
+export class BasicShell extends BasicInterface {
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
       'start_terminal',
@@ -82,7 +82,7 @@ class BasicShell extends BasicInterface {
   }
 }
 
-class Shell extends BasicShell {
+export class Shell extends BasicShell {
   static readonly type: string = 'shell';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
@@ -568,7 +568,7 @@ class Shell extends BasicShell {
   }
 }
 
-class FtpShell extends BasicShell {
+export class FtpShell extends BasicShell {
   static readonly type: string = 'ftpShell';
   static readonly customIntrinsics: CustomFunction[] = [
     CustomFunction.createExternalWithSelf(
