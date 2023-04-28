@@ -309,6 +309,7 @@ export class TestLib extends BasicInterface {
         } catch (err) {
           const lastActive = ctx.getLastActive();
 
+          ctx.debugger.setBreakpoint(true);
           ctx.debugger.interact(lastActive, lastActive.stackItem, null);
           await ctx.debugger.resume();
         }
