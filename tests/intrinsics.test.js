@@ -43,7 +43,17 @@ class TestOutputHandler extends OutputHandler {
 }
 
 class TestDebugger extends Debugger {
-  debug() {}
+  debug() {
+    printMock("debug");
+  }
+
+  interact(ctx, item) {
+    printMock("interact at " + item.start.line);
+  }
+
+  resume() {
+    printMock("resume");
+  }
 }
 
 describe('interpreter', function () {

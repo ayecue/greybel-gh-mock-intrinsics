@@ -280,6 +280,43 @@ export class TestLib extends BasicInterface {
     )
       .addArgument('callback')
       .addArgument('onError')
+      .addArgument('args', new CustomList()),
+    CustomFunction.createExternalWithSelf(
+      'try_to_execute_with_debug',
+      async (
+        ctx: OperationContext,
+        self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const callback = args.get('callback');
+        const callbackArgs = args.get('args');
+
+        if (!(callback instanceof CustomFunction)) {
+          return Promise.resolve(
+            new CustomString('callback argument has to be provided.')
+          );
+        }
+
+        if (!(callbackArgs instanceof CustomList)) {
+          return Promise.resolve(
+            new CustomString('args argument has to be a list.')
+          );
+        }
+
+        try {
+          const result = await callback.run(self, callbackArgs.value, ctx);
+          return result;
+        } catch (err) {
+          const lastActive = ctx.getLastActive();
+
+          ctx.debugger.interact(lastActive, lastActive.stackItem, null);
+          await ctx.debugger.resume();
+        }
+
+        return Defaults.Void;
+      }
+    )
+      .addArgument('callback')
       .addArgument('args', new CustomList())
   ];
 
