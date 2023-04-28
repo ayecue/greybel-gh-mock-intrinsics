@@ -10,7 +10,7 @@ import {
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { Port, create as createPort } from './port';
+import { create as createPort, Port } from './port';
 
 export interface RouterVariables {
   mockEnvironment: MockEnvironment;

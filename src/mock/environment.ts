@@ -13,8 +13,19 @@ export const sharedCustomObject = new CustomMap(
 );
 
 export class GHMockIntrinsicEnv extends MockEnvironment {
+  private startTime: number;
+
+  constructor(options: MockEnvironmentOptions) {
+    super(options);
+    this.startTime = Date.now();
+  }
+
   getSharedCustomObject(): CustomMap {
     return sharedCustomObject;
+  }
+
+  getElapsedTime(): number {
+    return (Date.now() - this.startTime) / 1000;
   }
 }
 

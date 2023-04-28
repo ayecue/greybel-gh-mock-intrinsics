@@ -248,7 +248,9 @@ export default function generics(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomNumber(Date.now()));
+        return Promise.resolve(
+          new CustomNumber(mockEnvironment.getElapsedTime())
+        );
       }
     ),
 

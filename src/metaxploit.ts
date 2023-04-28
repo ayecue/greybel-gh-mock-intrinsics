@@ -11,7 +11,7 @@ import {
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
-import { MetaLib, create as createMetaLib } from './meta-lib';
+import { create as createMetaLib, MetaLib } from './meta-lib';
 import { create as createNetSession } from './net-session';
 import { create as createShell } from './shell';
 import {
