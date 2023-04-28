@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`interpreter default scripts blockchain.src 1`] = `"blockchain"`;
+exports[`interpreter default scripts blockchain.src 1`] = `"blockchainLib"`;
 
-exports[`interpreter default scripts blockchain.src 2`] = `"blockchain"`;
+exports[`interpreter default scripts blockchain.src 2`] = `"blockchainLib"`;
 
 exports[`interpreter default scripts blockchain.src 3`] = `"Not yet supported"`;
 
@@ -34,9 +34,9 @@ exports[`interpreter default scripts coin.src 7`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts coin.src 8`] = `"Not yet supported"`;
 
-exports[`interpreter default scripts coin.src 9`] = `"subWallet"`;
+exports[`interpreter default scripts coin.src 9`] = `"subwallet"`;
 
-exports[`interpreter default scripts coin.src 10`] = `"[subWallet]"`;
+exports[`interpreter default scripts coin.src 10`] = `"[subwallet]"`;
 
 exports[`interpreter default scripts coin.src 11`] = `"Not yet supported"`;
 
@@ -44,9 +44,9 @@ exports[`interpreter default scripts coin.src 12`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts coin.src 13`] = `"Not yet supported"`;
 
-exports[`interpreter default scripts crypto.src 1`] = `"crypto"`;
+exports[`interpreter default scripts crypto.src 1`] = `"cryptoLib"`;
 
-exports[`interpreter default scripts crypto.src 2`] = `"crypto"`;
+exports[`interpreter default scripts crypto.src 2`] = `"cryptoLib"`;
 
 exports[`interpreter default scripts crypto.src 3`] = `
 "Waiting for beacon frame (BSSID: bssid-test-uuid)
@@ -74,7 +74,7 @@ exports[`interpreter default scripts generics.src 1`] = `"null"`;
 
 exports[`interpreter default scripts generics.src 2`] = `"098f6bcd4621d373cade4e832627b4f6"`;
 
-exports[`interpreter default scripts generics.src 3`] = `"1642924301240"`;
+exports[`interpreter default scripts generics.src 3`] = `"0"`;
 
 exports[`interpreter default scripts generics.src 4`] = `"172.57.134.56"`;
 
@@ -191,9 +191,9 @@ exports[`interpreter default scripts meta-mail.src 9`] = `"true"`;
 
 exports[`interpreter default scripts meta-mail.src 10`] = `"[]"`;
 
-exports[`interpreter default scripts metaxploit.src 1`] = `"metaxploit"`;
+exports[`interpreter default scripts metaxploit.src 1`] = `"MetaxploitLib"`;
 
-exports[`interpreter default scripts metaxploit.src 2`] = `"metaxploit"`;
+exports[`interpreter default scripts metaxploit.src 2`] = `"MetaxploitLib"`;
 
 exports[`interpreter default scripts metaxploit.src 3`] = `"null"`;
 
@@ -201,9 +201,9 @@ exports[`interpreter default scripts metaxploit.src 4`] = `"null"`;
 
 exports[`interpreter default scripts metaxploit.src 5`] = `"error: service rshelld is not running"`;
 
-exports[`interpreter default scripts metaxploit.src 6`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 6`] = `"MetaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 7`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 7`] = `"MetaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 8`] = `"[\\"0xC8CE05AB\\", \\"0xFDC63532\\", \\"0xDC4BD50C\\"]"`;
 
@@ -247,13 +247,13 @@ Privileges obtained from user: test"
 
 exports[`interpreter default scripts metaxploit.src 17`] = `"shell"`;
 
-exports[`interpreter default scripts metaxploit.src 18`] = `"netSession"`;
+exports[`interpreter default scripts metaxploit.src 18`] = `"NetSession"`;
 
-exports[`interpreter default scripts metaxploit.src 19`] = `"netSession"`;
+exports[`interpreter default scripts metaxploit.src 19`] = `"NetSession"`;
 
-exports[`interpreter default scripts metaxploit.src 20`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 20`] = `"MetaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 21`] = `"metaLib"`;
+exports[`interpreter default scripts metaxploit.src 21`] = `"MetaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
 
@@ -591,9 +591,9 @@ exports[`interpreter default scripts shell-self-launch.src 6`] = `"launch number
 
 exports[`interpreter default scripts shell-self-launch.src 7`] = `"finished self launch"`;
 
-exports[`interpreter default scripts sub-wallet.src 1`] = `"subWallet"`;
+exports[`interpreter default scripts sub-wallet.src 1`] = `"subwallet"`;
 
-exports[`interpreter default scripts sub-wallet.src 2`] = `"subWallet"`;
+exports[`interpreter default scripts sub-wallet.src 2`] = `"subwallet"`;
 
 exports[`interpreter default scripts sub-wallet.src 3`] = `"Not yet supported"`;
 
