@@ -5,7 +5,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import {
@@ -51,7 +51,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, mockEnvironment } = self.variables;
@@ -72,7 +72,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user, mockEnvironment } = self.variables;
@@ -87,7 +87,7 @@ export class Computer extends BasicInterface {
         const entityResult = device.getFile(target);
 
         if (!entityResult) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(
@@ -106,7 +106,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, options, user } = self.variables;
@@ -176,10 +176,10 @@ export class Computer extends BasicInterface {
 
           entityResult.putEntity(folder);
 
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('path')
@@ -192,7 +192,7 @@ export class Computer extends BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ),
     CustomFunction.createExternalWithSelf(
@@ -205,7 +205,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, options, user } = self.variables;
@@ -274,10 +274,10 @@ export class Computer extends BasicInterface {
 
           entityResult.putEntity(file);
 
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('path')
@@ -293,7 +293,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -319,7 +319,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -342,7 +342,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -350,7 +350,7 @@ export class Computer extends BasicInterface {
         const password = args.get('password');
 
         if (username instanceof CustomNil || password instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const usernameRaw = username.toString();
@@ -384,7 +384,7 @@ export class Computer extends BasicInterface {
 
         device.changePassword(usernameRaw, passwordRaw);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('username')
@@ -400,7 +400,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -408,7 +408,7 @@ export class Computer extends BasicInterface {
         const password = args.get('password');
 
         if (username instanceof CustomNil || password instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const usernameRaw = username.toString();
@@ -445,7 +445,7 @@ export class Computer extends BasicInterface {
         device.updatePasswd();
         device.createUserFolder(usernameRaw);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('username')
@@ -461,7 +461,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -469,7 +469,7 @@ export class Computer extends BasicInterface {
         const removeHome = args.get('removeHome');
 
         if (username instanceof CustomNil || removeHome instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const usernameRaw = username.toString();
@@ -504,7 +504,7 @@ export class Computer extends BasicInterface {
           folder?.delete();
         }
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('username')
@@ -520,7 +520,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -528,7 +528,7 @@ export class Computer extends BasicInterface {
         const groupname = args.get('groupname');
 
         if (username instanceof CustomNil || groupname instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const usernameRaw = username.toString();
@@ -560,7 +560,7 @@ export class Computer extends BasicInterface {
 
         device.addGroup(usernameRaw, groupnameRaw);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('username')
@@ -576,7 +576,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -584,7 +584,7 @@ export class Computer extends BasicInterface {
         const groupname = args.get('groupname');
 
         if (username instanceof CustomNil || groupname instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const usernameRaw = username.toString();
@@ -614,7 +614,7 @@ export class Computer extends BasicInterface {
 
         device.removeGroup(usernameRaw, groupnameRaw);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('username')
@@ -630,7 +630,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -670,14 +670,14 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
         const pid = args.get('pid');
 
         if (pid instanceof CustomNil) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const pidNum = pid.toNumber();
@@ -703,7 +703,7 @@ export class Computer extends BasicInterface {
 
         device.removeProcess(pidNum);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ).addArgument('pid'),
 
@@ -717,7 +717,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, mockEnvironment } = self.variables;
@@ -735,7 +735,7 @@ export class Computer extends BasicInterface {
           return Promise.resolve(new CustomList(result));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('netDevice'),
 
@@ -749,7 +749,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, mockEnvironment, user } = self.variables;
@@ -764,7 +764,7 @@ export class Computer extends BasicInterface {
           essid instanceof CustomNil ||
           password instanceof CustomNil
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (user.username === 'guest') {
@@ -818,7 +818,7 @@ export class Computer extends BasicInterface {
 
         mockEnvironment.connect(router, device);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('netDevice')
@@ -836,7 +836,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device, user } = self.variables;
@@ -907,7 +907,7 @@ export class Computer extends BasicInterface {
           router.changeIp(addressRaw, gatewayRaw);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('netDevice')
@@ -924,7 +924,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -941,7 +941,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -960,7 +960,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -977,7 +977,7 @@ export class Computer extends BasicInterface {
         const self = Computer.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -987,7 +987,7 @@ export class Computer extends BasicInterface {
           return Promise.resolve(new CustomString(router.publicIp));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
   ];

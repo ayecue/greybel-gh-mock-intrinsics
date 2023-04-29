@@ -3,7 +3,7 @@ import {
   CustomList,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -90,7 +90,7 @@ export class Coin extends BasicInterface {
         const self = Coin.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, user, computer } = self.variables;
@@ -109,7 +109,7 @@ export class Coin extends BasicInterface {
         const self = Coin.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, user, computer } = self.variables;

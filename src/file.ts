@@ -5,7 +5,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
@@ -38,13 +38,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const permissions = args.get('permissions');
@@ -102,13 +102,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const path = args.get('path');
@@ -154,10 +154,10 @@ export class File extends BasicInterface {
 
           folder.putEntity(copy);
 
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('path')
@@ -173,13 +173,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const path = args.get('path');
@@ -224,10 +224,10 @@ export class File extends BasicInterface {
           copy.name = newNameRaw;
           folder.putEntity(copy);
 
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('path')
@@ -243,19 +243,19 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const newName = args.get('newName');
 
         if (newName instanceof CustomNil) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const newNameRaw = newName.toString();
@@ -280,7 +280,7 @@ export class File extends BasicInterface {
 
         entity.name = newNameRaw;
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ).addArgument('newName'),
 
@@ -294,13 +294,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(new CustomString(entity.getPath()));
@@ -317,7 +317,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -325,7 +325,7 @@ export class File extends BasicInterface {
         if (entity instanceof Type.File) {
           return Promise.resolve(new CustomBoolean(entity.allowImport));
         }
-        return Promise.resolve(Defaults.False);
+        return Promise.resolve(DefaultType.False);
       }
     ),
 
@@ -339,17 +339,17 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device, mockEnvironment } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (entity.name === '') {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(
@@ -368,7 +368,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -386,23 +386,23 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (entity instanceof Type.Folder) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r && user.username !== 'root') {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (
@@ -412,7 +412,7 @@ export class File extends BasicInterface {
           return Promise.resolve(new CustomString(entity.content || ''));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -426,19 +426,19 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const content = args.get('content');
 
         if (content instanceof CustomNil) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const contentRaw = content.toString();
@@ -474,7 +474,7 @@ export class File extends BasicInterface {
 
         file.content = contentRaw;
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ).addArgument('content'),
 
@@ -488,13 +488,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
 
         if (entity instanceof Type.Folder) {
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
         const file = entity as Type.File;
@@ -514,7 +514,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -534,7 +534,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
@@ -557,13 +557,13 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { w } = entity.getPermissionsForUser(user, device.groups);
@@ -592,17 +592,17 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device, mockEnvironment } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (!(entity instanceof Type.Folder)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const result = Array.from((entity as Type.Folder).folders.values()).map(
@@ -625,17 +625,17 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device, mockEnvironment } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (!(entity instanceof Type.Folder)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const result = Array.from((entity as Type.Folder).files.values()).map(
@@ -658,7 +658,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -676,7 +676,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -694,20 +694,20 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const owner = args.get('owner');
         const isRecursive = args.get('isRecursive');
 
         if (owner instanceof CustomNil || isRecursive instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const ownerRaw = owner.toString();
@@ -753,7 +753,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;
@@ -771,20 +771,20 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity, user, device } = self.variables;
 
         if (entity.deleted) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const group = args.get('group');
         const isRecursive = args.get('isRecursive');
 
         if (group instanceof CustomNil || isRecursive instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const groupRaw = group.toString();
@@ -830,7 +830,7 @@ export class File extends BasicInterface {
         const self = File.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { entity } = self.variables;

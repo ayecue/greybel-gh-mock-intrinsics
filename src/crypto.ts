@@ -5,7 +5,7 @@ import {
   CustomNumber,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import {
@@ -38,7 +38,7 @@ export class Crypto extends BasicInterface {
         const self = Crypto.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, user, device } = self.variables;
@@ -119,7 +119,7 @@ export class Crypto extends BasicInterface {
           );
         }
 
-        return Defaults.Void;
+        return DefaultType.Void;
       }
     )
       .addArgument('bssid')
@@ -136,7 +136,7 @@ export class Crypto extends BasicInterface {
         const self = Crypto.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -144,7 +144,7 @@ export class Crypto extends BasicInterface {
         const deviceName = args.get('device');
 
         if (option instanceof CustomNil || device instanceof CustomNil) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const optionRaw = option.toString();
@@ -155,7 +155,7 @@ export class Crypto extends BasicInterface {
           deviceNameRaw === '' ||
           deviceNameRaw.length > 5
         ) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const activeWifiDevices = device
@@ -171,7 +171,7 @@ export class Crypto extends BasicInterface {
         const map = device.getNetworkDeviceMap();
 
         if (!map.has(deviceNameRaw)) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
         const netDevice = map.get(deviceNameRaw);
@@ -186,7 +186,7 @@ export class Crypto extends BasicInterface {
 
         netDevice.mode = Type.NetworkDeviceMode.Monitor;
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('option')
@@ -202,7 +202,7 @@ export class Crypto extends BasicInterface {
         const self = Crypto.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, user, device } = self.variables;
@@ -225,14 +225,14 @@ export class Crypto extends BasicInterface {
         const entity = device.getFile(traversalPath);
 
         if (entity === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r) {
           ctx.handler.outputHandler.print("Can't open file. Permission denied");
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (
@@ -242,7 +242,7 @@ export class Crypto extends BasicInterface {
           ctx.handler.outputHandler.print(
             "Can't process file. Not valid filecap."
           );
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const [acks, power, password] = entity.content.split(',');
@@ -252,7 +252,7 @@ export class Crypto extends BasicInterface {
 
         if (numAcks < n) {
           ctx.handler.outputHandler.print('Key not found. More acks needed');
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(new CustomString(password));
@@ -269,7 +269,7 @@ export class Crypto extends BasicInterface {
         const self = Crypto.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
@@ -284,7 +284,7 @@ export class Crypto extends BasicInterface {
         );
 
         if (!user) {
-          return Defaults.Void;
+          return DefaultType.Void;
         }
 
         return new CustomString(user.password);
@@ -302,7 +302,7 @@ export class Crypto extends BasicInterface {
         const port = args.get('port');
 
         if (ipAddress instanceof CustomNil || port instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const ipAddressRaw = ipAddress.toString();

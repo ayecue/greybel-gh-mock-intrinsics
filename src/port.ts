@@ -4,7 +4,7 @@ import {
   CustomNumber,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -30,7 +30,7 @@ export class Port extends BasicInterface {
         const self = Port.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = self.variables;
@@ -48,7 +48,7 @@ export class Port extends BasicInterface {
         const self = Port.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { port } = self.variables;
@@ -66,7 +66,7 @@ export class Port extends BasicInterface {
         const self = Port.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { port } = self.variables;

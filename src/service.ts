@@ -2,7 +2,7 @@ import {
   CustomFunction,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -29,7 +29,7 @@ export class Service extends BasicInterface {
         const self = Service.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, computer, library } = self.variables;
@@ -42,7 +42,7 @@ export class Service extends BasicInterface {
 
         computer.installServiceByFiletype(library.type);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ),
     CustomFunction.createExternalWithSelf(
@@ -55,14 +55,14 @@ export class Service extends BasicInterface {
         const self = Service.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, computer, library } = self.variables;
         const exisitingService = computer.findServiceByFiletype(library.type);
 
         if (exisitingService) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (user.username !== 'root') {
@@ -73,7 +73,7 @@ export class Service extends BasicInterface {
 
         computer.addServiceByFiletype(library.type);
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ),
     CustomFunction.createExternalWithSelf(
@@ -86,14 +86,14 @@ export class Service extends BasicInterface {
         const self = Service.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, computer, library } = self.variables;
         const exisitingService = computer.findServiceByFiletype(library.type);
 
         if (!exisitingService) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (user.username !== 'root') {
@@ -104,7 +104,7 @@ export class Service extends BasicInterface {
 
         exisitingService.delete();
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
   ];

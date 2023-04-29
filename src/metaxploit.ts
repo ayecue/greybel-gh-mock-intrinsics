@@ -5,7 +5,7 @@ import {
   CustomNumber,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
@@ -40,14 +40,14 @@ export class Metaxploit extends BasicInterface {
         const self = Metaxploit.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, computer, user, metaFile } = self.variables;
         const path = args.get('path');
 
         if (path instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const pathRaw = path.toString();
@@ -63,13 +63,13 @@ export class Metaxploit extends BasicInterface {
         const targetFile = computer.getFile(traversalPath) as Type.File;
 
         if (!targetFile) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const library = targetFile.getLibraryType();
 
         if (!library) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const libContainer = mockEnvironment.libraryManager.get(library);
@@ -79,7 +79,7 @@ export class Metaxploit extends BasicInterface {
         );
 
         if (vuls.length === 0) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(
@@ -108,7 +108,7 @@ export class Metaxploit extends BasicInterface {
         const self = Metaxploit.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, computer, metaFile } = self.variables;
@@ -116,14 +116,14 @@ export class Metaxploit extends BasicInterface {
         const port = args.get('port');
 
         if (ipAddress instanceof CustomNil || port instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const ipAddressRaw = ipAddress.toString();
 
         if (ipAddressRaw === '' || !Utils.isValidIp(ipAddressRaw)) {
           ctx.handler.outputHandler.print(`Invalid ip address:${ipAddressRaw}`);
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         let router: Type.Router = null;
@@ -138,7 +138,7 @@ export class Metaxploit extends BasicInterface {
 
         if (router == null) {
           ctx.handler.outputHandler.print('Ip address not found.');
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const portRaw = port.toInt();
@@ -147,7 +147,7 @@ export class Metaxploit extends BasicInterface {
           const kernel = router.getKernel();
 
           if (!kernel) {
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           return Promise.resolve(
@@ -167,20 +167,20 @@ export class Metaxploit extends BasicInterface {
 
           if (targetDevice == null) {
             ctx.handler.outputHandler.print('Error: LAN computer not found.');
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const targetPort = targetDevice.findPort(portRaw);
 
           if (targetPort == null) {
             ctx.handler.outputHandler.print('Port not found.');
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const targetFile = targetDevice.findLibraryFileByPort(targetPort);
 
           if (!targetFile) {
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           return Promise.resolve(
@@ -199,14 +199,14 @@ export class Metaxploit extends BasicInterface {
 
         if (forwardedComputer === null) {
           ctx.handler.outputHandler.print('Port not found.');
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const forwardedComputerPort = forwardedComputer.ports.get(portRaw);
 
         if (forwardedComputerPort.isClosed) {
           ctx.handler.outputHandler.print("can't connect: port closed.");
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const targetFile = forwardedComputer.findLibraryFileByPort(
@@ -214,7 +214,7 @@ export class Metaxploit extends BasicInterface {
         );
 
         if (!targetFile) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(
@@ -242,7 +242,7 @@ export class Metaxploit extends BasicInterface {
         const metaLib = args.get('metaLib');
 
         if (metaLib instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (
@@ -253,13 +253,13 @@ export class Metaxploit extends BasicInterface {
 
           if (!metaFile || metaFile.deleted) {
             ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const targetFile = metaLib.getVariable('targetFile') as Type.File;
 
           if (!targetFile || targetFile.deleted) {
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const vuls = metaLib.getVariable(
@@ -275,7 +275,7 @@ export class Metaxploit extends BasicInterface {
           return Promise.resolve(new CustomList(result));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('metaLib'),
 
@@ -290,7 +290,7 @@ export class Metaxploit extends BasicInterface {
         const memAddress = args.get('memAddress');
 
         if (metaLib instanceof CustomNil || memAddress instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (
@@ -301,13 +301,13 @@ export class Metaxploit extends BasicInterface {
 
           if (!metaFile || metaFile.deleted) {
             ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const targetFile = metaLib.getVariable('targetFile') as Type.File;
 
           if (!targetFile || targetFile.deleted) {
-            return Promise.resolve(Defaults.Void);
+            return Promise.resolve(DefaultType.Void);
           }
 
           const memAddressRaw = memAddress.toString();
@@ -334,7 +334,7 @@ export class Metaxploit extends BasicInterface {
           return Promise.resolve(new CustomString(output.join('\n')));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('metaLib')
@@ -347,7 +347,7 @@ export class Metaxploit extends BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -361,7 +361,7 @@ export class Metaxploit extends BasicInterface {
         const self = Metaxploit.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, computer, user } = self.variables;
@@ -374,7 +374,7 @@ export class Metaxploit extends BasicInterface {
           port instanceof CustomNil ||
           procName instanceof CustomNil
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const addressRaw = address.toString();
@@ -480,7 +480,7 @@ export class Metaxploit extends BasicInterface {
           command: procNameRaw
         });
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('address')
@@ -497,7 +497,7 @@ export class Metaxploit extends BasicInterface {
         const self = Metaxploit.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, computer } = self.variables;

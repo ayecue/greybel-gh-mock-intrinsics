@@ -6,7 +6,7 @@ import {
   CustomNumber,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
@@ -95,7 +95,7 @@ export default function generics(
         );
 
         if (!email) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(createMetaMail(mockEnvironment, email));
@@ -114,13 +114,13 @@ export default function generics(
         const ipAddress = args.get('ipAddress');
 
         if (!(ipAddress instanceof CustomString)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const target = ipAddress.toString();
 
         if (!Utils.isValidIp(target) && target !== '') {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, device } = mockEnvironment.getLocal();
@@ -144,17 +144,17 @@ export default function generics(
         const ipAddress = args.get('ipAddress');
 
         if (!(ipAddress instanceof CustomString)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const target = ipAddress.toString();
 
         if (!Utils.isValidIp(target)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         if (!Utils.isLanIp(target)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user } = mockEnvironment.getLocal();
@@ -164,7 +164,7 @@ export default function generics(
           return Promise.resolve(createRouter(mockEnvironment, user, router));
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('ipAddress'),
 
@@ -222,7 +222,7 @@ export default function generics(
           }
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('libPath'),
 
@@ -237,7 +237,7 @@ export default function generics(
         if (value instanceof CustomString) {
           return Promise.resolve(new CustomString(actualMd5(value.toString())));
         }
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('value'),
 
@@ -529,7 +529,7 @@ export default function generics(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         ctx.handler.outputHandler.clear();
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -555,7 +555,7 @@ export default function generics(
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const type =
-          args.get('value')?.getCustomType() || Defaults.Void.toString();
+          args.get('value')?.getCustomType() || DefaultType.Void.toString();
 
         return Promise.resolve(new CustomString(type));
       }

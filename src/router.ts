@@ -4,7 +4,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -31,7 +31,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -48,7 +48,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -66,7 +66,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -84,7 +84,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -99,7 +99,7 @@ export class Router extends BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -113,7 +113,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -124,7 +124,7 @@ export class Router extends BasicInterface {
           !(kernel instanceof Type.File) ||
           kernel.type !== Type.FileType.KernelRouter
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         return Promise.resolve(new CustomString(kernel.version.toString()));
@@ -141,7 +141,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;
@@ -165,7 +165,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router, mockEnvironment } = self.variables;
@@ -200,7 +200,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router, mockEnvironment } = self.variables;
@@ -231,14 +231,14 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router, mockEnvironment } = self.variables;
         const port = args.get('port');
 
         if (port instanceof Type.Port) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const portInstance = router.findPort(port.toInt());
@@ -258,7 +258,7 @@ export class Router extends BasicInterface {
           }
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('port'),
 
@@ -272,7 +272,7 @@ export class Router extends BasicInterface {
         const self = Router.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = self.variables;

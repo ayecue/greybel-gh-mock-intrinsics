@@ -4,7 +4,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -29,7 +29,7 @@ export class MetaMail extends BasicInterface {
         const self = MetaMail.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { email } = self.variables;
@@ -71,14 +71,14 @@ export class MetaMail extends BasicInterface {
         const self = MetaMail.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { email } = self.variables;
         const mailId = args.get('id');
 
         if (mailId instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const mailIdRaw = mailId.toString();
@@ -115,7 +115,7 @@ export class MetaMail extends BasicInterface {
         const self = MetaMail.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { email, mockEnvironment } = self.variables;
@@ -128,7 +128,7 @@ export class MetaMail extends BasicInterface {
           subject instanceof CustomNil ||
           message instanceof CustomNil
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const addressRaw = address.toString();
@@ -164,7 +164,7 @@ export class MetaMail extends BasicInterface {
           newEmail
         );
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     )
       .addArgument('address')
@@ -181,23 +181,23 @@ export class MetaMail extends BasicInterface {
         const self = MetaMail.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { email } = self.variables;
         const mailId = args.get('id');
 
         if (mailId instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const mailIdRaw = mailId.toString();
 
         if (email.messages.delete(mailIdRaw)) {
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('id')
   ];

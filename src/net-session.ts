@@ -1,7 +1,7 @@
 import {
   CustomFunction,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
@@ -31,7 +31,7 @@ export class NetSession extends BasicInterface {
         const self = NetSession.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const {

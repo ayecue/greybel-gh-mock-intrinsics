@@ -3,7 +3,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   Interpreter,
   OperationContext
 } from 'greybel-interpreter';
@@ -38,7 +38,7 @@ export class BasicShell extends BasicInterface {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
     CustomFunction.createExternalWithSelf(
@@ -51,7 +51,7 @@ export class BasicShell extends BasicInterface {
         const self = BasicShell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, user, device, options } = self.variables;
@@ -95,7 +95,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, device } = self.variables;
@@ -180,7 +180,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { options, device, user } = self.variables;
@@ -194,7 +194,7 @@ export class Shell extends BasicShell {
           pathDest instanceof CustomNil ||
           remoteShell instanceof CustomNil
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const remoteType = remoteShell.getCustomType();
@@ -251,10 +251,10 @@ export class Shell extends BasicShell {
           ctx.handler.outputHandler.progress(2000);
 
           remoteFolder.putEntity(localFile as Type.File);
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('pathOrig')
@@ -271,7 +271,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, device } = self.variables;
@@ -388,7 +388,7 @@ export class Shell extends BasicShell {
     )
       .addArgument('pathSource')
       .addArgument('pathBinary')
-      .addArgument('allowImport', Defaults.False),
+      .addArgument('allowImport', DefaultType.False),
 
     CustomFunction.createExternalWithSelf(
       'launch',
@@ -400,7 +400,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, device, user, options } = self.variables;
@@ -420,7 +420,7 @@ export class Shell extends BasicShell {
           ctx.handler.outputHandler.print(
             `Error: ${path.toString()} not found.`
           );
-          return Defaults.False;
+          return DefaultType.False;
         }
 
         if (
@@ -430,7 +430,7 @@ export class Shell extends BasicShell {
           ctx.handler.outputHandler.print(
             `${file.name} is not an executable file.`
           );
-          return Defaults.False;
+          return DefaultType.False;
         }
 
         const perms = file.getPermissionsForUser(user, device.groups);
@@ -439,7 +439,7 @@ export class Shell extends BasicShell {
           ctx.handler.outputHandler.print(
             "Can't launch program. Permission denied."
           );
-          return Defaults.False;
+          return DefaultType.False;
         }
 
         const paramsStr = params.toString();
@@ -449,7 +449,7 @@ export class Shell extends BasicShell {
           ctx.handler.outputHandler.print(
             `Error: invalid character ${matches[1]} in program parameters.`
           );
-          return Defaults.False;
+          return DefaultType.False;
         }
 
         const apiContext = ctx.api;
@@ -472,7 +472,7 @@ export class Shell extends BasicShell {
 
         mockEnvironment.sessions.pop();
 
-        return Defaults.True;
+        return DefaultType.True;
       }
     )
       .addArgument('path')
@@ -488,7 +488,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment, device } = self.variables;
@@ -508,19 +508,19 @@ export class Shell extends BasicShell {
           const lanDevice = device.findByLanIp(ipRaw);
 
           if (lanDevice === null) {
-            return Promise.resolve(Defaults.False);
+            return Promise.resolve(DefaultType.False);
           }
 
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
         const router = mockEnvironment.getRouterByIp(ipRaw);
 
         if (router === null) {
-          return Promise.resolve(Defaults.False);
+          return Promise.resolve(DefaultType.False);
         }
 
-        return Promise.resolve(Defaults.True);
+        return Promise.resolve(DefaultType.True);
       }
     ).addArgument('ipAddress'),
 
@@ -531,7 +531,7 @@ export class Shell extends BasicShell {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -542,7 +542,7 @@ export class Shell extends BasicShell {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     ),
 
@@ -553,7 +553,7 @@ export class Shell extends BasicShell {
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
   ];
@@ -581,7 +581,7 @@ export class FtpShell extends BasicShell {
         const self = FtpShell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { user, device, options } = self.variables;
@@ -595,7 +595,7 @@ export class FtpShell extends BasicShell {
           pathDest instanceof CustomNil ||
           remoteShell instanceof CustomNil
         ) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const remoteType = remoteShell.getCustomType();
@@ -652,10 +652,10 @@ export class FtpShell extends BasicShell {
           ctx.handler.outputHandler.progress(2000);
 
           remoteFolder.putEntity(localFile as Type.File);
-          return Promise.resolve(Defaults.True);
+          return Promise.resolve(DefaultType.True);
         }
 
-        return Promise.resolve(Defaults.Void);
+        return Promise.resolve(DefaultType.Void);
       }
     )
       .addArgument('pathOrig')
@@ -749,5 +749,5 @@ export function loginLocal(
     }
   }
 
-  return Defaults.Void;
+  return DefaultType.Void;
 }

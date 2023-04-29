@@ -5,7 +5,7 @@ import {
   CustomNil,
   CustomString,
   CustomValue,
-  Defaults,
+  DefaultType,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment } from 'greybel-mock-environment';
@@ -33,7 +33,7 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
@@ -81,20 +81,20 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
         const ip = args.get('ip');
 
         if (ip instanceof CustomNil) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const router = mockEnvironment.getRouterByIp(ip.toString());
 
         if (router === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const newRouter = createRouter(
@@ -116,14 +116,14 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
         const routerArg = args.get('router');
 
         if (!(routerArg instanceof Router)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { router } = routerArg.variables;
@@ -151,14 +151,14 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
         const computerArg = args.get('computer');
 
         if (!(computerArg instanceof Computer)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = computerArg.variables;
@@ -180,14 +180,14 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
         const fileArg = args.get('file');
 
         if (!(fileArg instanceof File)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = fileArg.variables;
@@ -209,14 +209,14 @@ export class TestLib extends BasicInterface {
         const self = TestLib.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { mockEnvironment } = self.variables;
         const fileArg = args.get('file');
 
         if (!(fileArg instanceof File)) {
-          return Promise.resolve(Defaults.Void);
+          return Promise.resolve(DefaultType.Void);
         }
 
         const { device } = fileArg.variables;
@@ -275,7 +275,7 @@ export class TestLib extends BasicInterface {
           );
         }
 
-        return Defaults.Void;
+        return DefaultType.Void;
       }
     )
       .addArgument('callback')
@@ -314,7 +314,7 @@ export class TestLib extends BasicInterface {
           await ctx.debugger.resume();
         }
 
-        return Defaults.Void;
+        return DefaultType.Void;
       }
     )
       .addArgument('callback')
