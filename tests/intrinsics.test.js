@@ -26,11 +26,13 @@ class TestOutputHandler extends OutputHandler {
     return Promise.resolve();
   }
 
-  waitForInput() {
+  waitForInput(isPassword, value) {
+    printMock(value);
     return Promise.resolve('test');
   }
 
-  waitForKeyPress() {
+  waitForKeyPress(value) {
+    printMock(value);
     return Promise.resolve({
       keyCode: 13,
       code: 'Enter'
