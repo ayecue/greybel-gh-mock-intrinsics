@@ -503,16 +503,19 @@ export default function generics(
         const isPassword = args.get('isPassword').toTruthy();
         const anyKey = args.get('anyKey').toTruthy();
 
-        ctx.handler.outputHandler.print(message, false);
-
         if (anyKey) {
-          const keyPress = await ctx.handler.outputHandler.waitForKeyPress();
+          const keyPress = await ctx.handler.outputHandler.waitForKeyPress(
+            message
+          );
           const value = keyEventToString(keyPress);
 
           return new CustomString(value);
         }
 
-        const input = await ctx.handler.outputHandler.waitForInput(isPassword);
+        const input = await ctx.handler.outputHandler.waitForInput(
+          isPassword,
+          message
+        );
 
         return new CustomString(input);
       }

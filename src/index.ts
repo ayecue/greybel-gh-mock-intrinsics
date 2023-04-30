@@ -1,13 +1,13 @@
 import { CustomString, ObjectValue } from 'greybel-interpreter';
 
 import generics from './generics';
-import create, { GHMockIntrinsicEnv } from './mock/environment';
+import { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';
 
 const s = (v: string) => new CustomString(v);
 
 export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   const apiInterface = new ObjectValue();
-  const intrinsics = generics(mockEnvironment || create());
+  const intrinsics = generics(mockEnvironment || createGHMockEnv());
 
   apiInterface.set(s('typeof'), intrinsics.typeOf);
   apiInterface.set(s('user_input'), intrinsics.userInput);
@@ -52,7 +52,4 @@ export function init(
   return api;
 }
 
-export {
-  default as createGHMockEnv,
-  GHMockIntrinsicEnv
-} from './mock/environment';
+export { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';

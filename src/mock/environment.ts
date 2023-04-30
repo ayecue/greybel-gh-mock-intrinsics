@@ -29,7 +29,7 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
   }
 }
 
-export default function create(
+export function createGHMockEnv(
   options: MockEnvironmentOptions = {}
 ): GHMockIntrinsicEnv {
   const mockEnvironment = new GHMockIntrinsicEnv(options);
