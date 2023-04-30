@@ -211,6 +211,11 @@ export class Router extends BasicInterface {
         }
 
         const device = router.findByLanIp(ip.toString());
+
+        if (device === null) {
+          return Promise.resolve(new CustomList());
+        }
+
         const ports: BasicInterface[] = [];
 
         for (const port of device.ports.values()) {
