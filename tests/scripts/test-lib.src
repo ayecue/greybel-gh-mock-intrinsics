@@ -27,7 +27,7 @@ testLib.try_to_execute(function
   get_shell(null, null)
 end function, function(errMessage, trace)
   print("An error appeared " + errMessage)
-  print(trace[:10])
+  print(trace.split(char(10)).len)
 end function)
 
 testLib.try_to_execute_with_debug(function

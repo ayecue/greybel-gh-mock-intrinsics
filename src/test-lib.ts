@@ -6,6 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
+  Operation,
   OperationContext
 } from 'greybel-interpreter';
 import { MockEnvironment } from 'greybel-mock-environment';
@@ -268,7 +269,13 @@ export class TestLib extends BasicInterface {
             [
               new CustomString(err.message),
               new CustomString(
-                `At line ${lastActive.stackItem.start.line} in ${lastActive.target}`
+                lastActive.stackTrace
+                  .map((op: Operation) => {
+                    return `at ${op.target}:${op.item?.start.line ?? 0}:${
+                      op.item?.start.character ?? 0
+                    }`;
+                  })
+                  .join('\n')
               )
             ],
             ctx
@@ -308,9 +315,10 @@ export class TestLib extends BasicInterface {
           return result;
         } catch (err) {
           const lastActive = ctx.getLastActive();
+          const op = lastActive.stackTrace[0];
 
           ctx.debugger.setBreakpoint(true);
-          ctx.debugger.interact(lastActive, lastActive.stackItem, null);
+          ctx.debugger.interact(lastActive, op.item, op);
           await ctx.debugger.resume();
         }
 
