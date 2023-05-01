@@ -372,6 +372,11 @@ export class File extends BasicInterface {
         }
 
         const { entity } = self.variables;
+
+        if (entity.getPath() === '/' && entity.name === '') {
+          return Promise.resolve(new CustomString('/'));
+        }
+
         return Promise.resolve(new CustomString(entity.name));
       }
     ),

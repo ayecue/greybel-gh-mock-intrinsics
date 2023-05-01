@@ -101,3 +101,5 @@ print(adminFile.owner)
 print(adminFile.group)
 print(adminFile.set_group("test-here"))
 print(adminFile.group)
+
+print(get_shell.host_computer.File("/").name)

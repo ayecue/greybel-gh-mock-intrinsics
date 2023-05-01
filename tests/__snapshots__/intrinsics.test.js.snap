@@ -577,6 +577,8 @@ exports[`interpreter default scripts shell.src 77`] = `""`;
 
 exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
 
+exports[`interpreter default scripts shell.src 79`] = `"/"`;
+
 exports[`interpreter default scripts shell-self-launch.src 1`] = `"launch number 0"`;
 
 exports[`interpreter default scripts shell-self-launch.src 2`] = `"launch number 1"`;
