@@ -97,9 +97,15 @@ export class Router extends BasicInterface {
       (
         _ctx: OperationContext,
         _self: CustomValue,
-        _args: Map<string, CustomValue>
+        args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        return Promise.resolve(DefaultType.Void);
+        const self = Router.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        return Promise.resolve(new CustomList());
       }
     ),
 
