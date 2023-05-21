@@ -505,6 +505,7 @@ export default function generics(
 
         if (anyKey) {
           const keyPress = await ctx.handler.outputHandler.waitForKeyPress(
+            ctx,
             message
           );
           const value = keyEventToString(keyPress);
@@ -513,6 +514,7 @@ export default function generics(
         }
 
         const input = await ctx.handler.outputHandler.waitForInput(
+          ctx,
           isPassword,
           message
         );
@@ -531,7 +533,7 @@ export default function generics(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        ctx.handler.outputHandler.clear();
+        ctx.handler.outputHandler.clear(ctx);
         return Promise.resolve(DefaultType.Void);
       }
     ),

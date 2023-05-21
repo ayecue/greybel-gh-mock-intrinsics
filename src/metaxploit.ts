@@ -122,7 +122,10 @@ export class Metaxploit extends BasicInterface {
         const ipAddressRaw = ipAddress.toString();
 
         if (ipAddressRaw === '' || !Utils.isValidIp(ipAddressRaw)) {
-          ctx.handler.outputHandler.print(`Invalid ip address:${ipAddressRaw}`);
+          ctx.handler.outputHandler.print(
+            ctx,
+            `Invalid ip address:${ipAddressRaw}`
+          );
           return Promise.resolve(DefaultType.Void);
         }
 
@@ -137,7 +140,7 @@ export class Metaxploit extends BasicInterface {
         }
 
         if (router == null) {
-          ctx.handler.outputHandler.print('Ip address not found.');
+          ctx.handler.outputHandler.print(ctx, 'Ip address not found.');
           return Promise.resolve(DefaultType.Void);
         }
 
@@ -166,14 +169,17 @@ export class Metaxploit extends BasicInterface {
           const targetDevice = router.findByLanIp(ipAddressRaw);
 
           if (targetDevice == null) {
-            ctx.handler.outputHandler.print('Error: LAN computer not found.');
+            ctx.handler.outputHandler.print(
+              ctx,
+              'Error: LAN computer not found.'
+            );
             return Promise.resolve(DefaultType.Void);
           }
 
           const targetPort = targetDevice.findPort(portRaw);
 
           if (targetPort == null) {
-            ctx.handler.outputHandler.print('Port not found.');
+            ctx.handler.outputHandler.print(ctx, 'Port not found.');
             return Promise.resolve(DefaultType.Void);
           }
 
@@ -198,14 +204,14 @@ export class Metaxploit extends BasicInterface {
         const forwardedComputer = router.getForwarded(portRaw);
 
         if (forwardedComputer === null) {
-          ctx.handler.outputHandler.print('Port not found.');
+          ctx.handler.outputHandler.print(ctx, 'Port not found.');
           return Promise.resolve(DefaultType.Void);
         }
 
         const forwardedComputerPort = forwardedComputer.ports.get(portRaw);
 
         if (forwardedComputerPort.isClosed) {
-          ctx.handler.outputHandler.print("can't connect: port closed.");
+          ctx.handler.outputHandler.print(ctx, "can't connect: port closed.");
           return Promise.resolve(DefaultType.Void);
         }
 
@@ -252,7 +258,10 @@ export class Metaxploit extends BasicInterface {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
           if (!metaFile || metaFile.deleted) {
-            ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
+            ctx.handler.outputHandler.print(
+              ctx,
+              'Error: metaxploit lib missing.'
+            );
             return Promise.resolve(DefaultType.Void);
           }
 
@@ -300,7 +309,10 @@ export class Metaxploit extends BasicInterface {
           const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
           if (!metaFile || metaFile.deleted) {
-            ctx.handler.outputHandler.print('Error: metaxploit lib missing.');
+            ctx.handler.outputHandler.print(
+              ctx,
+              'Error: metaxploit lib missing.'
+            );
             return Promise.resolve(DefaultType.Void);
           }
 

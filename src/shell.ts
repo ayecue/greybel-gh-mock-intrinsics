@@ -248,7 +248,7 @@ export class Shell extends BasicShell {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          ctx.handler.outputHandler.progress(2000);
+          ctx.handler.outputHandler.progress(ctx, 2000);
 
           remoteFolder.putEntity(localFile as Type.File);
           return Promise.resolve(DefaultType.True);
@@ -418,6 +418,7 @@ export class Shell extends BasicShell {
 
         if (file === null) {
           ctx.handler.outputHandler.print(
+            ctx,
             `Error: ${path.toString()} not found.`
           );
           return DefaultType.False;
@@ -428,6 +429,7 @@ export class Shell extends BasicShell {
           file.type !== Type.FileType.Binary
         ) {
           ctx.handler.outputHandler.print(
+            ctx,
             `${file.name} is not an executable file.`
           );
           return DefaultType.False;
@@ -437,6 +439,7 @@ export class Shell extends BasicShell {
 
         if (!perms.x) {
           ctx.handler.outputHandler.print(
+            ctx,
             "Can't launch program. Permission denied."
           );
           return DefaultType.False;
@@ -447,6 +450,7 @@ export class Shell extends BasicShell {
 
         if (matches) {
           ctx.handler.outputHandler.print(
+            ctx,
             `Error: invalid character ${matches[1]} in program parameters.`
           );
           return DefaultType.False;
@@ -649,7 +653,7 @@ export class FtpShell extends BasicShell {
             return Promise.resolve(new CustomString('Permission denied'));
           }
 
-          ctx.handler.outputHandler.progress(2000);
+          ctx.handler.outputHandler.progress(ctx, 2000);
 
           remoteFolder.putEntity(localFile as Type.File);
           return Promise.resolve(DefaultType.True);

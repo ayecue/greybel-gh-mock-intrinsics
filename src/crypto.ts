@@ -85,17 +85,17 @@ export class Crypto extends BasicInterface {
           'Sending Association Request\nAssociation succesful :-)'
         ].join('\n');
 
-        ctx.handler.outputHandler.print(output);
+        ctx.handler.outputHandler.print(ctx, output);
         let acks = 0;
 
         /* eslint-disable-next-line no-unmodified-loop-condition */
         while (acks < maxAcksRaw) {
-          ctx.handler.outputHandler.print(`${acks}/${maxAcksRaw}`);
+          ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
           acks += Utils.getRandomInt(250, 750);
           await delay(500);
         }
 
-        ctx.handler.outputHandler.print(`${acks}/${maxAcksRaw}`);
+        ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
 
         const n = 300000 / (network.percentage + 15);
 
@@ -231,7 +231,10 @@ export class Crypto extends BasicInterface {
         const { r } = entity.getPermissionsForUser(user, device.groups);
 
         if (!r) {
-          ctx.handler.outputHandler.print("Can't open file. Permission denied");
+          ctx.handler.outputHandler.print(
+            ctx,
+            "Can't open file. Permission denied"
+          );
           return Promise.resolve(DefaultType.Void);
         }
 
@@ -240,6 +243,7 @@ export class Crypto extends BasicInterface {
           entity.type !== Type.FileType.Ack
         ) {
           ctx.handler.outputHandler.print(
+            ctx,
             "Can't process file. Not valid filecap."
           );
           return Promise.resolve(DefaultType.Void);
@@ -251,7 +255,10 @@ export class Crypto extends BasicInterface {
         const n = 300000 / (numPower + 15);
 
         if (numAcks < n) {
-          ctx.handler.outputHandler.print('Key not found. More acks needed');
+          ctx.handler.outputHandler.print(
+            ctx,
+            'Key not found. More acks needed'
+          );
           return Promise.resolve(DefaultType.Void);
         }
 
@@ -275,7 +282,7 @@ export class Crypto extends BasicInterface {
         const { mockEnvironment } = self.variables;
         const encryptedPass = args.get('encryptedPass').toString();
 
-        await ctx.handler.outputHandler.progress(5000);
+        await ctx.handler.outputHandler.progress(ctx, 5000);
 
         const user = mockEnvironment.userGenerator.users.find(
           (item: Type.User) => {
