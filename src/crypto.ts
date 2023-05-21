@@ -88,14 +88,20 @@ export class Crypto extends BasicInterface {
         ctx.handler.outputHandler.print(ctx, output);
         let acks = 0;
 
+        ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
+
         /* eslint-disable-next-line no-unmodified-loop-condition */
-        while (acks < maxAcksRaw) {
-          ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
+        while (acks < maxAcksRaw && !ctx.isExit()) {
+          ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
+            replace: true
+          });
           acks += Utils.getRandomInt(250, 750);
           await delay(500);
         }
 
-        ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
+        ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
+          replace: true
+        });
 
         const n = 300000 / (network.percentage + 15);
 
