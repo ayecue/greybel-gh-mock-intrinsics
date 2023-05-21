@@ -18,20 +18,20 @@ const testDate = new Date(1642924301240);
 Date.now = () => testDate.getTime();
 
 class TestOutputHandler extends OutputHandler {
-  print(value) {
+  print(ctx, value) {
     printMock(value);
   }
 
-  progress(time) {
+  progress(ctx, time) {
     return Promise.resolve();
   }
 
-  waitForInput(isPassword, value) {
+  waitForInput(ctx, isPassword, value) {
     printMock(value);
     return Promise.resolve('test');
   }
 
-  waitForKeyPress(value) {
+  waitForKeyPress(ctx, value) {
     printMock(value);
     return Promise.resolve({
       keyCode: 13,
