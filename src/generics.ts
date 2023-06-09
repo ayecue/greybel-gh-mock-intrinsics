@@ -346,8 +346,15 @@ export default function generics(
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
+        const key = args.get('idCommand').toString().toUpperCase();
+        const text = Utils.getTranslationText(key);
+
+        if (text === null) {
+          return Promise.resolve(new CustomString('Unknown info'));
+        }
+
         return Promise.resolve(
-          new CustomString(args.get('idCommand').toString().toUpperCase())
+          new CustomString(text)
         );
       }
     ).addArgument('idCommand'),

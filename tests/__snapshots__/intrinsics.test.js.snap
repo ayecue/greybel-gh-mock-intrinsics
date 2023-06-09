@@ -91,7 +91,7 @@ exports[`interpreter default scripts generics.src 6`] = `"1"`;
 
 exports[`interpreter default scripts generics.src 7`] = `"1"`;
 
-exports[`interpreter default scripts generics.src 8`] = `"COMMAND"`;
+exports[`interpreter default scripts generics.src 8`] = `"Unknown info"`;
 
 exports[`interpreter default scripts generics.src 9`] = `"/home"`;
 
@@ -143,6 +143,13 @@ exports[`interpreter default scripts generics.src 28`] = `"number"`;
 exports[`interpreter default scripts generics.src 29`] = `"function"`;
 
 exports[`interpreter default scripts generics.src 30`] = `"null"`;
+
+exports[`interpreter default scripts generics.src 31`] = `
+"<b>Usage: ls [opt:-l, -a, -la] [opt: path]</b>
+It can be called without parameters."
+`;
+
+exports[`interpreter default scripts generics.src 32`] = `"Unknown info"`;
 
 exports[`interpreter default scripts get-custom-object.src 1`] = `"1"`;
 

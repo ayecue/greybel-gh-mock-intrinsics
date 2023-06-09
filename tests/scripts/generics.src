@@ -33,3 +33,6 @@ print(typeof("test"))
 print(typeof(false))
 print(typeof(@testFn))
 print(typeof(null))
+
+print(command_info("LS_USAGE"))
+print(command_info("SOME_INVALID_KEY"))
