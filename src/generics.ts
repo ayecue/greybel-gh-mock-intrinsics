@@ -353,9 +353,7 @@ export default function generics(
           return Promise.resolve(new CustomString('Unknown info'));
         }
 
-        return Promise.resolve(
-          new CustomString(text)
-        );
+        return Promise.resolve(new CustomString(text));
       }
     ).addArgument('idCommand'),
 

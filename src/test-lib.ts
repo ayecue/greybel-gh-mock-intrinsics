@@ -9,16 +9,16 @@ import {
   Operation,
   OperationContext
 } from 'greybel-interpreter';
-import { MockEnvironment } from 'greybel-mock-environment';
 
 import { Computer, create as createComputer } from './computer';
 import { create as createFile, File } from './file';
 import BasicInterface from './interface';
+import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createRouter, Router } from './router';
 import { create as createShell } from './shell';
 
 export interface TestVariables {
-  mockEnvironment: MockEnvironment;
+  mockEnvironment: GHMockIntrinsicEnv;
 }
 
 export class TestLib extends BasicInterface {
@@ -346,7 +346,7 @@ export class TestLib extends BasicInterface {
   }
 }
 
-export function create(mockEnvironment: MockEnvironment): BasicInterface {
+export function create(mockEnvironment: GHMockIntrinsicEnv): BasicInterface {
   const itrface = new TestLib({
     mockEnvironment
   });

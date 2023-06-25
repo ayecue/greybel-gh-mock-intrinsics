@@ -7,15 +7,11 @@ import {
   Interpreter,
   OperationContext
 } from 'greybel-interpreter';
-import {
-  MockEnvironment,
-  MockTranspiler,
-  Type,
-  Utils
-} from 'greybel-mock-environment';
+import { MockTranspiler, Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import BasicInterface from './interface';
+import { GHMockIntrinsicEnv } from './mock/environment';
 
 export interface ShellOptions {
   port?: Type.Port;
@@ -23,7 +19,7 @@ export interface ShellOptions {
 }
 
 export interface ShellVariables {
-  mockEnvironment: MockEnvironment;
+  mockEnvironment: GHMockIntrinsicEnv;
   user: Type.User;
   device: Type.Device;
   options: ShellOptions;
@@ -456,6 +452,16 @@ export class Shell extends BasicShell {
           return DefaultType.False;
         }
 
+        if (mockEnvironment.getLaunchCallStack() > 16) {
+          ctx.handler.outputHandler.print(
+            ctx,
+            'Program interrupted. Too many stack calls.'
+          );
+          return DefaultType.False;
+        }
+
+        mockEnvironment.increaseLaunchCallStack();
+
         const apiContext = ctx.api;
         const interpreter = new Interpreter({
           handler: ctx.handler,
@@ -475,6 +481,8 @@ export class Shell extends BasicShell {
         await interpreter.run(file.content);
 
         mockEnvironment.sessions.pop();
+
+        mockEnvironment.decreaseLaunchCallStack();
 
         return DefaultType.True;
       }
@@ -678,7 +686,7 @@ export class FtpShell extends BasicShell {
 }
 
 export function createShell(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions
@@ -694,7 +702,7 @@ export function createShell(
 }
 
 export function createFtpShell(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions
@@ -710,7 +718,7 @@ export function createFtpShell(
 }
 
 export function create(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   user: Type.User,
   device: Type.Device,
   options: ShellOptions = {}
@@ -734,7 +742,7 @@ export function create(
 export function loginLocal(
   user: CustomValue,
   password: CustomValue,
-  mockEnvironment: MockEnvironment
+  mockEnvironment: GHMockIntrinsicEnv
 ): CustomValue {
   const session = mockEnvironment.getLatestSession();
 

@@ -8,10 +8,11 @@ import {
   DefaultType,
   OperationContext
 } from 'greybel-interpreter';
-import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib, MetaLib } from './meta-lib';
+import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createNetSession } from './net-session';
 import { create as createShell } from './shell';
 import {
@@ -21,7 +22,7 @@ import {
 } from './utils';
 
 export interface MetaxploitVariables {
-  mockEnvironment: MockEnvironment;
+  mockEnvironment: GHMockIntrinsicEnv;
   metaFile: Type.File;
   user: Type.User;
   computer: Type.Device;
@@ -569,7 +570,7 @@ export class Metaxploit extends BasicInterface {
 }
 
 export function create(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   metaFile: Type.File,
   user: Type.User,
   computer: Type.Device

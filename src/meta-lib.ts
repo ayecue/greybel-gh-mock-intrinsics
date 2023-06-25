@@ -6,16 +6,17 @@ import {
   DefaultType,
   OperationContext
 } from 'greybel-interpreter';
-import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
+import { Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
 import BasicInterface from './interface';
+import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createShell } from './shell';
 import { greaterThanEntityNameLimit, isAlphaNumeric } from './utils';
 
 export interface MetaLibVariables {
-  mockEnvironment: MockEnvironment;
+  mockEnvironment: GHMockIntrinsicEnv;
   source: Type.Device;
   metaFile: Type.File;
   target: Type.Device;
@@ -363,7 +364,7 @@ export class MetaLib extends BasicInterface {
 }
 
 export function create(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   source: Type.Device,
   metaFile: Type.File,
   target: Type.Device,

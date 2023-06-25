@@ -4,13 +4,14 @@ import {
   DefaultType,
   OperationContext
 } from 'greybel-interpreter';
-import { MockEnvironment, Type } from 'greybel-mock-environment';
+import { Type } from 'greybel-mock-environment';
 
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
+import { GHMockIntrinsicEnv } from './mock/environment';
 
 export interface NetSessionVariables {
-  mockEnvironment: MockEnvironment;
+  mockEnvironment: GHMockIntrinsicEnv;
   source: Type.Device;
   metaFile: Type.File;
   target: Type.Device;
@@ -82,7 +83,7 @@ export class NetSession extends BasicInterface {
 }
 
 export function create(
-  mockEnvironment: MockEnvironment,
+  mockEnvironment: GHMockIntrinsicEnv,
   source: Type.Device,
   metaFile: Type.File,
   target: Type.Device,

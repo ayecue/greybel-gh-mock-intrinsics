@@ -14,10 +14,25 @@ export const sharedCustomObject = new CustomMap(
 
 export class GHMockIntrinsicEnv extends MockEnvironment {
   private startTime: number;
+  private launchCallStack: number = 0;
 
   constructor(options: MockEnvironmentOptions) {
     super(options);
     this.startTime = Date.now();
+  }
+
+  getLaunchCallStack(): number {
+    return this.launchCallStack;
+  }
+
+  increaseLaunchCallStack(): GHMockIntrinsicEnv {
+    this.launchCallStack++;
+    return this;
+  }
+
+  decreaseLaunchCallStack(): GHMockIntrinsicEnv {
+    this.launchCallStack;
+    return this;
   }
 
   getSharedCustomObject(): CustomMap {
