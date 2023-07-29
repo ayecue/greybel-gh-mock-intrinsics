@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "2.5.8",
+    "version": "2.5.9",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
@@ -56,6 +56,6 @@
     "dependencies": {
         "blueimp-md5": "^2.19.0",
         "greybel-interpreter": "^2.2.6",
-        "greybel-mock-environment": "^1.7.2"
+        "greybel-mock-environment": "^1.7.3"
     }
 }
