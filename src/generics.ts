@@ -127,7 +127,17 @@ export default function generics(
         let router = device.getRouter() as Type.Router;
 
         if (target !== '') {
-          router = mockEnvironment.getRouterByIp(target);
+          if (Utils.isLanIp(target)) {
+            const device = router.findByLanIp(target);
+
+            if (!device) {
+              return Promise.resolve(DefaultType.Void);
+            }
+
+            router = device.getRouter() as Type.Router;
+          } else {
+            router = mockEnvironment.getRouterByIp(target);
+          }
         }
 
         return Promise.resolve(createRouter(mockEnvironment, user, router));
