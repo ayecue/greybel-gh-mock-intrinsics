@@ -12,6 +12,7 @@ import {
 
 import { Computer, create as createComputer } from './computer';
 import { create as createFile, File } from './file';
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createRouter, Router } from './router';
@@ -23,7 +24,7 @@ export interface TestVariables {
 
 export class TestLib extends BasicInterface {
   static readonly type: string = 'TestLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'sessions',
       (
@@ -327,7 +328,7 @@ export class TestLib extends BasicInterface {
     )
       .addArgument('callback')
       .addArgument('args', new CustomList())
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): TestLib | null {
     const intf = args.get('self');
@@ -340,9 +341,8 @@ export class TestLib extends BasicInterface {
   variables: TestVariables;
 
   constructor(variables: TestVariables) {
-    super(TestLib.type);
+    super(TestLib.type, TestLib.isa);
     this.variables = variables;
-    TestLib.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

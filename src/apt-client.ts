@@ -6,6 +6,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
 export interface AptClientVariables {
@@ -17,7 +18,7 @@ export interface AptClientVariables {
 
 export class AptClient extends BasicInterface {
   static readonly type: string = 'aptclientLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'show',
       (
@@ -88,7 +89,7 @@ export class AptClient extends BasicInterface {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): AptClient | null {
     const intf = args.get('self');
@@ -101,9 +102,8 @@ export class AptClient extends BasicInterface {
   variables: AptClientVariables;
 
   constructor(variables: AptClientVariables) {
-    super(AptClient.type);
+    super(AptClient.type, AptClient.isa);
     this.variables = variables;
-    AptClient.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

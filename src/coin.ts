@@ -8,6 +8,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { create as createSubWallet } from './sub-wallet';
 
@@ -19,7 +20,7 @@ export interface CoinVariables {
 
 export class Coin extends BasicInterface {
   static readonly type: string = 'coin';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'set_cycle_mining',
       (
@@ -148,7 +149,7 @@ export class Coin extends BasicInterface {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Coin | null {
     const intf = args.get('self');
@@ -161,9 +162,8 @@ export class Coin extends BasicInterface {
   variables: CoinVariables;
 
   constructor(variables: CoinVariables) {
-    super(Coin.type);
+    super(Coin.type, Coin.isa);
     this.variables = variables;
-    Coin.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

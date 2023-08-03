@@ -9,6 +9,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
 export interface MetaMailVariables {
@@ -18,7 +19,7 @@ export interface MetaMailVariables {
 
 export class MetaMail extends BasicInterface {
   static readonly type: string = 'MetaMail';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'fetch',
       (
@@ -200,7 +201,7 @@ export class MetaMail extends BasicInterface {
         return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('id')
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): MetaMail | null {
     const intf = args.get('self');
@@ -213,9 +214,8 @@ export class MetaMail extends BasicInterface {
   variables: MetaMailVariables;
 
   constructor(variables: MetaMailVariables) {
-    super(MetaMail.type);
+    super(MetaMail.type, MetaMail.isa);
     this.variables = variables;
-    MetaMail.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

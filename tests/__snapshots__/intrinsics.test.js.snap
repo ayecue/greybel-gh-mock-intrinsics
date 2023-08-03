@@ -159,6 +159,18 @@ exports[`interpreter default scripts get-custom-object.src 3`] = `""`;
 
 exports[`interpreter default scripts get-custom-object.src 4`] = `"hello world"`;
 
+exports[`interpreter default scripts isa.src 1`] = `"1"`;
+
+exports[`interpreter default scripts isa.src 2`] = `"0"`;
+
+exports[`interpreter default scripts isa.src 3`] = `"0"`;
+
+exports[`interpreter default scripts isa.src 4`] = `"1"`;
+
+exports[`interpreter default scripts isa.src 5`] = `"0"`;
+
+exports[`interpreter default scripts isa.src 6`] = `"0"`;
+
 exports[`interpreter default scripts ls.src 1`] = `
 "Desktop    
 Downloads  
@@ -398,8 +410,8 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU  MEM    COMMAND      
-root  1621  5.8  25.17  kernel_task  
-root  1737  4.8  27.54  Xorg         "
+root  447   2.3  16.83  kernel_task  
+root  7723  5.3  18.03  Xorg         "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -450,8 +462,8 @@ exports[`interpreter default scripts shell.src 11`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER PID CPU MEM COMMAND
-root 4516 5.1 30.91 kernel_task
-root 8612 11.6 25.32 Xorg"
+root 6518 7.6 31.76 kernel_task
+root 268 2.4 29.78 Xorg"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -470,7 +482,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"0"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 53% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 51% bushed\\", \\"42:D6:90:7C:BF:71 51% footbal\\", \\"09:2F:46:FB:32:E9 34% emalia\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 71% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 62% bushed\\", \\"42:D6:90:7C:BF:71 49% footbal\\", \\"09:2F:46:FB:32:E9 81% emalia\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"1"`;
 

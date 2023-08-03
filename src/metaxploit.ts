@@ -10,6 +10,7 @@ import {
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { create as createMetaLib, MetaLib } from './meta-lib';
 import { GHMockIntrinsicEnv } from './mock/environment';
@@ -30,7 +31,7 @@ export interface MetaxploitVariables {
 
 export class Metaxploit extends BasicInterface {
   static readonly type: string = 'MetaxploitLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'load',
       (
@@ -550,7 +551,7 @@ export class Metaxploit extends BasicInterface {
         return Promise.resolve(new CustomList(shells));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Metaxploit | null {
     const intf = args.get('self');
@@ -563,9 +564,8 @@ export class Metaxploit extends BasicInterface {
   variables: MetaxploitVariables;
 
   constructor(variables: MetaxploitVariables) {
-    super(Metaxploit.type);
+    super(Metaxploit.type, Metaxploit.isa);
     this.variables = variables;
-    Metaxploit.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

@@ -6,6 +6,7 @@ import {
 } from 'greybel-interpreter';
 import { Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 import { GHMockIntrinsicEnv } from './mock/environment';
@@ -21,7 +22,7 @@ export interface NetSessionVariables {
 
 export class NetSession extends BasicInterface {
   static readonly type: string = 'NetSession';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'dump_lib',
       (
@@ -63,7 +64,7 @@ export class NetSession extends BasicInterface {
         );
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): NetSession | null {
     const intf = args.get('self');
@@ -76,9 +77,8 @@ export class NetSession extends BasicInterface {
   variables: NetSessionVariables;
 
   constructor(variables: NetSessionVariables) {
-    super(NetSession.type);
+    super(NetSession.type, NetSession.isa);
     this.variables = variables;
-    NetSession.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

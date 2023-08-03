@@ -7,6 +7,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
 export interface ServiceVariables {
@@ -18,7 +19,7 @@ export interface ServiceVariables {
 
 export class Service extends BasicInterface {
   static readonly type: string = 'service';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'install_service',
       (
@@ -107,7 +108,7 @@ export class Service extends BasicInterface {
         return Promise.resolve(DefaultType.True);
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Service | null {
     const intf = args.get('self');
@@ -120,9 +121,8 @@ export class Service extends BasicInterface {
   variables: ServiceVariables;
 
   constructor(variables: ServiceVariables) {
-    super(Service.type);
+    super(Service.type, Service.isa);
     this.variables = variables;
-    Service.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

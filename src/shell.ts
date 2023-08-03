@@ -10,6 +10,7 @@ import {
 import { MockTranspiler, Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { GHMockIntrinsicEnv } from './mock/environment';
 
@@ -26,7 +27,7 @@ export interface ShellVariables {
 }
 
 export class BasicShell extends BasicInterface {
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'start_terminal',
       (
@@ -59,7 +60,7 @@ export class BasicShell extends BasicInterface {
         );
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): BasicShell | null {
     const intf = args.get('self');
@@ -71,16 +72,15 @@ export class BasicShell extends BasicInterface {
 
   variables: ShellVariables;
 
-  constructor(variables: ShellVariables, type: string) {
-    super(type);
+  constructor(variables: ShellVariables, type: string, isa: GreyMap) {
+    super(type, isa);
     this.variables = variables;
-    BasicShell.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 
 export class Shell extends BasicShell {
   static readonly type: string = 'shell';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'connect_service',
       (
@@ -568,21 +568,20 @@ export class Shell extends BasicShell {
         return Promise.resolve(DefaultType.Void);
       }
     )
-  ];
+  ]).extend(BasicShell.isa);
 
   static retreive(args: Map<string, CustomValue>): Shell | null {
     return BasicShell.retreive(args);
   }
 
   constructor(variables: ShellVariables) {
-    super(variables, Shell.type);
-    Shell.customIntrinsics.forEach(this.addMethod.bind(this));
+    super(variables, Shell.type, Shell.isa);
   }
 }
 
 export class FtpShell extends BasicShell {
   static readonly type: string = 'ftpshell';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'put',
       (
@@ -673,15 +672,14 @@ export class FtpShell extends BasicShell {
       .addArgument('pathOrig')
       .addArgument('pathDest')
       .addArgument('remoteShell')
-  ];
+  ]).extend(BasicShell.isa);
 
   static retreive(args: Map<string, CustomValue>): Shell | null {
     return BasicShell.retreive(args);
   }
 
   constructor(variables: ShellVariables) {
-    super(variables, FtpShell.type);
-    FtpShell.customIntrinsics.forEach(this.addMethod.bind(this));
+    super(variables, FtpShell.type, FtpShell.isa);
   }
 }
 

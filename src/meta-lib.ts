@@ -10,6 +10,7 @@ import { Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
 import { create as createFile } from './file';
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { GHMockIntrinsicEnv } from './mock/environment';
 import { create as createShell } from './shell';
@@ -29,7 +30,7 @@ export interface MetaLibVariables {
 
 export class MetaLib extends BasicInterface {
   static readonly type: string = 'MetaLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'lib_name',
       (
@@ -344,7 +345,7 @@ export class MetaLib extends BasicInterface {
       .addArgument('memAddress')
       .addArgument('sector')
       .addArgument('optArgs')
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): MetaLib | null {
     const intf = args.get('self');
@@ -357,9 +358,8 @@ export class MetaLib extends BasicInterface {
   variables: MetaLibVariables;
 
   constructor(variables: MetaLibVariables) {
-    super(MetaLib.type);
+    super(MetaLib.type, MetaLib.isa);
     this.variables = variables;
-    MetaLib.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

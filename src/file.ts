@@ -10,6 +10,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import {
   greaterThanContentLimit,
@@ -27,7 +28,7 @@ export interface FileVariables {
 
 export class File extends BasicInterface {
   static readonly type: string = 'file';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'chmod',
       (
@@ -842,7 +843,7 @@ export class File extends BasicInterface {
         return Promise.resolve(new CustomString(entity.getSize().toString()));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): File | null {
     const intf = args.get('self');
@@ -855,9 +856,8 @@ export class File extends BasicInterface {
   variables: FileVariables;
 
   constructor(variables: FileVariables) {
-    super(File.type);
+    super(File.type, File.isa);
     this.variables = variables;
-    File.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

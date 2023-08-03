@@ -8,6 +8,7 @@ import {
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import { create as createCoin } from './coin';
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { create as createWallet } from './wallet';
 
@@ -20,7 +21,7 @@ export interface BlockchainVariables {
 
 export class Blockchain extends BasicInterface {
   static readonly type: string = 'blockchainLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'coin_price',
       (
@@ -122,7 +123,7 @@ export class Blockchain extends BasicInterface {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Blockchain | null {
     const intf = args.get('self');
@@ -135,9 +136,8 @@ export class Blockchain extends BasicInterface {
   variables: BlockchainVariables;
 
   constructor(variables: BlockchainVariables) {
-    super(Blockchain.type);
+    super(Blockchain.type, Blockchain.isa);
     this.variables = variables;
-    Blockchain.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

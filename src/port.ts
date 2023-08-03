@@ -9,6 +9,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
 export interface PortVariables {
@@ -19,7 +20,7 @@ export interface PortVariables {
 
 export class Port extends BasicInterface {
   static readonly type: string = 'port';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'get_lan_ip',
       (
@@ -73,7 +74,7 @@ export class Port extends BasicInterface {
         return Promise.resolve(new CustomNumber(port.port));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Port | null {
     const intf = args.get('self');
@@ -86,9 +87,8 @@ export class Port extends BasicInterface {
   variables: PortVariables;
 
   constructor(variables: PortVariables) {
-    super(Port.type);
+    super(Port.type, Port.isa);
     this.variables = variables;
-    Port.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 

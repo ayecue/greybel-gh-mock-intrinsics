@@ -6,6 +6,7 @@ import {
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
 export interface SubWalletVariables {
@@ -16,7 +17,7 @@ export interface SubWalletVariables {
 
 export class SubWallet extends BasicInterface {
   static readonly type: string = 'subwallet';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'get_balance',
       (
@@ -107,7 +108,7 @@ export class SubWallet extends BasicInterface {
         return Promise.resolve(new CustomString('Not yet supported'));
       }
     )
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): SubWallet | null {
     const intf = args.get('self');
@@ -120,9 +121,8 @@ export class SubWallet extends BasicInterface {
   variables: SubWalletVariables;
 
   constructor(variables: SubWalletVariables) {
-    super(SubWallet.type);
+    super(SubWallet.type, SubWallet.isa);
     this.variables = variables;
-    SubWallet.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 export function create(

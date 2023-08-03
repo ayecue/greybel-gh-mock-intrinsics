@@ -1,0 +1,13 @@
+fileEntity1 = get_shell.host_computer.File("/etc/passwd")
+fileEntity2 = get_shell.host_computer.File("/etc")
+
+print(fileEntity2 isa fileEntity1.__isa)
+print(fileEntity2 isa string)
+print(fileEntity2 isa number)
+
+shell = get_shell
+shell2 = get_shell("root", "test")
+
+print(shell2 isa shell.__isa)
+print(shell2 isa string)
+print(shell2 isa number)

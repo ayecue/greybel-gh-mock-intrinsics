@@ -15,6 +15,7 @@ import {
   Utils
 } from 'greybel-mock-environment';
 
+import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { delay } from './utils';
 
@@ -27,7 +28,7 @@ export interface CryptoVariables {
 
 export class Crypto extends BasicInterface {
   static readonly type: string = 'cryptoLib';
-  static readonly customIntrinsics: CustomFunction[] = [
+  static readonly isa: GreyMap = new GreyMap([
     CustomFunction.createExternalWithSelf(
       'aireplay',
       async (
@@ -332,7 +333,7 @@ export class Crypto extends BasicInterface {
     )
       .addArgument('ipAddress')
       .addArgument('port')
-  ];
+  ]);
 
   static retreive(args: Map<string, CustomValue>): Crypto | null {
     const intf = args.get('self');
@@ -345,9 +346,8 @@ export class Crypto extends BasicInterface {
   variables: CryptoVariables;
 
   constructor(variables: CryptoVariables) {
-    super(Crypto.type);
+    super(Crypto.type, Crypto.isa);
     this.variables = variables;
-    Crypto.customIntrinsics.forEach(this.addMethod.bind(this));
   }
 }
 
