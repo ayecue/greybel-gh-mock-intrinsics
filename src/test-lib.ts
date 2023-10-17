@@ -259,6 +259,8 @@ export class TestLib extends BasicInterface {
           );
         }
 
+        const stackTraceIndex = ctx.stackTrace.length - 1;
+
         try {
           const result = await callback.run(self, callbackArgs.value, ctx);
           return result;
@@ -281,6 +283,8 @@ export class TestLib extends BasicInterface {
             ],
             ctx
           );
+
+          ctx.stackTrace.splice(stackTraceIndex, ctx.stackTrace.length - stackTraceIndex);
         }
 
         return DefaultType.Void;
@@ -311,6 +315,8 @@ export class TestLib extends BasicInterface {
           );
         }
 
+        const stackTraceIndex = ctx.stackTrace.length - 1;
+
         try {
           const result = await callback.run(self, callbackArgs.value, ctx);
           return result;
@@ -321,13 +327,30 @@ export class TestLib extends BasicInterface {
           ctx.debugger.setBreakpoint(true);
           ctx.debugger.interact(lastActive, op.item, op);
           await ctx.debugger.resume();
+          ctx.debugger.setBreakpoint(false);
+
+          ctx.stackTrace.splice(stackTraceIndex, ctx.stackTrace.length - stackTraceIndex);
         }
 
         return DefaultType.Void;
       }
     )
       .addArgument('callback')
-      .addArgument('args', new CustomList())
+      .addArgument('args', new CustomList()),
+    CustomFunction.createExternalWithSelf(
+      'get_stack_trace',
+      async (
+        ctx: OperationContext
+      ): Promise<CustomValue> => {
+        const stackTrace = ctx.stackTrace.map((op) => {
+          return new CustomString(`at ${op.target}:${op.item?.start.line ?? 0}:${
+            op.item?.start.character ?? 0
+          }`);
+        });
+
+        return new CustomList(stackTrace);
+      }
+    )
   ]);
 
   static retreive(args: Map<string, CustomValue>): TestLib | null {

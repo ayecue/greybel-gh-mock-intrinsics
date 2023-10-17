@@ -33,3 +33,20 @@ end function)
 testLib.try_to_execute_with_debug(function
   get_shell(null, null)
 end function)
+
+foo = function
+  for item in testLib.get_stack_trace
+    pos = item.indexOf("test-lib.src")
+    print(item[pos:])
+  end for
+end function
+
+bar = function
+  foo
+end function
+
+moo = function
+  bar
+end function
+
+moo

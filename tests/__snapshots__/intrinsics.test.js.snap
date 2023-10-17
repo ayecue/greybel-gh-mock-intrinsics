@@ -656,6 +656,12 @@ exports[`interpreter default scripts test-lib.src 9`] = `"interact at 34"`;
 
 exports[`interpreter default scripts test-lib.src 10`] = `"resume"`;
 
+exports[`interpreter default scripts test-lib.src 11`] = `"test-lib.src:45:3"`;
+
+exports[`interpreter default scripts test-lib.src 12`] = `"test-lib.src:49:3"`;
+
+exports[`interpreter default scripts test-lib.src 13`] = `"test-lib.src:52:1"`;
+
 exports[`interpreter default scripts wallet.src 1`] = `"wallet"`;
 
 exports[`interpreter default scripts wallet.src 2`] = `"wallet"`;
