@@ -5,6 +5,7 @@ import {
   Path
 } from 'greybel-interpreter';
 
+export const ISA_PROPERTY = new CustomString('__isa');
 export const CLASS_ID_PROPERTY = new CustomString('classID');
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -13,8 +14,9 @@ export default class BasicInterface extends CustomMap {
   variables: Record<string, any>;
 
   constructor(type: string, isa: CustomMap) {
-    super(null, isa);
+    super(null);
     this.variables = {};
+    this.value.set(ISA_PROPERTY, isa);
     this.value.set(CLASS_ID_PROPERTY, new CustomString(type));
   }
 
