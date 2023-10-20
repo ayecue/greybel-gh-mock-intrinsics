@@ -342,7 +342,7 @@ export class Metaxploit extends BasicInterface {
           }
 
           for (const item of vulsOfAddress) {
-            output.push(`Unsafe check: ${item.getInfo()}`);
+            output.push(`Unsafe check: ${item.getInfo()}\n`);
           }
 
           return Promise.resolve(new CustomString(output.join('\n')));

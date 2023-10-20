@@ -232,9 +232,11 @@ exports[`interpreter default scripts metaxploit.src 9`] = `
 "decompiling source...
 searching unsecure values...
 Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+
 Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
 * Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
-* Checking an active user."
+* Checking an active user.
+"
 `;
 
 exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
@@ -247,9 +249,11 @@ exports[`interpreter default scripts metaxploit.src 13`] = `
 "decompiling source...
 searching unsecure values...
 Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+
 Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
 * Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
-* Checking an active user."
+* Checking an active user.
+"
 `;
 
 exports[`interpreter default scripts metaxploit.src 14`] = `
@@ -288,19 +292,24 @@ searching unsecure values...
 Unsafe check: string copy in <b>void</b>. Buffer overflow.
 * Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking registered users equal to 2.
+
 Unsafe check: loop in array <b>DeleteLinei</b>. Buffer overflow.
 * Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking registered users equal to 4.
 * Checking an active user.
 * Checking root active user.
 * 4 port forwarding configured from router to the target computer.
+
 Unsafe check: string copy in <b>treeDistancesdyn_tree</b>. Buffer overflow.
 * 3 port forwarding configured from router to the target computer.
+
 Unsafe check: loop in array <b>match_length</b>. Buffer overflow.
+
 Unsafe check: string copy in <b>ifrestoreWindow</b>. Buffer overflow.
 * Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking an active user.
-* 3 port forwarding configured from router to the target computer."
+* 3 port forwarding configured from router to the target computer.
+"
 `;
 
 exports[`interpreter default scripts metaxploit.src 26`] = `
@@ -321,10 +330,15 @@ exports[`interpreter default scripts metaxploit.src 31`] = `
 "decompiling source...
 searching unsecure values...
 Unsafe check: loop in array <b>linesInsertedOrRemoved</b>. Buffer overflow.
+
 Unsafe check: string copy in <b>distance</b>. Buffer overflow.
+
 Unsafe check: loop in array <b>QueueToken</b>. Buffer overflow.
+
 Unsafe check: string copy in <b>Title</b>. Buffer overflow.
-Unsafe check: string copy in <b>ALessThanB</b>. Buffer overflow."
+
+Unsafe check: string copy in <b>ALessThanB</b>. Buffer overflow.
+"
 `;
 
 exports[`interpreter default scripts metaxploit.src 32`] = `
