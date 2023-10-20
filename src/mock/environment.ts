@@ -6,19 +6,21 @@ import {
   Utils
 } from 'greybel-mock-environment';
 
-export const sharedCustomObject = new CustomMap(
-  new ObjectValue(
-    new Map([[new CustomString('classID'), new CustomString('custom_object')]])
-  )
-);
-
 export class GHMockIntrinsicEnv extends MockEnvironment {
   private startTime: number;
   private launchCallStack: number = 0;
+  private sharedCustomObject: CustomMap;
 
   constructor(options: MockEnvironmentOptions) {
     super(options);
     this.startTime = Date.now();
+    this.sharedCustomObject = new CustomMap(
+      new ObjectValue(
+        new Map([
+          [new CustomString('classID'), new CustomString('custom_object')]
+        ])
+      )
+    );
   }
 
   getLaunchCallStack(): number {
@@ -36,7 +38,7 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
   }
 
   getSharedCustomObject(): CustomMap {
-    return sharedCustomObject;
+    return this.sharedCustomObject;
   }
 
   getElapsedTime(): number {
