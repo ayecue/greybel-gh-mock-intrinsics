@@ -168,7 +168,7 @@ export class Shell extends BasicShell {
 
     CustomFunction.createExternalWithSelf(
       'scp',
-      (
+      async (
         ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
@@ -176,7 +176,7 @@ export class Shell extends BasicShell {
         const self = Shell.retreive(args);
 
         if (self === null) {
-          return Promise.resolve(DefaultType.Void);
+          return DefaultType.Void;
         }
 
         const { options, device, user } = self.variables;
@@ -190,7 +190,7 @@ export class Shell extends BasicShell {
           pathDest instanceof CustomNil ||
           remoteShell instanceof CustomNil
         ) {
-          return Promise.resolve(DefaultType.Void);
+          return DefaultType.Void;
         }
 
         const remoteType = remoteShell.getCustomType();
@@ -212,45 +212,39 @@ export class Shell extends BasicShell {
             .getFile(remoteTraversalPath);
 
           if (localFile === null) {
-            return Promise.resolve(
-              new CustomString(`${pathOrig.toString()} not found`)
-            );
+            return new CustomString(`${pathOrig.toString()} not found`);
           }
 
           if (remoteFolder === null) {
-            return Promise.resolve(
-              new CustomString(`${pathDest.toString()} not found`)
-            );
+            return new CustomString(`${pathDest.toString()} not found`);
           }
 
           if (!(remoteFolder instanceof Type.Folder)) {
-            return Promise.resolve(
-              new CustomString(`${pathDest.toString()} it's not a folder`)
-            );
+            return new CustomString(`${pathDest.toString()} it's not a folder`);
           }
 
           const { r } = localFile.getPermissionsForUser(user, device.groups);
 
           if (!r) {
-            return Promise.resolve(new CustomString('Permission denied'));
+            return new CustomString('Permission denied');
           }
 
           const { w } = remoteFolder.getPermissionsForUser(
             rshell.getVariable<Type.User>('user'),
-            device.groups
+            rshell.getVariable<Type.Device['groups']>('groups'),
           );
 
           if (!w) {
-            return Promise.resolve(new CustomString('Permission denied'));
+            return new CustomString('Permission denied');
           }
 
-          ctx.handler.outputHandler.progress(ctx, 2000);
+          await ctx.handler.outputHandler.progress(ctx, 2000);
 
           remoteFolder.putEntity(localFile as Type.File);
-          return Promise.resolve(DefaultType.True);
+          return DefaultType.True;
         }
 
-        return Promise.resolve(DefaultType.Void);
+        return DefaultType.Void;
       }
     )
       .addArgument('pathOrig')
