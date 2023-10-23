@@ -16,9 +16,9 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
     this.startTime = Date.now();
     this.sharedCustomObject = new CustomMap(
       new ObjectValue(
-        new Map([
+        [
           [new CustomString('classID'), new CustomString('custom_object')]
-        ])
+        ]
       )
     );
   }
