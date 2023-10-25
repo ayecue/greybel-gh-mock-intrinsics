@@ -196,6 +196,25 @@ export class Computer extends BasicInterface {
         return Promise.resolve(DefaultType.True);
       }
     ),
+
+    CustomFunction.createExternalWithSelf(
+      'get_name',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = Computer.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(new CustomString('Unknown'));
+        }
+
+        const { device } = self.variables;
+        return Promise.resolve(new CustomString(device.name));
+      }
+    ),
+
     CustomFunction.createExternalWithSelf(
       'touch',
       (

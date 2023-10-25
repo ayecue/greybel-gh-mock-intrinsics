@@ -103,3 +103,4 @@ print(adminFile.set_group("test-here"))
 print(adminFile.group)
 
 print(get_shell.host_computer.File("/").name)
+print(get_shell.host_computer.get_name)

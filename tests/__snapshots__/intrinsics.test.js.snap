@@ -81,9 +81,9 @@ exports[`interpreter default scripts generics.src 3`] = `"0"`;
 exports[`interpreter default scripts generics.src 4`] = `"172.57.134.56"`;
 
 exports[`interpreter default scripts generics.src 5`] = `
-"Domain name: imperial.com
-Administrative contact: Hercule Beane
-Email address: dan2731@imperial.com
+"Domain name: hampbell.com
+Administrative contact: Brenald Ameen
+Email address: e129895@hampbell.com
 Phone: 123456891"
 `;
 
@@ -101,7 +101,7 @@ exports[`interpreter default scripts generics.src 11`] = `"/home/test/myprogram"
 
 exports[`interpreter default scripts generics.src 12`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 13`] = `"test@briggs.de"`;
+exports[`interpreter default scripts generics.src 13`] = `"test@tierriso.tv"`;
 
 exports[`interpreter default scripts generics.src 14`] = `"s1jbeulm"`;
 
@@ -225,16 +225,36 @@ exports[`interpreter default scripts metaxploit.src 6`] = `"MetaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 7`] = `"MetaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 8`] = `"[\\"0xC8CE05AB\\", \\"0xFDC63532\\", \\"0xDC4BD50C\\"]"`;
+exports[`interpreter default scripts metaxploit.src 8`] = `"[\\"0x65E8E4EC\\", \\"0x3EB84DBB\\", \\"0x69498C3F\\", \\"0x1823E086\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 9`] = `
 "decompiling source...
 searching unsecure values...
-Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+Unsafe check: loop in array <b>Tuiteralse</b>. Buffer overflow.
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 3.
+* Checking an active user.
+* Checking root active user.
 
-Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
+Unsafe check: loop in array <b>Tionpoint_onclosesour</b>. Buffer overflow.
+* Checking root active user.
+
+Unsafe check: string copy in <b>Textsizede</b>. Buffer overflow.
+* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking root active user.
+
+Unsafe check: loop in array <b>Olor_buttoncloseinoverlayon</b>. Buffer overflow.
 * Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking an active user.
+* Checking root active user.
+
+Unsafe check: string copy in <b>Eady_defieldin</b>. Buffer overflow.
+
+Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 1.
+* Checking an active user.
+* Checking root active user.
 "
 `;
 
@@ -242,16 +262,36 @@ exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
 
 exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 12`] = `"[\\"0xC8CE05AB\\", \\"0xFDC63532\\", \\"0xDC4BD50C\\"]"`;
+exports[`interpreter default scripts metaxploit.src 12`] = `"[\\"0x65E8E4EC\\", \\"0x3EB84DBB\\", \\"0x69498C3F\\", \\"0x1823E086\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 13`] = `
 "decompiling source...
 searching unsecure values...
-Unsafe check: loop in array <b>_tr_flush_blockblock_start</b>. Buffer overflow.
+Unsafe check: loop in array <b>Tuiteralse</b>. Buffer overflow.
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 3.
+* Checking an active user.
+* Checking root active user.
 
-Unsafe check: loop in array <b>hash_mask</b>. Buffer overflow.
+Unsafe check: loop in array <b>Tionpoint_onclosesour</b>. Buffer overflow.
+* Checking root active user.
+
+Unsafe check: string copy in <b>Textsizede</b>. Buffer overflow.
+* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking root active user.
+
+Unsafe check: loop in array <b>Olor_buttoncloseinoverlayon</b>. Buffer overflow.
 * Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
 * Checking an active user.
+* Checking root active user.
+
+Unsafe check: string copy in <b>Eady_defieldin</b>. Buffer overflow.
+
+Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 1.
+* Checking an active user.
+* Checking root active user.
 "
 `;
 
@@ -261,7 +301,7 @@ Starting attack...success!
 Privileges obtained from user: test"
 `;
 
-exports[`interpreter default scripts metaxploit.src 15`] = `"shell"`;
+exports[`interpreter default scripts metaxploit.src 15`] = `"file"`;
 
 exports[`interpreter default scripts metaxploit.src 16`] = `
 "
@@ -269,7 +309,7 @@ Starting attack...success!
 Privileges obtained from user: test"
 `;
 
-exports[`interpreter default scripts metaxploit.src 17`] = `"shell"`;
+exports[`interpreter default scripts metaxploit.src 17`] = `"file"`;
 
 exports[`interpreter default scripts metaxploit.src 18`] = `"NetSession"`;
 
@@ -283,71 +323,60 @@ exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
 
 exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 24`] = `"[\\"0xA12E2B71\\", \\"0xE2D91188\\", \\"0x3089D743\\"]"`;
+exports[`interpreter default scripts metaxploit.src 24`] = `"[\\"0x2C35E48D\\", \\"0x2EC47F98\\", \\"0x6AB1D4F3\\", \\"0x7D20AD77\\", \\"0x591A7117\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 25`] = `
 "decompiling source...
 searching unsecure values...
-Unsafe check: string copy in <b>void</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
-* Checking registered users equal to 2.
+Unsafe check: string copy in <b>Animator3</b>. Buffer overflow.
 
-Unsafe check: loop in array <b>DeleteLinei</b>. Buffer overflow.
-* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
-* Checking registered users equal to 4.
-* Checking an active user.
-* Checking root active user.
-* 4 port forwarding configured from router to the target computer.
+Unsafe check: string copy in <b>Thsbuild_flush_bloc</b>. Buffer overflow.
 
-Unsafe check: string copy in <b>treeDistancesdyn_tree</b>. Buffer overflow.
-* 3 port forwarding configured from router to the target computer.
+Unsafe check: string copy in <b>Treelitextsiintof</b>. Buffer overflow.
 
-Unsafe check: loop in array <b>match_length</b>. Buffer overflow.
-
-Unsafe check: string copy in <b>ifrestoreWindow</b>. Buffer overflow.
-* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
-* Checking an active user.
-* 3 port forwarding configured from router to the target computer.
+Unsafe check: loop in array <b>Lush_s</b>. Buffer overflow.
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Checking registered users equal to 1.
+* 1 port forwarding configured from router to the target computer.
 "
 `;
 
 exports[`interpreter default scripts metaxploit.src 26`] = `
 "
 Starting attack...success!
-Privileges obtained from user: guest"
+Computer obtained with credentials from user: themlt2003"
 `;
 
-exports[`interpreter default scripts metaxploit.src 27`] = `"file"`;
+exports[`interpreter default scripts metaxploit.src 27`] = `"computer"`;
 
 exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router"`;
 
 exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0.0"`;
 
-exports[`interpreter default scripts metaxploit.src 30`] = `"[\\"0xB1AFF995\\", \\"0x2795D2B7\\", \\"0x95903F51\\", \\"0xC829866A\\"]"`;
+exports[`interpreter default scripts metaxploit.src 30`] = `"[\\"0x243A0F59\\", \\"0x2F618803\\", \\"0x45917FA3\\", \\"0x2542555D\\"]"`;
 
 exports[`interpreter default scripts metaxploit.src 31`] = `
 "decompiling source...
 searching unsecure values...
-Unsafe check: loop in array <b>linesInsertedOrRemoved</b>. Buffer overflow.
+Unsafe check: loop in array <b>_lit++</b>. Buffer overflow.
 
-Unsafe check: string copy in <b>distance</b>. Buffer overflow.
+Unsafe check: loop in array <b>Atelend_bit</b>. Buffer overflow.
 
-Unsafe check: loop in array <b>QueueToken</b>. Buffer overflow.
+Unsafe check: string copy in <b>_bits</b>. Buffer overflow.
 
-Unsafe check: string copy in <b>Title</b>. Buffer overflow.
+Unsafe check: loop in array <b>Ush_bloc</b>. Buffer overflow.
 
-Unsafe check: string copy in <b>ALessThanB</b>. Buffer overflow.
+Unsafe check: loop in array <b>Typebott</b>. Buffer overflow.
 "
 `;
 
 exports[`interpreter default scripts metaxploit.src 32`] = `
 "
 Starting attack...success!
-Accessing firewall config...
-Firewall disabled. (Firewalls are not yet supported in greybel!)"
+Privileges obtained from user: otisactiv"
 `;
 
-exports[`interpreter default scripts metaxploit.src 33`] = `"1"`;
+exports[`interpreter default scripts metaxploit.src 33`] = `"shell"`;
 
 exports[`interpreter default scripts metaxploit.src 34`] = `"14"`;
 
@@ -432,9 +461,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU  MEM    COMMAND      
-root  447   2.3  16.83  kernel_task  
-root  7723  5.3  18.03  Xorg         "
+"USER  PID   CPU   MEM    COMMAND      
+root  3808  13.2  12.17  kernel_task  
+root  4194  11.5  12.99  Xorg         "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -442,7 +471,7 @@ exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
 exports[`interpreter default scripts scripts.src 5`] = `
 "
 Connected to Wi-Fi:
-Essid: circinus
+Essid: anildx
 Bssid: 44:8E:73:9E:F2:63
 ----------------
 Public IP: 142.32.54.56
@@ -485,8 +514,8 @@ exports[`interpreter default scripts shell.src 11`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER PID CPU MEM COMMAND
-root 6518 7.6 31.76 kernel_task
-root 268 2.4 29.78 Xorg"
+root 8602 2.4 5.83 kernel_task
+root 7967 6.0 8.81 Xorg"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -505,7 +534,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"0"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 71% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 62% bushed\\", \\"42:D6:90:7C:BF:71 49% footbal\\", \\"09:2F:46:FB:32:E9 81% emalia\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 60% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 57% vingoftw\\", \\"42:D6:90:7C:BF:71 49% aptain117\\", \\"09:2F:46:FB:32:E9 57% f999\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"1"`;
 
@@ -622,6 +651,8 @@ exports[`interpreter default scripts shell.src 77`] = `""`;
 exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
 
 exports[`interpreter default scripts shell.src 79`] = `"/"`;
+
+exports[`interpreter default scripts shell.src 80`] = `"entooxi"`;
 
 exports[`interpreter default scripts shell-self-launch.src 1`] = `"launch number 0"`;
 
