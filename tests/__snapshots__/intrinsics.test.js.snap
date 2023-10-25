@@ -127,10 +127,7 @@ exports[`interpreter default scripts generics.src 22`] = `"test"`;
 
 exports[`interpreter default scripts generics.src 23`] = `"test"`;
 
-exports[`interpreter default scripts generics.src 24`] = `
-"
-"
-`;
+exports[`interpreter default scripts generics.src 24`] = `""`;
 
 exports[`interpreter default scripts generics.src 25`] = `"null"`;
 

@@ -78,7 +78,7 @@ export function keyEventToString(keyEvent: KeyEvent): string {
     case KeyCode.Escape:
       return KeyCode[keyEvent.keyCode];
     case KeyCode.Enter:
-      return '\n';
+      return '';
     case KeyCode.Space:
       return ' ';
     case KeyCode.Shift: {
