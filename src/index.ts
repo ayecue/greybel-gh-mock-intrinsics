@@ -36,6 +36,7 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('clear_screen'), intrinsics.clearScreen);
   apiInterface.set(s('launch_path'), intrinsics.launchPath);
   apiInterface.set(s('get_custom_object'), intrinsics.getCustomObject);
+  apiInterface.set(s('get_ctf'), intrinsics.getCTF);
 
   return apiInterface;
 }

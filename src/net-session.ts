@@ -1,5 +1,7 @@
 import {
+  CustomBoolean,
   CustomFunction,
+  CustomNumber,
   CustomValue,
   DefaultType,
   OperationContext
@@ -61,6 +63,118 @@ export class NetSession extends BasicInterface {
             libVersion,
             vuls
           )
+        );
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'get_num_users',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = NetSession.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        const {
+          target
+        } = self.variables;
+
+        return Promise.resolve(
+          new CustomNumber(target.users.size)
+        );
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'get_num_portforward',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = NetSession.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        const {
+          target
+        } = self.variables;
+        const router = target.getRouter() as Type.Router;
+
+        return Promise.resolve(
+          new CustomNumber(router.forwarded.size)
+        );
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'get_num_conn_gateway',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = NetSession.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        const {
+          target
+        } = self.variables;
+        const router = target.getRouter() as Type.Router;
+
+        return Promise.resolve(
+          new CustomNumber(router.devices.size)
+        );
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'is_any_active_user',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = NetSession.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        const {
+          target
+        } = self.variables;
+
+        return Promise.resolve(
+          new CustomBoolean(target.isAnyProcessActive())
+        );
+      }
+    ),
+    CustomFunction.createExternalWithSelf(
+      'is_root_active_user',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        const self = NetSession.retreive(args);
+
+        if (self === null) {
+          return Promise.resolve(DefaultType.Void);
+        }
+
+        const {
+          target
+        } = self.variables;
+
+        return Promise.resolve(
+          new CustomBoolean(target.isRootProcessActive())
         );
       }
     )

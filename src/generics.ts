@@ -54,6 +54,7 @@ export interface GenericIntrinsics {
   launchPath: CustomFunction;
   typeOf: CustomFunction;
   getCustomObject: CustomFunction;
+  getCTF: CustomFunction;
 }
 
 export default function generics(
@@ -590,7 +591,18 @@ export default function generics(
       ): Promise<CustomValue> => {
         return Promise.resolve(mockEnvironment.getSharedCustomObject());
       }
-    )
+    ),
+
+    getCTF: CustomFunction.createExternal(
+      'get_ctf',
+      (
+        _ctx: OperationContext,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(DefaultType.Void);
+      }
+    ).addArgument('user').addArgument('password').addArgument('eventName')
   };
 
   return intrinsics;

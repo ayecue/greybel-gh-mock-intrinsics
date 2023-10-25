@@ -65,3 +65,9 @@ print(scanResult)
 print(scanAddressResult)
 
 print(routerNetSessionMeta.overflow("0xB1AFF995", "QueueToken"))
+
+print(netSession.get_num_conn_gateway)
+print(netSession.get_num_portforward)
+print(netSession.get_num_users)
+print(netSession.is_any_active_user)
+print(netSession.is_root_active_user)

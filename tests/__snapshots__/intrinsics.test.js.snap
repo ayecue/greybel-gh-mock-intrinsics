@@ -151,6 +151,8 @@ It can be called without parameters."
 
 exports[`interpreter default scripts generics.src 32`] = `"Unknown info"`;
 
+exports[`interpreter default scripts generics.src 33`] = `"null"`;
+
 exports[`interpreter default scripts get-custom-object.src 1`] = `"1"`;
 
 exports[`interpreter default scripts get-custom-object.src 2`] = `"file"`;
@@ -349,6 +351,16 @@ Firewall disabled. (Firewalls are not yet supported in greybel!)"
 `;
 
 exports[`interpreter default scripts metaxploit.src 33`] = `"1"`;
+
+exports[`interpreter default scripts metaxploit.src 34`] = `"14"`;
+
+exports[`interpreter default scripts metaxploit.src 35`] = `"6"`;
+
+exports[`interpreter default scripts metaxploit.src 36`] = `"2"`;
+
+exports[`interpreter default scripts metaxploit.src 37`] = `"1"`;
+
+exports[`interpreter default scripts metaxploit.src 38`] = `"1"`;
 
 exports[`interpreter default scripts mkdir.src 1`] = `"0"`;
 

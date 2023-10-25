@@ -36,3 +36,5 @@ print(typeof(null))
 
 print(command_info("LS_USAGE"))
 print(command_info("SOME_INVALID_KEY"))
+
+print(get_ctf("test", "password", "eventname"))
