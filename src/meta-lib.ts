@@ -272,7 +272,7 @@ export class MetaLib extends BasicInterface {
             );
           }
           case Type.VulnerabilityAction.Password: {
-            if (optArgsRaw === '' || !isAlphaNumeric(optArgsRaw)) {
+            if (optArgsRaw === null || optArgsRaw === '' || !isAlphaNumeric(optArgsRaw)) {
               output += `success!\nExecuting payload...\nerror: can't change password for user ${vulTargetUser.username}. Password must be alphanumeric.`;
               ctx.handler.outputHandler.print(ctx, output);
               return Promise.resolve(DefaultType.False);
