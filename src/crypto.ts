@@ -91,14 +91,18 @@ export class Crypto extends BasicInterface {
 
         ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
 
+        const exitObserver = ctx.processState.createExitObserver();
+
         /* eslint-disable-next-line no-unmodified-loop-condition */
-        while (acks < maxAcksRaw && !ctx.isExit()) {
+        while (acks < maxAcksRaw && !exitObserver.occured()) {
           ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
             replace: true
           });
           acks += Utils.getRandomInt(250, 750);
           await delay(500);
         }
+
+        exitObserver.close();
 
         ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
           replace: true
