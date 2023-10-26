@@ -1,4 +1,6 @@
 import {
+  ContextState,
+  ContextType,
   CustomFunction,
   CustomNil,
   CustomString,
@@ -456,12 +458,10 @@ export class Shell extends BasicShell {
 
         mockEnvironment.increaseLaunchCallStack();
 
-        const apiContext = ctx.api;
         const interpreter = new Interpreter({
           handler: ctx.handler,
-          debugger: ctx.debugger,
           params: paramsStr ? paramsStr.split(' ') : undefined,
-          api: apiContext.scope.value
+          api: ctx.api.scope.value
         });
         const session = new Type.Session({
           user,
