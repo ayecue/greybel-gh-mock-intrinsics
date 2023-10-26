@@ -459,10 +459,11 @@ export class Shell extends BasicShell {
         mockEnvironment.increaseLaunchCallStack();
 
         const interpreter = new Interpreter({
-          target: 'launched_script',
+          target: file.isExternalProgram ? ctx.globals.target : 'virtual_script',
           handler: ctx.handler,
           params: paramsStr ? paramsStr.split(' ') : undefined,
-          api: ctx.api.scope.value
+          api: ctx.api.scope.value,
+          debugger: ctx.debugger
         });
         const session = new Type.Session({
           user,
