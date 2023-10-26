@@ -459,6 +459,7 @@ export class Shell extends BasicShell {
         mockEnvironment.increaseLaunchCallStack();
 
         const interpreter = new Interpreter({
+          target: 'launched_script',
           handler: ctx.handler,
           params: paramsStr ? paramsStr.split(' ') : undefined,
           api: ctx.api.scope.value
