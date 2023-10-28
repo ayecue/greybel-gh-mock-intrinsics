@@ -100,7 +100,7 @@ export function keyEventToString(keyEvent: KeyEvent): string {
       return 'RightAlt';
     }
     default:
-      return String.fromCharCode(keyEvent.keyCode).toLowerCase();
+      return String.fromCharCode(keyEvent.keyCode);
   }
 }
 
