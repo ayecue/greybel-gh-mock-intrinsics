@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "2.9.21",
+    "version": "2.9.22",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
