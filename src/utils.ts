@@ -15,18 +15,18 @@ export enum KeyCode {
   Backspace = 8,
   Delete = 46,
   Tab = 9,
-  F1 = -1,
-  F2 = -2,
-  F3 = -3,
-  F4 = -4,
-  F5 = -5,
-  F6 = -6,
-  F7 = -7,
-  F8 = -8,
-  F9 = -9,
-  F10 = -10,
-  F11 = -11,
-  F12 = -12,
+  F1 = 112,
+  F2 = 113,
+  F3 = 114,
+  F4 = 115,
+  F5 = 116,
+  F6 = 117,
+  F7 = 118,
+  F8 = 119,
+  F9 = 120,
+  F10 = 121,
+  F11 = 122,
+  F12 = 123,
   Escape = 27,
   Space = 32,
   Shift = 16,
@@ -50,7 +50,9 @@ export enum Month {
 }
 
 export function keyEventToString(keyEvent: KeyEvent): string {
-  switch (keyEvent.keyCode) {
+  const keyCode = keyEvent.keyCode ?? -1;
+
+  switch (keyCode) {
     case KeyCode.LeftArrow:
     case KeyCode.UpArrow:
     case KeyCode.RightArrow:
@@ -76,7 +78,7 @@ export function keyEventToString(keyEvent: KeyEvent): string {
     case KeyCode.F11:
     case KeyCode.F12:
     case KeyCode.Escape:
-      return KeyCode[keyEvent.keyCode];
+      return KeyCode[keyCode];
     case KeyCode.Enter:
       return '';
     case KeyCode.Space:
@@ -100,7 +102,11 @@ export function keyEventToString(keyEvent: KeyEvent): string {
       return 'RightAlt';
     }
     default:
-      return String.fromCharCode(keyEvent.keyCode);
+      if (keyEvent.charCode) {
+        return String.fromCharCode(keyEvent.charCode);
+      }
+
+      throw new Error('Unknown input.');
   }
 }
 

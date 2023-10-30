@@ -54,3 +54,4 @@ export function init(
 }
 
 export { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';
+export { KeyCode } from './utils';
