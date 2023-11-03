@@ -11,6 +11,47 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { create as createSubWallet } from './sub-wallet';
+import { placeholderIntrinsic } from './utils';
+
+export const getSubwallet = CustomFunction.createExternalWithSelf(
+  'get_subwallet',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = Coin.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const { mockEnvironment, user, computer } = self.variables;
+    return Promise.resolve(
+      createSubWallet(mockEnvironment, user, computer)
+    );
+  }
+);
+
+export const getSubwallets = CustomFunction.createExternalWithSelf(
+  'get_subwallets',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = Coin.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const { mockEnvironment, user, computer } = self.variables;
+    return Promise.resolve(
+      new CustomList([createSubWallet(mockEnvironment, user, computer)])
+    );
+  }
+);
 
 export interface CoinVariables {
   mockEnvironment: MockEnvironment;
@@ -21,134 +62,17 @@ export interface CoinVariables {
 export class Coin extends BasicInterface {
   static readonly type: string = 'coin';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'set_cycle_mining',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_cycle_mining',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_reward',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'set_reward',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'transaction',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'create_subwallet',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_subwallet',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = Coin.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const { mockEnvironment, user, computer } = self.variables;
-        return Promise.resolve(
-          createSubWallet(mockEnvironment, user, computer)
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_subwallets',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = Coin.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const { mockEnvironment, user, computer } = self.variables;
-        return Promise.resolve(
-          new CustomList([createSubWallet(mockEnvironment, user, computer)])
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'set_address',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_address',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_mined_coins',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    )
+    placeholderIntrinsic.forkAs('set_cycle_mining'),
+    placeholderIntrinsic.forkAs('get_cycle_mining'),
+    placeholderIntrinsic.forkAs('get_reward'),
+    placeholderIntrinsic.forkAs('set_reward'),
+    placeholderIntrinsic.forkAs('transaction'),
+    placeholderIntrinsic.forkAs('create_subwallet'),
+    getSubwallet,
+    getSubwallets,
+    placeholderIntrinsic.forkAs('set_address'),
+    placeholderIntrinsic.forkAs('get_address'),
+    placeholderIntrinsic.forkAs('get_mined_coins')
   ]);
 
   static retreive(args: Map<string, CustomValue>): Coin | null {

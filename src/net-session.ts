@@ -13,6 +13,165 @@ import BasicInterface from './interface';
 import { create as createMetaLib } from './meta-lib';
 import { GHMockIntrinsicEnv } from './mock/environment';
 
+export const dumpLib = CustomFunction.createExternalWithSelf(
+  'dump_lib',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      mockEnvironment,
+      source,
+      metaFile,
+      target,
+      targetFile,
+      targetLibrary
+    } = self.variables;
+    const mode = Type.VulnerabilityMode.Online;
+    const libContainer = mockEnvironment.libraryManager.get(targetLibrary);
+    const libVersion = libContainer.get(targetFile.version);
+    const vuls = libVersion.getVulnerabilitiesByMode(mode);
+
+    return Promise.resolve(
+      createMetaLib(
+        mockEnvironment,
+        source,
+        metaFile,
+        target,
+        targetFile,
+        mode,
+        libContainer,
+        libVersion,
+        vuls
+      )
+    );
+  }
+);
+
+export const getNumUsers = CustomFunction.createExternalWithSelf(
+  'get_num_users',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      target
+    } = self.variables;
+
+    return Promise.resolve(
+      new CustomNumber(target.users.size)
+    );
+  }
+);
+
+export const getNumPortforward = CustomFunction.createExternalWithSelf(
+  'get_num_portforward',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      target
+    } = self.variables;
+    const router = target.getRouter() as Type.Router;
+
+    return Promise.resolve(
+      new CustomNumber(router.forwarded.size)
+    );
+  }
+);
+
+export const getNumConnGateway = CustomFunction.createExternalWithSelf(
+  'get_num_conn_gateway',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      target
+    } = self.variables;
+    const router = target.getRouter() as Type.Router;
+
+    return Promise.resolve(
+      new CustomNumber(router.devices.size)
+    );
+  }
+);
+
+export const isAnyActiveUser = CustomFunction.createExternalWithSelf(
+  'is_any_active_user',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      target
+    } = self.variables;
+
+    return Promise.resolve(
+      new CustomBoolean(target.isAnyProcessActive())
+    );
+  }
+);
+
+export const isRootActiveUser = CustomFunction.createExternalWithSelf(
+  'is_root_active_user',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = NetSession.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const {
+      target
+    } = self.variables;
+
+    return Promise.resolve(
+      new CustomBoolean(target.isRootProcessActive())
+    );
+  }
+);
+
 export interface NetSessionVariables {
   mockEnvironment: GHMockIntrinsicEnv;
   source: Type.Device;
@@ -25,159 +184,12 @@ export interface NetSessionVariables {
 export class NetSession extends BasicInterface {
   static readonly type: string = 'NetSession';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'dump_lib',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          mockEnvironment,
-          source,
-          metaFile,
-          target,
-          targetFile,
-          targetLibrary
-        } = self.variables;
-        const mode = Type.VulnerabilityMode.Online;
-        const libContainer = mockEnvironment.libraryManager.get(targetLibrary);
-        const libVersion = libContainer.get(targetFile.version);
-        const vuls = libVersion.getVulnerabilitiesByMode(mode);
-
-        return Promise.resolve(
-          createMetaLib(
-            mockEnvironment,
-            source,
-            metaFile,
-            target,
-            targetFile,
-            mode,
-            libContainer,
-            libVersion,
-            vuls
-          )
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_num_users',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          target
-        } = self.variables;
-
-        return Promise.resolve(
-          new CustomNumber(target.users.size)
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_num_portforward',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          target
-        } = self.variables;
-        const router = target.getRouter() as Type.Router;
-
-        return Promise.resolve(
-          new CustomNumber(router.forwarded.size)
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_num_conn_gateway',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          target
-        } = self.variables;
-        const router = target.getRouter() as Type.Router;
-
-        return Promise.resolve(
-          new CustomNumber(router.devices.size)
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'is_any_active_user',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          target
-        } = self.variables;
-
-        return Promise.resolve(
-          new CustomBoolean(target.isAnyProcessActive())
-        );
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'is_root_active_user',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = NetSession.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const {
-          target
-        } = self.variables;
-
-        return Promise.resolve(
-          new CustomBoolean(target.isRootProcessActive())
-        );
-      }
-    )
+    dumpLib,
+    getNumUsers,
+    getNumPortforward,
+    getNumConnGateway,
+    isAnyActiveUser,
+    isRootActiveUser
   ]);
 
   static retreive(args: Map<string, CustomValue>): NetSession | null {

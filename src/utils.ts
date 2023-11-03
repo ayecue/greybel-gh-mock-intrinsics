@@ -1,4 +1,4 @@
-import { KeyEvent } from 'greybel-interpreter';
+import { CustomFunction, CustomString, CustomValue, KeyEvent } from 'greybel-interpreter';
 import { EOL } from 'os';
 
 export enum KeyCode {
@@ -191,3 +191,16 @@ export function delay(time: number = 1000): Promise<void> {
     setTimeout(resolve, time);
   });
 }
+
+export const placeholderIntrinsic = CustomFunction.createExternalWithSelf(
+  'placeholder',
+  (): Promise<CustomValue> => {
+    return Promise.resolve(new CustomString('Not yet supported'));
+  }
+)
+  .addArgument('a')
+  .addArgument('b')
+  .addArgument('c')
+  .addArgument('e')
+  .addArgument('f')
+  .addArgument('g');
