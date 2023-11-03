@@ -2,6 +2,7 @@ import { CustomString, ObjectValue } from 'greybel-interpreter';
 
 import generics from './generics';
 import { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';
+import { build, connectService, hostComputer, launch, ping, scp, startTerminal } from './shell';
 
 const s = (v: string) => new CustomString(v);
 
@@ -37,6 +38,15 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('launch_path'), intrinsics.launchPath);
   apiInterface.set(s('get_custom_object'), intrinsics.getCustomObject);
   apiInterface.set(s('get_ctf'), intrinsics.getCTF);
+
+  //shell
+  apiInterface.set(s('connect_service'), connectService);
+  apiInterface.set(s('start_terminal'), startTerminal);
+  apiInterface.set(s('scp'), scp);
+  apiInterface.set(s('build'), build);
+  apiInterface.set(s('launch'), launch);
+  apiInterface.set(s('host_computer'), hostComputer);
+  apiInterface.set(s('ping'), ping);
 
   return apiInterface;
 }
