@@ -6,6 +6,7 @@ import { build, connectService, hostComputer, launch, ping, scp, startTerminal }
 import { deleteMail, fetchMail, readMail, sendMail } from './meta-mail';
 import { activeNetCard, changePassword, closeProgram, connectEthernet, connectWifi, createFolder, createGroup, createUser, deleteGroup, deleteUser, getFile, getLanIp, getName, getNetworkDevices, getPorts, getPublicIpPc, groups, isNetworkActive, networkGateway, showProcs, touch, wifiNetworks } from './computer';
 import { allowImport, chmod, copy, deleteFile, getContent, getFiles, getFolders, group, hasPermission, isBinary, isFolder, move, name, owner, parent, path, permissions, rename, setContent, setGroup, setOwner, size } from './file';
+import { bssidName, devicePorts, devicesLanIp, essidName, firewallRules, kernelVersion, localIp, pingPort, portInfo, publicIp, usedPorts } from './router';
 
 const s = (v: string) => new CustomString(v);
 
@@ -98,6 +99,19 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('set_group'), setGroup);
   apiInterface.set(s('size'), size);
   apiInterface.set(s('allow_import'), allowImport);
+
+  //router
+  apiInterface.set(s('public_ip'), publicIp);
+  apiInterface.set(s('local_ip'), localIp);
+  apiInterface.set(s('ping_port'), pingPort);
+  apiInterface.set(s('port_info'), portInfo);
+  apiInterface.set(s('used_ports'), usedPorts);
+  apiInterface.set(s('device_ports'), devicePorts);
+  apiInterface.set(s('devices_lan_ip'), devicesLanIp);
+  apiInterface.set(s('essid_name'), essidName);
+  apiInterface.set(s('bssid_name'), bssidName);
+  apiInterface.set(s('kernel_version'), kernelVersion);
+  apiInterface.set(s('firewall_rules'), firewallRules);
 
   //metaMail
   apiInterface.set(s('fetch'), fetchMail);
