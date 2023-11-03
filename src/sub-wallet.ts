@@ -8,6 +8,7 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
+import { placeholderIntrinsic } from './utils';
 
 export interface SubWalletVariables {
   mockEnvironment: MockEnvironment;
@@ -18,96 +19,15 @@ export interface SubWalletVariables {
 export class SubWallet extends BasicInterface {
   static readonly type: string = 'subwallet';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'get_balance',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'set_info',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_info',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'delete',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_user',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'last_transaction',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'mining',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'check_password',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'wallet_username',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    )
+    placeholderIntrinsic.forkAs('get_balance'),
+    placeholderIntrinsic.forkAs('set_info'),
+    placeholderIntrinsic.forkAs('get_info'),
+    placeholderIntrinsic.forkAs('delete'),
+    placeholderIntrinsic.forkAs('get_user'),
+    placeholderIntrinsic.forkAs('last_transaction'),
+    placeholderIntrinsic.forkAs('mining'),
+    placeholderIntrinsic.forkAs('check_password'),
+    placeholderIntrinsic.forkAs('wallet_username')
   ]);
 
   static retreive(args: Map<string, CustomValue>): SubWallet | null {

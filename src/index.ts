@@ -190,6 +190,19 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('get_address'), placeholderIntrinsic.forkAs('get_address'));
   apiInterface.set(s('get_mined_coins'), placeholderIntrinsic.forkAs('get_mined_coins'));
 
+  //subWallet
+  apiInterface.set(s('get_balance_subwallet'), placeholderIntrinsic.forkAs('get_balance_subwallet'));
+  apiInterface.set(s('set_info'), placeholderIntrinsic.forkAs('set_info'));
+  apiInterface.set(s('buy_coin'), placeholderIntrinsic.forkAs('buy_coin'));
+  apiInterface.set(s('get_info'), placeholderIntrinsic.forkAs('get_info'));
+  apiInterface.set(s('delete_subwallet'), placeholderIntrinsic.forkAs('delete_subwallet'));
+  apiInterface.set(s('get_user'), placeholderIntrinsic.forkAs('get_user'));
+  apiInterface.set(s('last_transaction'), placeholderIntrinsic.forkAs('last_transaction'));
+  apiInterface.set(s('list_global_coins'), placeholderIntrinsic.forkAs('list_global_coins'));
+  apiInterface.set(s('mining'), placeholderIntrinsic.forkAs('mining'));
+  apiInterface.set(s('check_password'), placeholderIntrinsic.forkAs('check_password'));
+  apiInterface.set(s('wallet_username'), placeholderIntrinsic.forkAs('wallet_username'));
+
   //wallet
   apiInterface.set(s('list_coins'), placeholderIntrinsic.forkAs('list_coins'));
   apiInterface.set(s('get_balance'), placeholderIntrinsic.forkAs('get_balance'));
