@@ -14,6 +14,7 @@ import { libName, overflow, version } from './meta-lib';
 import { load, netUse, rshellClient, rshellServer, scan, scanAddress, sniffer } from './metaxploit';
 import { dumpLib, getNumConnGateway, getNumPortforward, getNumUsers, isAnyActiveUser, isRootActiveUser } from './net-session';
 import { isClosed, portNumber } from './port';
+import { installService, startService, stopService } from './service';
 
 const s = (v: string) => new CustomString(v);
 
@@ -152,6 +153,11 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('get_lan_ip'), getLanIp);
   apiInterface.set(s('is_closed'), isClosed);
   apiInterface.set(s('port_number'), portNumber);
+
+  //service
+  apiInterface.set(s('install_service'), installService);
+  apiInterface.set(s('start_service'), startService);
+  apiInterface.set(s('stop_service'), stopService);
 
   //aptClient
   apiInterface.set(s('show'), placeholderIntrinsic.forkAs('show'));
