@@ -10,6 +10,7 @@ import { bssidName, devicePorts, devicesLanIp, essidName, firewallRules, kernelV
 import { placeholderIntrinsic } from './utils';
 import { createWallet, getCoin, loginWallet } from './blockchain';
 import { getSubwallet, getSubwallets } from './coin';
+import { libName, overflow, version } from './meta-lib';
 
 const s = (v: string) => new CustomString(v);
 
@@ -115,6 +116,11 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('bssid_name'), bssidName);
   apiInterface.set(s('kernel_version'), kernelVersion);
   apiInterface.set(s('firewall_rules'), firewallRules);
+
+  //metaLib
+  apiInterface.set(s('overflow'), overflow);
+  apiInterface.set(s('lib_name'), libName);
+  apiInterface.set(s('version'), version);
 
   //metaMail
   apiInterface.set(s('fetch'), fetchMail);
