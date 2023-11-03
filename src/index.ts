@@ -11,6 +11,7 @@ import { placeholderIntrinsic } from './utils';
 import { createWallet, getCoin, loginWallet } from './blockchain';
 import { getSubwallet, getSubwallets } from './coin';
 import { libName, overflow, version } from './meta-lib';
+import { load, netUse, rshellClient, rshellServer, scan, scanAddress, sniffer } from './metaxploit';
 
 const s = (v: string) => new CustomString(v);
 
@@ -127,6 +128,15 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('read'), readMail);
   apiInterface.set(s('send'), sendMail);
   apiInterface.set(s('delete_mail'), deleteMail);
+
+  //metaxploit
+  apiInterface.set(s('load'), load);
+  apiInterface.set(s('net_use'), netUse);
+  apiInterface.set(s('scan'), scan);
+  apiInterface.set(s('scan_address'), scanAddress);
+  apiInterface.set(s('sniffer'), sniffer);
+  apiInterface.set(s('rshell_client'), rshellClient);
+  apiInterface.set(s('rshell_server'), rshellServer);
 
   //aptClient
   apiInterface.set(s('show'), placeholderIntrinsic.forkAs('show'));
