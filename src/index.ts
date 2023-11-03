@@ -5,6 +5,7 @@ import { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';
 import { build, connectService, hostComputer, launch, ping, scp, startTerminal } from './shell';
 import { deleteMail, fetchMail, readMail, sendMail } from './meta-mail';
 import { activeNetCard, changePassword, closeProgram, connectEthernet, connectWifi, createFolder, createGroup, createUser, deleteGroup, deleteUser, getFile, getLanIp, getName, getNetworkDevices, getPorts, getPublicIpPc, groups, isNetworkActive, networkGateway, showProcs, touch, wifiNetworks } from './computer';
+import { allowImport, chmod, copy, deleteFile, getContent, getFiles, getFolders, group, hasPermission, isBinary, isFolder, move, name, owner, parent, path, permissions, rename, setContent, setGroup, setOwner, size } from './file';
 
 const s = (v: string) => new CustomString(v);
 
@@ -73,6 +74,30 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('active_net_card'), activeNetCard);
   apiInterface.set(s('network_gateway'), networkGateway);
   apiInterface.set(s('get_name'), getName);
+
+  //file
+  apiInterface.set(s('copy'), copy);
+  apiInterface.set(s('move'), move);
+  apiInterface.set(s('rename'), rename);
+  apiInterface.set(s('path'), path);
+  apiInterface.set(s('parent'), parent);
+  apiInterface.set(s('name'), name);
+  apiInterface.set(s('is_folder'), isFolder);
+  apiInterface.set(s('get_content'), getContent);
+  apiInterface.set(s('set_content'), setContent);
+  apiInterface.set(s('is_binary'), isBinary);
+  apiInterface.set(s('has_permission'), hasPermission);
+  apiInterface.set(s('delete'), deleteFile);
+  apiInterface.set(s('get_folders'), getFolders);
+  apiInterface.set(s('get_files'), getFiles);
+  apiInterface.set(s('chmod'), chmod);
+  apiInterface.set(s('permissions'), permissions);
+  apiInterface.set(s('owner'), owner);
+  apiInterface.set(s('set_owner'), setOwner);
+  apiInterface.set(s('group'), group);
+  apiInterface.set(s('set_group'), setGroup);
+  apiInterface.set(s('size'), size);
+  apiInterface.set(s('allow_import'), allowImport);
 
   //metaMail
   apiInterface.set(s('fetch'), fetchMail);
