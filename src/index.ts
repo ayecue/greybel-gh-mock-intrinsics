@@ -4,6 +4,7 @@ import generics from './generics';
 import { createGHMockEnv, GHMockIntrinsicEnv } from './mock/environment';
 import { build, connectService, hostComputer, launch, ping, scp, startTerminal } from './shell';
 import { deleteMail, fetchMail, readMail, sendMail } from './meta-mail';
+import { activeNetCard, changePassword, closeProgram, connectEthernet, connectWifi, createFolder, createGroup, createUser, deleteGroup, deleteUser, getFile, getLanIp, getName, getNetworkDevices, getPorts, getPublicIpPc, groups, isNetworkActive, networkGateway, showProcs, touch, wifiNetworks } from './computer';
 
 const s = (v: string) => new CustomString(v);
 
@@ -48,6 +49,30 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('launch'), launch);
   apiInterface.set(s('host_computer'), hostComputer);
   apiInterface.set(s('ping'), ping);
+
+  //computer
+  apiInterface.set(s('get_ports'), getPorts);
+  apiInterface.set(s('File'), getFile);
+  apiInterface.set(s('create_folder'), createFolder);
+  apiInterface.set(s('is_network_active'), isNetworkActive);
+  apiInterface.set(s('lan_ip'), getLanIp);
+  apiInterface.set(s('public_ip_pc'), getPublicIpPc);
+  apiInterface.set(s('touch'), touch);
+  apiInterface.set(s('show_procs'), showProcs);
+  apiInterface.set(s('network_devices'), getNetworkDevices);
+  apiInterface.set(s('change_password'), changePassword);
+  apiInterface.set(s('create_user'), createUser);
+  apiInterface.set(s('delete_user'), deleteUser);
+  apiInterface.set(s('create_group'), createGroup);
+  apiInterface.set(s('delete_group'), deleteGroup);
+  apiInterface.set(s('groups'), groups);
+  apiInterface.set(s('close_program'), closeProgram);
+  apiInterface.set(s('wifi_networks'), wifiNetworks);
+  apiInterface.set(s('connect_wifi'), connectWifi);
+  apiInterface.set(s('connect_ethernet'), connectEthernet);
+  apiInterface.set(s('active_net_card'), activeNetCard);
+  apiInterface.set(s('network_gateway'), networkGateway);
+  apiInterface.set(s('get_name'), getName);
 
   //metaMail
   apiInterface.set(s('fetch'), fetchMail);
