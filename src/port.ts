@@ -12,6 +12,60 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
 
+export const getLanIp = CustomFunction.createExternalWithSelf(
+  'get_lan_ip',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = Port.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const { device } = self.variables;
+    return Promise.resolve(new CustomString(device.localIp));
+  }
+);
+
+export const isClosed = CustomFunction.createExternalWithSelf(
+  'is_closed',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = Port.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const { port } = self.variables;
+    return Promise.resolve(new CustomBoolean(port.isClosed));
+  }
+);
+
+export const portNumber = CustomFunction.createExternalWithSelf(
+  'port_number',
+  (
+    _ctx: OperationContext,
+    _self: CustomValue,
+    args: Map<string, CustomValue>
+  ): Promise<CustomValue> => {
+    const self = Port.retreive(args);
+
+    if (self === null) {
+      return Promise.resolve(DefaultType.Void);
+    }
+
+    const { port } = self.variables;
+    return Promise.resolve(new CustomNumber(port.port));
+  }
+);
+
 export interface PortVariables {
   mockEnvironment: MockEnvironment;
   device: Type.Device;
@@ -21,59 +75,9 @@ export interface PortVariables {
 export class Port extends BasicInterface {
   static readonly type: string = 'port';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'get_lan_ip',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = Port.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const { device } = self.variables;
-        return Promise.resolve(new CustomString(device.localIp));
-      }
-    ),
-
-    CustomFunction.createExternalWithSelf(
-      'is_closed',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = Port.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const { port } = self.variables;
-        return Promise.resolve(new CustomBoolean(port.isClosed));
-      }
-    ),
-
-    CustomFunction.createExternalWithSelf(
-      'port_number',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const self = Port.retreive(args);
-
-        if (self === null) {
-          return Promise.resolve(DefaultType.Void);
-        }
-
-        const { port } = self.variables;
-        return Promise.resolve(new CustomNumber(port.port));
-      }
-    )
+    getLanIp,
+    isClosed,
+    portNumber
   ]);
 
   static retreive(args: Map<string, CustomValue>): Port | null {

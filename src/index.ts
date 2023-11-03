@@ -13,6 +13,7 @@ import { getSubwallet, getSubwallets } from './coin';
 import { libName, overflow, version } from './meta-lib';
 import { load, netUse, rshellClient, rshellServer, scan, scanAddress, sniffer } from './metaxploit';
 import { dumpLib, getNumConnGateway, getNumPortforward, getNumUsers, isAnyActiveUser, isRootActiveUser } from './net-session';
+import { isClosed, portNumber } from './port';
 
 const s = (v: string) => new CustomString(v);
 
@@ -146,6 +147,11 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('get_num_conn_gateway'), getNumConnGateway);
   apiInterface.set(s('is_any_active_user'), isAnyActiveUser);
   apiInterface.set(s('is_root_active_user'), isRootActiveUser);
+
+  //port
+  apiInterface.set(s('get_lan_ip'), getLanIp);
+  apiInterface.set(s('is_closed'), isClosed);
+  apiInterface.set(s('port_number'), portNumber);
 
   //aptClient
   apiInterface.set(s('show'), placeholderIntrinsic.forkAs('show'));
