@@ -15,6 +15,7 @@ import { load, netUse, rshellClient, rshellServer, scan, scanAddress, sniffer } 
 import { dumpLib, getNumConnGateway, getNumPortforward, getNumUsers, isAnyActiveUser, isRootActiveUser } from './net-session';
 import { isClosed, portNumber } from './port';
 import { installService, startService, stopService } from './service';
+import { aircrack, aireplay, airmon, decipher, smtpUserList } from './crypto';
 
 const s = (v: string) => new CustomString(v);
 
@@ -120,6 +121,13 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('bssid_name'), bssidName);
   apiInterface.set(s('kernel_version'), kernelVersion);
   apiInterface.set(s('firewall_rules'), firewallRules);
+
+  //crypto
+  apiInterface.set(s('decipher'), decipher);
+  apiInterface.set(s('aircrack'), aircrack);
+  apiInterface.set(s('airmon'), airmon);
+  apiInterface.set(s('aireplay'), aireplay);
+  apiInterface.set(s('smtp_user_list'), smtpUserList);
 
   //metaLib
   apiInterface.set(s('overflow'), overflow);
