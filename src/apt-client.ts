@@ -1,13 +1,11 @@
 import {
-  CustomFunction,
-  CustomString,
-  CustomValue,
-  OperationContext
+  CustomValue
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
+import { placeholderIntrinsic } from './utils';
 
 export interface AptClientVariables {
   mockEnvironment: MockEnvironment;
@@ -19,76 +17,13 @@ export interface AptClientVariables {
 export class AptClient extends BasicInterface {
   static readonly type: string = 'aptclientLib';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'show',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'search',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'update',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'add_repo',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'del_repo',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'install',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'check_upgrade',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    )
+    placeholderIntrinsic.forkAs('show'),
+    placeholderIntrinsic.forkAs('search'),
+    placeholderIntrinsic.forkAs('update'),
+    placeholderIntrinsic.forkAs('add_repo'),
+    placeholderIntrinsic.forkAs('del_repo'),
+    placeholderIntrinsic.forkAs('install'),
+    placeholderIntrinsic.forkAs('check_upgrade'),
   ]);
 
   static retreive(args: Map<string, CustomValue>): AptClient | null {

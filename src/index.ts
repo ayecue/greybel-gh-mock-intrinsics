@@ -7,6 +7,9 @@ import { deleteMail, fetchMail, readMail, sendMail } from './meta-mail';
 import { activeNetCard, changePassword, closeProgram, connectEthernet, connectWifi, createFolder, createGroup, createUser, deleteGroup, deleteUser, getFile, getLanIp, getName, getNetworkDevices, getPorts, getPublicIpPc, groups, isNetworkActive, networkGateway, showProcs, touch, wifiNetworks } from './computer';
 import { allowImport, chmod, copy, deleteFile, getContent, getFiles, getFolders, group, hasPermission, isBinary, isFolder, move, name, owner, parent, path, permissions, rename, setContent, setGroup, setOwner, size } from './file';
 import { bssidName, devicePorts, devicesLanIp, essidName, firewallRules, kernelVersion, localIp, pingPort, portInfo, publicIp, usedPorts } from './router';
+import { placeholderIntrinsic } from './utils';
+import { createWallet, getCoin, loginWallet } from './blockchain';
+import { getSubwallet, getSubwallets } from './coin';
 
 const s = (v: string) => new CustomString(v);
 
@@ -118,6 +121,50 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('read'), readMail);
   apiInterface.set(s('send'), sendMail);
   apiInterface.set(s('delete_mail'), deleteMail);
+
+  //aptClient
+  apiInterface.set(s('show'), placeholderIntrinsic.forkAs('show'));
+  apiInterface.set(s('search'), placeholderIntrinsic.forkAs('search'));
+  apiInterface.set(s('update'), placeholderIntrinsic.forkAs('update'));
+  apiInterface.set(s('add_repo'), placeholderIntrinsic.forkAs('add_repo'));
+  apiInterface.set(s('del_repo'), placeholderIntrinsic.forkAs('del_repo'));
+  apiInterface.set(s('install'), placeholderIntrinsic.forkAs('install'));
+  apiInterface.set(s('check_upgrade'), placeholderIntrinsic.forkAs('check_upgrade'));
+
+  //blockchain
+  apiInterface.set(s('get_coin'), getCoin);
+  apiInterface.set(s('login_wallet'), loginWallet);
+  apiInterface.set(s('create_wallet'), createWallet);
+  apiInterface.set(s('coin_price'), placeholderIntrinsic.forkAs('coin_price'));
+  apiInterface.set(s('show_history'), placeholderIntrinsic.forkAs('show_history'));
+  apiInterface.set(s('amount_mined'), placeholderIntrinsic.forkAs('amount_mined'));
+  apiInterface.set(s('delete_coin'), placeholderIntrinsic.forkAs('delete_coin'));
+
+  //coin
+  apiInterface.set(s('get_subwallet'), getSubwallet);
+  apiInterface.set(s('get_subwallets'), getSubwallets);
+  apiInterface.set(s('set_cycle_mining'), placeholderIntrinsic.forkAs('set_cycle_mining'));
+  apiInterface.set(s('get_cycle_mining'), placeholderIntrinsic.forkAs('get_cycle_mining'));
+  apiInterface.set(s('get_reward'), placeholderIntrinsic.forkAs('get_reward'));
+  apiInterface.set(s('set_reward'), placeholderIntrinsic.forkAs('set_reward'));
+  apiInterface.set(s('transaction'), placeholderIntrinsic.forkAs('transaction'));
+  apiInterface.set(s('create_subwallet'), placeholderIntrinsic.forkAs('create_subwallet'));
+  apiInterface.set(s('set_address'), placeholderIntrinsic.forkAs('set_address'));
+  apiInterface.set(s('get_address'), placeholderIntrinsic.forkAs('get_address'));
+  apiInterface.set(s('get_mined_coins'), placeholderIntrinsic.forkAs('get_mined_coins'));
+
+  //wallet
+  apiInterface.set(s('list_coins'), placeholderIntrinsic.forkAs('list_coins'));
+  apiInterface.set(s('get_balance'), placeholderIntrinsic.forkAs('get_balance'));
+  apiInterface.set(s('buy_coin'), placeholderIntrinsic.forkAs('buy_coin'));
+  apiInterface.set(s('sell_coin'), placeholderIntrinsic.forkAs('sell_coin'));
+  apiInterface.set(s('get_pending_trade'), placeholderIntrinsic.forkAs('get_pending_trade'));
+  apiInterface.set(s('cancel_pending_trade'), placeholderIntrinsic.forkAs('cancel_pending_trade'));
+  apiInterface.set(s('get_global_offers'), placeholderIntrinsic.forkAs('get_global_offers'));
+  apiInterface.set(s('list_global_coins'), placeholderIntrinsic.forkAs('list_global_coins'));
+  apiInterface.set(s('show_nodes'), placeholderIntrinsic.forkAs('show_nodes'));
+  apiInterface.set(s('reset_password'), placeholderIntrinsic.forkAs('reset_password'));
+  apiInterface.set(s('get_pin'), placeholderIntrinsic.forkAs('get_pin'));
 
   return apiInterface;
 }

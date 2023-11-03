@@ -8,6 +8,7 @@ import { MockEnvironment, Type } from 'greybel-mock-environment';
 
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
+import { placeholderIntrinsic } from './utils';
 
 export interface WalletVariables {
   mockEnvironment: MockEnvironment;
@@ -18,116 +19,17 @@ export interface WalletVariables {
 export class Wallet extends BasicInterface {
   static readonly type: string = 'wallet';
   static readonly isa: GreyMap = new GreyMap([
-    CustomFunction.createExternalWithSelf(
-      'list_coins',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_balance',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'buy_coin',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'sell_coin',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_pending_trade',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'cancel_pending_trade',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_global_offers',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'list_global_coins',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'show_nodes',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'reset_password',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    ),
-    CustomFunction.createExternalWithSelf(
-      'get_pin',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(new CustomString('Not yet supported'));
-      }
-    )
+    placeholderIntrinsic.forkAs('list_coins'),
+    placeholderIntrinsic.forkAs('get_balance'),
+    placeholderIntrinsic.forkAs('buy_coin'),
+    placeholderIntrinsic.forkAs('sell_coin'),
+    placeholderIntrinsic.forkAs('get_pending_trade'),
+    placeholderIntrinsic.forkAs('cancel_pending_trade'),
+    placeholderIntrinsic.forkAs('get_global_offers'),
+    placeholderIntrinsic.forkAs('list_global_coins'),
+    placeholderIntrinsic.forkAs('show_nodes'),
+    placeholderIntrinsic.forkAs('reset_password'),
+    placeholderIntrinsic.forkAs('get_pin'),
   ]);
 
   static retreive(args: Map<string, CustomValue>): Wallet | null {
