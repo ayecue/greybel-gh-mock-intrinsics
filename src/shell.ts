@@ -441,7 +441,13 @@ export const launch = CustomFunction.createExternalWithSelf(
 
     mockEnvironment.sessions.push(session);
 
-    await interpreter.run(file.content);
+    await interpreter.run({
+      customCode: file.content,
+      ctxOptions: {
+        contextTypeIntrinsics: ctx.contextTypeIntrinsics,
+        stackTrace: ctx.stackTrace
+      }
+    });
 
     mockEnvironment.sessions.pop();
 
