@@ -38,10 +38,6 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
   getSharedCustomObject(): CustomMap {
     return this.sharedCustomObject;
   }
-
-  getElapsedTime(): number {
-    return (Date.now() - this.startTime) / 1000;
-  }
 }
 
 export function createGHMockEnv(

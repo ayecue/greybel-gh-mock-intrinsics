@@ -34,7 +34,6 @@ export interface GenericIntrinsics {
   getSwitch: CustomFunction;
   includeLib: CustomFunction;
   md5: CustomFunction;
-  time: CustomFunction;
   nslookup: CustomFunction;
   whois: CustomFunction;
   isValidIp: CustomFunction;
@@ -251,19 +250,6 @@ export default function generics(
         return Promise.resolve(DefaultType.Void);
       }
     ).addArgument('value'),
-
-    time: CustomFunction.createExternal(
-      'time',
-      (
-        _ctx: OperationContext,
-        _self: CustomValue,
-        _args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        return Promise.resolve(
-          new CustomNumber(mockEnvironment.getElapsedTime())
-        );
-      }
-    ),
 
     nslookup: CustomFunction.createExternal(
       'nslookup',

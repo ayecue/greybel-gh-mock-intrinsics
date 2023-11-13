@@ -31,7 +31,6 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('get_switch'), intrinsics.getSwitch);
   apiInterface.set(s('include_lib'), intrinsics.includeLib);
   apiInterface.set(s('md5'), intrinsics.md5);
-  apiInterface.set(s('time'), intrinsics.time);
   apiInterface.set(s('nslookup'), intrinsics.nslookup);
   apiInterface.set(s('whois'), intrinsics.whois);
   apiInterface.set(s('is_valid_ip'), intrinsics.isValidIp);
