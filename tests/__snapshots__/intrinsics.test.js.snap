@@ -18,6 +18,18 @@ exports[`interpreter default scripts blockchain.src 8`] = `"wallet"`;
 
 exports[`interpreter default scripts blockchain.src 9`] = `"Not yet supported"`;
 
+exports[`interpreter default scripts class-output.src 1`] = `"test"`;
+
+exports[`interpreter default scripts class-output.src 2`] = `"{\\"__isa\\":test}"`;
+
+exports[`interpreter default scripts class-output.src 3`] = `"{\\"__isa\\":test}"`;
+
+exports[`interpreter default scripts class-output.src 4`] = `"test"`;
+
+exports[`interpreter default scripts class-output.src 5`] = `"test"`;
+
+exports[`interpreter default scripts class-output.src 6`] = `"test"`;
+
 exports[`interpreter default scripts coin.src 1`] = `"coin"`;
 
 exports[`interpreter default scripts coin.src 2`] = `"coin"`;
@@ -60,7 +72,7 @@ exports[`interpreter default scripts crypto.src 4`] = `"0/200"`;
 
 exports[`interpreter default scripts crypto.src 5`] = `"0/200"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `"667/200"`;
+exports[`interpreter default scripts crypto.src 6`] = `"420/200"`;
 
 exports[`interpreter default scripts crypto.src 7`] = `"null"`;
 
@@ -461,9 +473,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 `;
 
 exports[`interpreter default scripts scripts.src 3`] = `
-"USER  PID   CPU   MEM    COMMAND      
-root  3808  13.2  12.17  kernel_task  
-root  4194  11.5  12.99  Xorg         "
+"USER  PID   CPU  MEM    COMMAND      
+root  5371  4.6  20.12  kernel_task  
+root  980   9.3  14.63  Xorg         "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -514,8 +526,8 @@ exports[`interpreter default scripts shell.src 11`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER PID CPU MEM COMMAND
-root 8602 2.4 5.83 kernel_task
-root 7967 6.0 8.81 Xorg"
+root 1027 9.8 5.31 kernel_task
+root 4923 3.3 6.86 Xorg"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -534,7 +546,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"0"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 60% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 57% vingoftw\\", \\"42:D6:90:7C:BF:71 49% aptain117\\", \\"09:2F:46:FB:32:E9 57% f999\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 51% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 73% vingoftw\\", \\"42:D6:90:7C:BF:71 56% aptain117\\", \\"09:2F:46:FB:32:E9 48% f999\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"1"`;
 

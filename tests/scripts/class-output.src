@@ -1,0 +1,18 @@
+Obj = { "classID": "test" }
+Obj.create = function()
+  instance = new self
+  instance.foo = 123
+  instance.bar = false
+  return instance
+end function
+
+instance = new Obj
+instance2 = Obj.create
+
+print Obj
+print instance
+print instance
+
+print typeof(Obj)
+print typeof(instance2)
+print typeof(instance2)

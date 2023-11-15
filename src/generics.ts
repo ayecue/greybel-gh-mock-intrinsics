@@ -2,8 +2,8 @@ import actualMd5 from 'blueimp-md5';
 import {
   CustomBoolean,
   CustomFunction,
+  CustomMap,
   CustomNil,
-  CustomNumber,
   CustomString,
   CustomValue,
   DefaultType,
@@ -26,6 +26,7 @@ import {
   keyEventToString,
   Month
 } from './utils';
+import { CLASS_ID_PROPERTY } from './interface';
 
 export interface GenericIntrinsics {
   getShell: CustomFunction;
@@ -557,12 +558,18 @@ export default function generics(
     typeOf: CustomFunction.createExternal(
       'typeOf',
       (
-        _ctx: OperationContext,
+        ctx: OperationContext,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const type =
-          args.get('value')?.getCustomType() || DefaultType.Void.toString();
+        const value = args.get('value');
+        let type;
+
+        if (value instanceof CustomMap && value.has(CLASS_ID_PROPERTY)) {
+          type = value.get(CLASS_ID_PROPERTY, ctx.contextTypeIntrinsics).toString();
+        } else {
+          type = value?.getCustomType() || DefaultType.Void.toString();
+        }
 
         return Promise.resolve(new CustomString(type));
       }

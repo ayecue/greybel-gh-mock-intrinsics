@@ -20,6 +20,10 @@ export default class BasicInterface extends CustomMap {
     this.value.set(CLASS_ID_PROPERTY, new CustomString(type));
   }
 
+  getCustomType(): string {
+    return this.value.get(CLASS_ID_PROPERTY)?.toString() ?? super.getCustomType();
+  }
+
   set(_path: Path<CustomValue> | CustomValue, _newValue: CustomValue) {
     throw new Error('Cannot set property on an interface.');
   }
@@ -34,9 +38,5 @@ export default class BasicInterface extends CustomMap {
       return this.variables[key];
     }
     return null;
-  }
-
-  toString(): string {
-    return this.getCustomType();
   }
 }

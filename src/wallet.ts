@@ -1,8 +1,5 @@
 import {
-  CustomFunction,
-  CustomString,
-  CustomValue,
-  OperationContext
+  CustomValue
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 

@@ -1,10 +1,12 @@
 const {
-  Interpreter,
   Debugger,
   OutputHandler,
   HandlerContainer,
   ObjectValue
 } = require('greybel-interpreter');
+const {
+  Interpreter
+} = require('greyscript-interpreter');
 const defaultInit = require('greybel-intrinsics').init;
 const { init, createGHMockEnv } = require('../dist');
 const fs = require('fs');
