@@ -5,7 +5,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -16,7 +16,7 @@ import { create as createPort, Port } from './port';
 export const publicIp = CustomFunction.createExternalWithSelf(
   'public_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -34,7 +34,7 @@ export const publicIp = CustomFunction.createExternalWithSelf(
 export const localIp = CustomFunction.createExternalWithSelf(
   'local_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -52,7 +52,7 @@ export const localIp = CustomFunction.createExternalWithSelf(
 export const bssidName = CustomFunction.createExternalWithSelf(
   'bssid_name',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -70,7 +70,7 @@ export const bssidName = CustomFunction.createExternalWithSelf(
 export const essidName = CustomFunction.createExternalWithSelf(
   'essid_name',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -88,7 +88,7 @@ export const essidName = CustomFunction.createExternalWithSelf(
 export const firewallRules = CustomFunction.createExternalWithSelf(
   'firewall_rules',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -105,7 +105,7 @@ export const firewallRules = CustomFunction.createExternalWithSelf(
 export const kernelVersion = CustomFunction.createExternalWithSelf(
   'kernel_version',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -133,7 +133,7 @@ export const kernelVersion = CustomFunction.createExternalWithSelf(
 export const devicesLanIp = CustomFunction.createExternalWithSelf(
   'devices_lan_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -157,7 +157,7 @@ export const devicesLanIp = CustomFunction.createExternalWithSelf(
 export const usedPorts = CustomFunction.createExternalWithSelf(
   'used_ports',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -192,7 +192,7 @@ export const usedPorts = CustomFunction.createExternalWithSelf(
 export const devicePorts = CustomFunction.createExternalWithSelf(
   'device_ports',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -228,7 +228,7 @@ export const devicePorts = CustomFunction.createExternalWithSelf(
 export const pingPort = CustomFunction.createExternalWithSelf(
   'ping_port',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -269,7 +269,7 @@ export const pingPort = CustomFunction.createExternalWithSelf(
 export const portInfo = CustomFunction.createExternalWithSelf(
   'port_info',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

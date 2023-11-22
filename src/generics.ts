@@ -7,7 +7,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
 
@@ -64,7 +64,7 @@ export default function generics(
     getShell: CustomFunction.createExternal(
       'getShell',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -84,7 +84,7 @@ export default function generics(
     mailLogin: CustomFunction.createExternal(
       'mailLogin',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -108,7 +108,7 @@ export default function generics(
     getRouter: CustomFunction.createExternal(
       'getRouter',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -148,7 +148,7 @@ export default function generics(
     getSwitch: CustomFunction.createExternal(
       'getSwitch',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -182,7 +182,7 @@ export default function generics(
     includeLib: CustomFunction.createExternal(
       'includeLib',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -240,7 +240,7 @@ export default function generics(
     md5: CustomFunction.createExternal(
       'md5',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -255,7 +255,7 @@ export default function generics(
     nslookup: CustomFunction.createExternal(
       'nslookup',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -273,7 +273,7 @@ export default function generics(
     whois: CustomFunction.createExternal(
       'whois',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -314,7 +314,7 @@ export default function generics(
     isValidIp: CustomFunction.createExternal(
       'isValidIp',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -326,7 +326,7 @@ export default function generics(
     isLanIp: CustomFunction.createExternal(
       'isLanIp',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -340,7 +340,7 @@ export default function generics(
     commandInfo: CustomFunction.createExternal(
       'commandInfo',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -358,7 +358,7 @@ export default function generics(
     currentDate: CustomFunction.createExternal(
       'currentDate',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -373,7 +373,7 @@ export default function generics(
     currentPath: CustomFunction.createExternal(
       'currentPath',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -387,7 +387,7 @@ export default function generics(
     parentPath: CustomFunction.createExternal(
       'parentPath',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -410,7 +410,7 @@ export default function generics(
     homeDir: CustomFunction.createExternal(
       'homeDir',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -426,7 +426,7 @@ export default function generics(
     programPath: CustomFunction.createExternal(
       'programPath',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -440,7 +440,7 @@ export default function generics(
     activeUser: CustomFunction.createExternal(
       'activeUser',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -453,7 +453,7 @@ export default function generics(
     userMailAddress: CustomFunction.createExternal(
       'userMailAddress',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -466,7 +466,7 @@ export default function generics(
     userBankNumber: CustomFunction.createExternal(
       'userBankNumber',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -479,7 +479,7 @@ export default function generics(
     formatColumns: CustomFunction.createExternal(
       'formatColumns',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -498,7 +498,7 @@ export default function generics(
     userInput: CustomFunction.createExternal(
       'userInput',
       async (
-        ctx: OperationContext,
+        vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -507,8 +507,8 @@ export default function generics(
         const anyKey = args.get('anyKey').toTruthy();
 
         if (anyKey) {
-          const keyPress = await ctx.handler.outputHandler.waitForKeyPress(
-            ctx,
+          const keyPress = await vm.handler.outputHandler.waitForKeyPress(
+            vm,
             message
           );
           const value = keyEventToString(keyPress);
@@ -516,8 +516,8 @@ export default function generics(
           return new CustomString(value);
         }
 
-        const input = await ctx.handler.outputHandler.waitForInput(
-          ctx,
+        const input = await vm.handler.outputHandler.waitForInput(
+          vm,
           isPassword,
           message
         );
@@ -532,11 +532,11 @@ export default function generics(
     clearScreen: CustomFunction.createExternal(
       'clearScreen',
       (
-        ctx: OperationContext,
+        vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        ctx.handler.outputHandler.clear(ctx);
+        vm.handler.outputHandler.clear(vm);
         return Promise.resolve(DefaultType.Void);
       }
     ),
@@ -544,7 +544,7 @@ export default function generics(
     launchPath: CustomFunction.createExternal(
       'launchPath',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -558,7 +558,7 @@ export default function generics(
     typeOf: CustomFunction.createExternal(
       'typeOf',
       (
-        ctx: OperationContext,
+        vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -566,7 +566,7 @@ export default function generics(
         let type;
 
         if (value instanceof CustomMap && value.has(CLASS_ID_PROPERTY)) {
-          type = value.get(CLASS_ID_PROPERTY, ctx.contextTypeIntrinsics).toString();
+          type = value.get(CLASS_ID_PROPERTY, vm.contextTypeIntrinsics).toString();
         } else {
           type = value?.getCustomType() || DefaultType.Void.toString();
         }
@@ -578,7 +578,7 @@ export default function generics(
     getCustomObject: CustomFunction.createExternal(
       'getCustomObject',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -589,7 +589,7 @@ export default function generics(
     getCTF: CustomFunction.createExternal(
       'get_ctf',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {

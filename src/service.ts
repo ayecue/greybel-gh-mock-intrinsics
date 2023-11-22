@@ -3,7 +3,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -13,7 +13,7 @@ import BasicInterface from './interface';
 export const installService = CustomFunction.createExternalWithSelf(
   'install_service',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -40,7 +40,7 @@ export const installService = CustomFunction.createExternalWithSelf(
 export const startService = CustomFunction.createExternalWithSelf(
   'start_service',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -72,7 +72,7 @@ export const startService = CustomFunction.createExternalWithSelf(
 export const stopService = CustomFunction.createExternalWithSelf(
   'stop_service',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

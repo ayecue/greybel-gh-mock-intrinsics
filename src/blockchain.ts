@@ -2,7 +2,7 @@ import {
   CustomFunction,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -15,7 +15,7 @@ import { placeholderIntrinsic } from './utils';
 export const getCoin = CustomFunction.createExternalWithSelf(
   'get_coin',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -33,7 +33,7 @@ export const getCoin = CustomFunction.createExternalWithSelf(
 export const loginWallet = CustomFunction.createExternalWithSelf(
   'login_wallet',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -51,7 +51,7 @@ export const loginWallet = CustomFunction.createExternalWithSelf(
 export const createWallet = CustomFunction.createExternalWithSelf(
   'create_wallet',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

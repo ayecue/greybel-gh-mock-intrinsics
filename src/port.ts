@@ -5,7 +5,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -15,7 +15,7 @@ import BasicInterface from './interface';
 export const getLanIp = CustomFunction.createExternalWithSelf(
   'get_lan_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -33,7 +33,7 @@ export const getLanIp = CustomFunction.createExternalWithSelf(
 export const isClosed = CustomFunction.createExternalWithSelf(
   'is_closed',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -51,7 +51,7 @@ export const isClosed = CustomFunction.createExternalWithSelf(
 export const portNumber = CustomFunction.createExternalWithSelf(
   'port_number',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

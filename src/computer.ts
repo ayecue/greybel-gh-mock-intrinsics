@@ -6,7 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import {
   MockEnvironment,
@@ -31,7 +31,7 @@ import {
 export const getPorts = CustomFunction.createExternalWithSelf(
   'get_ports',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -53,7 +53,7 @@ export const getPorts = CustomFunction.createExternalWithSelf(
 export const getFile = CustomFunction.createExternalWithSelf(
   'File',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -87,7 +87,7 @@ export const getFile = CustomFunction.createExternalWithSelf(
 export const createFolder = CustomFunction.createExternalWithSelf(
   'create_folder',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -176,7 +176,7 @@ export const createFolder = CustomFunction.createExternalWithSelf(
 export const isNetworkActive = CustomFunction.createExternalWithSelf(
   'is_network_active',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -187,7 +187,7 @@ export const isNetworkActive = CustomFunction.createExternalWithSelf(
 export const getName = CustomFunction.createExternalWithSelf(
   'get_name',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -205,7 +205,7 @@ export const getName = CustomFunction.createExternalWithSelf(
 export const touch = CustomFunction.createExternalWithSelf(
   'touch',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -293,7 +293,7 @@ export const touch = CustomFunction.createExternalWithSelf(
 export const showProcs = CustomFunction.createExternalWithSelf(
   'show_procs',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -320,7 +320,7 @@ export const showProcs = CustomFunction.createExternalWithSelf(
 export const getNetworkDevices = CustomFunction.createExternalWithSelf(
   'network_devices',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -344,7 +344,7 @@ export const getNetworkDevices = CustomFunction.createExternalWithSelf(
 export const changePassword = CustomFunction.createExternalWithSelf(
   'change_password',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -402,7 +402,7 @@ export const changePassword = CustomFunction.createExternalWithSelf(
 export const createUser = CustomFunction.createExternalWithSelf(
   'create_user',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -463,7 +463,7 @@ export const createUser = CustomFunction.createExternalWithSelf(
 export const deleteUser = CustomFunction.createExternalWithSelf(
   'delete_user',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -522,7 +522,7 @@ export const deleteUser = CustomFunction.createExternalWithSelf(
 export const createGroup = CustomFunction.createExternalWithSelf(
   'create_group',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -578,7 +578,7 @@ export const createGroup = CustomFunction.createExternalWithSelf(
 export const deleteGroup = CustomFunction.createExternalWithSelf(
   'delete_group',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -632,7 +632,7 @@ export const deleteGroup = CustomFunction.createExternalWithSelf(
 export const groups = CustomFunction.createExternalWithSelf(
   'groups',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -672,7 +672,7 @@ export const groups = CustomFunction.createExternalWithSelf(
 export const closeProgram = CustomFunction.createExternalWithSelf(
   'close_program',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -719,7 +719,7 @@ export const closeProgram = CustomFunction.createExternalWithSelf(
 export const wifiNetworks = CustomFunction.createExternalWithSelf(
   'wifi_networks',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -751,7 +751,7 @@ export const wifiNetworks = CustomFunction.createExternalWithSelf(
 export const connectWifi = CustomFunction.createExternalWithSelf(
   'connect_wifi',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -838,7 +838,7 @@ export const connectWifi = CustomFunction.createExternalWithSelf(
 export const connectEthernet = CustomFunction.createExternalWithSelf(
   'connect_ethernet',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -926,7 +926,7 @@ export const connectEthernet = CustomFunction.createExternalWithSelf(
 export const networkGateway = CustomFunction.createExternalWithSelf(
   'network_gateway',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -944,7 +944,7 @@ export const networkGateway = CustomFunction.createExternalWithSelf(
 export const activeNetCard = CustomFunction.createExternalWithSelf(
   'active_net_card',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -964,7 +964,7 @@ export const activeNetCard = CustomFunction.createExternalWithSelf(
 export const getLanIp = CustomFunction.createExternalWithSelf(
   'local_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -982,7 +982,7 @@ export const getLanIp = CustomFunction.createExternalWithSelf(
 export const getPublicIpPc = CustomFunction.createExternalWithSelf(
   'public_ip',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

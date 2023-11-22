@@ -6,8 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  Operation,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 
 import { Computer, create as createComputer } from './computer';
@@ -28,7 +27,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'sessions',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -76,7 +75,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'get_or_create_router',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -111,7 +110,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'get_computers_connected_to_router',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -146,7 +145,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'get_shell_for_computer',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -175,7 +174,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'get_shell_for_file',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -204,7 +203,7 @@ export class TestLib extends BasicInterface {
     CustomFunction.createExternalWithSelf(
       'get_computer_for_file',
       (
-        _ctx: OperationContext,
+        _vm: VM,
         _self: CustomValue,
         args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
@@ -231,120 +230,13 @@ export class TestLib extends BasicInterface {
       }
     ).addArgument('file'),
     CustomFunction.createExternalWithSelf(
-      'try_to_execute',
-      async (
-        ctx: OperationContext,
-        self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const callback = args.get('callback');
-        const onError = args.get('onError');
-        const callbackArgs = args.get('args');
-
-        if (!(callback instanceof CustomFunction)) {
-          return Promise.resolve(
-            new CustomString('callback argument has to be provided.')
-          );
-        }
-
-        if (!(onError instanceof CustomFunction)) {
-          return Promise.resolve(
-            new CustomString('onError argument has to be provided.')
-          );
-        }
-
-        if (!(callbackArgs instanceof CustomList)) {
-          return Promise.resolve(
-            new CustomString('args argument has to be a list.')
-          );
-        }
-
-        const stackTraceIndex = ctx.stackTrace.length - 1;
-
-        try {
-          const result = await callback.run(self, callbackArgs.value, ctx);
-          return result;
-        } catch (err) {
-          const lastActive = ctx.getLastActive();
-
-          await onError.run(
-            self,
-            [
-              new CustomString(err.message),
-              new CustomString(
-                lastActive.stackTrace
-                  .map((op: Operation) => {
-                    return `at ${op.target}:${op.item?.start.line ?? 0}:${
-                      op.item?.start.character ?? 0
-                    }`;
-                  })
-                  .join('\n')
-              )
-            ],
-            ctx
-          );
-
-          ctx.stackTrace.splice(stackTraceIndex, ctx.stackTrace.length - stackTraceIndex);
-        }
-
-        return DefaultType.Void;
-      }
-    )
-      .addArgument('callback')
-      .addArgument('onError')
-      .addArgument('args', new CustomList()),
-    CustomFunction.createExternalWithSelf(
-      'try_to_execute_with_debug',
-      async (
-        ctx: OperationContext,
-        self: CustomValue,
-        args: Map<string, CustomValue>
-      ): Promise<CustomValue> => {
-        const callback = args.get('callback');
-        const callbackArgs = args.get('args');
-
-        if (!(callback instanceof CustomFunction)) {
-          return Promise.resolve(
-            new CustomString('callback argument has to be provided.')
-          );
-        }
-
-        if (!(callbackArgs instanceof CustomList)) {
-          return Promise.resolve(
-            new CustomString('args argument has to be a list.')
-          );
-        }
-
-        const stackTraceIndex = ctx.stackTrace.length - 1;
-
-        try {
-          const result = await callback.run(self, callbackArgs.value, ctx);
-          return result;
-        } catch (err) {
-          const lastActive = ctx.getLastActive();
-          const op = lastActive.stackTrace[0];
-
-          ctx.debugger.setBreakpoint(true);
-          ctx.debugger.interact(lastActive, op.item, op);
-          await ctx.debugger.resume();
-          ctx.debugger.setBreakpoint(false);
-
-          ctx.stackTrace.splice(stackTraceIndex, ctx.stackTrace.length - stackTraceIndex);
-        }
-
-        return DefaultType.Void;
-      }
-    )
-      .addArgument('callback')
-      .addArgument('args', new CustomList()),
-    CustomFunction.createExternalWithSelf(
       'get_stack_trace',
       async (
-        ctx: OperationContext
+        vm: VM
       ): Promise<CustomValue> => {
-        const stackTrace = ctx.stackTrace.map((op) => {
-          return new CustomString(`at ${op.target}:${op.item?.start.line ?? 0}:${
-            op.item?.start.character ?? 0
+        const stackTrace = vm.getStacktrace().map((op) => {
+          return new CustomString(`at ${op.source.path}:${op.source?.start.line ?? 0}:${
+            op.source?.start.character ?? 0
           }`);
         });
 

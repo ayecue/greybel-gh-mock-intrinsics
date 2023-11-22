@@ -6,7 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
 
@@ -25,7 +25,7 @@ import {
 export const load = CustomFunction.createExternalWithSelf(
   'load',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -93,7 +93,7 @@ export const load = CustomFunction.createExternalWithSelf(
 export const netUse = CustomFunction.createExternalWithSelf(
   'net_use',
   (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -114,8 +114,8 @@ export const netUse = CustomFunction.createExternalWithSelf(
     const ipAddressRaw = ipAddress.toString();
 
     if (ipAddressRaw === '' || !Utils.isValidIp(ipAddressRaw)) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         `Invalid ip address:${ipAddressRaw}`
       );
       return Promise.resolve(DefaultType.Void);
@@ -132,7 +132,7 @@ export const netUse = CustomFunction.createExternalWithSelf(
     }
 
     if (router == null) {
-      ctx.handler.outputHandler.print(ctx, 'Ip address not found.');
+      vm.handler.outputHandler.print(vm, 'Ip address not found.');
       return Promise.resolve(DefaultType.Void);
     }
 
@@ -161,8 +161,8 @@ export const netUse = CustomFunction.createExternalWithSelf(
       const targetDevice = router.findByLanIp(ipAddressRaw);
 
       if (targetDevice == null) {
-        ctx.handler.outputHandler.print(
-          ctx,
+        vm.handler.outputHandler.print(
+          vm,
           'Error: LAN computer not found.'
         );
         return Promise.resolve(DefaultType.Void);
@@ -171,7 +171,7 @@ export const netUse = CustomFunction.createExternalWithSelf(
       const targetPort = targetDevice.findPort(portRaw);
 
       if (targetPort == null) {
-        ctx.handler.outputHandler.print(ctx, 'Port not found.');
+        vm.handler.outputHandler.print(vm, 'Port not found.');
         return Promise.resolve(DefaultType.Void);
       }
 
@@ -196,14 +196,14 @@ export const netUse = CustomFunction.createExternalWithSelf(
     const forwardedComputer = router.getForwarded(portRaw);
 
     if (forwardedComputer === null) {
-      ctx.handler.outputHandler.print(ctx, 'Port not found.');
+      vm.handler.outputHandler.print(vm, 'Port not found.');
       return Promise.resolve(DefaultType.Void);
     }
 
     const forwardedComputerPort = forwardedComputer.ports.get(portRaw);
 
     if (forwardedComputerPort.isClosed) {
-      ctx.handler.outputHandler.print(ctx, "can't connect: port closed.");
+      vm.handler.outputHandler.print(vm, "can't connect: port closed.");
       return Promise.resolve(DefaultType.Void);
     }
 
@@ -233,7 +233,7 @@ export const netUse = CustomFunction.createExternalWithSelf(
 export const scan = CustomFunction.createExternalWithSelf(
   'scan',
   (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -250,8 +250,8 @@ export const scan = CustomFunction.createExternalWithSelf(
       const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
       if (!metaFile || metaFile.deleted) {
-        ctx.handler.outputHandler.print(
-          ctx,
+        vm.handler.outputHandler.print(
+          vm,
           'Error: metaxploit lib missing.'
         );
         return Promise.resolve(DefaultType.Void);
@@ -283,7 +283,7 @@ export const scan = CustomFunction.createExternalWithSelf(
 export const scanAddress = CustomFunction.createExternalWithSelf(
   'scan_address',
   (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -301,8 +301,8 @@ export const scanAddress = CustomFunction.createExternalWithSelf(
       const metaFile = metaLib.getVariable('metaFile') as Type.File;
 
       if (!metaFile || metaFile.deleted) {
-        ctx.handler.outputHandler.print(
-          ctx,
+        vm.handler.outputHandler.print(
+          vm,
           'Error: metaxploit lib missing.'
         );
         return Promise.resolve(DefaultType.Void);
@@ -347,7 +347,7 @@ export const scanAddress = CustomFunction.createExternalWithSelf(
 export const sniffer = CustomFunction.createExternalWithSelf(
   'sniffer',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -358,7 +358,7 @@ export const sniffer = CustomFunction.createExternalWithSelf(
 export const rshellClient = CustomFunction.createExternalWithSelf(
   'rshell_client',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -494,7 +494,7 @@ export const rshellClient = CustomFunction.createExternalWithSelf(
 export const rshellServer = CustomFunction.createExternalWithSelf(
   'rshell_server',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

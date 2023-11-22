@@ -1,14 +1,16 @@
 import {
-  ContextState,
-  ContextType,
   CustomFunction,
   CustomNil,
   CustomString,
   CustomValue,
   DefaultType,
   Interpreter,
+  VM,
   OperationContext
 } from 'greybel-interpreter';
+import {
+  Stack
+} from 'greybel-interpreter/dist/utils/stack';
 import { MockTranspiler, Type, Utils } from 'greybel-mock-environment';
 
 import { create as createComputer } from './computer';
@@ -19,7 +21,7 @@ import { GHMockIntrinsicEnv } from './mock/environment';
 export const startTerminal = CustomFunction.createExternalWithSelf(
   'start_terminal',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     _args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -30,7 +32,7 @@ export const startTerminal = CustomFunction.createExternalWithSelf(
 export const hostComputer = CustomFunction.createExternalWithSelf(
   'host_computer',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -53,7 +55,7 @@ export const hostComputer = CustomFunction.createExternalWithSelf(
 export const connectService = CustomFunction.createExternalWithSelf(
   'connect_service',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -138,7 +140,7 @@ export const connectService = CustomFunction.createExternalWithSelf(
 export const scp = CustomFunction.createExternalWithSelf(
   'scp',
   async (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -207,7 +209,7 @@ export const scp = CustomFunction.createExternalWithSelf(
         return new CustomString('Permission denied');
       }
 
-      await ctx.handler.outputHandler.progress(ctx, 2000);
+      await vm.handler.outputHandler.progress(vm, 2000);
 
       remoteFolder.putEntity(localFile as Type.File);
       return DefaultType.True;
@@ -223,7 +225,7 @@ export const scp = CustomFunction.createExternalWithSelf(
 export const build = CustomFunction.createExternalWithSelf(
   'build',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -352,7 +354,7 @@ export const build = CustomFunction.createExternalWithSelf(
 export const launch = CustomFunction.createExternalWithSelf(
   'launch',
   async (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -376,8 +378,8 @@ export const launch = CustomFunction.createExternalWithSelf(
     );
 
     if (file === null) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         `Error: ${path.toString()} not found.`
       );
       return DefaultType.False;
@@ -387,8 +389,8 @@ export const launch = CustomFunction.createExternalWithSelf(
       !(file instanceof Type.File) ||
       file.type !== Type.FileType.Binary
     ) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         `${file.name} is not an executable file.`
       );
       return DefaultType.False;
@@ -397,8 +399,8 @@ export const launch = CustomFunction.createExternalWithSelf(
     const perms = file.getPermissionsForUser(user, device.groups);
 
     if (!perms.x) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         "Can't launch program. Permission denied."
       );
       return DefaultType.False;
@@ -408,16 +410,16 @@ export const launch = CustomFunction.createExternalWithSelf(
     const matches = paramsStr.match(/(\/\/|\\\\|[[\];\\{}()])/);
 
     if (matches) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         `Error: invalid character ${matches[1]} in program parameters.`
       );
       return DefaultType.False;
     }
 
     if (mockEnvironment.getLaunchCallStack() > 16) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         'Program interrupted. Too many stack calls.'
       );
       return DefaultType.False;
@@ -426,11 +428,11 @@ export const launch = CustomFunction.createExternalWithSelf(
     mockEnvironment.increaseLaunchCallStack();
 
     const interpreter = new Interpreter({
-      target: file.isExternalProgram ? ctx.globals.target : 'virtual_script',
-      handler: ctx.handler,
+      target: file.isExternalProgram ? vm.target : 'virtual_script',
+      handler: vm.handler,
       params: paramsStr ? paramsStr.split(' ') : undefined,
-      api: ctx.api.scope.value,
-      debugger: ctx.debugger
+      api: vm.getFrame().api.scope.value,
+      debugger: vm.debugger
     });
     const session = new Type.Session({
       user,
@@ -441,11 +443,16 @@ export const launch = CustomFunction.createExternalWithSelf(
 
     mockEnvironment.sessions.push(session);
 
+    const externalFrames: Stack<OperationContext> = new Stack();
+
+    vm.externalFrames.values().forEach((ctx) => externalFrames.push(ctx));
+    vm.getFrames().values().forEach((ctx) => externalFrames.push(ctx));
+
     await interpreter.run({
       customCode: file.content,
-      ctxOptions: {
-        contextTypeIntrinsics: ctx.contextTypeIntrinsics,
-        stackTrace: ctx.stackTrace
+      vmOptions: {
+        externalFrames,
+        contextTypeIntrinsics: vm.contextTypeIntrinsics
       }
     });
 
@@ -462,7 +469,7 @@ export const launch = CustomFunction.createExternalWithSelf(
 export const ping = CustomFunction.createExternalWithSelf(
   'ping',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
