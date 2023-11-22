@@ -4,7 +4,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
 
@@ -19,7 +19,7 @@ import { greaterThanEntityNameLimit, isAlphaNumeric } from './utils';
 export const libName = CustomFunction.createExternalWithSelf(
   'lib_name',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -37,7 +37,7 @@ export const libName = CustomFunction.createExternalWithSelf(
 export const version = CustomFunction.createExternalWithSelf(
   'version',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -55,7 +55,7 @@ export const version = CustomFunction.createExternalWithSelf(
 export const overflow = CustomFunction.createExternalWithSelf(
   'overflow',
   (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -76,8 +76,8 @@ export const overflow = CustomFunction.createExternalWithSelf(
     }
 
     if (!targetFile.getPath().startsWith('/lib')) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         'Exploit failed. The library must be found on the /lib path'
       );
       return Promise.resolve(DefaultType.Void);
@@ -91,8 +91,8 @@ export const overflow = CustomFunction.createExternalWithSelf(
     });
 
     if (!targetVul) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         'Exploit failed. Vulnerability not found.'
       );
       return Promise.resolve(DefaultType.Void);
@@ -113,7 +113,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (libFile === null) {
             output +=
               ' => failed. Required lib not found. Program aborted.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
 
@@ -124,7 +124,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
             output += requiredLib.version.toString();
             output += '. Target insalled version is: ';
             output += libFile.version.toString();
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
 
@@ -140,7 +140,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (targetUsers < registeredUsers) {
             output +=
               'Starting attack... failed!\nMin users registered failed.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -148,7 +148,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
         case Type.VulnerabilityRequirements.AnyActive: {
           if (!target.isAnyProcessActive()) {
             output += 'Starting attack... failed!\nNo active user found.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -157,7 +157,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (!target.isRootProcessActive()) {
             output +=
               'Starting attack... failed!\nNo active root user found.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -166,13 +166,13 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (!(target instanceof Type.Router)) {
             output +=
               'Starting attack... failed!\nTarget must be a router.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           if (!target.isDeviceInNetwork(source)) {
             output +=
               'Starting attack... failed!\nHost computer not in the same network.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -186,7 +186,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (router.forwarded.size > portsForwarded) {
             output +=
               'Starting attack... failed!\nInsufficient amount of port forward towards the target.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -198,7 +198,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
           if (router.devices.size > connGateway) {
             output +=
               'Starting attack... failed!\nInsufficient amount of computers connected to this gateway.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
           break;
@@ -218,7 +218,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
 
       if (vulTargetUser === null) {
         output += 'failed. Unable to find non root user in computer.';
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
         return Promise.resolve(DefaultType.Void);
       }
     }
@@ -226,7 +226,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
     switch (targetVul.action) {
       case Type.VulnerabilityAction.Shell: {
         output += `success!\nPrivileges obtained from user: ${vulTargetUser.username}`;
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
 
         return Promise.resolve(
           createShell(mockEnvironment, vulTargetUser, target)
@@ -240,12 +240,12 @@ export const overflow = CustomFunction.createExternalWithSelf(
 
         if (vulRandomFolder === null) {
           output += `failed. can't access to resource: ${vulRandomFolderPath}`;
-          ctx.handler.outputHandler.print(ctx, output);
+          vm.handler.outputHandler.print(vm, output);
           return Promise.resolve(DefaultType.Void);
         }
 
         output += `success!\nPrivileges obtained from user: ${vulTargetUser.username}`;
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
 
         return Promise.resolve(
           createFile(
@@ -259,17 +259,17 @@ export const overflow = CustomFunction.createExternalWithSelf(
       case Type.VulnerabilityAction.Password: {
         if (optArgsRaw === null || optArgsRaw === '' || !isAlphaNumeric(optArgsRaw)) {
           output += `success!\nExecuting payload...\nerror: can't change password for user ${vulTargetUser.username}. Password must be alphanumeric.`;
-          ctx.handler.outputHandler.print(ctx, output);
+          vm.handler.outputHandler.print(vm, output);
           return Promise.resolve(DefaultType.False);
         } else if (greaterThanEntityNameLimit(optArgsRaw)) {
           output += 'password cannot exceed the 15 character limit.';
-          ctx.handler.outputHandler.print(ctx, output);
+          vm.handler.outputHandler.print(vm, output);
           return Promise.resolve(DefaultType.False);
         }
 
         target.changePassword(vulTargetUser.username, optArgsRaw);
         output += `success\nExecuting payload...\nPassword for user ${vulTargetUser.username} modified OK.`;
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
 
         return Promise.resolve(DefaultType.True);
       }
@@ -279,7 +279,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
         if (target instanceof Type.Router) {
           if (optArgsRaw === '' || !Utils.isValidIp(optArgsRaw)) {
             output += 'Failed!\nNo lan ip indicated or invalid.';
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
 
@@ -287,7 +287,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
 
           if (lanTarget === null) {
             output += `Failed!\nNo computer found at address: ${optArgsRaw}`;
-            ctx.handler.outputHandler.print(ctx, output);
+            vm.handler.outputHandler.print(vm, output);
             return Promise.resolve(DefaultType.Void);
           }
         }
@@ -299,12 +299,12 @@ export const overflow = CustomFunction.createExternalWithSelf(
 
         if (vulTargetUser === null) {
           output += 'failed. Unable to find non root user in computer.';
-          ctx.handler.outputHandler.print(ctx, output);
+          vm.handler.outputHandler.print(vm, output);
           return Promise.resolve(DefaultType.Void);
         }
 
         output += `success!\nComputer obtained with credentials from user: ${vulTargetUser.username}`;
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
 
         return Promise.resolve(
           createComputer(mockEnvironment, vulTargetUser, computerTarget)
@@ -313,13 +313,13 @@ export const overflow = CustomFunction.createExternalWithSelf(
       case Type.VulnerabilityAction.Firewall: {
         if (!(target instanceof Type.Router)) {
           output += 'Failed!\nTarget must be a router.';
-          ctx.handler.outputHandler.print(ctx, output);
+          vm.handler.outputHandler.print(vm, output);
           return Promise.resolve(DefaultType.False);
         }
 
         output +=
           'success!\nAccessing firewall config...\nFirewall disabled. (Firewalls are not yet supported in greybel!)';
-        ctx.handler.outputHandler.print(ctx, output);
+        vm.handler.outputHandler.print(vm, output);
         return Promise.resolve(DefaultType.True);
       }
     }

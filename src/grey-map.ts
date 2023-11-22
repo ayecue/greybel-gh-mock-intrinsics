@@ -2,8 +2,7 @@ import {
   CustomFunction,
   CustomMap,
   CustomString,
-  CustomValue,
-  Path
+  CustomValue
 } from 'greybel-interpreter';
 
 export default class GreyMap extends CustomMap {
@@ -14,7 +13,7 @@ export default class GreyMap extends CustomMap {
     );
   }
 
-  set(_path: Path<CustomValue> | CustomValue, _newValue: CustomValue) {
+  set(_path: CustomValue, _newValue: CustomValue) {
     throw new Error('Cannot set property on an interface.');
   }
 }

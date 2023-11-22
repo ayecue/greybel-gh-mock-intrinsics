@@ -1,8 +1,7 @@
 import {
   CustomMap,
   CustomString,
-  CustomValue,
-  Path
+  CustomValue
 } from 'greybel-interpreter';
 
 export const ISA_PROPERTY = new CustomString('__isa');
@@ -24,7 +23,7 @@ export default class BasicInterface extends CustomMap {
     return this.value.get(CLASS_ID_PROPERTY)?.toString() ?? super.getCustomType();
   }
 
-  set(_path: Path<CustomValue> | CustomValue, _newValue: CustomValue) {
+  set(_path: CustomValue, _newValue: CustomValue) {
     throw new Error('Cannot set property on an interface.');
   }
 

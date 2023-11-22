@@ -4,7 +4,7 @@ import {
   CustomNumber,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { Type } from 'greybel-mock-environment';
 
@@ -16,7 +16,7 @@ import { GHMockIntrinsicEnv } from './mock/environment';
 export const dumpLib = CustomFunction.createExternalWithSelf(
   'dump_lib',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -58,7 +58,7 @@ export const dumpLib = CustomFunction.createExternalWithSelf(
 export const getNumUsers = CustomFunction.createExternalWithSelf(
   'get_num_users',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -81,7 +81,7 @@ export const getNumUsers = CustomFunction.createExternalWithSelf(
 export const getNumPortforward = CustomFunction.createExternalWithSelf(
   'get_num_portforward',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -105,7 +105,7 @@ export const getNumPortforward = CustomFunction.createExternalWithSelf(
 export const getNumConnGateway = CustomFunction.createExternalWithSelf(
   'get_num_conn_gateway',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -129,7 +129,7 @@ export const getNumConnGateway = CustomFunction.createExternalWithSelf(
 export const isAnyActiveUser = CustomFunction.createExternalWithSelf(
   'is_any_active_user',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -152,7 +152,7 @@ export const isAnyActiveUser = CustomFunction.createExternalWithSelf(
 export const isRootActiveUser = CustomFunction.createExternalWithSelf(
   'is_root_active_user',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

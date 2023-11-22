@@ -5,7 +5,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type } from 'greybel-mock-environment';
 
@@ -15,7 +15,7 @@ import BasicInterface from './interface';
 export const fetchMail = CustomFunction.createExternalWithSelf(
   'fetch',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -57,7 +57,7 @@ export const fetchMail = CustomFunction.createExternalWithSelf(
 export const readMail = CustomFunction.createExternalWithSelf(
   'read',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -101,7 +101,7 @@ export const readMail = CustomFunction.createExternalWithSelf(
 export const sendMail = CustomFunction.createExternalWithSelf(
   'send',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -167,7 +167,7 @@ export const sendMail = CustomFunction.createExternalWithSelf(
 export const deleteMail = CustomFunction.createExternalWithSelf(
   'delete',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

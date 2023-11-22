@@ -6,7 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import { MockEnvironment, Type, Utils } from 'greybel-mock-environment';
 
@@ -22,7 +22,7 @@ import {
 export const chmod = CustomFunction.createExternalWithSelf(
   'chmod',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -86,7 +86,7 @@ export const chmod = CustomFunction.createExternalWithSelf(
 export const copy = CustomFunction.createExternalWithSelf(
   'copy',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -157,7 +157,7 @@ export const copy = CustomFunction.createExternalWithSelf(
 export const move = CustomFunction.createExternalWithSelf(
   'move',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -227,7 +227,7 @@ export const move = CustomFunction.createExternalWithSelf(
 export const rename = CustomFunction.createExternalWithSelf(
   'rename',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -278,7 +278,7 @@ export const rename = CustomFunction.createExternalWithSelf(
 export const path = CustomFunction.createExternalWithSelf(
   'path',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -301,7 +301,7 @@ export const path = CustomFunction.createExternalWithSelf(
 export const allowImport = CustomFunction.createExternalWithSelf(
   'allow_import',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -323,7 +323,7 @@ export const allowImport = CustomFunction.createExternalWithSelf(
 export const parent = CustomFunction.createExternalWithSelf(
   'parent',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -352,7 +352,7 @@ export const parent = CustomFunction.createExternalWithSelf(
 export const name = CustomFunction.createExternalWithSelf(
   'name',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -375,7 +375,7 @@ export const name = CustomFunction.createExternalWithSelf(
 export const getContent = CustomFunction.createExternalWithSelf(
   'get_content',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -415,7 +415,7 @@ export const getContent = CustomFunction.createExternalWithSelf(
 export const setContent = CustomFunction.createExternalWithSelf(
   'set_content',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -477,7 +477,7 @@ export const setContent = CustomFunction.createExternalWithSelf(
 export const isBinary = CustomFunction.createExternalWithSelf(
   'is_binary',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -503,7 +503,7 @@ export const isBinary = CustomFunction.createExternalWithSelf(
 export const isFolder = CustomFunction.createExternalWithSelf(
   'is_folder',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -523,7 +523,7 @@ export const isFolder = CustomFunction.createExternalWithSelf(
 export const hasPermission = CustomFunction.createExternalWithSelf(
   'has_permission',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -546,7 +546,7 @@ export const hasPermission = CustomFunction.createExternalWithSelf(
 export const deleteFile = CustomFunction.createExternalWithSelf(
   'delete',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -581,7 +581,7 @@ export const deleteFile = CustomFunction.createExternalWithSelf(
 export const getFolders = CustomFunction.createExternalWithSelf(
   'get_folders',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -614,7 +614,7 @@ export const getFolders = CustomFunction.createExternalWithSelf(
 export const getFiles = CustomFunction.createExternalWithSelf(
   'get_files',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -647,7 +647,7 @@ export const getFiles = CustomFunction.createExternalWithSelf(
 export const permissions = CustomFunction.createExternalWithSelf(
   'permissions',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -665,7 +665,7 @@ export const permissions = CustomFunction.createExternalWithSelf(
 export const owner = CustomFunction.createExternalWithSelf(
   'owner',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -683,7 +683,7 @@ export const owner = CustomFunction.createExternalWithSelf(
 export const setOwner = CustomFunction.createExternalWithSelf(
   'set_owner',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -742,7 +742,7 @@ export const setOwner = CustomFunction.createExternalWithSelf(
 export const group = CustomFunction.createExternalWithSelf(
   'group',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -760,7 +760,7 @@ export const group = CustomFunction.createExternalWithSelf(
 export const setGroup = CustomFunction.createExternalWithSelf(
   'set_group',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -819,7 +819,7 @@ export const setGroup = CustomFunction.createExternalWithSelf(
 export const size = CustomFunction.createExternalWithSelf(
   'size',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {

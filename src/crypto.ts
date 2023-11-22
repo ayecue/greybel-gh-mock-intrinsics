@@ -6,7 +6,7 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  OperationContext
+  VM
 } from 'greybel-interpreter';
 import {
   MockEnvironment,
@@ -22,7 +22,7 @@ import { delay } from './utils';
 export const aireplay = CustomFunction.createExternalWithSelf(
   'aireplay',
   async (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -76,25 +76,30 @@ export const aireplay = CustomFunction.createExternalWithSelf(
       'Sending Association Request\nAssociation succesful :-)'
     ].join('\n');
 
-    ctx.handler.outputHandler.print(ctx, output);
+    vm.handler.outputHandler.print(vm, output);
     let acks = 0;
 
-    ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`);
+    vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`);
 
-    const exitObserver = ctx.processState.createExitObserver();
+    let didExit = false;
+    const onExit = function() {
+      didExit = true;
+    };
+
+    vm.getSignal().once('exit', onExit);
 
     /* eslint-disable-next-line no-unmodified-loop-condition */
-    while (acks < maxAcksRaw && !exitObserver.occured()) {
-      ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
+    while (acks < maxAcksRaw && !didExit) {
+      vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`, {
         replace: true
       });
       acks += Utils.getRandomInt(250, 750);
       await delay(500);
     }
 
-    exitObserver.close();
+    vm.getSignal().off('exit', onExit);
 
-    ctx.handler.outputHandler.print(ctx, `${acks}/${maxAcksRaw}`, {
+    vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`, {
       replace: true
     });
 
@@ -130,7 +135,7 @@ export const aireplay = CustomFunction.createExternalWithSelf(
 export const airmon = CustomFunction.createExternalWithSelf(
   'airmon',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -196,7 +201,7 @@ export const airmon = CustomFunction.createExternalWithSelf(
 export const aircrack = CustomFunction.createExternalWithSelf(
   'aircrack',
   (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -232,8 +237,8 @@ export const aircrack = CustomFunction.createExternalWithSelf(
     const { r } = entity.getPermissionsForUser(user, device.groups);
 
     if (!r) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         "Can't open file. Permission denied"
       );
       return Promise.resolve(DefaultType.Void);
@@ -243,8 +248,8 @@ export const aircrack = CustomFunction.createExternalWithSelf(
       !(entity instanceof Type.File) ||
       entity.type !== Type.FileType.Ack
     ) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         "Can't process file. Not valid filecap."
       );
       return Promise.resolve(DefaultType.Void);
@@ -256,8 +261,8 @@ export const aircrack = CustomFunction.createExternalWithSelf(
     const n = 300000 / (numPower + 15);
 
     if (numAcks < n) {
-      ctx.handler.outputHandler.print(
-        ctx,
+      vm.handler.outputHandler.print(
+        vm,
         'Key not found. More acks needed'
       );
       return Promise.resolve(DefaultType.Void);
@@ -270,7 +275,7 @@ export const aircrack = CustomFunction.createExternalWithSelf(
 export const decipher = CustomFunction.createExternalWithSelf(
   'decipher',
   async (
-    ctx: OperationContext,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -283,7 +288,7 @@ export const decipher = CustomFunction.createExternalWithSelf(
     const { mockEnvironment } = self.variables;
     const encryptedPass = args.get('encryptedPass').toString();
 
-    await ctx.handler.outputHandler.progress(ctx, 5000);
+    await vm.handler.outputHandler.progress(vm, 5000);
 
     const user = mockEnvironment.userGenerator.users.find(
       (item: Type.User) => {
@@ -302,7 +307,7 @@ export const decipher = CustomFunction.createExternalWithSelf(
 export const smtpUserList = CustomFunction.createExternalWithSelf(
   'smtp_user_list',
   (
-    _ctx: OperationContext,
+    _vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
