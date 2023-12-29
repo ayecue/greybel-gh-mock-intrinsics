@@ -190,7 +190,11 @@ export const airmon = CustomFunction.createExternalWithSelf(
       );
     }
 
-    netDevice.mode = Type.NetworkDeviceMode.Monitor;
+    if (optionRaw) {
+      netDevice.mode = Type.NetworkDeviceMode.Monitor;
+    } else {
+      netDevice.mode = Type.NetworkDeviceMode.None;
+    }
 
     return Promise.resolve(DefaultType.True);
   }
