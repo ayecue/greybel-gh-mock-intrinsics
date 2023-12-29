@@ -550,7 +550,7 @@ exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 51% 
 
 exports[`interpreter default scripts shell.src 22`] = `"1"`;
 
-exports[`interpreter default scripts shell.src 23`] = `"Error: Invalid IP address"`;
+exports[`interpreter default scripts shell.src 23`] = `"connect_ethernet: Network device not found"`;
 
 exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
 
