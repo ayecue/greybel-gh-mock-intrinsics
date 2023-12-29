@@ -869,9 +869,9 @@ export const connectEthernet = CustomFunction.createExternalWithSelf(
 
     const addressRaw = address.toString();
 
-    if (Utils.isValidIp(addressRaw)) {
+    if (!Utils.isValidIp(addressRaw)) {
       return Promise.resolve(new CustomString('Error: Invalid IP address'));
-    } else if (Utils.isLanIp(addressRaw)) {
+    } else if (!Utils.isLanIp(addressRaw)) {
       return Promise.resolve(
         new CustomString(
           'Error: the IP address and the gateway must belong to the same subnet'
@@ -881,9 +881,9 @@ export const connectEthernet = CustomFunction.createExternalWithSelf(
 
     const gatewayRaw = gateway.toString();
 
-    if (Utils.isValidIp(gatewayRaw)) {
+    if (!Utils.isValidIp(gatewayRaw)) {
       return Promise.resolve(new CustomString('Error: invalid gateway'));
-    } else if (Utils.isLanIp(gatewayRaw)) {
+    } else if (!Utils.isLanIp(gatewayRaw)) {
       return Promise.resolve(
         new CustomString(
           'Error: the IP address and the gateway must belong to the same subnet'
