@@ -24,6 +24,10 @@ class TestOutputHandler extends OutputHandler {
     printMock(value);
   }
 
+  update(vm, value) {
+    printMock(value);
+  }
+
   progress(vm, time) {
     return Promise.resolve();
   }

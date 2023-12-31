@@ -90,7 +90,7 @@ export const aireplay = CustomFunction.createExternalWithSelf(
 
     /* eslint-disable-next-line no-unmodified-loop-condition */
     while (acks < maxAcksRaw && !didExit) {
-      vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`, {
+      vm.handler.outputHandler.update(vm, `${acks}/${maxAcksRaw}`, {
         replace: true
       });
       acks += Utils.getRandomInt(250, 750);
@@ -99,8 +99,9 @@ export const aireplay = CustomFunction.createExternalWithSelf(
 
     vm.getSignal().off('exit', onExit);
 
-    vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`, {
-      replace: true
+    vm.handler.outputHandler.update(vm, `${acks}/${maxAcksRaw}`, {
+      replace: true,
+      appendNewLine: true
     });
 
     const n = 300000 / (network.percentage + 15);
