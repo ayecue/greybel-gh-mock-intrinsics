@@ -19,9 +19,9 @@ import { aircrack, aireplay, airmon, decipher, smtpUserList } from './crypto';
 
 const s = (v: string) => new CustomString(v);
 
-export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
+export function getAPI(mockEnvironment: GHMockIntrinsicEnv): ObjectValue {
   const apiInterface = new ObjectValue();
-  const intrinsics = generics(mockEnvironment || createGHMockEnv());
+  const intrinsics = generics(mockEnvironment);
 
   apiInterface.set(s('typeof'), intrinsics.typeOf);
   apiInterface.set(s('user_input'), intrinsics.userInput);
@@ -228,7 +228,7 @@ export function getAPI(mockEnvironment?: GHMockIntrinsicEnv): ObjectValue {
 
 export function init(
   customAPI: ObjectValue = new ObjectValue(),
-  mockEnvironment?: GHMockIntrinsicEnv
+  mockEnvironment: GHMockIntrinsicEnv
 ) {
   const apiInterface = getAPI(mockEnvironment);
   const api: ObjectValue = new ObjectValue(apiInterface);

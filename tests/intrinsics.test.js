@@ -83,7 +83,7 @@ describe('interpreter', function () {
         });
         let success = false;
 
-        interpreter.setApi(defaultInit(init(new ObjectValue(), createGHMockEnv({
+        interpreter.setApi(defaultInit(init(new ObjectValue(), createGHMockEnv(interpreter, {
           myProgramContent: fs.readFileSync(filepath, {
             encoding: 'utf-8'
           })

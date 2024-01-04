@@ -5,6 +5,7 @@ import {
   Type,
   Utils
 } from 'greybel-mock-environment';
+import { Interpreter } from 'greyscript-interpreter';
 
 export class GHMockIntrinsicEnv extends MockEnvironment {
   private startTime: number;
@@ -41,6 +42,7 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
 }
 
 export function createGHMockEnv(
+  interpreter: Interpreter,
   options: MockEnvironmentOptions = {}
 ): GHMockIntrinsicEnv {
   const mockEnvironment = new GHMockIntrinsicEnv(options);
@@ -86,8 +88,13 @@ export function createGHMockEnv(
     service: Type.ServiceType.SSH,
     isClosed: false
   });
-  const { device } = mockEnvironment.getLocal();
+  const { device, user, programPath } = mockEnvironment.getLocal();
 
+  device.addProcess({
+    owner: user,
+    command: programPath.name,
+    ref: interpreter
+  });
   device.addPort(sshTestPort);
 
   emailGenerator.generate({
