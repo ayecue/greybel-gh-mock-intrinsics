@@ -457,7 +457,6 @@ export const launch = CustomFunction.createExternalWithSelf(
     });
 
     mockEnvironment.sessions.pop();
-
     mockEnvironment.decreaseLaunchCallStack();
 
     return DefaultType.True;
