@@ -7,7 +7,8 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  VM
+  VM,
+  KeyEvent
 } from 'greybel-interpreter';
 import { Type, Utils } from 'greybel-mock-environment';
 
@@ -506,23 +507,41 @@ export default function generics(
         const isPassword = args.get('isPassword').toTruthy();
         const anyKey = args.get('anyKey').toTruthy();
 
-        if (anyKey) {
-          const keyPress = await vm.handler.outputHandler.waitForKeyPress(
+        return new Promise((resolve: (value: CustomValue) => void, reject: (err: any) => void) => {
+          let didExit = false;
+          const onExit = function() {
+            didExit = true;
+            resolve(DefaultType.Void)
+          };
+
+          vm.getSignal().once('exit', onExit);
+
+          if (anyKey) {
+            (vm.handler.outputHandler.waitForKeyPress(
+              vm,
+              message
+            ) as Promise<KeyEvent>).then((keyPress) => {
+              if (!didExit) {
+                const value = keyEventToString(keyPress);
+                resolve(new CustomString(value));
+              }
+            }).catch((err) => {
+              if (!didExit) reject(err);
+            });
+
+            return;
+          }
+
+          (vm.handler.outputHandler.waitForInput(
             vm,
+            isPassword,
             message
-          );
-          const value = keyEventToString(keyPress);
-
-          return new CustomString(value);
-        }
-
-        const input = await vm.handler.outputHandler.waitForInput(
-          vm,
-          isPassword,
-          message
-        );
-
-        return new CustomString(input);
+          ) as Promise<string>).then((input) => {
+            if (!didExit) resolve(new CustomString(input));
+          }).catch((err) => {
+            if (!didExit) reject(err);
+          });
+        });
       }
     )
       .addArgument('message')
