@@ -32,7 +32,7 @@ export class GHMockIntrinsicEnv extends MockEnvironment {
   }
 
   decreaseLaunchCallStack(): GHMockIntrinsicEnv {
-    this.launchCallStack;
+    this.launchCallStack--;
     return this;
   }
 
