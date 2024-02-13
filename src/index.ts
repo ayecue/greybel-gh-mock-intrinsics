@@ -50,6 +50,7 @@ export function getAPI(mockEnvironment: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('launch_path'), intrinsics.launchPath);
   apiInterface.set(s('get_custom_object'), intrinsics.getCustomObject);
   apiInterface.set(s('get_ctf'), intrinsics.getCTF);
+  apiInterface.set(s('reset_ctf_password'), intrinsics.resetCtfPassword);
 
   //shell
   apiInterface.set(s('connect_service'), connectService);
