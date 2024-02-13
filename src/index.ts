@@ -196,6 +196,7 @@ export function getAPI(mockEnvironment: GHMockIntrinsicEnv): ObjectValue {
   apiInterface.set(s('set_address'), placeholderIntrinsic.forkAs('set_address'));
   apiInterface.set(s('get_address'), placeholderIntrinsic.forkAs('get_address'));
   apiInterface.set(s('get_mined_coins'), placeholderIntrinsic.forkAs('get_mined_coins'));
+  apiInterface.set(s('reset_password_coin'), placeholderIntrinsic.forkAs('reset_password'));
 
   //subWallet
   apiInterface.set(s('get_balance_subwallet'), placeholderIntrinsic.forkAs('get_balance_subwallet'));

@@ -71,7 +71,8 @@ export class Coin extends BasicInterface {
     getSubwallets,
     placeholderIntrinsic.forkAs('set_address'),
     placeholderIntrinsic.forkAs('get_address'),
-    placeholderIntrinsic.forkAs('get_mined_coins')
+    placeholderIntrinsic.forkAs('get_mined_coins'),
+    placeholderIntrinsic.forkAs('reset_password')
   ]);
 
   static retreive(args: Map<string, CustomValue>): Coin | null {

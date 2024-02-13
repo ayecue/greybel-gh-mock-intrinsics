@@ -56,6 +56,7 @@ export interface GenericIntrinsics {
   typeOf: CustomFunction;
   getCustomObject: CustomFunction;
   getCTF: CustomFunction;
+  resetCtfPassword: CustomFunction;
 }
 
 export default function generics(
@@ -614,7 +615,18 @@ export default function generics(
       ): Promise<CustomValue> => {
         return Promise.resolve(DefaultType.Void);
       }
-    ).addArgument('user').addArgument('password').addArgument('eventName')
+    ).addArgument('user').addArgument('password').addArgument('eventName'),
+
+    resetCtfPassword: CustomFunction.createExternal(
+      'reset_ctf_password',
+      (
+        _vm: VM,
+        _self: CustomValue,
+        _args: Map<string, CustomValue>
+      ): Promise<CustomValue> => {
+        return Promise.resolve(DefaultType.True);
+      }
+    ).addArgument('newPassword')
   };
 
   return intrinsics;
