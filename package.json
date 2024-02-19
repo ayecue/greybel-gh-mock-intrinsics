@@ -1,6 +1,6 @@
 {
     "name": "greybel-gh-mock-intrinsics",
-    "version": "4.5.3",
+    "version": "4.6.0",
     "description": "Interpreter intrinsics",
     "main": "dist/index",
     "typings": "dist/index",
@@ -43,7 +43,7 @@
         "eslint-plugin-promise": "^6.0.0",
         "eslint-plugin-security": "^1.5.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
-        "greybel-intrinsics": "~4.4.0",
+        "greybel-intrinsics": "~4.5.0",
         "jest": "^27.4.5",
         "nodemon": "^2.0.15",
         "ts-node": "^10.4.0",
@@ -55,7 +55,7 @@
     ],
     "dependencies": {
         "blueimp-md5": "^2.19.0",
-        "greyscript-interpreter": "~1.4.0",
-        "greybel-mock-environment": "~2.4.2"
+        "greyscript-interpreter": "~1.5.0",
+        "greybel-mock-environment": "~2.4.3"
     }
 }
