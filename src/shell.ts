@@ -202,7 +202,7 @@ export const scp = CustomFunction.createExternalWithSelf(
 
       const { w } = remoteFolder.getPermissionsForUser(
         rshell.getVariable<Type.User>('user'),
-        rshell.getVariable<Type.Device['groups']>('groups'),
+        rshell.getVariable<Type.Device>('device').groups,
       );
 
       if (!w) {
