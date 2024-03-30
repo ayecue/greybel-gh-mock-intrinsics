@@ -334,7 +334,8 @@ export const build = CustomFunction.createExternalWithSelf(
           name: source.name.replace(/\.[^.]*$/, ''),
           content: output,
           permissions: 'rwxrwxrwx',
-          owner: user.username
+          owner: user.username,
+          allowImport: allowImport.toTruthy()
         },
         dest
       );

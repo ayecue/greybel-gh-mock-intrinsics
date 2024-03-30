@@ -22,13 +22,13 @@ exports[`interpreter default scripts class-output.src 1`] = `"test"`;
 
 exports[`interpreter default scripts class-output.src 2`] = `"{\\"__isa\\":test}"`;
 
-exports[`interpreter default scripts class-output.src 3`] = `"{\\"__isa\\":test}"`;
+exports[`interpreter default scripts class-output.src 3`] = `"{\\"__isa\\":test,\\"foo\\":123,\\"bar\\":0}"`;
 
 exports[`interpreter default scripts class-output.src 4`] = `"test"`;
 
-exports[`interpreter default scripts class-output.src 5`] = `"test"`;
+exports[`interpreter default scripts class-output.src 5`] = `"map"`;
 
-exports[`interpreter default scripts class-output.src 6`] = `"test"`;
+exports[`interpreter default scripts class-output.src 6`] = `"map"`;
 
 exports[`interpreter default scripts coin.src 1`] = `"coin"`;
 
@@ -243,7 +243,7 @@ exports[`interpreter default scripts metaxploit.src 9`] = `
 "decompiling source...
 searching unsecure values...
 Unsafe check: loop in array <b>Tuiteralse</b>. Buffer overflow.
-* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0</b>
 * Checking registered users equal to 3.
 * Checking an active user.
 * Checking root active user.
@@ -252,18 +252,18 @@ Unsafe check: loop in array <b>Tionpoint_onclosesour</b>. Buffer overflow.
 * Checking root active user.
 
 Unsafe check: string copy in <b>Textsizede</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0</b>
 * Checking root active user.
 
 Unsafe check: loop in array <b>Olor_buttoncloseinoverlayon</b>. Buffer overflow.
-* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0</b>
 * Checking an active user.
 * Checking root active user.
 
 Unsafe check: string copy in <b>Eady_defieldin</b>. Buffer overflow.
 
 Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
-* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0</b>
 * Checking registered users equal to 1.
 * Checking an active user.
 * Checking root active user.
@@ -272,7 +272,7 @@ Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
 
 exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
 
-exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0.0"`;
+exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0"`;
 
 exports[`interpreter default scripts metaxploit.src 12`] = `"[\\"0x65E8E4EC\\", \\"0x3EB84DBB\\", \\"0x69498C3F\\", \\"0x1823E086\\"]"`;
 
@@ -280,7 +280,7 @@ exports[`interpreter default scripts metaxploit.src 13`] = `
 "decompiling source...
 searching unsecure values...
 Unsafe check: loop in array <b>Tuiteralse</b>. Buffer overflow.
-* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>init.so</b> compiled at version >= <b>1.0.0</b>
 * Checking registered users equal to 3.
 * Checking an active user.
 * Checking root active user.
@@ -289,18 +289,18 @@ Unsafe check: loop in array <b>Tionpoint_onclosesour</b>. Buffer overflow.
 * Checking root active user.
 
 Unsafe check: string copy in <b>Textsizede</b>. Buffer overflow.
-* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>net.so</b> compiled at version >= <b>1.0.0</b>
 * Checking root active user.
 
 Unsafe check: loop in array <b>Olor_buttoncloseinoverlayon</b>. Buffer overflow.
-* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0</b>
 * Checking an active user.
 * Checking root active user.
 
 Unsafe check: string copy in <b>Eady_defieldin</b>. Buffer overflow.
 
 Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
-* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0</b>
 * Checking registered users equal to 1.
 * Checking an active user.
 * Checking root active user.
@@ -333,7 +333,7 @@ exports[`interpreter default scripts metaxploit.src 21`] = `"MetaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
 
-exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0.0"`;
+exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0"`;
 
 exports[`interpreter default scripts metaxploit.src 24`] = `"[\\"0x2C35E48D\\", \\"0x2EC47F98\\", \\"0x6AB1D4F3\\", \\"0x7D20AD77\\", \\"0x591A7117\\"]"`;
 
@@ -347,7 +347,7 @@ Unsafe check: string copy in <b>Thsbuild_flush_bloc</b>. Buffer overflow.
 Unsafe check: string copy in <b>Treelitextsiintof</b>. Buffer overflow.
 
 Unsafe check: loop in array <b>Lush_s</b>. Buffer overflow.
-* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0.0</b>
+* Using namespace <b>kernel_module.so</b> compiled at version >= <b>1.0.0</b>
 * Checking registered users equal to 1.
 * 1 port forwarding configured from router to the target computer.
 "
@@ -363,7 +363,7 @@ exports[`interpreter default scripts metaxploit.src 27`] = `"computer"`;
 
 exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router"`;
 
-exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0.0"`;
+exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0"`;
 
 exports[`interpreter default scripts metaxploit.src 30`] = `"[\\"0x243A0F59\\", \\"0x2F618803\\", \\"0x45917FA3\\", \\"0x2542555D\\"]"`;
 
@@ -416,11 +416,11 @@ exports[`interpreter default scripts router.src 6`] = `"192.168.0.1"`;
 
 exports[`interpreter default scripts router.src 7`] = `"port"`;
 
-exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0.0"`;
+exports[`interpreter default scripts router.src 8`] = `"ssh 1.0.0"`;
 
 exports[`interpreter default scripts router.src 9`] = `"[port, port, port, port, port, port, port]"`;
 
-exports[`interpreter default scripts router.src 10`] = `"1.0.0.0"`;
+exports[`interpreter default scripts router.src 10`] = `"1.0.0"`;
 
 exports[`interpreter default scripts scripts.src 1`] = `
 "Desktop    

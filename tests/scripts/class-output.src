@@ -11,8 +11,8 @@ instance2 = Obj.create
 
 print Obj
 print instance
-print instance
+print instance2
 
 print typeof(Obj)
-print typeof(instance2)
+print typeof(instance)
 print typeof(instance2)

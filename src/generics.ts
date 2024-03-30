@@ -585,8 +585,8 @@ export default function generics(
         const value = args.get('value');
         let type;
 
-        if (value instanceof CustomMap && value.has(CLASS_ID_PROPERTY)) {
-          type = value.get(CLASS_ID_PROPERTY, vm.contextTypeIntrinsics).toString();
+        if (value instanceof CustomMap && value.value.has(CLASS_ID_PROPERTY)) {
+          type = value.value.get(CLASS_ID_PROPERTY).toString();
         } else {
           type = value?.getCustomType() || DefaultType.Void.toString();
         }
