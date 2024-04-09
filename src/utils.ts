@@ -101,12 +101,15 @@ export function keyEventToString(keyEvent: KeyEvent): string {
       }
       return 'RightAlt';
     }
-    default:
+    default: {
       if (keyEvent.charCode) {
         return String.fromCharCode(keyEvent.charCode);
+      } else if (keyEvent.code) {
+        return keyEvent.code;
       }
 
       throw new Error('Unknown input.');
+    }
   }
 }
 

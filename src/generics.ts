@@ -29,40 +29,10 @@ import {
 } from './utils';
 import { CLASS_ID_PROPERTY } from './interface';
 
-export interface GenericIntrinsics {
-  getShell: CustomFunction;
-  mailLogin: CustomFunction;
-  getRouter: CustomFunction;
-  getSwitch: CustomFunction;
-  includeLib: CustomFunction;
-  md5: CustomFunction;
-  nslookup: CustomFunction;
-  whois: CustomFunction;
-  isValidIp: CustomFunction;
-  isLanIp: CustomFunction;
-  commandInfo: CustomFunction;
-  currentDate: CustomFunction;
-  currentPath: CustomFunction;
-  parentPath: CustomFunction;
-  homeDir: CustomFunction;
-  programPath: CustomFunction;
-  activeUser: CustomFunction;
-  userMailAddress: CustomFunction;
-  userBankNumber: CustomFunction;
-  formatColumns: CustomFunction;
-  userInput: CustomFunction;
-  clearScreen: CustomFunction;
-  launchPath: CustomFunction;
-  typeOf: CustomFunction;
-  getCustomObject: CustomFunction;
-  getCTF: CustomFunction;
-  resetCtfPassword: CustomFunction;
-}
-
 export default function generics(
   mockEnvironment: GHMockIntrinsicEnv
-): GenericIntrinsics {
-  const intrinsics: GenericIntrinsics = {
+) {
+  const intrinsics = {
     getShell: CustomFunction.createExternal(
       'getShell',
       (
