@@ -104,3 +104,6 @@ print(adminFile.group)
 
 print(get_shell.host_computer.File("/").name)
 print(get_shell.host_computer.get_name)
+
+print(get_shell.connect_service("172.57.134.56", 22, "root", "test"))
+print(get_shell.connect_service(get_shell.host_computer.local_ip, 22, "root", "test"))

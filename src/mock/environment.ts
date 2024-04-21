@@ -74,7 +74,8 @@ export function createGHMockEnv(
   closeRouters[0].wifi.credentials.password = 'test';
 
   mockEnvironment.connectLocal(localRouter);
-  networkGenerator.generateRouter({
+
+  const testRemoteRouter = networkGenerator.generateRouter({
     publicIp: '172.57.134.56',
     domain: 'www.mytest.org',
     users: [
@@ -82,6 +83,18 @@ export function createGHMockEnv(
       userGenerator.generate('gandalf', 'shallnotpass')
     ]
   });
+  
+  testRemoteRouter.getForwarded(22)?.removePort(22);
+
+  const testRemoteDevice = testRemoteRouter.getComputers()[0];
+  const remoteSshTestPort = new Type.Port({
+    port: 22,
+    service: Type.ServiceType.SSH,
+    isClosed: false
+  });
+
+  testRemoteDevice.changePassword('root', 'test');
+  testRemoteDevice.addPort(remoteSshTestPort);
 
   const sshTestPort = new Type.Port({
     port: 22,
@@ -95,6 +108,7 @@ export function createGHMockEnv(
     command: programPath.name,
     ref: interpreter
   });
+  (device.getRouter() as Type.Router).getForwarded(22)?.removePort(22);
   device.addPort(sshTestPort);
 
   emailGenerator.generate({

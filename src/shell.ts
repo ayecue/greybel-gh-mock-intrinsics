@@ -92,7 +92,8 @@ export const connectService = CustomFunction.createExternalWithSelf(
     if (Utils.isLanIp(ipAddress)) {
       remoteDevice = device.findByLanIp(ipAddress);
     } else {
-      remoteDevice = mockEnvironment.getRouterByIp(ipAddress);
+      const router = mockEnvironment.getRouterByIp(ipAddress);
+      remoteDevice = router.getForwarded(port.toInt());
     }
 
     if (remoteDevice === null) {

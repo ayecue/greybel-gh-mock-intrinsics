@@ -356,7 +356,7 @@ Unsafe check: loop in array <b>Lush_s</b>. Buffer overflow.
 exports[`interpreter default scripts metaxploit.src 26`] = `
 "
 Starting attack...success!
-Computer obtained with credentials from user: themlt2003"
+Computer obtained with credentials from user: test"
 `;
 
 exports[`interpreter default scripts metaxploit.src 27`] = `"computer"`;
@@ -667,6 +667,10 @@ exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
 exports[`interpreter default scripts shell.src 79`] = `"/"`;
 
 exports[`interpreter default scripts shell.src 80`] = `"entooxi"`;
+
+exports[`interpreter default scripts shell.src 81`] = `"shell"`;
+
+exports[`interpreter default scripts shell.src 82`] = `"shell"`;
 
 exports[`interpreter default scripts shell-self-launch.src 1`] = `"launch number 0"`;
 
