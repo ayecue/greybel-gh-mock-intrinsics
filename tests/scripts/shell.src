@@ -28,7 +28,12 @@ print(computer.groups("test"))
 print(computer.delete_group("test", "testg"))
 print(computer.close_program)
 print(computer.wifi_networks("wlan0"))
-print(computer.connect_wifi("wlan0", "bssid-test-uuid", "essid-test-uuid", "test"))
+print(
+	computer.connect_wifi(
+		"wlan0",
+		"bssid-test-uuid",
+		"essid-test-uuid",
+		"test"))
 print(computer.connect_ethernet("eth0", "192.168.0.1", get_router.local_ip))
 print(computer.network_gateway)
 print(computer.active_net_card)
@@ -59,7 +64,7 @@ print(file.set_group("foo"))
 print(file.size)
 print(file.allow_import)
 
-print(globals.get_shell.host_computer)
+print(get_shell.host_computer)
 
 print(get_shell("test", "test").host_computer.File("/root").has_permission("w"))
 print(get_shell("root", "test").host_computer.File("/root").has_permission("w"))
@@ -70,11 +75,11 @@ print(shell.host_computer.touch("/home/test", "hello.src"))
 f = shell.host_computer.File("/home/test/hello.src")
 print(f)
 
-if (f) then
-    f.set_content("print(123)")
-    result = shell.build("/home/test/hello.src", "/home/test")
-    print(result)
-    shell.launch("/home/test/hello")
+if f then
+	f.set_content("print(123)")
+	result = shell.build("/home/test/hello.src", "/home/test")
+	print(result)
+	shell.launch("/home/test/hello")
 end if
 
 print(adminComputer.change_password("test", "xxx"))
@@ -105,5 +110,15 @@ print(adminFile.group)
 print(get_shell.host_computer.File("/").name)
 print(get_shell.host_computer.get_name)
 
-print(get_shell.connect_service("172.57.134.56", 22, "root", "test"))
-print(get_shell.connect_service(get_shell.host_computer.local_ip, 22, "root", "test"))
+print(
+	get_shell.connect_service(
+		"172.57.134.56",
+		22,
+		"root",
+		"test"))
+print(
+	get_shell.connect_service(
+		get_shell.host_computer.local_ip,
+		22,
+		"root",
+		"test"))
