@@ -4,10 +4,12 @@ import {
   CustomString,
   CustomValue,
   DefaultType,
-  Interpreter,
   VM,
   OperationContext
 } from 'greybel-interpreter';
+import {
+  Interpreter
+} from 'greyscript-interpreter';
 import {
   Stack
 } from 'greybel-interpreter/dist/utils/stack';
@@ -623,13 +625,13 @@ export function create(
   const itrface =
     activePort?.service === Type.ServiceType.FTP
       ? createFtpShell(mockEnvironment, user, device, {
-          ...options,
-          location: currentLocation
-        })
+        ...options,
+        location: currentLocation
+      })
       : createShell(mockEnvironment, user, device, {
-          ...options,
-          location: currentLocation
-        });
+        ...options,
+        location: currentLocation
+      });
 
   return itrface;
 }
