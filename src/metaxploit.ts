@@ -52,9 +52,9 @@ export const load = CustomFunction.createExternalWithSelf(
       pathRaw,
       computer.getHomePath(user)
     );
-    const targetFile = computer.getFile(traversalPath) as Type.File;
+    const targetFile = computer.getFile(traversalPath);
 
-    if (!targetFile) {
+    if (!targetFile || !(targetFile instanceof Type.File)) {
       return Promise.resolve(DefaultType.Void);
     }
 
