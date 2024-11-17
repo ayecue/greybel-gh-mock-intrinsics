@@ -1,0 +1,20 @@
+shell = get_shell("root", "test")
+computer = shell.host_computer
+
+file = computer.File("/root")
+print("Before deletion: ")
+print("object: " + file + " (" + typeof(file) + ")")
+print("is folder:" + file.is_folder + " (" + typeof(file.is_folder) + ")")
+print("parent: " + file.parent + " (" + typeof(file.parent) + ")")
+print("path: " + file.path + " (" + typeof(file.path) + ")")
+file.delete
+
+print("After deletion (old ref): ")
+print("object: " + file + " (" + typeof(file) + ")")
+print("is folder:" + file.is_folder + " (" + typeof(file.is_folder) + ")")
+print("parent: " + file.parent + " (" + typeof(file.parent) + ")")
+print("path: " + file.path + " (" + typeof(file.path) + ")")
+
+fileAgain = computer.File("/root")
+print("After deletion (new ref): ")
+print("object: " + fileAgain + " (" + typeof(fileAgain) + ")")

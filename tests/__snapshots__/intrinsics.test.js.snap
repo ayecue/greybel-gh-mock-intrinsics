@@ -84,6 +84,30 @@ exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
 
 exports[`interpreter default scripts crypto.src 11`] = `"null"`;
 
+exports[`interpreter default scripts fs.src 1`] = `"Before deletion: "`;
+
+exports[`interpreter default scripts fs.src 2`] = `"object: file (file)"`;
+
+exports[`interpreter default scripts fs.src 3`] = `"is folder:1 (number)"`;
+
+exports[`interpreter default scripts fs.src 4`] = `"parent: file (file)"`;
+
+exports[`interpreter default scripts fs.src 5`] = `"path: /root (string)"`;
+
+exports[`interpreter default scripts fs.src 6`] = `"After deletion (old ref): "`;
+
+exports[`interpreter default scripts fs.src 7`] = `"object: file (file)"`;
+
+exports[`interpreter default scripts fs.src 8`] = `"is folder:1 (number)"`;
+
+exports[`interpreter default scripts fs.src 9`] = `"parent:  (null)"`;
+
+exports[`interpreter default scripts fs.src 10`] = `"path:  (null)"`;
+
+exports[`interpreter default scripts fs.src 11`] = `"After deletion (new ref): "`;
+
+exports[`interpreter default scripts fs.src 12`] = `"object:  (null)"`;
+
 exports[`interpreter default scripts generics.src 1`] = `"null"`;
 
 exports[`interpreter default scripts generics.src 2`] = `"098f6bcd4621d373cade4e832627b4f6"`;
@@ -474,9 +498,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  8619  11.9  8.30   kernel_task  
-root  3551  3.4   14.60  Xorg         
-test  5169  10.7  28.79  myprogram    "
+root  3060  6.9   8.10   kernel_task  
+root  1588  11.6  24.27  Xorg         
+test  3288  14.7  22.26  myprogram    "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -527,9 +551,9 @@ exports[`interpreter default scripts shell.src 11`] = `"0"`;
 
 exports[`interpreter default scripts shell.src 12`] = `
 "USER PID CPU MEM COMMAND
-root 5577 6.3 18.55 kernel_task
-root 4294 8.4 25.81 Xorg
-test 4901 13.2 28.69 myprogram"
+root 6938 13.8 20.39 kernel_task
+root 8513 2.3 20.73 Xorg
+test 3604 3.1 26.25 myprogram"
 `;
 
 exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
@@ -548,7 +572,7 @@ exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user c
 
 exports[`interpreter default scripts shell.src 20`] = `"0"`;
 
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 65% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 38% vingoftw\\", \\"42:D6:90:7C:BF:71 90% aptain117\\", \\"09:2F:46:FB:32:E9 66% f999\\"]"`;
+exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 52% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 61% vingoftw\\", \\"42:D6:90:7C:BF:71 84% aptain117\\", \\"09:2F:46:FB:32:E9 80% f999\\"]"`;
 
 exports[`interpreter default scripts shell.src 22`] = `"1"`;
 
