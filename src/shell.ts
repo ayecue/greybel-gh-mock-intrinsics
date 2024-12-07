@@ -19,6 +19,7 @@ import { create as createComputer } from './computer';
 import GreyMap from './grey-map';
 import BasicInterface from './interface';
 import { GHMockIntrinsicEnv } from './mock/environment';
+import { isNullOrEmpty } from './utils';
 
 export const startTerminal = CustomFunction.createExternalWithSelf(
   'start_terminal',
@@ -312,7 +313,9 @@ export const build = CustomFunction.createExternalWithSelf(
       );
     }
 
-    if (/^\./.test(source.name)) {
+    const segments = source.name.split('.');
+
+    if (segments.length == 1 || (segments.length == 2 && isNullOrEmpty(segments[0]))) {
       return Promise.resolve(
         new CustomString(`Can't build ${source.name}. Invalid extension.`)
       );

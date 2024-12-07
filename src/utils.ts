@@ -189,6 +189,10 @@ export function isValidProcName(str: string): boolean {
   return ['dsession', 'kernel_task', 'xorg', 'ssh_enc'].includes(str);
 }
 
+export function isNullOrEmpty(value: string | null): boolean {
+  return value == null || value === '';
+}
+
 export function delay(time: number = 1000): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
