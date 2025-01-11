@@ -85,7 +85,7 @@ export const overflow = CustomFunction.createExternalWithSelf(
 
     const memAddressRaw = memAddress.toString();
     const sectorRaw = sector.toString();
-    const optArgsRaw = optArgs.toString();
+    const optArgsRaw = optArgs instanceof CustomNil ? null : optArgs.toString();
     const targetVul = vulnerabilities.find((item: Type.Vulnerability) => {
       return item.memAddress === memAddressRaw && item.sector === sectorRaw;
     });
