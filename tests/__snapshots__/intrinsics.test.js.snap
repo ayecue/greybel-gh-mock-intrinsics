@@ -294,7 +294,7 @@ Unsafe check: loop in array <b>Rhsa</b>. Buffer overflow.
 "
 `;
 
-exports[`interpreter default scripts metaxploit.src 10`] = `"crypto"`;
+exports[`interpreter default scripts metaxploit.src 10`] = `"crypto.so"`;
 
 exports[`interpreter default scripts metaxploit.src 11`] = `"1.0.0"`;
 
@@ -355,7 +355,7 @@ exports[`interpreter default scripts metaxploit.src 20`] = `"MetaLib"`;
 
 exports[`interpreter default scripts metaxploit.src 21`] = `"MetaLib"`;
 
-exports[`interpreter default scripts metaxploit.src 22`] = `"libssh"`;
+exports[`interpreter default scripts metaxploit.src 22`] = `"libssh.so"`;
 
 exports[`interpreter default scripts metaxploit.src 23`] = `"1.0.0"`;
 
@@ -385,7 +385,7 @@ Computer obtained with credentials from user: test"
 
 exports[`interpreter default scripts metaxploit.src 27`] = `"computer"`;
 
-exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router"`;
+exports[`interpreter default scripts metaxploit.src 28`] = `"kernel_router.so"`;
 
 exports[`interpreter default scripts metaxploit.src 29`] = `"1.0.0"`;
 

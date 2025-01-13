@@ -30,7 +30,7 @@ export const libName = CustomFunction.createExternalWithSelf(
     }
 
     const { targetFile } = self.variables;
-    return Promise.resolve(new CustomString(targetFile.getLibraryType()));
+    return Promise.resolve(new CustomString(`${targetFile.getLibraryType()}.so`));
   }
 );
 
