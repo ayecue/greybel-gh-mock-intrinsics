@@ -335,9 +335,8 @@ export default function generics(
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
         const date = new Date(Date.now());
-        const result = `${date.getDate()}/${
-          Month[date.getMonth() + 1]
-        }/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`;
+        const result = `${date.getDate()}/${Month[date.getMonth() + 1]
+          }/${date.getFullYear()} - ${date.getHours()}:${date.getMinutes()}`;
         return Promise.resolve(new CustomString(result));
       }
     ),
@@ -480,7 +479,7 @@ export default function generics(
 
         return new Promise((resolve: (value: CustomValue) => void, reject: (err: any) => void) => {
           let didExit = false;
-          const onExit = function() {
+          const onExit = function () {
             didExit = true;
             resolve(DefaultType.Void)
           };

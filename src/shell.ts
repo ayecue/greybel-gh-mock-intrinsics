@@ -124,7 +124,7 @@ export const connectService = CustomFunction.createExternalWithSelf(
     const cPass = password.toString();
     const remoteUser = remoteDevice.users.get(cUser);
 
-    if (!remoteUser || remoteUser.password !== cPass) {
+    if (!remoteUser || remoteUser.password.value !== cPass) {
       return Promise.resolve(new CustomString('invalid credentials'));
     }
 
@@ -656,7 +656,7 @@ export function loginLocal(
   if (session.device.users.has(usr)) {
     const item = session.device.users.get(usr);
 
-    if (item.password === pwd) {
+    if (item.password.value === pwd) {
       return create(mockEnvironment, item, session.device);
     }
   }

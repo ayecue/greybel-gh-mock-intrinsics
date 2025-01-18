@@ -82,7 +82,7 @@ export const aireplay = CustomFunction.createExternalWithSelf(
     vm.handler.outputHandler.print(vm, `${acks}/${maxAcksRaw}`);
 
     let didExit = false;
-    const onExit = function() {
+    const onExit = function () {
       didExit = true;
     };
 
@@ -295,17 +295,13 @@ export const decipher = CustomFunction.createExternalWithSelf(
 
     await vm.handler.outputHandler.progress(vm, 5000);
 
-    const user = mockEnvironment.userGenerator.users.find(
-      (item: Type.User) => {
-        return item.passwordHashed === encryptedPass;
-      }
-    );
+    const password = mockEnvironment.passwordManager.getByHashed(encryptedPass);
 
-    if (!user) {
+    if (!password) {
       return DefaultType.Void;
     }
 
-    return new CustomString(user.password);
+    return new CustomString(password.value);
   }
 ).addArgument('encryptedPass');
 

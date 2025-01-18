@@ -402,7 +402,7 @@ export const changePassword = CustomFunction.createExternalWithSelf(
 export const createUser = CustomFunction.createExternalWithSelf(
   'create_user',
   (
-    _vm: VM,
+    vm: VM,
     _self: CustomValue,
     args: Map<string, CustomValue>
   ): Promise<CustomValue> => {
@@ -412,7 +412,7 @@ export const createUser = CustomFunction.createExternalWithSelf(
       return Promise.resolve(DefaultType.Void);
     }
 
-    const { device, user } = self.variables;
+    const { device, user, mockEnvironment } = self.variables;
     const username = args.get('username');
     const password = args.get('password');
 
@@ -450,7 +450,7 @@ export const createUser = CustomFunction.createExternalWithSelf(
       );
     }
 
-    device.addUser(usernameRaw, passwordRaw);
+    device.addUser(usernameRaw, mockEnvironment.passwordManager.create(passwordRaw));
     device.updatePasswd();
     device.createUserFolder(usernameRaw);
 
@@ -819,7 +819,7 @@ export const connectWifi = CustomFunction.createExternalWithSelf(
     const router = routerLoc.router;
     const passwordRaw = password.toString();
 
-    if (router.wifi.credentials.password !== passwordRaw) {
+    if (router.wifi.credentials.password.value !== passwordRaw) {
       return Promise.resolve(
         new CustomString("Can't connect. Incorrect password.")
       );

@@ -71,7 +71,7 @@ export function createGHMockEnv(
 
   closeRouters[0].mac = 'bssid-test-uuid';
   closeRouters[0].wifi.name = 'essid-test-uuid';
-  closeRouters[0].wifi.credentials.password = 'test';
+  closeRouters[0].wifi.credentials.password = mockEnvironment.passwordManager.create('test');
 
   mockEnvironment.connectLocal(localRouter);
 
@@ -79,11 +79,11 @@ export function createGHMockEnv(
     publicIp: '172.57.134.56',
     domain: 'www.mytest.org',
     users: [
-      userGenerator.generate('root', 'test'),
-      userGenerator.generate('gandalf', 'shallnotpass')
+      userGenerator.generate('root', mockEnvironment.passwordManager.create('test')),
+      userGenerator.generate('gandalf', mockEnvironment.passwordManager.create('shallnotpass'))
     ]
   });
-  
+
   testRemoteRouter.getForwarded(22)?.removePort(22);
 
   const testRemoteDevice = testRemoteRouter.getComputers()[0];
@@ -114,7 +114,7 @@ export function createGHMockEnv(
   emailGenerator.generate({
     name: 'test',
     domain: 'test.org',
-    password: 'test'
+    password: mockEnvironment.passwordManager.create('test')
   });
 
   return mockEnvironment;
