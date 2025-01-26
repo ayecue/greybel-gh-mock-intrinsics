@@ -117,7 +117,7 @@ export const aireplay = CustomFunction.createExternalWithSelf(
           content: [
             acks,
             network.percentage,
-            network.router.wifi.credentials.password
+            network.router.wifi.credentials.password.value
           ].join(','),
           owner: user.username,
           permissions: 'rwxr--r--',

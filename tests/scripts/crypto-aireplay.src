@@ -1,0 +1,11 @@
+crypto = include_lib("/lib/crypto.so")
+networks = get_shell.host_computer.wifi_networks("wlan0")
+firstNetwork = networks[1].split(" ")
+bssid = firstNetwork[0]
+pwr = firstNetwork[1][ : -1].to_int
+essid = firstNetwork[2]
+aireplayResult = crypto.aireplay(bssid, essid, 300000 / pwr)
+if aireplayResult == null then
+	result = crypto.aircrack(home_dir + "/file.cap")
+	print(result)
+end if

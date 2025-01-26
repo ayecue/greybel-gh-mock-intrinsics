@@ -129,7 +129,7 @@ exports[`interpreter default scripts crypto.src 4`] = `"0/200"`;
 
 exports[`interpreter default scripts crypto.src 5`] = `"0/200"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `"642/200"`;
+exports[`interpreter default scripts crypto.src 6`] = `"656/200"`;
 
 exports[`interpreter default scripts crypto.src 7`] = `"null"`;
 
@@ -140,6 +140,56 @@ exports[`interpreter default scripts crypto.src 9`] = `"null"`;
 exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
 
 exports[`interpreter default scripts crypto.src 11`] = `"null"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 1`] = `
+"Waiting for beacon frame (BSSID: CE:A4:DD:DF:73:29)
+Sending Authentication Request (Open system) [ACK]
+Authentication succesful
+Sending Association Request
+Association succesful :-)"
+`;
+
+exports[`interpreter default scripts crypto-aireplay.src 2`] = `"0/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 3`] = `"0/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 4`] = `"642/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 5`] = `"897/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 6`] = `"1184/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 7`] = `"1541/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 8`] = `"1892/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 9`] = `"2461/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 10`] = `"2904/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 11`] = `"3206/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 12`] = `"3737/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 13`] = `"4350/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 14`] = `"4958/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 15`] = `"5533/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 16`] = `"5838/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 17`] = `"6166/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 18`] = `"6722/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 19`] = `"6977/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 20`] = `"7611/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 21`] = `"7986/7894"`;
+
+exports[`interpreter default scripts crypto-aireplay.src 22`] = `"Hristi"`;
 
 exports[`interpreter default scripts file-content.src 1`] = `"Change content of file from user shell"`;
 
@@ -731,9 +781,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  6200  13.2  14.36  kernel_task  
-root  7417  9.3   17.89  Xorg         
-test  2515  12.6  5.40   myprogram    "
+root  7404  14.9  7.88   kernel_task  
+root  8123  6.3   14.92  Xorg         
+test  5418  5.9   12.05  myprogram    "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;

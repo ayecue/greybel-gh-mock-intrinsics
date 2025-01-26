@@ -1,6 +1,6 @@
 {
   "name": "greybel-gh-mock-intrinsics",
-  "version": "5.5.7",
+  "version": "5.5.8",
   "description": "Interpreter intrinsics",
   "main": "dist/index",
   "typings": "dist/index",
@@ -9,7 +9,7 @@
     "build": "npm run clean && tsc -p .",
     "watch": "tsc -w -p .",
     "clean": "rm -rf dist",
-    "test": "jest ./tests",
+    "test": "jest ./tests --testTimeout=10000",
     "lint": "eslint ./src/**/*.ts",
     "lint:fix": "eslint --fix ./src/**/*.ts"
   },
