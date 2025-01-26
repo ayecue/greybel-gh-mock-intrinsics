@@ -139,7 +139,7 @@ export const copy = CustomFunction.createExternalWithSelf(
         return Promise.resolve(new CustomString('permission denied'));
       }
 
-      const copy = entity.copy();
+      const copy = Type.Folder.isFolder(entity) ? entity.copy(true) : entity.copy();
 
       copy.name = newNameRaw;
 
@@ -210,10 +210,11 @@ export const move = CustomFunction.createExternalWithSelf(
         return Promise.resolve(new CustomString('permission denied'));
       }
 
-      const copy = entity.copy();
+      const copy = Type.Folder.isFolder(entity) ? entity.copy(true) : entity.copy();
 
       copy.name = newNameRaw;
       folder.putEntity(copy);
+      entity.delete();
 
       return Promise.resolve(DefaultType.True);
     }
@@ -269,7 +270,7 @@ export const rename = CustomFunction.createExternalWithSelf(
       );
     }
 
-    entity.name = newNameRaw;
+    entity.rename(newNameRaw);
 
     return Promise.resolve(DefaultType.True);
   }

@@ -1,0 +1,23 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/root")
+adminFile = adminComputer.File("/root")
+
+print("Get state of file from user shell")
+print(userFile.is_binary)
+print(userFile.is_folder)
+print(userFile.size)
+print(userFile.allow_import)
+
+print("Get state of file from admin shell")
+print(adminFile.is_binary)
+print(adminFile.is_folder)
+print(adminFile.size)
+print(adminFile.allow_import)

@@ -1,0 +1,33 @@
+shell = get_shell
+computer = shell.host_computer
+
+print(typeof(computer))
+print(computer)
+print(computer.get_ports)
+print(computer.create_folder("/root", "foo"))
+print(computer.create_folder("/home/test", "foo"))
+print(computer.File("/home/test/foo"))
+print(computer.is_network_active)
+print(computer.touch("/root", "foo-file"))
+print(computer.touch("/home/test", "foo-file"))
+print(computer.File("/home/test/foo-file").is_folder)
+print(computer.show_procs)
+print(computer.network_devices)
+print(computer.change_password("test", "xxx"))
+print(computer.create_user("foo", "foo"))
+print(computer.delete_user("foo", true))
+print(computer.create_group("test", "testg"))
+print(computer.groups("test"))
+print(computer.delete_group("test", "testg"))
+print(computer.close_program)
+print(computer.wifi_networks("wlan0"))
+print(computer.connect_wifi(
+	"wlan0",
+	"bssid-test-uuid",
+	"essid-test-uuid",
+	"test"))
+print(computer.connect_ethernet("eth0", "192.168.0.1", get_router.local_ip))
+print(computer.network_gateway)
+print(computer.active_net_card)
+print(computer.local_ip)
+print(computer.public_ip)

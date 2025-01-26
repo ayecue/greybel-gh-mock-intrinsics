@@ -1,0 +1,5 @@
+shell = get_shell
+computer = shell.host_computer
+
+print(typeof(shell))
+print(typeof(computer))

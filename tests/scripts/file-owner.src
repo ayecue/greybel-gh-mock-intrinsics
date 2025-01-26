@@ -1,0 +1,21 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/root")
+adminFile = adminComputer.File("/root")
+
+print("Change owner of file from user shell")
+print(userFile.owner)
+print(userFile.set_owner("test"))
+print(userFile.owner)
+
+print("Change owner of file from admin shell")
+print(adminFile.owner)
+print(adminFile.set_owner("test"))
+print(adminFile.owner)

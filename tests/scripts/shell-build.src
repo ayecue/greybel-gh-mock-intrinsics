@@ -1,0 +1,11 @@
+shell = get_shell("root", "test")
+print(shell.host_computer.touch("/home/test", "hello.src"))
+f = shell.host_computer.File("/home/test/hello.src")
+print(f)
+
+if f then
+	f.set_content("print(123)")
+	result = shell.build("/home/test/hello.src", "/home/test")
+	print(result)
+	shell.launch("/home/test/hello")
+end if

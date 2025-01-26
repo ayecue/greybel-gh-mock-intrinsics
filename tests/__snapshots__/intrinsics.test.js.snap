@@ -56,6 +56,63 @@ exports[`interpreter default scripts coin.src 12`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts coin.src 13`] = `"Not yet supported"`;
 
+exports[`interpreter default scripts computer.src 1`] = `"computer"`;
+
+exports[`interpreter default scripts computer.src 2`] = `"computer"`;
+
+exports[`interpreter default scripts computer.src 3`] = `"[port]"`;
+
+exports[`interpreter default scripts computer.src 4`] = `"Can't create folder /root/foo. Permission denied"`;
+
+exports[`interpreter default scripts computer.src 5`] = `"1"`;
+
+exports[`interpreter default scripts computer.src 6`] = `"file"`;
+
+exports[`interpreter default scripts computer.src 7`] = `"1"`;
+
+exports[`interpreter default scripts computer.src 8`] = `"Can't create file /root/foo-file. Permission denied"`;
+
+exports[`interpreter default scripts computer.src 9`] = `"1"`;
+
+exports[`interpreter default scripts computer.src 10`] = `"0"`;
+
+exports[`interpreter default scripts computer.src 11`] = `
+"USER PID CPU MEM COMMAND
+root 3555 12.6 14.08 kernel_task
+root 8053 2.7 10.85 Xorg
+test 2379 7.6 11.92 myprogram"
+`;
+
+exports[`interpreter default scripts computer.src 12`] = `"wlan0 ggrdk4zo true"`;
+
+exports[`interpreter default scripts computer.src 13`] = `"Denied. Only root user can execute this command."`;
+
+exports[`interpreter default scripts computer.src 14`] = `"Denied. Only root user can execute this command."`;
+
+exports[`interpreter default scripts computer.src 15`] = `"Denied. Only root user can execute this command."`;
+
+exports[`interpreter default scripts computer.src 16`] = `"Denied. Only root user can execute this command."`;
+
+exports[`interpreter default scripts computer.src 17`] = `""`;
+
+exports[`interpreter default scripts computer.src 18`] = `"Denied. Only root user can execute this command."`;
+
+exports[`interpreter default scripts computer.src 19`] = `"0"`;
+
+exports[`interpreter default scripts computer.src 20`] = `"[\\"bssid-test-uuid 68% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 74% vingoftw\\", \\"42:D6:90:7C:BF:71 58% aptain117\\", \\"09:2F:46:FB:32:E9 35% f999\\"]"`;
+
+exports[`interpreter default scripts computer.src 21`] = `"1"`;
+
+exports[`interpreter default scripts computer.src 22`] = `"connect_ethernet: Network device not found"`;
+
+exports[`interpreter default scripts computer.src 23`] = `"192.168.0.10"`;
+
+exports[`interpreter default scripts computer.src 24`] = `"WIFI"`;
+
+exports[`interpreter default scripts computer.src 25`] = `"192.168.93.53"`;
+
+exports[`interpreter default scripts computer.src 26`] = `"20.118.3.131"`;
+
 exports[`interpreter default scripts crypto.src 1`] = `"cryptoLib"`;
 
 exports[`interpreter default scripts crypto.src 2`] = `"cryptoLib"`;
@@ -72,7 +129,7 @@ exports[`interpreter default scripts crypto.src 4`] = `"0/200"`;
 
 exports[`interpreter default scripts crypto.src 5`] = `"0/200"`;
 
-exports[`interpreter default scripts crypto.src 6`] = `"533/200"`;
+exports[`interpreter default scripts crypto.src 6`] = `"642/200"`;
 
 exports[`interpreter default scripts crypto.src 7`] = `"null"`;
 
@@ -83,6 +140,182 @@ exports[`interpreter default scripts crypto.src 9`] = `"null"`;
 exports[`interpreter default scripts crypto.src 10`] = `"shallnotpass"`;
 
 exports[`interpreter default scripts crypto.src 11`] = `"null"`;
+
+exports[`interpreter default scripts file-content.src 1`] = `"Change content of file from user shell"`;
+
+exports[`interpreter default scripts file-content.src 2`] = `"null"`;
+
+exports[`interpreter default scripts file-content.src 3`] = `"permission denied"`;
+
+exports[`interpreter default scripts file-content.src 4`] = `"null"`;
+
+exports[`interpreter default scripts file-content.src 5`] = `"Change content of file from admin shell"`;
+
+exports[`interpreter default scripts file-content.src 6`] = `
+"root:098f6bcd4621d373cade4e832627b4f6
+test:098f6bcd4621d373cade4e832627b4f6
+"
+`;
+
+exports[`interpreter default scripts file-content.src 7`] = `"1"`;
+
+exports[`interpreter default scripts file-content.src 8`] = `"foo"`;
+
+exports[`interpreter default scripts file-delete.src 1`] = `"Delete file via user shell"`;
+
+exports[`interpreter default scripts file-delete.src 2`] = `"permission denied"`;
+
+exports[`interpreter default scripts file-delete.src 3`] = `"file"`;
+
+exports[`interpreter default scripts file-delete.src 4`] = `"Delete file via admin shell"`;
+
+exports[`interpreter default scripts file-delete.src 5`] = `""`;
+
+exports[`interpreter default scripts file-delete.src 6`] = `"null"`;
+
+exports[`interpreter default scripts file-group.src 1`] = `"Change group of file from user shell"`;
+
+exports[`interpreter default scripts file-group.src 2`] = `"root"`;
+
+exports[`interpreter default scripts file-group.src 3`] = `"Permission denied"`;
+
+exports[`interpreter default scripts file-group.src 4`] = `"root"`;
+
+exports[`interpreter default scripts file-group.src 5`] = `"Change group of file from admin shell"`;
+
+exports[`interpreter default scripts file-group.src 6`] = `"root"`;
+
+exports[`interpreter default scripts file-group.src 7`] = `""`;
+
+exports[`interpreter default scripts file-group.src 8`] = `"foo"`;
+
+exports[`interpreter default scripts file-is-state.src 1`] = `"Get state of file from user shell"`;
+
+exports[`interpreter default scripts file-is-state.src 2`] = `"1"`;
+
+exports[`interpreter default scripts file-is-state.src 3`] = `"1"`;
+
+exports[`interpreter default scripts file-is-state.src 4`] = `"0"`;
+
+exports[`interpreter default scripts file-is-state.src 5`] = `"0"`;
+
+exports[`interpreter default scripts file-is-state.src 6`] = `"Get state of file from admin shell"`;
+
+exports[`interpreter default scripts file-is-state.src 7`] = `"1"`;
+
+exports[`interpreter default scripts file-is-state.src 8`] = `"1"`;
+
+exports[`interpreter default scripts file-is-state.src 9`] = `"0"`;
+
+exports[`interpreter default scripts file-is-state.src 10`] = `"0"`;
+
+exports[`interpreter default scripts file-move.src 1`] = `"Rename file from user shell"`;
+
+exports[`interpreter default scripts file-move.src 2`] = `"permission denied"`;
+
+exports[`interpreter default scripts file-move.src 3`] = `"root"`;
+
+exports[`interpreter default scripts file-move.src 4`] = `"/root"`;
+
+exports[`interpreter default scripts file-move.src 5`] = `"null"`;
+
+exports[`interpreter default scripts file-move.src 6`] = `"Rename file from admin shell"`;
+
+exports[`interpreter default scripts file-move.src 7`] = `"1"`;
+
+exports[`interpreter default scripts file-move.src 8`] = `"root"`;
+
+exports[`interpreter default scripts file-move.src 9`] = `"null"`;
+
+exports[`interpreter default scripts file-move.src 10`] = `"file"`;
+
+exports[`interpreter default scripts file-owner.src 1`] = `"Change owner of file from user shell"`;
+
+exports[`interpreter default scripts file-owner.src 2`] = `"root"`;
+
+exports[`interpreter default scripts file-owner.src 3`] = `"Permission denied"`;
+
+exports[`interpreter default scripts file-owner.src 4`] = `"root"`;
+
+exports[`interpreter default scripts file-owner.src 5`] = `"Change owner of file from admin shell"`;
+
+exports[`interpreter default scripts file-owner.src 6`] = `"root"`;
+
+exports[`interpreter default scripts file-owner.src 7`] = `""`;
+
+exports[`interpreter default scripts file-owner.src 8`] = `"test"`;
+
+exports[`interpreter default scripts file-path.src 1`] = `"Get path and name from file of user shell"`;
+
+exports[`interpreter default scripts file-path.src 2`] = `"file"`;
+
+exports[`interpreter default scripts file-path.src 3`] = `"/root"`;
+
+exports[`interpreter default scripts file-path.src 4`] = `"root"`;
+
+exports[`interpreter default scripts file-path.src 5`] = `"Get path and name from file of admin shell"`;
+
+exports[`interpreter default scripts file-path.src 6`] = `"file"`;
+
+exports[`interpreter default scripts file-path.src 7`] = `"/root"`;
+
+exports[`interpreter default scripts file-path.src 8`] = `"root"`;
+
+exports[`interpreter default scripts file-permission.src 1`] = `"Set permission o+wrx from file of user shell"`;
+
+exports[`interpreter default scripts file-permission.src 2`] = `"permission denied"`;
+
+exports[`interpreter default scripts file-permission.src 3`] = `"0"`;
+
+exports[`interpreter default scripts file-permission.src 4`] = `"Set permission o+wrx from file of admin shell"`;
+
+exports[`interpreter default scripts file-permission.src 5`] = `""`;
+
+exports[`interpreter default scripts file-permission.src 6`] = `"1"`;
+
+exports[`interpreter default scripts file-permission.src 7`] = `"Set permission o-wrx from file of user shell"`;
+
+exports[`interpreter default scripts file-permission.src 8`] = `""`;
+
+exports[`interpreter default scripts file-permission.src 9`] = `"0"`;
+
+exports[`interpreter default scripts file-permission.src 10`] = `"Set permission o-wrx from file of admin shell"`;
+
+exports[`interpreter default scripts file-permission.src 11`] = `""`;
+
+exports[`interpreter default scripts file-permission.src 12`] = `"0"`;
+
+exports[`interpreter default scripts file-rename.src 1`] = `"Rename file from user shell"`;
+
+exports[`interpreter default scripts file-rename.src 2`] = `"permission denied"`;
+
+exports[`interpreter default scripts file-rename.src 3`] = `"root"`;
+
+exports[`interpreter default scripts file-rename.src 4`] = `"/root"`;
+
+exports[`interpreter default scripts file-rename.src 5`] = `"null"`;
+
+exports[`interpreter default scripts file-rename.src 6`] = `"Rename file from admin shell"`;
+
+exports[`interpreter default scripts file-rename.src 7`] = `"1"`;
+
+exports[`interpreter default scripts file-rename.src 8`] = `"foo"`;
+
+exports[`interpreter default scripts file-rename.src 9`] = `"/foo"`;
+
+exports[`interpreter default scripts file-rename.src 10`] = `"file"`;
+
+exports[`interpreter default scripts file-sub.src 1`] = `"Files and folders of user shell"`;
+
+exports[`interpreter default scripts file-sub.src 2`] = `"[file, file, file, file]"`;
+
+exports[`interpreter default scripts file-sub.src 3`] = `"[]"`;
+
+exports[`interpreter default scripts file-sub.src 4`] = `"Files and folders of admin shell"`;
+
+exports[`interpreter default scripts file-sub.src 5`] = `"[file, file, file, file]"`;
+
+exports[`interpreter default scripts file-sub.src 6`] = `"[]"`;
 
 exports[`interpreter default scripts fs.src 1`] = `"Before deletion: "`;
 
@@ -498,9 +731,9 @@ exports[`interpreter default scripts scripts.src 2`] = `
 
 exports[`interpreter default scripts scripts.src 3`] = `
 "USER  PID   CPU   MEM    COMMAND      
-root  3060  6.9   8.10   kernel_task  
-root  1588  11.6  24.27  Xorg         
-test  3288  14.7  22.26  myprogram    "
+root  6200  13.2  14.36  kernel_task  
+root  7417  9.3   17.89  Xorg         
+test  2515  12.6  5.40   myprogram    "
 `;
 
 exports[`interpreter default scripts scripts.src 4`] = `"/root"`;
@@ -527,174 +760,21 @@ exports[`interpreter default scripts service.src 4`] = `"null"`;
 
 exports[`interpreter default scripts service.src 5`] = `"Denied. Only root user can install this service."`;
 
-exports[`interpreter default scripts shell.src 1`] = `"shell"`;
+exports[`interpreter default scripts shell-build.src 1`] = `"1"`;
 
-exports[`interpreter default scripts shell.src 2`] = `"computer"`;
+exports[`interpreter default scripts shell-build.src 2`] = `"file"`;
 
-exports[`interpreter default scripts shell.src 3`] = `"computer"`;
+exports[`interpreter default scripts shell-build.src 3`] = `""`;
 
-exports[`interpreter default scripts shell.src 4`] = `"[port]"`;
+exports[`interpreter default scripts shell-build.src 4`] = `"123"`;
 
-exports[`interpreter default scripts shell.src 5`] = `"Can't create folder /root/foo. Permission denied"`;
+exports[`interpreter default scripts shell-connect-service.src 1`] = `"shell"`;
 
-exports[`interpreter default scripts shell.src 6`] = `"1"`;
+exports[`interpreter default scripts shell-connect-service.src 2`] = `"shell"`;
 
-exports[`interpreter default scripts shell.src 7`] = `"file"`;
+exports[`interpreter default scripts shell-host-computer.src 1`] = `"shell"`;
 
-exports[`interpreter default scripts shell.src 8`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 9`] = `"Can't create file /root/foo-file. Permission denied"`;
-
-exports[`interpreter default scripts shell.src 10`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 11`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 12`] = `
-"USER PID CPU MEM COMMAND
-root 6938 13.8 20.39 kernel_task
-root 8513 2.3 20.73 Xorg
-test 3604 3.1 26.25 myprogram"
-`;
-
-exports[`interpreter default scripts shell.src 13`] = `"wlan0 ggrdk4zo true"`;
-
-exports[`interpreter default scripts shell.src 14`] = `"Denied. Only root user can execute this command."`;
-
-exports[`interpreter default scripts shell.src 15`] = `"Denied. Only root user can execute this command."`;
-
-exports[`interpreter default scripts shell.src 16`] = `"Denied. Only root user can execute this command."`;
-
-exports[`interpreter default scripts shell.src 17`] = `"Denied. Only root user can execute this command."`;
-
-exports[`interpreter default scripts shell.src 18`] = `""`;
-
-exports[`interpreter default scripts shell.src 19`] = `"Denied. Only root user can execute this command."`;
-
-exports[`interpreter default scripts shell.src 20`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 21`] = `"[\\"bssid-test-uuid 52% essid-test-uuid\\", \\"CE:A4:DD:DF:73:29 61% vingoftw\\", \\"42:D6:90:7C:BF:71 84% aptain117\\", \\"09:2F:46:FB:32:E9 80% f999\\"]"`;
-
-exports[`interpreter default scripts shell.src 22`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 23`] = `"connect_ethernet: Network device not found"`;
-
-exports[`interpreter default scripts shell.src 24`] = `"192.168.0.10"`;
-
-exports[`interpreter default scripts shell.src 25`] = `"WIFI"`;
-
-exports[`interpreter default scripts shell.src 26`] = `"192.168.93.53"`;
-
-exports[`interpreter default scripts shell.src 27`] = `"20.118.3.131"`;
-
-exports[`interpreter default scripts shell.src 28`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 29`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 30`] = `"permission denied"`;
-
-exports[`interpreter default scripts shell.src 31`] = `"permission denied"`;
-
-exports[`interpreter default scripts shell.src 32`] = `"permission denied"`;
-
-exports[`interpreter default scripts shell.src 33`] = `"permission denied"`;
-
-exports[`interpreter default scripts shell.src 34`] = `"/root"`;
-
-exports[`interpreter default scripts shell.src 35`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 36`] = `"root"`;
-
-exports[`interpreter default scripts shell.src 37`] = `"null"`;
-
-exports[`interpreter default scripts shell.src 38`] = `"can't open /root Binary file."`;
-
-exports[`interpreter default scripts shell.src 39`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 40`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 41`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 42`] = `"permission denied"`;
-
-exports[`interpreter default scripts shell.src 43`] = `"[file, file, file, file]"`;
-
-exports[`interpreter default scripts shell.src 44`] = `"[]"`;
-
-exports[`interpreter default scripts shell.src 45`] = `"root"`;
-
-exports[`interpreter default scripts shell.src 46`] = `"Permission denied"`;
-
-exports[`interpreter default scripts shell.src 47`] = `"root"`;
-
-exports[`interpreter default scripts shell.src 48`] = `"Permission denied"`;
-
-exports[`interpreter default scripts shell.src 49`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 50`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 51`] = `"computer"`;
-
-exports[`interpreter default scripts shell.src 52`] = `"0"`;
-
-exports[`interpreter default scripts shell.src 53`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 54`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 55`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 56`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 57`] = `""`;
-
-exports[`interpreter default scripts shell.src 58`] = `"123"`;
-
-exports[`interpreter default scripts shell.src 59`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 60`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 61`] = `"testg"`;
-
-exports[`interpreter default scripts shell.src 62`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 63`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 64`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 65`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 66`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 67`] = `"file"`;
-
-exports[`interpreter default scripts shell.src 68`] = `""`;
-
-exports[`interpreter default scripts shell.src 69`] = `"drwxr--rwx"`;
-
-exports[`interpreter default scripts shell.src 70`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 71`] = `"1"`;
-
-exports[`interpreter default scripts shell.src 72`] = `"i am admin"`;
-
-exports[`interpreter default scripts shell.src 73`] = `"root"`;
-
-exports[`interpreter default scripts shell.src 74`] = `""`;
-
-exports[`interpreter default scripts shell.src 75`] = `"test"`;
-
-exports[`interpreter default scripts shell.src 76`] = `"root"`;
-
-exports[`interpreter default scripts shell.src 77`] = `""`;
-
-exports[`interpreter default scripts shell.src 78`] = `"test-here"`;
-
-exports[`interpreter default scripts shell.src 79`] = `"/"`;
-
-exports[`interpreter default scripts shell.src 80`] = `"entooxi"`;
-
-exports[`interpreter default scripts shell.src 81`] = `"shell"`;
-
-exports[`interpreter default scripts shell.src 82`] = `"shell"`;
+exports[`interpreter default scripts shell-host-computer.src 2`] = `"computer"`;
 
 exports[`interpreter default scripts shell-self-launch.src 1`] = `"launch number 0"`;
 

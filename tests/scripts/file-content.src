@@ -1,0 +1,21 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/etc/passwd")
+adminFile = adminComputer.File("/etc/passwd")
+
+print("Change content of file from user shell")
+print(userFile.get_content)
+print(userFile.set_content("foo"))
+print(userFile.get_content)
+
+print("Change content of file from admin shell")
+print(adminFile.get_content)
+print(adminFile.set_content("foo"))
+print(adminFile.get_content)

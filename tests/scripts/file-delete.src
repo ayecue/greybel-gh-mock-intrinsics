@@ -1,0 +1,19 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/root")
+adminFile = adminComputer.File("/root")
+
+print("Delete file via user shell")
+print(userFile.delete)
+print(userComputer.File("/root"))
+
+print("Delete file via admin shell")
+print(adminFile.delete)
+print(userComputer.File("/root"))

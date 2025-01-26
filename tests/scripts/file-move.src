@@ -1,0 +1,23 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/root")
+adminFile = adminComputer.File("/root")
+
+print("Rename file from user shell")
+print(userFile.move("/", "foo"))
+print(userFile.name)
+print(userFile.path)
+print(userComputer.File("/foo"))
+
+print("Rename file from admin shell")
+print(adminFile.move("/", "foo"))
+print(userFile.name)
+print(userFile.path)
+print(userComputer.File("/foo"))

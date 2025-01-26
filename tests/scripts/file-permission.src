@@ -1,0 +1,27 @@
+shell = get_shell
+computer = shell.host_computer
+
+userShell = get_shell("test", "test")
+adminShell = get_shell("root", "test")
+
+userComputer = userShell.host_computer
+adminComputer = adminShell.host_computer
+
+userFile = userComputer.File("/root")
+adminFile = adminComputer.File("/root")
+
+print("Set permission o+wrx from file of user shell")
+print(userFile.chmod("o+wrx", true))
+print(userFile.has_permission("r"))
+
+print("Set permission o+wrx from file of admin shell")
+print(adminFile.chmod("o+wrx", true))
+print(userFile.has_permission("r"))
+
+print("Set permission o-wrx from file of user shell")
+print(userFile.chmod("o-wrx", true))
+print(userFile.has_permission("r"))
+
+print("Set permission o-wrx from file of admin shell")
+print(adminFile.chmod("o-wrx", true))
+print(userFile.has_permission("r"))
