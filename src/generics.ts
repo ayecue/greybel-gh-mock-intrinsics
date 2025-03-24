@@ -401,7 +401,7 @@ export default function generics(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const session = mockEnvironment.getLocal();
+        const session = mockEnvironment.getLatestSession();
         const path = session.programPath.getPath();
 
         return Promise.resolve(new CustomString(path));
@@ -537,7 +537,7 @@ export default function generics(
         _self: CustomValue,
         _args: Map<string, CustomValue>
       ): Promise<CustomValue> => {
-        const session = mockEnvironment.getLatestSession();
+        const session = mockEnvironment.getLocal();
         const path = session.programPath.getPath();
 
         return Promise.resolve(new CustomString(path));
