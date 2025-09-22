@@ -20,9 +20,9 @@ exports[`interpreter default scripts blockchain.src 9`] = `"Not yet supported"`;
 
 exports[`interpreter default scripts class-output.src 1`] = `"test"`;
 
-exports[`interpreter default scripts class-output.src 2`] = `"{\\"__isa\\":test}"`;
+exports[`interpreter default scripts class-output.src 2`] = `"{\\"__isa\\": test}"`;
 
-exports[`interpreter default scripts class-output.src 3`] = `"{\\"__isa\\":test,\\"foo\\":123,\\"bar\\":0}"`;
+exports[`interpreter default scripts class-output.src 3`] = `"{\\"__isa\\": test,\\"foo\\": 123,\\"bar\\": 0}"`;
 
 exports[`interpreter default scripts class-output.src 4`] = `"test"`;
 
@@ -862,11 +862,11 @@ exports[`interpreter default scripts sub-wallet.src 10`] = `"Not yet supported"`
 
 exports[`interpreter default scripts sub-wallet.src 11`] = `"Not yet supported"`;
 
-exports[`interpreter default scripts test-lib.src 1`] = `"[{\\"device\\":computer,\\"program\\":file,\\"currentPath\\":file}]"`;
+exports[`interpreter default scripts test-lib.src 1`] = `"[{\\"device\\": computer,\\"program\\": file,\\"currentPath\\": file}]"`;
 
 exports[`interpreter default scripts test-lib.src 2`] = `"router"`;
 
-exports[`interpreter default scripts test-lib.src 3`] = `"{\\"192.168.33.152\\":computer,\\"192.168.42.250\\":computer,\\"192.168.64.69\\":computer,\\"192.168.70.249\\":computer,\\"192.168.207.138\\":computer,\\"192.168.70.55\\":computer,\\"192.168.28.205\\":computer,\\"192.168.231.43\\":computer}"`;
+exports[`interpreter default scripts test-lib.src 3`] = `"{\\"192.168.33.152\\": computer,\\"192.168.42.250\\": computer,\\"192.168.64.69\\": computer,\\"192.168.70.249\\": computer,\\"192.168.207.138\\": computer,\\"192.168.70.55\\": computer,\\"192.168.28.205\\": computer,\\"192.168.231.43\\": computer}"`;
 
 exports[`interpreter default scripts test-lib.src 4`] = `"shell"`;
 
